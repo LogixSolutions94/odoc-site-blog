@@ -86,9 +86,9 @@ const plans = [
     features: [
       "👥 Sur mesure",
       "Tout Manager",
-      "SSO SAML/OpenID",
-      "Infrastructure dédiée",
-      "SLA contractuel",
+      "SSO SAML/OpenID — sur demande, roadmap",
+      "Instance dédiée — sur étude (cahier des charges)",
+      "SLA — sur étude contractuelle",
       "API privée",
       "Formation & accompagnement",
       "Stockage illimité",
@@ -110,7 +110,7 @@ const faqItems = [
   },
   {
     question: "Mes données sont-elles sécurisées ?",
-    answer: "Absolument. Vos données sont chiffrées AES-256, hébergées en France et conformes au RGPD. Nous ne revendons jamais vos données.",
+    answer: "Absolument. Vos données transitent en TLS 1.3, sont hébergées sur l'infrastructure chiffrée d'OVH en France et conformes au RGPD. Nous ne revendons jamais vos données.",
   },
   {
     question: "Que se passe-t-il à la fin d'un abonnement ?",

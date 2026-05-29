@@ -49,45 +49,45 @@ const LOIS = [
     titre: "Directive européenne 2014/55/UE",
     loi: "Directive UE 2014/55/UE + Norme EN 16931",
     detail:
-      "La norme européenne EN 16931 définit le format sémantique de la facture électronique. Odoc génère des factures conformes UBL 2.1 et CII — les deux formats acceptés dans toute l'Union Européenne.",
-    urgence: "✅ Conforme maintenant",
-    urgenceColor: "#22c55e",
+      "La norme européenne EN 16931 définit le format sémantique de la facture électronique. La génération native Factur-X/UBL 2.1/CII conforme EN 16931 est en cours de développement (échéance produit Q3 2026, en amont de l'obligation française).",
+    urgence: "🚧 En développement — Q3 2026",
+    urgenceColor: ORANGE,
   },
   {
     icon: Shield,
     date: "En vigueur",
-    titre: "Archivage légal NF Z42-013",
-    loi: "Norme AFNOR NF Z42-013",
+    titre: "Archivage à valeur probante (référentiel NF Z42-013)",
+    loi: "Norme AFNOR NF Z42-013 — référentiel",
     detail:
-      "La norme française NF Z42-013 définit les règles de l'archivage électronique à valeur probante. Une facture archivée par Odoc selon cette norme a la même valeur qu'un original papier en cas de contrôle fiscal.",
-    urgence: "✅ Certifié",
-    urgenceColor: "#22c55e",
+      "Odoc applique les principes de la norme NF Z42-013 (empreinte SHA-256, journal d'événements, traçabilité) pour ses archives. La certification officielle NF Z42-013 par un organisme accrédité n'est pas encore obtenue — projet inscrit à la roadmap 2026.",
+    urgence: "🚧 Certification roadmap 2026",
+    urgenceColor: ORANGE,
   },
 ];
 
 const FEATURES = [
   {
     icon: Brain,
-    title: "Extraction IA — 98%+ de précision",
-    desc: "L'IA lit et extrait automatiquement : montant HT/TVA/TTC, SIRET, IBAN, numéro de facture, date d'échéance, références. Zéro saisie manuelle, zéro erreur.",
+    title: "Extraction IA — montants, SIRET, IBAN, dates",
+    desc: "L'IA lit et extrait automatiquement : montant HT/TVA/TTC, SIRET, IBAN, numéro de facture, date d'échéance, références. Réduit drastiquement la saisie manuelle.",
     badge: "🧠 IA",
   },
   {
     icon: FileText,
-    title: "Formats légaux : Factur-X, UBL, CII",
-    desc: "Génération et lecture des formats structurés exigés par la réforme 2026 : Factur-X (PDF/A-3), UBL 2.1 et UN/CEFACT CII. Prêt PDP dès aujourd'hui.",
+    title: "Lecture/détection Factur-X",
+    desc: "Lecture et détection des formats Factur-X (PDF/A-3) dès aujourd'hui. Génération native Factur-X, UBL 2.1 et UN/CEFACT CII prévue Q3 2026, en amont de l'obligation.",
     badge: "📄 2026",
   },
   {
     icon: Lock,
-    title: "Signature SHA-256 & horodatage",
-    desc: "Chaque facture est signée cryptographiquement SHA-256 et horodatée à la seconde. Intégrité garantie, falsification impossible, admissible en justice.",
+    title: "Empreinte SHA-256 & horodatage",
+    desc: "Chaque facture reçoit une empreinte SHA-256 horodatée à la seconde, utilisée pour le contrôle d'intégrité et le journal d'événements.",
     badge: "🔒 Crypto",
   },
   {
     icon: AlertTriangle,
-    title: "Détection de fraude IA en temps réel",
-    desc: "Analyse automatique des doublons, montants anormaux, IBAN suspects, fournisseurs inconnus, TVA incohérente. Alerte avant tout paiement.",
+    title: "Détection automatique par règles métier",
+    desc: "Détection automatique des doublons, montants anormaux, OCR à faible confiance, TVA incohérente. Alerte avant tout paiement.",
     badge: "⚠️ Anti-fraude",
   },
   {
@@ -110,19 +110,19 @@ const FEATURES = [
   },
   {
     icon: Zap,
-    title: "Rapprochement bancaire automatique",
-    desc: "Odoc rapproche automatiquement vos factures avec vos relevés bancaires. Détection des impayés, alertes d'échéance, suivi encaissements en temps réel.",
+    title: "Rapprochement par import CSV de relevés",
+    desc: "Importez vos relevés bancaires au format CSV : Odoc rapproche vos factures, détecte les impayés et suit les encaissements. Open banking prévu en 2026.",
     badge: "⚡ Auto",
   },
 ];
 
 const COMPARISON = [
   { feature: "Extraction automatique IA",           odoc: true,  excel: false, other: false },
-  { feature: "Format Factur-X / UBL / CII (2026)", odoc: true,  excel: false, other: false },
-  { feature: "Conformité NF Z42-013",               odoc: true,  excel: false, other: true  },
-  { feature: "Directive UE 2014/55/UE — EN 16931",  odoc: true,  excel: false, other: false },
-  { feature: "Signature SHA-256 horodatée",          odoc: true,  excel: false, other: true  },
-  { feature: "Détection de fraude IA",               odoc: true,  excel: false, other: false },
+  { feature: "Format Factur-X / UBL / CII (2026)", odoc: "Q3 2026", excel: false, other: false },
+  { feature: "Archivage SHA-256 + journal d'événements", odoc: true,  excel: false, other: true  },
+  { feature: "Directive UE 2014/55/UE — EN 16931",  odoc: "Q3 2026", excel: false, other: false },
+  { feature: "Empreinte SHA-256 horodatée",          odoc: true,  excel: false, other: true  },
+  { feature: "Détection automatique par règles",     odoc: true,  excel: false, other: false },
   { feature: "Portail fournisseur intégré",          odoc: true,  excel: false, other: false },
   { feature: "Export FEC natif",                     odoc: true,  excel: false, other: true  },
   { feature: "Couplé GED + RH + Projets",            odoc: true,  excel: false, other: false },
@@ -225,17 +225,17 @@ export default function EFacturePage() {
             <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed">
               L'<strong>ordonnance n°2021-1190</strong> et le <strong>décret n°2022-1299</strong> imposent
               la facturation électronique B2B dès 2026. Odoc automatise vos{" "}
-              <strong>e-factures conformes Factur-X, UBL et NF Z42-013</strong> — extraction IA,
-              signature SHA-256, archivage légal probant. <strong>Zéro saisie. Zéro risque fiscal.</strong>
+              <strong>traitement de vos factures électroniques</strong> — extraction IA,
+              empreinte SHA-256 horodatée, journal d'événements. Génération Factur-X/UBL native prévue Q3 2026.
             </p>
           </motion.div>
 
           <motion.div {...fade(0.24)}>
             <div className="mt-5 flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground font-medium">
               {[
-                "🏆 NF Z42-013 certifié",
-                "🇪🇺 EN 16931 / UBL 2.1",
-                "🇫🇷 Factur-X compatible",
+                "🔐 Empreinte SHA-256 + journal d'événements",
+                "🇪🇺 EN 16931 / UBL 2.1 — Q3 2026",
+                "🇫🇷 Factur-X lecture/détection",
                 "🔒 SHA-256 horodaté",
                 "🛡️ RGPD — hébergé France",
                 "⚡ Setup 2 minutes",

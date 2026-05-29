@@ -56,7 +56,7 @@ const tools = [
     emoji: "🧾",
     title: "Factures IA",
     description:
-      "Extraction automatique, workflow de validation, conformité NF Z42-013, détection de fraude, archivage légal SHA-256.",
+      "Extraction automatique, workflow de validation, empreinte SHA-256 + journal d'événements, détection automatique par règles métier.",
   },
   {
     icon: Brain,
@@ -140,7 +140,7 @@ const audiences = [
     title: "Cabinets Comptables",
     description:
       "Gérez vos clients, leurs factures et votre conformité depuis un seul endroit.",
-    bullets: ["Multi-clients", "Conformité NF Z42-013", "Export FEC natif"],
+    bullets: ["Multi-clients", "Archivage SHA-256 horodaté", "Export FEC natif"],
   },
   {
     icon: Scale,
@@ -160,10 +160,10 @@ const audiences = [
 
 const trustBadges = [
   { icon: "🇫🇷", label: "Données hébergées en France" },
-  { icon: <Lock className="h-4 w-4" />, label: "Chiffrement AES-256" },
+  { icon: <Lock className="h-4 w-4" />, label: "TLS 1.3 + hébergement chiffré OVH France" },
   { icon: <BadgeCheck className="h-4 w-4" />, label: "Conforme RGPD" },
-  { icon: <Shield className="h-4 w-4" />, label: "Norme NF Z42-013" },
-  { icon: <Zap className="h-4 w-4" />, label: "99.9% Uptime garanti" },
+  { icon: <Shield className="h-4 w-4" />, label: "Empreinte SHA-256 + journal d'événements" },
+  { icon: <Zap className="h-4 w-4" />, label: "Bêta active — SLA en cours de mise en place" },
 ];
 
 const pricingTeaser = [
@@ -230,7 +230,7 @@ const bentoCards = [
     icon: Shield,
     emoji: "🔒",
     title: "Sécurité enterprise",
-    description: "AES-256, NF Z42-013, hébergé en France",
+    description: "TLS 1.3, SHA-256, hébergé en France",
     accent: false,
   },
   {
@@ -243,10 +243,10 @@ const bentoCards = [
 ];
 
 const stats = [
-  { value: 200, suffix: "+", label: "Équipes actives", icon: Users },
   { value: 11, suffix: "", label: "Modules intégrés", icon: KanbanSquare },
-  { value: 2, suffix: "h", label: "Gagnées / jour", icon: Timer },
-  { value: 99, suffix: ".9%", label: "Uptime garanti", icon: Globe },
+  { value: 2, suffix: "h", label: "Gagnées / jour (estimé)", icon: Timer },
+  { value: 100, suffix: "%", label: "Hébergé en France", icon: Globe },
+  { value: 0, suffix: "€", label: "Pour démarrer", icon: Zap },
 ];
 
 const ROTATING_MODULES = [
@@ -498,7 +498,7 @@ export default function HomePage() {
               }}
             >
               <span className="animate-pulse">●</span>
-              Nouveau — OS d'entreprise IA · Déjà adopté par +200 équipes
+              Nouveau — OS d'entreprise IA · Accès anticipé ouvert
             </span>
           </MotionDiv>
 
@@ -555,7 +555,7 @@ export default function HomePage() {
             transition={{ delay: 0.3, duration: 0.5 }}
           >
             <div className="mt-5 flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground font-medium">
-              {["🏆 NF Z42-013 certifié", "🔒 Hébergé en France", "⚡ Setup 2 min", "🎯 11 modules", "🛡️ RGPD conforme"].map((item) => (
+              {["🔐 Empreinte SHA-256 + journal d'événements", "🔒 Hébergé en France", "⚡ Setup 2 min", "🎯 11 modules", "🛡️ RGPD conforme"].map((item) => (
                 <span key={item}>{item}</span>
               ))}
             </div>

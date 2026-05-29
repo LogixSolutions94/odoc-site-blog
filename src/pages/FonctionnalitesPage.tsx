@@ -84,7 +84,7 @@ const modules = [
     benefits: [
       "Invitation par email en un clic",
       "Rôles prédéfinis : admin, comptable, juriste, lecteur",
-      "Permissions granulaires par module et par dossier",
+      "Rôles owner / admin / member / viewer",
       "Journal d'activité et traçabilité complète",
       "Gestion des équipes et départements",
     ],
@@ -152,8 +152,8 @@ const modules = [
     title: "Smart Connectors",
     description: "Connectez Google Drive et Dropbox pour synchroniser vos documents automatiquement dans Odoc. Votre écosystème, unifié.",
     benefits: [
-      "Synchronisation Google Drive bidirectionnelle",
-      "Synchronisation Dropbox bidirectionnelle",
+      "Import automatique Google Drive",
+      "Import automatique Dropbox",
       "Import automatique des nouveaux fichiers",
       "Mapping de dossiers personnalisable",
       "API ouverte pour intégrations custom",
@@ -164,11 +164,11 @@ const modules = [
     id: "calendrier",
     icon: Calendar,
     title: "Calendrier Partagé",
-    description: "Planifiez et synchronisez les événements de votre équipe. Vue agenda, rappels automatiques, partage en un clic et intégration Google Calendar bidirectionnelle.",
+    description: "Calendrier partagé Odoc : planifiez et partagez les événements de votre équipe. Vue agenda, rappels automatiques, partage en un clic. Intégration Google Calendar prévue Q4 2026.",
     benefits: [
       "Vue agenda partagée par équipe",
       "Rappels automatiques par email",
-      "Intégration Google Calendar bidirectionnelle",
+      "Intégration Google Calendar — prévue Q4 2026",
       "Création d'événements depuis les tâches Kanban",
       "Disponibilités et planification simplifiées",
     ],
