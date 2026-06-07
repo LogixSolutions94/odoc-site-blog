@@ -61,6 +61,21 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        text: {
+          DEFAULT: "hsl(var(--color-text))",
+          muted: "hsl(var(--color-text-muted))",
+          faint: "hsl(var(--color-text-faint))",
+        },
+        surface: {
+          DEFAULT: "hsl(var(--color-surface))",
+          2: "hsl(var(--color-surface-2))",
+        },
+        divider: "hsl(var(--color-divider))",
+      },
+      backgroundImage: {
+        'gradient-cta': 'var(--gradient-cta)',
+        'gradient-primary': 'var(--gradient-primary)',
+        'gradient-cool': 'var(--gradient-cool)',
       },
       borderRadius: {
         lg: "var(--radius)",

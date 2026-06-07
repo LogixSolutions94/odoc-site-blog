@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
-import { Check, Lock, BadgeCheck, Shield, Zap } from "lucide-react";
+import { Check, ShieldCheck } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -17,17 +17,17 @@ const plans = [
     name: "Essential",
     monthlyPrice: 49,
     annualPrice: 39,
-    target: "TPE, solo, indépendants",
-    badge: null,
+    target: "Indépendant, solo, TPE",
+    badge: null as string | null,
     highlight: false,
     features: [
-      "👤 1 compte",
-      "GED — 200 documents",
-      "Facturation IA",
-      "Trésorerie & SEPA Export",
-      "CRM basique",
-      "10 GB stockage",
-      "Support email",
+      "Devis & factures illimités",
+      "Relances d'impayés automatiques",
+      "Saisie automatique des documents",
+      "Suivi de trésorerie & export SEPA",
+      "Fichier clients (CRM)",
+      "Hébergé en France · conforme RGPD",
+      "Support par email",
     ],
     cta: "Commencer l'essai gratuit",
     ctaLink: `${APP_URL}/auth`,
@@ -36,20 +36,16 @@ const plans = [
     name: "Pro",
     monthlyPrice: 89,
     annualPrice: 71,
-    target: "PME, équipes 5-20 pers.",
-    badge: "⭐ Plus populaire",
+    target: "Équipes 3 à 20 personnes",
+    badge: "⭐ Le plus choisi",
     highlight: true,
     features: [
-      "👥 3 comptes",
-      "Tout Essential",
-      "Brain Copilot RAG (IA doc)",
-      "N8N Webhooks & automations",
-      "Analytics avancés",
-      "Module RH complet",
-      "Projets Kanban",
-      "Messagerie interne",
-      "2000 documents",
-      "50 GB stockage",
+      "Tout Essential, pour toute l'équipe",
+      "Assistant IA sur tous vos documents",
+      "Automatisations (relances, rappels, workflows)",
+      "Tableaux de bord avancés",
+      "Module RH (congés, fiches)",
+      "Projets & messagerie d'équipe",
       "Support prioritaire",
     ],
     cta: "Commencer l'essai gratuit",
@@ -59,19 +55,17 @@ const plans = [
     name: "Manager",
     monthlyPrice: 149,
     annualPrice: 119,
-    target: "Multi-équipes, managers",
+    target: "Multi-équipes, dirigeants",
     badge: null,
     highlight: false,
     features: [
-      "👥 5 comptes et plus",
       "Tout Pro",
       "Multi-équipes & délégation",
-      "Portail Fournisseur",
-      "Smart Connectors",
-      "Rapports dirigeant perso.",
+      "Portail fournisseur",
+      "Connexions Google Drive / Dropbox",
+      "Rapports dirigeant personnalisés",
       "Documents illimités",
-      "200 GB stockage",
-      "Support dédié + onboarding",
+      "Support dédié + accompagnement",
     ],
     cta: "Commencer l'essai gratuit",
     ctaLink: `${APP_URL}/auth`,
@@ -80,17 +74,14 @@ const plans = [
     name: "Entreprise",
     monthlyPrice: -1,
     annualPrice: -1,
-    target: "+50 salariés, groupes",
+    target: "+50 personnes, groupes",
     badge: "Sur mesure",
     highlight: false,
     features: [
-      "👥 Sur mesure",
       "Tout Manager",
-      "SSO SAML/OpenID — sur demande, roadmap",
-      "Instance dédiée — sur étude (cahier des charges)",
-      "SLA — sur étude contractuelle",
-      "API privée",
-      "Formation & accompagnement",
+      "Instance dédiée (sur étude)",
+      "Connexion SSO (sur demande)",
+      "Accompagnement & formation",
       "Stockage illimité",
       "Support 24h/24 7j/7",
     ],
@@ -99,35 +90,37 @@ const plans = [
   },
 ];
 
+const compare = [
+  { label: "Devis & factures", essential: "Illimités", pro: "Illimités", manager: "Illimités", entreprise: "Illimités" },
+  { label: "Utilisateurs", essential: "1", pro: "Jusqu'à 20", manager: "Illimités", entreprise: "Illimités" },
+  { label: "Relances automatiques", essential: true, pro: true, manager: true, entreprise: true },
+  { label: "Assistant IA", essential: false, pro: true, manager: true, entreprise: true },
+  { label: "Automatisations", essential: false, pro: true, manager: true, entreprise: true },
+  { label: "Module RH", essential: false, pro: true, manager: true, entreprise: true },
+  { label: "Portail fournisseur", essential: false, pro: false, manager: true, entreprise: true },
+  { label: "Connexion SSO", essential: false, pro: false, manager: false, entreprise: true },
+];
+
 const faqItems = [
-  {
-    question: "Puis-je changer de plan à tout moment ?",
-    answer: "Oui, vous pouvez passer à un plan supérieur ou inférieur à tout moment. Les changements prennent effet immédiatement avec un prorata automatique.",
-  },
-  {
-    question: "Y a-t-il une période d'essai ?",
-    answer: "Les plans Essential, Pro et Manager incluent un essai gratuit de 14 jours sans carte bancaire.",
-  },
-  {
-    question: "Mes données sont-elles sécurisées ?",
-    answer: "Absolument. Vos données transitent en TLS 1.3, sont hébergées sur l'infrastructure chiffrée d'OVH en France et conformes au RGPD. Nous ne revendons jamais vos données.",
-  },
-  {
-    question: "Que se passe-t-il à la fin d'un abonnement ?",
-    answer: "Vous conservez un accès en lecture seule à vos données pendant 30 jours. L'export de vos données reste disponible à tout moment.",
-  },
-  {
-    question: "Proposez-vous des tarifs pour associations/écoles ?",
-    answer: "Oui, contactez-nous à contact@odocpilot.com pour discuter de tarifs adaptés aux associations, écoles et structures éducatives.",
-  },
+  { question: "Y a-t-il un coût par utilisateur ?", answer: "Non. Le prix de votre plan est tout compris : vous ajoutez vos collaborateurs sans supplément caché. Vous savez exactement ce que vous payez." },
+  { question: "Puis-je changer de plan à tout moment ?", answer: "Oui, vous montez ou descendez de plan quand vous voulez. Le changement prend effet immédiatement, avec un prorata automatique." },
+  { question: "Y a-t-il une période d'essai ?", answer: "Oui : 14 jours gratuits sur tous les plans, sans carte bancaire. Vous testez en conditions réelles avant de décider." },
+  { question: "Êtes-vous prêt pour la facture électronique 2026 ?", answer: "Oui. Odoc vous accompagne pas à pas vers la conformité à la réforme de la facturation électronique, pour que vous soyez en règle sans stress." },
+  { question: "Mes données sont-elles en sécurité ?", answer: "Vos données sont hébergées en France (OVH), chiffrées et conformes au RGPD. Nous ne les revendons jamais, et vous pouvez les exporter à tout moment." },
+  { question: "Que se passe-t-il si j'arrête ?", answer: "Aucun engagement : vous résiliez en un clic et repartez avec toutes vos données. Vous gardez un accès en lecture seule pendant 30 jours." },
 ];
 
 const trustBadges = [
   { icon: "🔒", label: "Paiement sécurisé Stripe" },
   { icon: "🇫🇷", label: "Hébergé en France" },
-  { icon: "↩️", label: "Remboursement 30 jours" },
+  { icon: "↩️", label: "Satisfait ou remboursé 30 jours" },
   { icon: "📞", label: "Support réactif en français" },
 ];
+
+function Cell({ value }: { value: boolean | string }) {
+  if (typeof value === "string") return <span className="font-semibold text-foreground">{value}</span>;
+  return value ? <Check className="h-4 w-4 text-primary mx-auto" /> : <span className="text-muted-foreground/40">—</span>;
+}
 
 export default function PricingPage() {
   const [annual, setAnnual] = useState(false);
@@ -135,8 +128,8 @@ export default function PricingPage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="Tarifs Odoc — Essential, Pro, Manager | Essai 14 jours gratuit"
-        description="Comparez les plans Odoc : Essential 49€, Pro 89€, Manager 149€. Essai gratuit 14 jours sans carte bancaire. Annulation à tout moment."
+        title="Tarifs Odoc — un seul prix, tout compris | Essai 14 jours gratuit"
+        description="Des tarifs simples et transparents, sans coût par utilisateur. Essential 49€, Pro 89€, Manager 149€. Essai gratuit 14 jours sans carte bancaire. Hébergé en France."
         canonical="/pricing"
         jsonLd={{
           "@context": "https://schema.org",
@@ -144,401 +137,126 @@ export default function PricingPage() {
           mainEntity: faqItems.map((item) => ({
             "@type": "Question",
             name: item.question,
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: item.answer,
-            },
+            acceptedAnswer: { "@type": "Answer", text: item.answer },
           })),
         }}
       />
 
-      {/* ═══════════════════════════════════════════
-          1 · HERO
-      ═══════════════════════════════════════════ */}
-      <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-14 text-center">
-        <MotionDiv>
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
-            Des tarifs simples, sans surprise
-          </h1>
+      {/* HERO */}
+      <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-12 text-center">
+        <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">Un seul prix. Tout compris.</h1>
           <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Essai gratuit 14 jours · Sans carte bancaire · Résiliation en 1 clic
+            Pas de coût par utilisateur. Pas d'option qui s'empile. Un abonnement clair qui remplace votre logiciel de facture, votre CRM et des heures de saisie.
           </p>
+          <p className="mt-3 text-sm text-muted-foreground">14 jours gratuits · Sans carte bancaire · Résiliable en 1 clic</p>
         </MotionDiv>
 
-        {/* Toggle Mensuel/Annuel */}
-        <MotionDiv className="mt-10 flex items-center justify-center gap-3">
-          <span
-            className={`text-sm font-semibold ${
-              !annual ? "text-foreground" : "text-muted-foreground"
-            }`}
-          >
-            Mensuel
-          </span>
-          <button
-            onClick={() => setAnnual(!annual)}
-            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
-              annual ? "bg-primary" : "bg-muted"
-            }`}
-            aria-label="Basculer entre mensuel et annuel"
-          >
-            <span
-              className={`inline-block h-5 w-5 transform rounded-full bg-card shadow-sm transition-transform ${
-                annual ? "translate-x-6" : "translate-x-1"
-              }`}
-            />
+        {/* Toggle */}
+        <div className="mt-9 flex items-center justify-center gap-3">
+          <span className={`text-sm font-semibold ${!annual ? "text-foreground" : "text-muted-foreground"}`}>Mensuel</span>
+          <button onClick={() => setAnnual(!annual)} aria-label="Basculer mensuel / annuel" className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${annual ? "bg-primary" : "bg-muted"}`}>
+            <span className={`inline-block h-5 w-5 transform rounded-full bg-card shadow-sm transition-transform ${annual ? "translate-x-6" : "translate-x-1"}`} />
           </button>
-          <span
-            className={`text-sm font-semibold ${
-              annual ? "text-foreground" : "text-muted-foreground"
-            }`}
-          >
-            Annuel
-          </span>
-          {annual && (
-            <span className="ml-1 rounded-full bg-green-500/15 px-2.5 py-0.5 text-xs font-bold text-green-600">
-              Économisez 20%
-            </span>
-          )}
-        </MotionDiv>
+          <span className={`text-sm font-semibold ${annual ? "text-foreground" : "text-muted-foreground"}`}>Annuel</span>
+          {annual && <span className="ml-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary">−20%</span>}
+        </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          2 · PRICING CARDS (4 plans)
-      ═══════════════════════════════════════════ */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28">
+      {/* PLANS */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
           {plans.map((plan, i) => {
             const isCustom = plan.monthlyPrice === -1;
-            const price = isCustom
-              ? null
-              : annual
-              ? plan.annualPrice
-              : plan.monthlyPrice;
-
+            const price = isCustom ? null : annual ? plan.annualPrice : plan.monthlyPrice;
+            const isMail = plan.ctaLink.startsWith("mailto:");
             return (
-              <MotionDiv
-                key={plan.name}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                viewport={{ once: true }}
-                className={`relative flex flex-col rounded-xl p-6 sm:p-7 transition-all duration-300 ${
-                  plan.highlight
-                    ? "border-2 border-primary bg-card shadow-elevated ring-1 ring-primary/15 md:scale-[1.02]"
-                    : "border border-border bg-card shadow-card hover:shadow-card-hover"
-                }`}
-              >
-                {/* Badge "Plus populaire" */}
-                {plan.highlight && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground whitespace-nowrap">
-                    {plan.badge}
-                  </span>
+              <MotionDiv key={plan.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.45 }}
+                className={`relative flex flex-col rounded-2xl p-6 sm:p-7 bg-card ${plan.highlight ? "border-2 border-primary shadow-elevated ring-1 ring-primary/15 md:scale-[1.02]" : "border border-border shadow-card"}`}>
+                {plan.highlight && plan.badge && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-cta text-primary-foreground px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap">{plan.badge}</span>
                 )}
-
-                {/* Nom du plan */}
-                <h3 className="text-lg sm:text-xl font-bold text-foreground">
-                  {plan.name}
-                </h3>
-
-                {/* Cible */}
-                <p className="mt-1 text-xs sm:text-sm text-muted-foreground">
-                  {plan.target}
-                </p>
-
-                {/* Prix */}
+                <h3 className="text-lg sm:text-xl font-bold text-foreground">{plan.name}</h3>
+                <p className="mt-1 text-xs sm:text-sm text-muted-foreground">{plan.target}</p>
                 <div className="mt-5 flex items-baseline gap-1">
                   {isCustom ? (
-                    <span className="text-2xl sm:text-3xl font-bold text-foreground">
-                      {plan.badge}
-                    </span>
+                    <span className="text-2xl sm:text-3xl font-bold text-foreground">Sur mesure</span>
                   ) : (
-                    <>
-                      <span className="text-2xl sm:text-3xl font-bold text-foreground">
-                        {price}€
-                      </span>
-                      <span className="text-muted-foreground text-sm">/mois</span>
-                    </>
+                    <><span className="text-3xl font-extrabold text-foreground">{price}€</span><span className="text-muted-foreground text-sm">/mois</span></>
                   )}
                 </div>
-                {annual && !isCustom && (
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {plan.annualPrice * 12}€ /an
-                  </p>
-                )}
-
-                {/* Features */}
-                <ul className="mt-6 sm:mt-7 flex-1 space-y-2 sm:space-y-3">
+                {annual && !isCustom && <p className="mt-1 text-xs text-muted-foreground">soit {plan.annualPrice * 12}€ /an</p>}
+                <ul className="mt-6 flex-1 space-y-2.5">
                   {plan.features.map((f) => (
-                    <li
-                      key={f}
-                      className="flex items-start gap-2 text-xs sm:text-sm text-muted-foreground"
-                    >
-                      <Check className="h-4 w-4 text-accent flex-shrink-0 mt-0.5" />
-                      <span>{f}</span>
-                    </li>
+                    <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground"><Check className="h-4 w-4 text-primary shrink-0 mt-0.5" /><span>{f}</span></li>
                   ))}
                 </ul>
-
-                {/* CTA Button */}
-                {plan.ctaLink.startsWith("mailto:") ? (
-                  <a href={plan.ctaLink} className="mt-6 sm:mt-7 block">
-                    <Button
-                      className="w-full"
-                      variant={plan.highlight ? "default" : "outline"}
-                      size="lg"
-                    >
-                      {plan.cta}
-                    </Button>
-                  </a>
-                ) : (
-                  <a
-                    href={plan.ctaLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-6 sm:mt-7 block"
-                  >
-                    <Button
-                      className={`w-full ${
-                        plan.highlight ? "bg-accent hover:bg-accent/90" : ""
-                      }`}
-                      variant={plan.highlight ? "default" : "outline"}
-                      size="lg"
-                    >
-                      {plan.cta}
-                    </Button>
-                  </a>
-                )}
+                <a href={plan.ctaLink} {...(!isMail ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="mt-7 block" data-umami-event="cta-essai-gratuit">
+                  <Button className={`w-full ${plan.highlight ? "bg-gradient-cta text-primary-foreground font-bold" : ""}`} variant={plan.highlight ? "default" : "outline"} size="lg">{plan.cta}</Button>
+                </a>
               </MotionDiv>
             );
           })}
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          3 · TABLEAU COMPARATIF
-      ═══════════════════════════════════════════ */}
-      <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28">
-        <MotionDiv className="text-center mb-14">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-            Comparatif complet
-          </h2>
-          <p className="mt-4 text-base sm:text-lg text-muted-foreground">
-            Tous les détails des features par plan.
-          </p>
-        </MotionDiv>
-
-        <div className="overflow-x-auto rounded-xl border border-border shadow-card">
+      {/* COMPARATIF */}
+      <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground text-center">Ce qui est inclus, plan par plan</h2>
+        <div className="mt-10 overflow-x-auto rounded-2xl border border-border shadow-card">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border bg-primary/5">
-                <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-foreground">
-                  Fonctionnalité
-                </th>
-                <th className="px-4 sm:px-6 py-3 sm:py-4 text-center font-semibold text-foreground">
-                  Essential
-                </th>
-                <th className="px-4 sm:px-6 py-3 sm:py-4 text-center font-semibold text-foreground">
-                  Pro
-                </th>
-                <th className="px-4 sm:px-6 py-3 sm:py-4 text-center font-semibold text-foreground">
-                  Manager
-                </th>
-                <th className="px-4 sm:px-6 py-3 sm:py-4 text-center font-semibold text-foreground">
-                  Entreprise
-                </th>
+              <tr className="border-b border-border bg-secondary/60">
+                <th className="px-4 sm:px-6 py-4 text-left font-semibold text-foreground">Inclus</th>
+                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Essential</th>
+                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-primary">Pro</th>
+                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Manager</th>
+                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Entreprise</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-border">
-                <td className="px-4 sm:px-6 py-3 sm:py-4 font-medium text-foreground">
-                  Documents max
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  200
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  2000
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ∞
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ∞
-                </td>
-              </tr>
-              <tr className="border-b border-border">
-                <td className="px-4 sm:px-6 py-3 sm:py-4 font-medium text-foreground">
-                  Utilisateurs
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  1
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  3
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ∞
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ∞
-                </td>
-              </tr>
-              <tr className="border-b border-border">
-                <td className="px-4 sm:px-6 py-3 sm:py-4 font-medium text-foreground">
-                  Stockage
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  10 GB
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  50 GB
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  200 GB
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ∞
-                </td>
-              </tr>
-              <tr className="border-b border-border">
-                <td className="px-4 sm:px-6 py-3 sm:py-4 font-medium text-foreground">
-                  Brain Copilot RAG
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-red-500 font-bold">
-                  ✗
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ✅
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ✅
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ✅
-                </td>
-              </tr>
-              <tr className="border-b border-border">
-                <td className="px-4 sm:px-6 py-3 sm:py-4 font-medium text-foreground">
-                  N8N Webhooks
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-red-500 font-bold">
-                  ✗
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ✅
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ✅
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ✅
-                </td>
-              </tr>
-              <tr className="border-b border-border">
-                <td className="px-4 sm:px-6 py-3 sm:py-4 font-medium text-foreground">
-                  Module RH
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-red-500 font-bold">
-                  ✗
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ✅
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ✅
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ✅
-                </td>
-              </tr>
-              <tr className="border-b border-border">
-                <td className="px-4 sm:px-6 py-3 sm:py-4 font-medium text-foreground">
-                  SSO SAML/OpenID
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-red-500 font-bold">
-                  ✗
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-red-500 font-bold">
-                  ✗
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-red-500 font-bold">
-                  ✗
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-green-600 font-bold">
-                  ✅
-                </td>
-              </tr>
-              <tr className="border-b border-border bg-secondary/50">
-                <td className="px-4 sm:px-6 py-3 sm:py-4 font-bold text-foreground">
-                  Support
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-sm font-semibold">
-                  Email
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-sm font-semibold">
-                  Prioritaire
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-sm font-semibold">
-                  Dédié
-                </td>
-                <td className="px-4 sm:px-6 py-3 sm:py-4 text-center text-sm font-semibold">
-                  24/7
-                </td>
-              </tr>
+              {compare.map((row) => (
+                <tr key={row.label} className="border-b border-border last:border-0">
+                  <td className="px-4 sm:px-6 py-3.5 font-medium text-foreground">{row.label}</td>
+                  <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.essential} /></td>
+                  <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.pro} /></td>
+                  <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.manager} /></td>
+                  <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.entreprise} /></td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
 
-        {/* Garantie 30 jours */}
-        <div className="mt-12 rounded-xl bg-card border border-border p-6 sm:p-8 flex items-start gap-4 shadow-card">
-          <Shield className="h-6 w-6 text-green-600 flex-shrink-0 mt-0.5" />
+        {/* Garantie */}
+        <div className="mt-10 rounded-2xl bg-card border border-border p-6 sm:p-8 flex items-start gap-4 shadow-card">
+          <ShieldCheck className="h-6 w-6 text-primary shrink-0 mt-0.5" />
           <div>
-            <h3 className="font-bold text-foreground mb-2">
-              Satisfait ou remboursé 30 jours
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Essayez Odoc sans risque. Si vous n'êtes pas satisfait dans les 30 jours, on vous rembourse intégralement. Sans question.
-            </p>
+            <h3 className="font-bold text-foreground mb-1">Satisfait ou remboursé 30 jours</h3>
+            <p className="text-sm text-muted-foreground">Essayez Odoc sans risque. Si vous n'êtes pas convaincu dans les 30 jours, on vous rembourse intégralement. Sans question.</p>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          4 · FAQ
-      ═══════════════════════════════════════════ */}
-      <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-28">
-        <MotionDiv className="text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-            Questions fréquentes
-          </h2>
-        </MotionDiv>
+      {/* FAQ */}
+      <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground text-center">Questions fréquentes</h2>
         <Accordion type="single" collapsible className="mt-10">
           {faqItems.map((item, i) => (
             <AccordionItem key={i} value={`faq-${i}`} className="border-border">
-              <AccordionTrigger className="text-left text-foreground font-medium">
-                {item.question}
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                {item.answer}
-              </AccordionContent>
+              <AccordionTrigger className="text-left text-foreground font-medium">{item.question}</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">{item.answer}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          5 · TRUST BADGES
-      ═══════════════════════════════════════════ */}
-      <section className="w-full py-10 border-t border-border">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
-            {trustBadges.map((b, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground font-medium">
-                <span className="text-lg">{b.icon}</span>
-                <span>{b.label}</span>
-              </div>
-            ))}
-          </div>
+      {/* TRUST */}
+      <section className="w-full py-10 border-t border-border bg-secondary/40">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-center gap-6 sm:gap-10">
+          {trustBadges.map((b, i) => (
+            <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground font-medium"><span className="text-lg">{b.icon}</span><span>{b.label}</span></div>
+          ))}
         </div>
       </section>
     </div>

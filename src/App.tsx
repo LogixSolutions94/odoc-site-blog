@@ -22,6 +22,7 @@ const RoadmapPage = lazy(() => import("./pages/RoadmapPage"));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
 const RecrutementPage = lazy(() => import("./pages/RecrutementPage"));
 const EFacturePage = lazy(() => import("./pages/EFacturePage"));
+const ArtisansPage = lazy(() => import("./pages/ArtisansPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -57,6 +58,7 @@ const App = () => (
                 <Route path="/changelog" element={<ChangelogPage />} />
                 <Route path="/recrutement" element={<RecrutementPage />} />
                 <Route path="/e-facture" element={<EFacturePage />} />
+                <Route path="/artisans" element={<ArtisansPage />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>

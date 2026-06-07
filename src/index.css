@@ -1,7 +1,9 @@
 /* ═══════════════════════════════════════════════════════════
-   ODOCPILOT DESIGN SYSTEM 2026
-   Palette: Orange #F97316 + Bleu Pétrole #0B4F6C
-   Fonts: Cabinet Grotesk (display) + Satoshi (body) + Plus Jakarta Sans
+   ODOCPILOT DESIGN SYSTEM 2026 — v2 (palette harmonisée)
+   Marque : Pétrole #0D4F63 · Accent clair : Orange #F2722A · Accent sombre : Cyan/Teal
+   Règle : 1 système, 2 thèmes. Défaut = CLAIR. Bascule via [data-theme].
+   Dégradés dans une même famille (jamais orange↔pétrole sur du texte).
+   Fonts : Cabinet Grotesk (display) + Satoshi (body)
    ═══════════════════════════════════════════════════════════ */
 
 @tailwind base;
@@ -10,7 +12,7 @@
 
 @layer base {
   /* ─────────────────────────────────────────────────
-     LIGHT MODE (Default) - Light theme ou [data-theme="light"]
+     THÈME CLAIR (défaut) — :root ou [data-theme="light"]
      ───────────────────────────────────────────────── */
   :root,
   [data-theme="light"] {
@@ -18,207 +20,204 @@
     --font-display: 'Cabinet Grotesk', 'Helvetica Neue', sans-serif;
     --font-body: 'Satoshi', 'Inter', 'Plus Jakarta Sans', sans-serif;
 
-    /* ─── Primary: Orange #F97316 ─── */
-    --color-primary: 30 100% 50%;
-    --color-primary-hover: 24 100% 45%;
-    --color-primary-light: 30 100% 97%;
-    --color-primary-glow: 30 90% 55%;
+    /* ─── Marque / accents (custom) ─── */
+    --color-primary: 19 82% 45%;          /* Orange CTA (texte blanc AA) */
+    --color-primary-hover: 19 82% 40%;
+    --color-primary-light: 24 100% 96%;
+    --color-primary-glow: 22 88% 56%;     /* Orange vif (glow, liserés) */
+    --color-secondary: 194 77% 22%;       /* Pétrole */
+    --color-secondary-hover: 194 77% 17%;
+    --color-secondary-light: 194 46% 90%;
+    --color-secondary-glow: 194 79% 35%;
 
-    /* ─── Secondary: Bleu Pétrole #0B4F6C ─── */
-    --color-secondary: 201 85% 22%;
-    --color-secondary-hover: 201 85% 18%;
-    --color-secondary-light: 200 70% 90%;
-    --color-secondary-glow: 201 75% 35%;
+    /* ─── Surfaces ─── */
+    --color-background: 0 0% 100%;
+    --color-surface: 195 25% 97%;
+    --color-surface-2: 0 0% 100%;
+    --color-surface-offset: 195 25% 95%;
+    --color-border: 196 22% 90%;
+    --color-divider: 196 20% 93%;
 
-    /* ─── Surfaces Light Mode ─── */
-    --color-background: 220 14% 93%;
-    --color-surface: 220 14% 96%;
-    --color-surface-2: 220 14% 98%;
-    --color-surface-offset: 210 20% 92%;
-    --color-border: 220 14% 80%;
-    --color-divider: 220 14% 86%;
-
-    /* ─── Text Light Mode ─── */
-    --color-text: 210 20% 10%;
-    --color-text-muted: 210 10% 40%;
-    --color-text-faint: 210 10% 55%;
+    /* ─── Texte ─── */
+    --color-text: 196 60% 12%;            /* Pétrole encre */
+    --color-text-muted: 196 16% 42%;
+    --color-text-faint: 196 14% 55%;
     --color-text-inverse: 0 0% 100%;
 
-    /* ─── Status ─── */
-    --color-success: 142 76% 36%;
-    --color-error: 0 84% 60%;
-    --color-warning: 38 92% 50%;
+    /* ─── États ─── */
+    --color-success: 142 72% 29%;
+    --color-error: 347 77% 50%;
+    --color-warning: 33 92% 44%;
 
-    /* ─── Legacy/Compatibility ─── */
-    --background: 220 14% 93%;
-    --foreground: 210 20% 10%;
-    --card: 220 14% 96%;
-    --card-foreground: 210 20% 10%;
+    /* ─── Tokens shadcn (effectifs) ─── */
+    --background: 0 0% 100%;
+    --foreground: 196 60% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 196 60% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 210 20% 10%;
-    --primary: 30 100% 50%;
+    --popover-foreground: 196 60% 12%;
+    --primary: 19 82% 45%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 30 90% 55%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 210 20% 10%;
-    --muted: 210 20% 92%;
-    --muted-foreground: 210 10% 40%;
-    --accent: 201 85% 22%;
+    --primary-glow: 22 88% 56%;
+    --secondary: 195 25% 96%;
+    --secondary-foreground: 196 60% 14%;
+    --muted: 195 25% 96%;
+    --muted-foreground: 196 16% 42%;
+    --accent: 194 77% 22%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --destructive: 347 77% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 210 20% 85%;
-    --input: 210 20% 85%;
-    --ring: 30 100% 50%;
-    --radius: 0.75rem;
+    --border: 196 22% 90%;
+    --input: 196 22% 90%;
+    --ring: 19 82% 45%;
+    --radius: 0.85rem;
 
-    /* ─── Gradients ─── */
-    --gradient-primary: linear-gradient(135deg, hsl(30 100% 50%), hsl(201 85% 22%));
-    --gradient-hero: linear-gradient(135deg, hsl(30 100% 50%) 0%, hsl(30 90% 55%) 50%, hsl(201 75% 35%) 100%);
-    --gradient-cta: linear-gradient(135deg, hsl(30 100% 50%), hsl(201 85% 30%));
+    /* ─── Dégradés (harmonisés) ─── */
+    --gradient-primary: linear-gradient(135deg, hsl(22 88% 56%), hsl(194 77% 22%)); /* signature — GROS blocs only */
+    --gradient-hero: linear-gradient(135deg, hsl(22 88% 56%) 0%, hsl(19 82% 50%) 100%);
+    --gradient-cta: linear-gradient(135deg, hsl(22 88% 56%), hsl(19 82% 45%));      /* boutons — analogues */
+    --gradient-cool: linear-gradient(135deg, hsl(194 79% 26%), hsl(193 81% 35%));
 
     /* ─── Sidebar ─── */
-    --sidebar-background: 220 14% 93%;
-    --sidebar-foreground: 210 20% 10%;
-    --sidebar-primary: 30 100% 50%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 196 60% 12%;
+    --sidebar-primary: 19 82% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 40% 96%;
-    --sidebar-accent-foreground: 210 20% 10%;
-    --sidebar-border: 210 20% 85%;
-    --sidebar-ring: 30 100% 50%;
+    --sidebar-accent: 195 25% 96%;
+    --sidebar-accent-foreground: 196 60% 14%;
+    --sidebar-border: 196 22% 90%;
+    --sidebar-ring: 19 82% 45%;
 
     /* ─── Radius ─── */
     --radius-sm: 0.375rem;
     --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
+    --radius-lg: 0.85rem;
     --radius-xl: 1rem;
     --radius-2xl: 1.5rem;
     --radius-full: 9999px;
 
-    /* ─── Shadows Light ─── */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    /* ─── Ombres ─── */
+    --shadow-sm: 0 1px 2px 0 rgba(8, 49, 61, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(8, 49, 61, 0.10), 0 2px 4px -2px rgba(8, 49, 61, 0.08);
+    --shadow-lg: 0 10px 15px -3px rgba(8, 49, 61, 0.10), 0 4px 6px -4px rgba(8, 49, 61, 0.08);
+    --shadow-xl: 0 20px 40px -12px rgba(8, 49, 61, 0.18);
 
-    /* ─── Transitions ─── */
     --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   /* ─────────────────────────────────────────────────
-     DARK MODE (System Preference)
+     THÈME SOMBRE — [data-theme="dark"]  (ambiance « Piste B » : pétrole profond + cyan/teal)
      ───────────────────────────────────────────────── */
+  [data-theme="dark"] {
+    /* ─── Marque / accents (custom) ─── */
+    --color-primary: 199 89% 60%;         /* Cyan CTA (texte sombre) */
+    --color-primary-hover: 199 89% 54%;
+    --color-primary-light: 200 40% 14%;
+    --color-primary-glow: 173 70% 62%;    /* Teal glow */
+    --color-secondary: 173 65% 50%;       /* Teal */
+    --color-secondary-hover: 173 65% 44%;
+    --color-secondary-light: 200 30% 16%;
+    --color-secondary-glow: 199 89% 60%;
+
+    /* ─── Surfaces ─── */
+    --color-background: 200 33% 6%;
+    --color-surface: 198 30% 9%;
+    --color-surface-2: 200 24% 13%;
+    --color-surface-offset: 200 20% 18%;
+    --color-border: 200 18% 18%;
+    --color-divider: 200 16% 16%;
+
+    /* ─── Texte ─── */
+    --color-text: 195 25% 92%;
+    --color-text-muted: 196 16% 62%;
+    --color-text-faint: 200 12% 48%;
+    --color-text-inverse: 200 40% 7%;
+
+    /* ─── Tokens shadcn (effectifs) ─── */
+    --background: 200 33% 6%;
+    --foreground: 195 25% 92%;
+    --card: 198 30% 9%;
+    --card-foreground: 195 25% 92%;
+    --popover: 198 30% 9%;
+    --popover-foreground: 195 25% 92%;
+    --primary: 199 89% 60%;
+    --primary-foreground: 200 40% 7%;
+    --primary-glow: 173 70% 62%;
+    --secondary: 200 22% 14%;
+    --secondary-foreground: 195 25% 92%;
+    --muted: 200 20% 15%;
+    --muted-foreground: 196 16% 62%;
+    --accent: 173 65% 50%;
+    --accent-foreground: 200 40% 7%;
+    --destructive: 347 80% 62%;
+    --destructive-foreground: 200 40% 7%;
+    --border: 200 18% 18%;
+    --input: 200 18% 18%;
+    --ring: 199 89% 60%;
+
+    /* ─── Dégradés ─── */
+    --gradient-primary: linear-gradient(135deg, hsl(173 70% 62%), hsl(199 89% 60%));
+    --gradient-hero: linear-gradient(135deg, hsl(173 70% 62%) 0%, hsl(199 89% 60%) 100%);
+    --gradient-cta: linear-gradient(120deg, hsl(173 70% 62%), hsl(199 89% 60%));
+    --gradient-cool: linear-gradient(135deg, hsl(199 89% 60%), hsl(173 70% 62%));
+
+    /* ─── Sidebar ─── */
+    --sidebar-background: 200 33% 6%;
+    --sidebar-foreground: 195 25% 92%;
+    --sidebar-primary: 199 89% 60%;
+    --sidebar-primary-foreground: 200 40% 7%;
+    --sidebar-accent: 200 22% 14%;
+    --sidebar-accent-foreground: 195 25% 92%;
+    --sidebar-border: 200 18% 18%;
+    --sidebar-ring: 199 89% 60%;
+
+    /* ─── Ombres (sombre) ─── */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 40px -12px rgba(0, 0, 0, 0.7);
+  }
+
   /* ─────────────────────────────────────────────────
-     DARK MODE via System Preference (ONLY if NO data-theme set)
+     Repli préférence système (si AUCUN data-theme posé) → applique le sombre
      ───────────────────────────────────────────────── */
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme]) {
-      /* ─── Surfaces Dark Mode ─── */
-      --color-background: 215 30% 8%;
-      --color-surface: 215 30% 12%;
-      --color-surface-2: 215 25% 18%;
-      --color-surface-offset: 215 20% 25%;
-      --color-border: 215 20% 35%;
-      --color-divider: 215 20% 30%;
+      --color-background: 200 33% 6%;
+      --color-surface: 198 30% 9%;
+      --color-surface-2: 200 24% 13%;
+      --color-border: 200 18% 18%;
+      --color-divider: 200 16% 16%;
+      --color-text: 195 25% 92%;
+      --color-text-muted: 196 16% 62%;
+      --color-text-faint: 200 12% 48%;
+      --color-primary: 199 89% 60%;
+      --color-primary-glow: 173 70% 62%;
+      --color-secondary: 173 65% 50%;
 
-      /* ─── Text Dark Mode ─── */
-      --color-text: 0 0% 95%;
-      --color-text-muted: 215 15% 60%;
-      --color-text-faint: 215 10% 45%;
-
-      /* ─── Colors Dark Mode (slightly lighter) ─── */
-      --color-primary: 30 100% 58%;
-      --color-primary-hover: 30 100% 50%;
-      --color-primary-light: 30 80% 20%;
-      --color-primary-glow: 30 95% 60%;
-
-      --color-secondary: 201 85% 35%;
-      --color-secondary-hover: 201 85% 30%;
-      --color-secondary-light: 200 70% 18%;
-      --color-secondary-glow: 201 85% 40%;
-
-      /* ─── Legacy/Compatibility Dark ─── */
-      --background: 215 30% 8%;
-      --foreground: 0 0% 95%;
-      --card: 215 30% 12%;
-      --card-foreground: 0 0% 95%;
-      --popover: 215 30% 12%;
-      --popover-foreground: 0 0% 95%;
-      --primary: 30 100% 58%;
-      --primary-foreground: 215 30% 8%;
-      --secondary: 215 25% 18%;
-      --secondary-foreground: 0 0% 95%;
-      --muted: 215 20% 25%;
-      --muted-foreground: 215 15% 60%;
-      --accent: 201 85% 35%;
-      --accent-foreground: 215 30% 8%;
-      --border: 215 20% 35%;
-      --input: 215 20% 35%;
-
-      /* ─── Shadows Dark ─── */
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
-      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+      --background: 200 33% 6%;
+      --foreground: 195 25% 92%;
+      --card: 198 30% 9%;
+      --card-foreground: 195 25% 92%;
+      --popover: 198 30% 9%;
+      --popover-foreground: 195 25% 92%;
+      --primary: 199 89% 60%;
+      --primary-foreground: 200 40% 7%;
+      --primary-glow: 173 70% 62%;
+      --secondary: 200 22% 14%;
+      --secondary-foreground: 195 25% 92%;
+      --muted: 200 20% 15%;
+      --muted-foreground: 196 16% 62%;
+      --accent: 173 65% 50%;
+      --accent-foreground: 200 40% 7%;
+      --border: 200 18% 18%;
+      --input: 200 18% 18%;
+      --ring: 199 89% 60%;
     }
   }
 
   /* ─────────────────────────────────────────────────
-     MANUAL DARK MODE OVERRIDE [data-theme="dark"]
-     ───────────────────────────────────────────────── */
-  [data-theme="dark"] {
-    /* ─── Surfaces Dark Mode ─── */
-    --color-background: 215 30% 8%;
-    --color-surface: 215 30% 12%;
-    --color-surface-2: 215 25% 18%;
-    --color-surface-offset: 215 20% 25%;
-    --color-border: 215 20% 35%;
-    --color-divider: 215 20% 30%;
-
-    /* ─── Text Dark Mode ─── */
-    --color-text: 0 0% 95%;
-    --color-text-muted: 215 15% 60%;
-    --color-text-faint: 215 10% 45%;
-
-    /* ─── Colors Dark Mode (slightly lighter) ─── */
-    --color-primary: 30 100% 58%;
-    --color-primary-hover: 30 100% 50%;
-    --color-primary-light: 30 80% 20%;
-    --color-primary-glow: 30 95% 60%;
-
-    --color-secondary: 201 85% 35%;
-    --color-secondary-hover: 201 85% 30%;
-    --color-secondary-light: 200 70% 18%;
-    --color-secondary-glow: 201 85% 40%;
-
-    /* ─── Legacy/Compatibility Dark ─── */
-    --background: 215 30% 8%;
-    --foreground: 0 0% 95%;
-    --card: 215 30% 12%;
-    --card-foreground: 0 0% 95%;
-    --popover: 215 30% 12%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 30 100% 58%;
-    --primary-foreground: 215 30% 8%;
-    --secondary: 215 25% 18%;
-    --secondary-foreground: 0 0% 95%;
-    --muted: 215 20% 25%;
-    --muted-foreground: 215 15% 60%;
-    --accent: 201 85% 35%;
-    --accent-foreground: 215 30% 8%;
-    --border: 215 20% 35%;
-    --input: 215 20% 35%;
-    --ring: 201 85% 35%;
-
-    /* ─── Shadows Dark ─── */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
-  }
-
-  /* ─────────────────────────────────────────────────
-     BASE STYLES
+     BASE
      ───────────────────────────────────────────────── */
   * {
     @apply border-border;
@@ -240,7 +239,7 @@
   }
 }
 
-/* ── Prose table styles (remark-gfm) ──────────────────────── */
+/* ── Styles tableaux prose (remark-gfm) ──────────────────────── */
 .prose table {
   border-collapse: collapse;
   width: 100%;
