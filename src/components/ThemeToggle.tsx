@@ -9,9 +9,9 @@ export function ThemeToggle() {
   useLayoutEffect(() => {
     const html = document.documentElement;
 
-    // Chercher le thème : localStorage > data-theme > défaut dark
+    // Chercher le thème : localStorage > data-theme > défaut CLAIR
     const stored = localStorage.getItem('theme') || html.getAttribute('data-theme');
-    const initial = (stored as 'light' | 'dark') || 'dark';
+    const initial = (stored as 'light' | 'dark') || 'light';
 
     setTheme(initial);
     html.setAttribute('data-theme', initial);
