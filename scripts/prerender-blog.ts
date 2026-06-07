@@ -47,7 +47,6 @@ type Post = {
   json_ld: unknown;
   schema_faq: unknown;
   cover_image_url: string | null;
-  og_image_url: string | null;
   author_name: string | null;
   category: string | null;
   published_at: string | null;
@@ -128,7 +127,7 @@ function buildHead(post: Post): { title: string; tags: string } {
   const url = `${BASE_URL}/blog/${post.slug}`;
   const title = `${post.seo_title || post.title} — Blog OdocPilot`;
   const desc = (post.seo_description || post.excerpt || post.meta_description || "").slice(0, 300);
-  const img = post.og_image_url || post.cover_image_url || `${BASE_URL}/og-image.svg`;
+  const img = post.cover_image_url || `${BASE_URL}/og-image.svg`;
 
   // JSON-LD : on réutilise celui de l'agent s'il existe, sinon on synthétise.
   let jsonLd: unknown = post.json_ld;
@@ -223,7 +222,7 @@ async function run() {
   console.log("[prerender-blog] Récupération des articles publiés…");
   let posts: Post[] = [];
   try {
-    const cols = "slug,title,seo_title,seo_description,excerpt,meta_description,content,json_ld,schema_faq,cover_image_url,og_image_url,author_name,category,published_at,updated_at";
+    const cols = "slug,title,seo_title,seo_description,excerpt,meta_description,content,json_ld,schema_faq,cover_image_url,author_name,category,published_at,updated_at";
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/blog_posts?select=${cols}&status=eq.published`,
       { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
