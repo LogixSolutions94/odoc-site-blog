@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npx tsx scripts/generate-sitemap.ts && tsc --noEmit && vite build",
+    "build": "npx tsx scripts/generate-sitemap.ts && tsc --noEmit && vite build && npx tsx scripts/prerender-blog.ts",
     "sitemap": "npx tsx scripts/generate-sitemap.ts",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
