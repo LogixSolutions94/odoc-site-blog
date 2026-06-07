@@ -2,6 +2,12 @@
 
 **Document de référence pour tous les travaux de développement sur Odoc (landing page + blog)**
 
+> ## ⚡ ÉTAT 2026-06-08 — LIRE `TODO.md` EN PREMIER
+> La **refonte conversion** (design system v2 clair/sombre + 4 pages orientées bénéfice + nouvelle page `/artisans`) est **mergée dans `main`** mais **PAS ENCORE DÉPLOYÉE** : la prod sert encore l'ANCIEN build (`/artisans` → 404, claims légaux retirés le 29/05 encore EN LIGNE).
+> 👉 **P0 = rebuild Docker sur le VPS** (`git pull origin main` + `docker build -t odoc-landing .` + stop/rm/run). Le `docker restart` seul ne suffit pas (image baked-in). Détails : **`TODO.md`** + **`refonte/DEPLOY-WINDOWS.md`**.
+> **Design system** : tokens dans `src/index.css` (défaut **CLAIR**) ; pour couleurs/CTA utiliser `bg-gradient-cta` / `text-primary` / `text-primary-foreground` (**adaptatifs clair↔sombre**), **jamais de couleur hardcodée**. Build local (pas de node) : `bun ./node_modules/typescript/bin/tsc --noEmit` + `bun ./node_modules/vite/bin/vite.js build` ; dev `bun run dev` → **:8080**.
+> ⚠️ Plusieurs sections **ci-dessous sont datées** (déploiement `scp`, palette « Navy Premium », « OS d'entreprise », modules en jargon…) — en cas de doute, **`TODO.md` fait foi**.
+
 ---
 
 ## 🏗️ ARCHITECTURE 2 SITES — RÈGLE CRITIQUE (LIRE EN PREMIER)
