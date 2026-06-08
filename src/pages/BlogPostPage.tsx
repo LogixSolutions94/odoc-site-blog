@@ -120,7 +120,7 @@ export default function BlogPostPage() {
   return (
     <article className="mx-auto max-w-3xl py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
       <BlogSEOHead
-        title={`${post.seo_title || post.title} — Blog Odoc`}
+        title={`${post.seo_title || post.title} — Blog OdocPilot`}
         description={post.seo_description || post.excerpt}
         canonical={`/blog/${post.slug}`}
         ogImage={post.og_image_url || post.cover_image_url || undefined}
@@ -193,7 +193,7 @@ export default function BlogPostPage() {
           <div className="flex items-center justify-center gap-2 mb-2">
             <Sparkles className="h-5 w-5 text-primary" />
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">
-              Essayez Odoc gratuitement — 14 jours, sans CB
+              Essayez OdocPilot gratuitement — 14 jours, sans CB
             </span>
           </div>
           <p className="text-foreground font-medium">

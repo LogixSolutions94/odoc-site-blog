@@ -15,7 +15,7 @@ interface BlogSEOHeadProps {
 }
 
 export function BlogSEOHead({
-  title = "Blog Odoc — Facturation IA et gestion documentaire pour PME",
+  title = "Blog OdocPilot — Facturation IA et gestion documentaire pour PME",
   description = "Tutoriels, bonnes pratiques et actualités sur la facturation automatique, la gestion documentaire IA et la comptabilité pour TPE/PME.",
   canonical = "/blog",
   ogImage,

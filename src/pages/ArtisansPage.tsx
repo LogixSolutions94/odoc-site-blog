@@ -23,7 +23,7 @@ const wins = [
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Odoc — pour les artisans du bâtiment",
+  name: "OdocPilot — pour les artisans du bâtiment",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   description:
@@ -35,8 +35,8 @@ export default function ArtisansPage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="Logiciel de gestion pour artisans & BTP — devis, factures, relances | Odoc"
-        description="Odoc gère vos devis de chantier, vos factures, vos relances d'impayés et la facture électronique 2026 — pendant que vous êtes sur le terrain. Hébergé en France, essai gratuit 14 jours."
+        title="Logiciel de gestion pour artisans & BTP — devis, factures, relances | OdocPilot"
+        description="OdocPilot gère vos devis de chantier, vos factures, vos relances d'impayés et la facture électronique 2026 — pendant que vous êtes sur le terrain. Hébergé en France, essai gratuit 14 jours."
         canonical="/artisans"
         jsonLd={jsonLd}
       />
@@ -62,7 +62,7 @@ export default function ArtisansPage() {
             </MotionDiv>
             <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16, duration: 0.6 }}>
               <p className="mt-5 max-w-xl text-lg text-muted-foreground leading-relaxed">
-                Odoc gère vos <strong className="text-foreground">devis, factures et relances</strong>, et un{" "}
+                OdocPilot gère vos <strong className="text-foreground">devis, factures et relances</strong>, et un{" "}
                 <strong className="text-foreground">assistant IA</strong> s'occupe de l'administratif pendant que vous êtes sur le terrain.
               </p>
             </MotionDiv>
@@ -114,7 +114,7 @@ export default function ArtisansPage() {
       {/* CE QU'ODOC FAIT */}
       <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Ce qu'Odoc fait pendant que vous travaillez</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Ce qu'OdocPilot fait pendant que vous travaillez</h2>
         </div>
         <div className="mt-12 grid md:grid-cols-3 gap-5">
           {wins.map((w, i) => {
@@ -135,7 +135,7 @@ export default function ArtisansPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold px-3 py-1.5">🧾 Réforme 2026</span>
           <h2 className="mt-5 text-3xl sm:text-4xl font-bold leading-tight text-foreground">La facture électronique, sans prise de tête</h2>
-          <p className="mt-5 text-lg text-muted-foreground leading-relaxed">Dès 2026, vous devrez recevoir vos factures au format électronique. Avec Odoc, pas de logiciel à changer en catastrophe : on vous accompagne pas à pas pour être en règle, l'esprit tranquille.</p>
+          <p className="mt-5 text-lg text-muted-foreground leading-relaxed">Dès 2026, vous devrez recevoir vos factures au format électronique. Avec OdocPilot, pas de logiciel à changer en catastrophe : on vous accompagne pas à pas pour être en règle, l'esprit tranquille.</p>
           <ul className="mt-8 flex flex-wrap justify-center gap-3 text-sm">
             {["En règle sans paperasse", "Accompagnement humain en français", "Pensé pour les artisans"].map((t) => (
               <li key={t} className="flex items-center gap-2 rounded-full bg-card border border-border px-4 py-2 text-foreground"><Check className="h-4 w-4 text-primary" />{t}</li>
@@ -159,7 +159,7 @@ export default function ArtisansPage() {
       {/* CTA */}
       <section className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 text-center">
         <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground leading-tight">Et si, ce soir,<br /><span className="bg-gradient-cta bg-clip-text text-transparent">le devis était déjà parti ?</span></h2>
-        <p className="mt-5 text-lg text-muted-foreground">Testez Odoc gratuitement. 2 minutes, sans carte bancaire.</p>
+        <p className="mt-5 text-lg text-muted-foreground">Testez OdocPilot gratuitement. 2 minutes, sans carte bancaire.</p>
         <div className="mt-8 flex justify-center">
           <a href={SIGNUP} target="_blank" rel="noopener noreferrer" data-umami-event="cta-essai-gratuit">
             <Button size="lg" className="bg-gradient-cta text-primary-foreground text-base font-bold px-8 py-6 shadow-lg shadow-primary/20 hover:opacity-95">Je teste gratuitement <ArrowRight className="ml-2 h-5 w-5" /></Button>

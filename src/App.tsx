@@ -23,6 +23,7 @@ const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
 const RecrutementPage = lazy(() => import("./pages/RecrutementPage"));
 const EFacturePage = lazy(() => import("./pages/EFacturePage"));
 const ArtisansPage = lazy(() => import("./pages/ArtisansPage"));
+const MetierPage = lazy(() => import("./pages/MetierPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -59,6 +60,9 @@ const App = () => (
                 <Route path="/recrutement" element={<RecrutementPage />} />
                 <Route path="/e-facture" element={<EFacturePage />} />
                 <Route path="/artisans" element={<ArtisansPage />} />
+                <Route path="/commerce" element={<MetierPage slug="commerce" />} />
+                <Route path="/professions-liberales" element={<MetierPage slug="professions-liberales" />} />
+                <Route path="/cabinets-comptables" element={<MetierPage slug="cabinets-comptables" />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>

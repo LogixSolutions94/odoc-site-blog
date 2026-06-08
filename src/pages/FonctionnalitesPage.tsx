@@ -77,7 +77,7 @@ const groups: Group[] = [
     eyebrow: "Faites tourner votre équipe",
     title: "Toute votre équipe, au même endroit",
     intro:
-      "Invitez vos collaborateurs, donnez à chacun le bon accès, suivez vos projets, gérez les congés et échangez — sans quitter Odoc. Un seul outil pour le terrain, le bureau et la compta.",
+      "Invitez vos collaborateurs, donnez à chacun le bon accès, suivez vos projets, gérez les congés et échangez — sans quitter OdocPilot. Un seul outil pour le terrain, le bureau et la compta.",
     points: [
       "Invitations & rôles (chacun voit ce qu'il doit voir)",
       "Projets et tâches en vue Kanban ou liste",
@@ -115,8 +115,8 @@ export default function FonctionnalitesPage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="Fonctionnalités — Odoc | Devis, factures, IA & gestion tout-en-un"
-        description="Découvrez tout ce qu'Odoc fait pour vous : devis et factures, relances automatiques, assistant IA, saisie automatique des documents, équipe et projets. Un seul outil, hébergé en France."
+        title="Fonctionnalités — OdocPilot | Devis, factures, IA & gestion tout-en-un"
+        description="Découvrez tout ce qu'OdocPilot fait pour vous : devis et factures, relances automatiques, assistant IA, saisie automatique des documents, équipe et projets. Un seul outil, hébergé en France."
         canonical="/fonctionnalites"
       />
 
@@ -124,7 +124,7 @@ export default function FonctionnalitesPage() {
       <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-14 text-center">
         <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold px-3 py-1.5">Tout-en-un</span>
-          <h1 className="mt-5 text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">Tout ce qu'Odoc fait à votre place</h1>
+          <h1 className="mt-5 text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">Tout ce qu'OdocPilot fait à votre place</h1>
           <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground">
             Pas une liste de fonctions techniques — une liste de soucis en moins. Voici concrètement ce que vous gagnez, jour après jour.
           </p>

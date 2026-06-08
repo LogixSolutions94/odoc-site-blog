@@ -2,11 +2,21 @@
 
 > Pour la prochaine IA / le prochain dev. Lis aussi **`CLAUDE.md`** (règles repo) et **`refonte/DEPLOY-WINDOWS.md`** (déploiement) + **`refonte/HANDOFF-CAPTURES.md`** (captures).
 > Ce repo = le **SITE marketing public** (odocpilot.com), **SÉPARÉ** du SaaS odoc-pulse (app.odocpilot.com).
-> Dernière mise à jour : **2026-06-08**.
+> Dernière mise à jour : **2026-06-08 (soir)**.
 
 ---
 
-## 🔴 P0 — BLOQUANT : la refonte est mergée mais **PAS déployée**
+## ✅ FAIT (2026-06-08)
+- **Refonte v1 DÉPLOYÉE & vérifiée EN LIGNE** (design system clair/sombre, Home structure A, `/artisans`, Tarifs « un seul prix » ; claims légaux corrigés).
+- **Finitions ajoutées et commitées sur `main`** *(⚠️ pas encore redéployées — voir bloc deploy ci-dessous)* :
+  - ✅ **3 pages métiers** créées + routées : `/commerce`, `/professions-liberales`, `/cabinets-comptables` (composant data-driven `src/pages/MetierPage.tsx`).
+  - ✅ **Routeur ICP câblé** : les 4 cartes « Vous êtes…? » de la home pointent vers les bonnes pages.
+  - ✅ **Marque unifiée en « OdocPilot »** sur Home, Fonctionnalités, Tarifs, Artisans, Métiers, Footer + Blog. *(→ les items « Unifier la marque / Pages verticales / Reskin blog » du P2 ci-dessous sont DONC FAITS.)*
+- ⚠️ **À REDÉPLOYER** : ces finitions sont sur `main` mais la prod tourne encore sur le build précédent → **relancer le rebuild VPS** (commande P0 ci-dessous) pour les mettre en ligne.
+
+---
+
+## 🔴 P0 — REDÉPLOYER pour mettre les finitions en ligne (même procédure)
 
 **État vérifié (2026-06-08)** : `main` contient bien la **refonte conversion** (design system v2 clair/sombre + 4 pages orientées bénéfice : Home structure A, Fonctionnalités en groupes-bénéfices, page `/artisans`, Tarifs « un seul prix ») **+** le SSG prerender blog.
 **MAIS la production sert encore l'ANCIEN build** : titre serveur = « OdocPilot – Copilot IA… », `/artisans` → **404**, ancien `/pricing`, et surtout les **claims légaux retirés le 29/05 (NF Z42-013 / AES-256 / +200 équipes) TOUJOURS EN LIGNE** = risque DGCCRF.

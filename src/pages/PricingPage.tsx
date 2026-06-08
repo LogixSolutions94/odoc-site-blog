@@ -105,7 +105,7 @@ const faqItems = [
   { question: "Y a-t-il un coût par utilisateur ?", answer: "Non. Le prix de votre plan est tout compris : vous ajoutez vos collaborateurs sans supplément caché. Vous savez exactement ce que vous payez." },
   { question: "Puis-je changer de plan à tout moment ?", answer: "Oui, vous montez ou descendez de plan quand vous voulez. Le changement prend effet immédiatement, avec un prorata automatique." },
   { question: "Y a-t-il une période d'essai ?", answer: "Oui : 14 jours gratuits sur tous les plans, sans carte bancaire. Vous testez en conditions réelles avant de décider." },
-  { question: "Êtes-vous prêt pour la facture électronique 2026 ?", answer: "Oui. Odoc vous accompagne pas à pas vers la conformité à la réforme de la facturation électronique, pour que vous soyez en règle sans stress." },
+  { question: "Êtes-vous prêt pour la facture électronique 2026 ?", answer: "Oui. OdocPilot vous accompagne pas à pas vers la conformité à la réforme de la facturation électronique, pour que vous soyez en règle sans stress." },
   { question: "Mes données sont-elles en sécurité ?", answer: "Vos données sont hébergées en France (OVH), chiffrées et conformes au RGPD. Nous ne les revendons jamais, et vous pouvez les exporter à tout moment." },
   { question: "Que se passe-t-il si j'arrête ?", answer: "Aucun engagement : vous résiliez en un clic et repartez avec toutes vos données. Vous gardez un accès en lecture seule pendant 30 jours." },
 ];
@@ -128,7 +128,7 @@ export default function PricingPage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="Tarifs Odoc — un seul prix, tout compris | Essai 14 jours gratuit"
+        title="Tarifs OdocPilot — un seul prix, tout compris | Essai 14 jours gratuit"
         description="Des tarifs simples et transparents, sans coût par utilisateur. Essential 49€, Pro 89€, Manager 149€. Essai gratuit 14 jours sans carte bancaire. Hébergé en France."
         canonical="/pricing"
         jsonLd={{
@@ -233,7 +233,7 @@ export default function PricingPage() {
           <ShieldCheck className="h-6 w-6 text-primary shrink-0 mt-0.5" />
           <div>
             <h3 className="font-bold text-foreground mb-1">Satisfait ou remboursé 30 jours</h3>
-            <p className="text-sm text-muted-foreground">Essayez Odoc sans risque. Si vous n'êtes pas convaincu dans les 30 jours, on vous rembourse intégralement. Sans question.</p>
+            <p className="text-sm text-muted-foreground">Essayez OdocPilot sans risque. Si vous n'êtes pas convaincu dans les 30 jours, on vous rembourse intégralement. Sans question.</p>
           </div>
         </div>
       </section>

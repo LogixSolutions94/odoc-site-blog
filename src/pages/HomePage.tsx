@@ -31,9 +31,9 @@ const SIGNUP = `${APP_URL}/auth`;
 
 const icp = [
   { icon: HardHat, title: "Artisan & BTP", desc: "Devis de chantier, situations, relances d'impayés.", to: "/artisans" },
-  { icon: Store, title: "Commerce & Services", desc: "Facturation, fichier clients, trésorerie au quotidien.", to: "/fonctionnalites" },
-  { icon: Scale, title: "Professions libérales", desc: "Documents, rendez-vous, conformité, sérénité.", to: "/fonctionnalites" },
-  { icon: Calculator, title: "Cabinets comptables", desc: "Plusieurs clients, des données propres, moins de relances.", to: "/fonctionnalites" },
+  { icon: Store, title: "Commerce & Services", desc: "Facturation, fichier clients, trésorerie au quotidien.", to: "/commerce" },
+  { icon: Scale, title: "Professions libérales", desc: "Documents, rendez-vous, conformité, sérénité.", to: "/professions-liberales" },
+  { icon: Calculator, title: "Cabinets comptables", desc: "Plusieurs clients, des données propres, moins de relances.", to: "/cabinets-comptables" },
 ];
 
 const aiTasks = [
@@ -56,11 +56,11 @@ const outcomes = [
 ];
 
 const faqs = [
-  { q: "Je suis nul en informatique.", a: "Si vous savez prendre une photo et envoyer un SMS, vous savez utiliser Odoc. Et au démarrage, un humain, en français, vous accompagne pas à pas." },
+  { q: "Je suis nul en informatique.", a: "Si vous savez prendre une photo et envoyer un SMS, vous savez utiliser OdocPilot. Et au démarrage, un humain, en français, vous accompagne pas à pas." },
   { q: "Mes données sont-elles en sécurité ?", a: "Hébergées en France, chiffrées, jamais revendues. Vous gardez la main, et vous exportez tout quand vous voulez." },
   { q: "Et si je veux arrêter ?", a: "Sans engagement. Vous résiliez en un clic et repartez avec l'intégralité de vos données. Aucune mauvaise surprise." },
   { q: "Ça remplace mon expert-comptable ?", a: "Non — ça travaille avec lui. Vos données arrivent propres et à jour : votre comptable gagne du temps, et vous aussi." },
-  { q: "Pourquoi vous, je ne vous connais pas ?", a: "Parce qu'on construit Odoc main dans la main avec des artisans et des TPE françaises. Vous rejoignez les premiers, et on vous écoute vraiment." },
+  { q: "Pourquoi vous, je ne vous connais pas ?", a: "Parce qu'on construit OdocPilot main dans la main avec des artisans et des TPE françaises. Vous rejoignez les premiers, et on vous écoute vraiment." },
 ];
 
 const pricing = [
@@ -72,11 +72,11 @@ const pricing = [
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Odoc",
+  name: "OdocPilot",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   description:
-    "Odoc réunit devis, factures, clients, documents, RH et projets dans un seul outil, avec un assistant IA qui gère l'administratif. Pour les TPE et PME françaises, hébergé en France.",
+    "OdocPilot réunit devis, factures, clients, documents, RH et projets dans un seul outil, avec un assistant IA qui gère l'administratif. Pour les TPE et PME françaises, hébergé en France.",
   offers: [
     { "@type": "Offer", name: "Solo", price: "49", priceCurrency: "EUR" },
     { "@type": "Offer", name: "Équipe", price: "89", priceCurrency: "EUR" },
@@ -114,7 +114,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="Odoc — Devis, factures & gestion tout-en-un pour TPE/PME"
+        title="OdocPilot — Devis, factures & gestion tout-en-un pour TPE/PME"
         description="Réunissez devis, factures, clients, RH et projets dans un seul outil, avec un assistant IA qui gère l'administratif. Hébergé en France. Essai gratuit 14 jours, sans carte bancaire."
         canonical="/"
         jsonLd={jsonLd}
@@ -215,7 +215,7 @@ export default function HomePage() {
         <MotionDiv whileInView={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 16 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
           <p className="text-sm font-semibold text-primary">Un seul outil, votre métier</p>
           <h2 className="mt-1 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Vous êtes… ?</h2>
-          <p className="mt-2 text-muted-foreground">On vous montre Odoc avec les mots et les cas de votre activité.</p>
+          <p className="mt-2 text-muted-foreground">On vous montre OdocPilot avec les mots et les cas de votre activité.</p>
         </MotionDiv>
         <div className="mt-9 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {icp.map((c, i) => {
@@ -295,7 +295,7 @@ export default function HomePage() {
         <MotionDiv initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Arrêtez de payer 5 logiciels<br />qui ne se parlent pas.</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            Un outil pour les devis. Un autre pour la facture. Un CRM. Un Drive. Et des heures perdues à tout recopier de l'un à l'autre. Odoc remplace tout ça par <strong className="text-foreground">un seul endroit</strong> où vos données circulent enfin toutes seules — un seul abonnement, clair, sans coût par utilisateur.
+            Un outil pour les devis. Un autre pour la facture. Un CRM. Un Drive. Et des heures perdues à tout recopier de l'un à l'autre. OdocPilot remplace tout ça par <strong className="text-foreground">un seul endroit</strong> où vos données circulent enfin toutes seules — un seul abonnement, clair, sans coût par utilisateur.
           </p>
           <Link to="/pricing"><Button className="mt-6 bg-gradient-cta text-primary-foreground font-semibold">Voir le tarif tout compris <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
         </MotionDiv>
@@ -307,7 +307,7 @@ export default function HomePage() {
             </ul>
           </div>
           <div className="rounded-2xl border-2 border-primary/40 bg-primary/5 p-6">
-            <p className="text-xs font-semibold text-primary uppercase tracking-wide">Avec Odoc</p>
+            <p className="text-xs font-semibold text-primary uppercase tracking-wide">Avec OdocPilot</p>
             <ul className="mt-3 space-y-2 text-sm text-foreground font-medium">
               <li className="flex gap-2"><Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />Tout au même endroit</li>
               <li className="flex gap-2"><Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />Données reliées</li>
@@ -369,7 +369,7 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold px-3 py-1.5">🧾 Réforme 2026</span>
           <h2 className="mt-5 text-3xl sm:text-4xl font-bold leading-tight text-foreground">La facture électronique devient obligatoire.<br />Vous, vous serez déjà prêt.</h2>
-          <p className="mt-5 text-lg text-muted-foreground leading-relaxed">Dès 2026, toutes les entreprises devront recevoir leurs factures au format électronique. Pas de panique, pas de logiciel à changer en urgence : Odoc vous accompagne pas à pas vers la conformité. Vous restez en règle — sans paperasse, sans stress.</p>
+          <p className="mt-5 text-lg text-muted-foreground leading-relaxed">Dès 2026, toutes les entreprises devront recevoir leurs factures au format électronique. Pas de panique, pas de logiciel à changer en urgence : OdocPilot vous accompagne pas à pas vers la conformité. Vous restez en règle — sans paperasse, sans stress.</p>
           <Link to="/e-facture"><Button size="lg" className="mt-7 bg-gradient-cta text-primary-foreground font-semibold">Comprendre la réforme en 2 minutes <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
         </div>
       </section>
@@ -425,7 +425,7 @@ export default function HomePage() {
         <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
           Et si, ce soir,<br /><span className="bg-gradient-cta bg-clip-text text-transparent">la paperasse était déjà faite ?</span>
         </h2>
-        <p className="mt-5 text-lg text-muted-foreground">Essayez Odoc gratuitement. En 2 minutes, sans carte bancaire. Vous verrez la différence dès la première facture.</p>
+        <p className="mt-5 text-lg text-muted-foreground">Essayez OdocPilot gratuitement. En 2 minutes, sans carte bancaire. Vous verrez la différence dès la première facture.</p>
         <div className="mt-8 flex justify-center">
           <a href={SIGNUP} target="_blank" rel="noopener noreferrer" data-umami-event="cta-essai-gratuit">
             <Button size="lg" className="bg-gradient-cta text-primary-foreground text-base font-bold px-8 py-6 shadow-lg shadow-primary/20 hover:opacity-95">
@@ -436,7 +436,7 @@ export default function HomePage() {
         <p className="mt-3 text-xs text-muted-foreground">14 jours gratuits · Sans engagement · Données hébergées en France</p>
 
         <div className="mt-14 pt-10 border-t border-border">
-          <p className="text-sm font-semibold text-foreground">Restez informé des nouveautés Odoc</p>
+          <p className="text-sm font-semibold text-foreground">Restez informé des nouveautés OdocPilot</p>
           <p className="text-xs text-muted-foreground mt-1">Conseils gestion, facture électronique, nouveautés — directement dans votre boîte mail.</p>
           <form onSubmit={handleNewsletter} className="mt-4 flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
             <Input type="email" placeholder="votre@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required className="flex-1" />
