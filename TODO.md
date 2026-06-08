@@ -35,6 +35,17 @@ curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:3000     # attendu : 2
 ⚠️ **NE JAMAIS toucher `odoc-frontend`** (le SaaS, port 3001). Détails pas-à-pas : `refonte/DEPLOY-WINDOWS.md`.
 👉 **Déployer corrige d'un coup : la refonte EN LIGNE + les claims légaux encore exposés.**
 
+### ✅ Mieux : AUTO-DÉPLOIEMENT (workflow CI créé — `.github/workflows/deploy.yml`)
+Pour ne plus jamais revivre « mergé mais pas en ligne », un workflow GitHub Actions a été ajouté : **chaque push de code sur `main` rebuild le VPS tout seul**.
+**À activer UNE fois** — ajouter 4 secrets (Repo → Settings → Secrets and variables → Actions) :
+- `VPS_HOST` = `151.80.144.236`
+- `VPS_USER` = `root`
+- `VPS_SSH_KEY` = la **clé privée SSH** qui a accès au VPS (celle du PC Windows)
+- `VPS_REPO_DIR` = chemin du repo odoc-landing sur le VPS
+
+Une fois les secrets posés : push = déploiement auto. Ou déclenchement manuel : onglet **Actions → « Déploiement odoc-landing (VPS) » → Run workflow** (ou `gh workflow run deploy.yml`).
+> ⛏️ Pour déployer **les finitions actuelles** : pose les secrets, puis lance le workflow manuellement (ou fais le rebuild manuel ci-dessus une dernière fois). Tant que les secrets ne sont pas là, le workflow ne peut pas joindre le VPS.
+
 **Vérif post-deploy (navigateur)** : home en **CLAIR** par défaut · hero « Toute la gestion de votre entreprise. Sans la paperasse. » · section « Vous êtes…? » · **`/artisans` s'ouvre** (plus de 404) · `/pricing` = « Un seul prix. Tout compris. » · **aucun** « SHA-256 / N8N / OS d'entreprise / NF Z42-013 / +200 équipes » visible.
 
 ---

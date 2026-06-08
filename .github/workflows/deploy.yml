@@ -1,0 +1,60 @@
+name: Déploiement odoc-landing (VPS)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Reconstruit l'image Docker "baked-in" odoc-landing (port 3000) sur le VPS et
+# la relance. Résout le piège « mergé sur main mais pas en ligne » : à chaque
+# push de code sur main, le site se déploie tout seul.
+#
+# ⚙️  À ACTIVER UNE SEULE FOIS — ajouter ces 4 secrets dans GitHub :
+#     Repo → Settings → Secrets and variables → Actions → New repository secret
+#       VPS_HOST      = 151.80.144.236
+#       VPS_USER      = root
+#       VPS_SSH_KEY   = (la clé privée SSH qui a accès au VPS — celle du PC Windows)
+#       VPS_REPO_DIR  = chemin du repo odoc-landing sur le VPS (ex: /home/claude-agent/odoc-site-blog)
+#
+#   Ensuite : push sur main = déploiement auto. Ou manuel : onglet "Actions" →
+#   "Déploiement odoc-landing (VPS)" → "Run workflow" (ou `gh workflow run deploy.yml`).
+#
+# ⚠️  Ne touche JAMAIS le conteneur du SaaS (odoc-frontend, port 3001).
+# ─────────────────────────────────────────────────────────────────────────────
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'refonte/**'
+      - '.github/**'
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-odoc-landing
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rebuild & relance odoc-landing sur le VPS
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script_stop: true
+          command_timeout: "15m"
+          script: |
+            set -e
+            cd "${{ secrets.VPS_REPO_DIR }}"
+            echo "→ git pull"
+            git pull origin main
+            echo "→ docker build odoc-landing"
+            docker build -t odoc-landing .
+            echo "→ restart conteneur"
+            docker stop odoc-landing 2>/dev/null || true
+            docker rm odoc-landing 2>/dev/null || true
+            docker run -d --name odoc-landing --network coolify -p 3000:80 --restart unless-stopped odoc-landing
+            sleep 3
+            code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000 || echo "000")
+            echo "→ HTTP local: $code"
+            test "$code" = "200"
