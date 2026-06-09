@@ -146,10 +146,10 @@ export default function HomePage() {
               </p>
             </MotionDiv>
             <MotionDiv initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24, duration: 0.5 }}>
-              <div className="mt-7 flex flex-col sm:flex-row gap-3">
+              <div className="mt-7 flex flex-col sm:flex-row flex-wrap gap-3">
                 <a href={SIGNUP} target="_blank" rel="noopener noreferrer" data-umami-event="cta-essai-gratuit">
                   <Button size="lg" className="w-full sm:w-auto bg-gradient-cta text-primary-foreground font-bold px-7 py-6 text-base shadow-lg shadow-primary/20 hover:opacity-95">
-                    Essayer gratuitement — sans carte bancaire <ArrowRight className="ml-2 h-5 w-5" />
+                    Essayer gratuitement <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </a>
                 <Link to="/fonctionnalites">
@@ -158,7 +158,7 @@ export default function HomePage() {
                   </Button>
                 </Link>
               </div>
-              <p className="mt-3 text-xs text-muted-foreground">14 jours gratuits · Sans engagement · Résiliable en 1 clic</p>
+              <p className="mt-3 text-xs text-muted-foreground">14 jours gratuits · Sans carte bancaire · Sans engagement</p>
               <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium text-muted-foreground">
                 <span>🇫🇷 100% Français</span><span className="text-border">•</span>
                 <span>🔒 Hébergé en France</span><span className="text-border">•</span>

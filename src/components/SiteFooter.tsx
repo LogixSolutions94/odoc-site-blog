@@ -4,7 +4,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border py-14 bg-card">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
           <div>
             <h3 className="text-sm font-bold text-foreground mb-4">Produit</h3>
             <ul className="space-y-2.5">
@@ -12,6 +12,15 @@ export function SiteFooter() {
               <li><Link to="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Tarifs</Link></li>
               <li><Link to="/roadmap" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Roadmap</Link></li>
               <li><Link to="/changelog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Changelog</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-foreground mb-4">Métiers</h3>
+            <ul className="space-y-2.5">
+              <li><Link to="/artisans" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Artisans &amp; BTP</Link></li>
+              <li><Link to="/commerce" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Commerce &amp; Services</Link></li>
+              <li><Link to="/professions-liberales" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Professions libérales</Link></li>
+              <li><Link to="/cabinets-comptables" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Cabinets comptables</Link></li>
             </ul>
           </div>
           <div>
