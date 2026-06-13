@@ -220,16 +220,16 @@ export default function HomePage() {
             </MotionDiv>
             <MotionDiv initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24, duration: 0.5 }}>
               <div className="mt-7 flex flex-col items-center sm:flex-row sm:justify-center flex-wrap gap-3">
-                <Link to={CONFORMITE} data-umami-event="cta-conformite-hero">
-                  <Button size="lg" className="w-full sm:w-auto bg-gradient-cta text-primary-foreground font-bold px-7 py-6 text-base shadow-lg shadow-primary/20 hover:opacity-95">
-                    Préparer ma conformité 2026 <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
                 <a href={SIGNUP} data-umami-event="cta-essai-hero">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto px-7 py-6 text-base">
-                    Démarrer l'essai 14 jours
+                  <Button size="lg" className="w-full sm:w-auto bg-gradient-cta text-primary-foreground font-bold px-7 py-6 text-base shadow-lg shadow-primary/20 hover:opacity-95">
+                    Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </a>
+                <Link to={CONFORMITE} data-umami-event="cta-conformite-hero">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto px-7 py-6 text-base">
+                    Vérifier ma conformité (3 min)
+                  </Button>
+                </Link>
               </div>
               <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-primary" /> L'IA prépare, vous validez</span>
@@ -503,7 +503,7 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Tarifs clairs, par entreprise</p>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Un abonnement par entreprise, sans coût par utilisateur</h2>
-          <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">Quand votre équipe s'agrandit, votre facture ne suit pas. Chaque offre inclut l'essai gratuit de 14 jours, sans carte bancaire.</p>
+          <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">Commencez gratuitement avec le palier <strong className="text-foreground">Conformité</strong> (0€), puis passez à l'offre adaptée. Chaque offre payante inclut l'essai gratuit de 14 jours, sans carte bancaire — et quand votre équipe s'agrandit, votre facture ne suit pas.</p>
           <div className="mt-10 grid sm:grid-cols-3 gap-5 text-left">
             {pricing.map((p) => (
               <div key={p.name} className={`relative rounded-2xl bg-card p-6 ${p.highlight ? "border-2 border-primary shadow-elevated ring-1 ring-primary/15" : "border border-border shadow-card"}`}>
@@ -551,14 +551,14 @@ export default function HomePage() {
           Préparez votre conformité face aux échéances 2026 et 2027, ou lancez directement l'essai de 14 jours, sans carte bancaire, pour voir l'IA préparer votre administratif sur vos propres documents.
         </p>
         <div className="mt-8 flex flex-col items-center sm:flex-row sm:justify-center gap-3">
-          <Link to={CONFORMITE} data-umami-event="cta-conformite-final">
-            <Button size="lg" className="w-full sm:w-auto bg-gradient-cta text-primary-foreground text-base font-bold px-8 py-6 shadow-lg shadow-primary/20 hover:opacity-95">
-              Préparer ma conformité 2026 <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
           <a href={SIGNUP} data-umami-event="cta-essai-final">
-            <Button size="lg" variant="outline" className="w-full sm:w-auto px-8 py-6 text-base">Démarrer l'essai 14 jours</Button>
+            <Button size="lg" className="w-full sm:w-auto bg-gradient-cta text-primary-foreground text-base font-bold px-8 py-6 shadow-lg shadow-primary/20 hover:opacity-95">
+              Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
           </a>
+          <Link to={CONFORMITE} data-umami-event="cta-conformite-final">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto px-8 py-6 text-base">Vérifier ma conformité (3 min)</Button>
+          </Link>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">Sans engagement · Sans carte bancaire · Données en France</p>
 
