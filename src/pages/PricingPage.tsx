@@ -17,6 +17,23 @@ const SIGNUP = `${APP_URL}/auth?mode=signup`;
 
 const plans = [
   {
+    name: "Conformité",
+    monthlyPrice: 0,
+    annualPrice: 0,
+    target: "Se mettre en conformité, gratuitement",
+    badge: "Gratuit" as string | null,
+    highlight: false,
+    features: [
+      "Générateur de factures Factur-X illimité",
+      "Diagnostic + vérificateur de conformité",
+      "Recevez et lisez vos premières factures avec l'IA",
+      "1 utilisateur · hébergé en France",
+      "Sans carte bancaire, sans engagement",
+    ],
+    cta: "Commencer gratuitement",
+    ctaLink: SIGNUP,
+  },
+  {
     name: "Essential",
     monthlyPrice: 49,
     annualPrice: 39,
@@ -72,36 +89,18 @@ const plans = [
     cta: "Commencer l'essai gratuit",
     ctaLink: SIGNUP,
   },
-  {
-    name: "Entreprise",
-    monthlyPrice: -1,
-    annualPrice: -1,
-    target: "+50 personnes, groupes",
-    badge: "Sur mesure",
-    highlight: false,
-    features: [
-      "Tout Manager",
-      "Instance dédiée (sur étude)",
-      "Accompagnement & formation",
-      "Stockage illimité",
-      "Support prioritaire",
-    ],
-    cta: "Nous contacter",
-    ctaLink: "mailto:contact@odocpilot.com",
-  },
 ];
 
 const compare = [
-  { label: "Devis & factures", essential: "Illimités", pro: "Illimités", manager: "Illimités", entreprise: "Illimités" },
-  { label: "Factures Factur-X conformes", essential: true, pro: true, manager: true, entreprise: true },
-  { label: "Lecture IA des factures reçues", essential: true, pro: true, manager: true, entreprise: true },
-  { label: "Recherche en langage naturel", essential: true, pro: true, manager: true, entreprise: true },
-  { label: "Export FEC", essential: true, pro: true, manager: true, entreprise: true },
-  { label: "Utilisateurs", essential: "1", pro: "Illimités", manager: "Illimités", entreprise: "Illimités" },
-  { label: "Copilote Brain", essential: false, pro: true, manager: true, entreprise: true },
-  { label: "Relances préparées automatiquement", essential: false, pro: true, manager: true, entreprise: true },
-  { label: "Multi-équipes & délégation", essential: false, pro: false, manager: true, entreprise: true },
-  { label: "Accompagnement à la conformité", essential: false, pro: false, manager: true, entreprise: true },
+  { label: "Générateur de factures Factur-X", gratuit: "Illimité", essential: "Illimité", pro: "Illimité", manager: "Illimité" },
+  { label: "Diagnostic + vérificateur de conformité", gratuit: true, essential: true, pro: true, manager: true },
+  { label: "Lecture IA des factures reçues", gratuit: "Découverte", essential: true, pro: true, manager: true },
+  { label: "Recherche en langage naturel", gratuit: false, essential: true, pro: true, manager: true },
+  { label: "Export FEC pour l'expert-comptable", gratuit: false, essential: true, pro: true, manager: true },
+  { label: "Utilisateurs", gratuit: "1", essential: "1", pro: "Illimités", manager: "Illimités" },
+  { label: "Copilote Brain", gratuit: false, essential: false, pro: true, manager: true },
+  { label: "Relances préparées automatiquement", gratuit: false, essential: false, pro: true, manager: true },
+  { label: "Multi-équipes & délégation", gratuit: false, essential: false, pro: false, manager: true },
 ];
 
 const faqItems = [
@@ -132,7 +131,7 @@ export default function PricingPage() {
     <div className="flex flex-col items-center">
       <SEOHead
         title="Tarifs OdocPilot — un seul prix, tout compris | Essai 14 jours gratuit"
-        description="Des tarifs simples et transparents, sans coût par utilisateur. Essential 49€, Pro 89€, Manager 149€. Préparez votre conformité facture électronique 2026/2027. Essai gratuit 14 jours sans carte bancaire. Données et IA en France."
+        description="Des tarifs simples et transparents, sans coût par utilisateur. Palier Conformité gratuit, puis Essential 49€, Pro 89€, Manager 149€. Préparez votre conformité facture électronique 2026/2027. Essai 14 jours sans carte bancaire. Données et IA en France."
         canonical="/pricing"
         jsonLd={{
           "@context": "https://schema.org",
@@ -176,25 +175,25 @@ export default function PricingPage() {
       <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
           {plans.map((plan, i) => {
-            const isCustom = plan.monthlyPrice === -1;
-            const price = isCustom ? null : annual ? plan.annualPrice : plan.monthlyPrice;
+            const isFree = plan.monthlyPrice === 0;
+            const price = annual ? plan.annualPrice : plan.monthlyPrice;
             const isMail = plan.ctaLink.startsWith("mailto:");
             return (
               <MotionDiv key={plan.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.45 }}
                 className={`relative flex flex-col rounded-2xl p-6 sm:p-7 bg-card ${plan.highlight ? "border-2 border-primary shadow-elevated ring-1 ring-primary/15 md:scale-[1.02]" : "border border-border shadow-card"}`}>
-                {plan.highlight && plan.badge && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-cta text-primary-foreground px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap">{plan.badge}</span>
+                {plan.badge && (
+                  <span className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ${plan.highlight ? "bg-gradient-cta text-primary-foreground" : "bg-secondary text-foreground border border-border"}`}>{plan.badge}</span>
                 )}
                 <h3 className="text-lg sm:text-xl font-bold text-foreground">{plan.name}</h3>
                 <p className="mt-1 text-xs sm:text-sm text-muted-foreground">{plan.target}</p>
                 <div className="mt-5 flex items-baseline gap-1">
-                  {isCustom ? (
-                    <span className="text-2xl sm:text-3xl font-bold text-foreground">Sur mesure</span>
+                  {isFree ? (
+                    <span className="text-3xl font-extrabold text-foreground">Gratuit</span>
                   ) : (
                     <><span className="text-3xl font-extrabold text-foreground tabular-nums">{price}€</span><span className="text-muted-foreground text-sm">/mois</span></>
                   )}
                 </div>
-                {annual && !isCustom && <p className="mt-1 text-xs text-muted-foreground tabular-nums">soit {plan.annualPrice * 12}€ /an</p>}
+                {annual && !isFree && <p className="mt-1 text-xs text-muted-foreground tabular-nums">soit {plan.annualPrice * 12}€ /an</p>}
                 <ul className="mt-6 flex-1 space-y-2.5">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground"><Check className="h-4 w-4 text-primary shrink-0 mt-0.5" /><span>{f}</span></li>
@@ -207,6 +206,10 @@ export default function PricingPage() {
             );
           })}
         </div>
+        <p className="mt-8 text-center text-sm text-muted-foreground">
+          Plus de 50 personnes ou un groupe ?{" "}
+          <a href="mailto:contact@odocpilot.com" className="font-semibold text-primary underline hover:no-underline">Parlons d'une offre sur mesure</a>.
+        </p>
       </section>
 
       {/* ANCRAGE DOULEUR — coût de la non-conformité */}
@@ -234,20 +237,20 @@ export default function PricingPage() {
             <thead>
               <tr className="border-b border-border bg-secondary/60">
                 <th className="px-4 sm:px-6 py-4 text-left font-semibold text-foreground">Inclus</th>
+                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Conformité</th>
                 <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Essential</th>
                 <th className="px-3 sm:px-4 py-4 text-center font-semibold text-primary">Pro</th>
                 <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Manager</th>
-                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Entreprise</th>
               </tr>
             </thead>
             <tbody>
               {compare.map((row) => (
                 <tr key={row.label} className="border-b border-border last:border-0">
                   <td className="px-4 sm:px-6 py-3.5 font-medium text-foreground">{row.label}</td>
+                  <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.gratuit} /></td>
                   <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.essential} /></td>
                   <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.pro} /></td>
                   <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.manager} /></td>
-                  <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.entreprise} /></td>
                 </tr>
               ))}
             </tbody>
