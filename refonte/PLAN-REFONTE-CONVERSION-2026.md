@@ -7,6 +7,14 @@
 
 ---
 
+## ✅ État de livraison — mis à jour 13/06 (session autonome)
+> **LOT 0 (hygiène)** : Home refondue (wedge, calendrier, marque) ; **`/e-facture` purgé** des claims illégaux DGCCRF + refondu conforme (50€/500€, « plateforme agréée », encart transmission honnête) ; marque `OdocPilot` corrigée (a-propos/roadmap/changelog/recrutement) ; CTA en deep-link `/auth?mode=signup` sans `_blank` ; `/e-facture` + verticales + outils **ajoutés au sitemap + footer**. ✅
+> **LOT 1 (cœur funnel)** : **`/diagnostic`** (quiz 3 questions → feuille de route datée → capture email) et **`/generateur-factur-x`** (XML Factur-X CII EN16931 valide + PDF imprimable + vérif mentions obligatoires, sans compte) **créés et routés** ; **CTA Home → `/diagnostic`** ; composant `TrustCredentials` (Numérique Responsable · IA frugale · RGPD · AI Act · Mistral France · sécurité max) propagé Home+footer+e-facture+pricing+métiers. ✅
+> **Reste** : instrumentation Umami HTTPS + consentement (LOT 1) ; `/pricing` ancrage douleur + offre fondateur (LOT 2) ; repositionnement `/a-propos` (retirer « OS d'entreprise ») + claims verticales/fonctionnalités ; SEO silos + perf/a11y (LOT 3) ; **déploiement `docker build` VPS** + alignement DB pricing in-app. **Grille actée : 49/89/149 € (Essential/Pro/Manager).**
+> **Honnêteté** : les labels affichés (Numérique Responsable, IA frugale) doivent correspondre à des **certificats réellement détenus et valides**.
+
+---
+
 ## 0. TL;DR — le verdict en 10 lignes
 
 1. **Repositionner tout le site sur le wedge conformité e-facture 2026/2027** (porte d'entrée par la douleur légale), pas sur « OS d'entreprise tout-en-un ».
