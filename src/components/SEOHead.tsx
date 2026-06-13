@@ -10,7 +10,7 @@ interface SEOHeadProps {
 }
 
 const BASE_URL = "https://odocpilot.com";
-const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.svg`;
+const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
 
 export function SEOHead({
   title,
@@ -33,8 +33,11 @@ export function SEOHead({
       <meta property="og:description" content={description} />
       <meta property="og:type" content={ogType} />
       <meta property="og:image" content={ogImage} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:type" content="image/png" />
       {fullCanonical && <meta property="og:url" content={fullCanonical} />}
-      <meta property="og:site_name" content="Odoc" />
+      <meta property="og:site_name" content="OdocPilot" />
       <meta property="og:locale" content="fr_FR" />
 
       {/* Twitter */}

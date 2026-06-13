@@ -40,7 +40,7 @@ export function BlogSEOHead({
             name: "OdocPilot",
             logo: {
               "@type": "ImageObject",
-              url: `${BASE_URL}/og-image.svg`,
+              url: `${BASE_URL}/og-image.png`,
             },
           },
           datePublished: publishedTime,
