@@ -6,80 +6,154 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { TrustCredentials } from "@/components/TrustCredentials";
 import {
   ArrowRight,
+  ChevronRight,
   Check,
+  Clock,
+  CalendarClock,
+  PlugZap,
+  Search,
+  FileText,
+  ScanLine,
+  FileOutput,
+  MessageSquareText,
+  Sparkles,
   HardHat,
   Store,
   Scale,
   Calculator,
-  Mail,
-  ReceiptText,
-  FolderInput,
-  MessageSquare,
-  Clock,
-  Banknote,
-  BellRing,
   MapPin,
   ShieldCheck,
-  FileCheck2,
-  Quote,
+  MousePointerClick,
+  FileX2,
+  CreditCard,
+  RotateCcw,
 } from "lucide-react";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
-const SIGNUP = `${APP_URL}/auth`;
+const SIGNUP = `${APP_URL}/auth?mode=signup`;
+// CTA conformité : pointe vers la page pilier /e-facture (le diagnostic interactif /diagnostic
+// sera branché au LOT suivant — repointer ici à ce moment-là).
+const CONFORMITE = "/e-facture";
+
+/* ───────── Données ───────── */
+
+const timeline = [
+  { date: "15/10/2024", title: "Fin du portail public gratuit", desc: "L'État abandonne le Portail Public de Facturation : passer par une plateforme agréée privée devient incontournable.", icon: PlugZap, tone: "muted" as const },
+  { date: "01/09/2026", title: "Réception obligatoire — toutes entreprises", desc: "Toute entreprise assujettie à la TVA doit pouvoir recevoir ses factures au format électronique structuré.", icon: CalendarClock, tone: "primary" as const },
+  { date: "01/09/2027", title: "Émission + e-reporting — TPE / PME", desc: "Les TPE, PME et micro-entreprises doivent à leur tour émettre leurs factures et transmettre leur e-reporting.", icon: CalendarClock, tone: "muted" as const },
+];
+
+const flow = [
+  { title: "Votre entreprise", desc: "Émet et reçoit au format Factur-X", soon: false },
+  { title: "Plateforme agréée (PA)", desc: "Achemine la facture et l'e-reporting", soon: true },
+  { title: "Destinataire & administration", desc: "Reçoit la facture ; l'État reçoit les données", soon: false },
+];
+
+const positioning = [
+  { name: "Pennylane", role: "pour le cabinet comptable" },
+  { name: "Qonto", role: "pour la banque" },
+  { name: "Indy", role: "pour la déclaration du TNS" },
+  { name: "OdocPilot", role: "pour le dirigeant qui prépare son administratif", highlight: true },
+];
+
+const features = [
+  { icon: FileText, title: "Factures au format Factur-X", desc: "Vos factures sortent au format conforme à la réforme, sans aucun paramétrage technique." },
+  { icon: ScanLine, title: "Lecture intelligente des factures", desc: "Photographiez ou déposez une facture : montant, TVA et échéance sont extraits, prêts à valider." },
+  { icon: FileOutput, title: "Export FEC en un clic", desc: "Un Fichier des Écritures Comptables propre, transmis à votre expert-comptable sans manipulation." },
+  { icon: MessageSquareText, title: "Copilote qui répond et suggère", desc: "« Qui me doit de l'argent ce mois-ci ? » : réponse claire et action suggérée." },
+];
 
 const icp = [
-  { icon: HardHat, title: "Artisan & BTP", desc: "Devis de chantier, situations, relances d'impayés.", to: "/artisans" },
-  { icon: Store, title: "Commerce & Services", desc: "Facturation, fichier clients, trésorerie au quotidien.", to: "/commerce" },
-  { icon: Scale, title: "Professions libérales", desc: "Documents, rendez-vous, conformité, sérénité.", to: "/professions-liberales" },
-  { icon: Calculator, title: "Cabinets comptables", desc: "Plusieurs clients, des données propres, moins de relances.", to: "/cabinets-comptables" },
+  { icon: HardHat, title: "Artisan & BTP", desc: "Vos factures de matériaux sont lues à mesure et classées par chantier. Vous validez depuis le téléphone.", to: "/artisans" },
+  { icon: Store, title: "Commerce & Services", desc: "Factures conformes préparées, justificatifs classés, trésorerie résumée en une phrase.", to: "/commerce" },
+  { icon: Scale, title: "Professions libérales", desc: "Honoraires, justificatifs et écritures tenus prêts pour votre expert-comptable.", to: "/professions-liberales" },
+  { icon: Calculator, title: "Cabinets comptables", desc: "Proposez à vos petits clients un outil qui prépare des données propres. Devenez partenaire.", to: "/cabinets-comptables" },
 ];
 
-const aiTasks = [
-  { icon: Mail, title: "Il relance vos impayés, tout seul", desc: "Facture en retard ? La relance part au bon moment, au bon ton. Vous êtes payé plus vite — sans courir après personne." },
-  { icon: ReceiptText, title: "Il prépare vos devis et factures", desc: "Dictez l'essentiel. Il rédige un document propre, prêt à envoyer et à signer en ligne. Le devis du dimanche soir, c'est fini." },
-  { icon: FolderInput, title: "Il lit et classe vos documents", desc: "Photographiez une facture : montant, TVA, échéance — tout est saisi et rangé au bon endroit. Fini la saisie à la main." },
-  { icon: MessageSquare, title: "Il répond à vos questions", desc: "« Qui me doit de l'argent ? » « Combien j'ai facturé ce mois-ci ? » Réponse immédiate, en français clair." },
-];
-
-const steps = [
-  { n: "1", title: "Vous importez, il range", desc: "Photo ou glisser-déposer : vos documents sont lus, triés et saisis automatiquement. Vous ne recopiez plus une seule ligne." },
-  { n: "2", title: "Vous facturez, il relance", desc: "Devis et factures en quelques secondes, prêts à signer. L'assistant relance vos clients à votre place, au bon moment." },
-  { n: "3", title: "Vous pilotez, l'esprit clair", desc: "Vous voyez où va votre argent en temps réel. Plus de mauvaise surprise en fin de mois : vous décidez sereinement." },
-];
-
-const outcomes = [
-  { icon: Clock, big: "−5 h", label: "d'administratif par semaine", sub: "Du temps rendu à votre métier" },
-  { icon: Banknote, big: "2×", label: "plus vite payé", sub: "Devis signés & relances automatiques" },
-  { icon: BellRing, big: "0", label: "impayé oublié", sub: "L'assistant n'oublie jamais une relance" },
-];
-
-const faqs = [
-  { q: "Je suis nul en informatique.", a: "Si vous savez prendre une photo et envoyer un SMS, vous savez utiliser OdocPilot. Et au démarrage, un humain, en français, vous accompagne pas à pas." },
-  { q: "Mes données sont-elles en sécurité ?", a: "Hébergées en France, chiffrées, jamais revendues. Vous gardez la main, et vous exportez tout quand vous voulez." },
-  { q: "Et si je veux arrêter ?", a: "Sans engagement. Vous résiliez en un clic et repartez avec l'intégralité de vos données. Aucune mauvaise surprise." },
-  { q: "Ça remplace mon expert-comptable ?", a: "Non — ça travaille avec lui. Vos données arrivent propres et à jour : votre comptable gagne du temps, et vous aussi." },
-  { q: "Pourquoi vous, je ne vous connais pas ?", a: "Parce qu'on construit OdocPilot main dans la main avec des artisans et des TPE françaises. Vous rejoignez les premiers, et on vous écoute vraiment." },
+const sovereignty = [
+  { icon: MapPin, t: "Hébergement en France", s: "Documents et traitement IA sur le territoire" },
+  { icon: ShieldCheck, t: "Conforme RGPD", s: "Pas de transfert opaque, jamais revendues" },
+  { icon: MousePointerClick, t: "Vous gardez le dernier mot", s: "Rien n'est validé sans votre accord" },
+  { icon: FileOutput, t: "Vos données sont à vous", s: "Exportables à tout moment (FEC inclus)" },
 ];
 
 const pricing = [
-  { name: "Essential", price: "49€", note: "Pour l'indépendant qui veut tout centraliser." },
-  { name: "Pro", price: "89€", note: "Pour les équipes — assistant IA complet.", highlight: true },
-  { name: "Manager", price: "149€", note: "Multi-équipes & accompagnement dédié." },
+  { name: "Essential", price: "49€", annual: "39€/mois en annuel", note: "Pour l'indépendant qui centralise documents, factures et conformité." },
+  { name: "Pro", price: "89€", annual: "71€/mois en annuel", note: "Le copilote IA complet : lecture, classement, relances, factures conformes.", highlight: true },
+  { name: "Manager", price: "149€", annual: "119€/mois en annuel", note: "Pour les structures multi-équipes, avec un accompagnement dédié." },
+];
+
+const faqs = [
+  {
+    q: "Suis-je concerné par la facturation électronique en 2026, même sans expert-comptable ?",
+    a: "Oui. Toute entreprise assujettie à la TVA en France devra recevoir ses factures fournisseurs au format électronique structuré dès le 1ᵉʳ septembre 2026, puis émettre les siennes et déclarer son e-reporting au 1ᵉʳ septembre 2027 pour les TPE, PME et micro-entreprises. L'obligation s'applique que vous travailliez ou non avec un cabinet — OdocPilot est justement conçu pour les dirigeants qui pilotent leur administratif eux-mêmes.",
+  },
+  {
+    q: "Une facture électronique, c'est juste un PDF envoyé par e-mail ?",
+    a: "Non, et c'est la confusion la plus répandue. La loi impose un format structuré, lisible automatiquement par les logiciels et l'administration : Factur-X (un PDF lisible doublé de données structurées intégrées), UBL ou CII. OdocPilot génère vos factures directement au format Factur-X conforme, sans le moindre paramétrage technique de votre part.",
+  },
+  {
+    q: "OdocPilot transmet-il déjà mes factures à l'administration ?",
+    a: "Soyons transparents : la transmission via une plateforme agréée (PA) est en cours de mise en place et arrivera avant l'échéance. Aujourd'hui, OdocPilot génère vos factures au format Factur-X conforme et vous prépare à l'obligation. Nous préférons vous dire précisément ce qui est actif plutôt que de promettre une transmission qui n'est pas encore branchée.",
+  },
+  {
+    q: "L'IA fait-elle ma comptabilité à ma place, toute seule ?",
+    a: "Non, et c'est un choix assumé. L'IA prépare le travail : elle lit vos factures, en extrait le fournisseur, le montant, la TVA et l'échéance, classe vos documents et prépare vos relances. Mais rien n'est engagé sans vous. Vous validez d'un clic, ou vous corrigez. Vous gardez toujours le dernier mot sur ce qui touche à votre comptabilité et à votre argent.",
+  },
+  {
+    q: "Est-ce compatible avec mon expert-comptable ?",
+    a: "Oui, totalement. OdocPilot ne remplace pas votre expert-comptable : il prépare des données propres et structurées qui lui facilitent le travail. Vous exportez votre FEC en un clic pour le lui transmettre, et vos documents sont déjà classés. L'outil s'intègre à votre organisation au lieu de la bousculer.",
+  },
+  {
+    q: "Que se passe-t-il à la fin de l'essai de 14 jours ?",
+    a: "Rien d'automatique et aucune mauvaise surprise. L'essai gratuit ne demande pas de carte bancaire : à son terme, vous n'êtes pas prélevé tant que vous n'avez pas choisi un abonnement. Si OdocPilot vous convient, vous activez l'offre adaptée à votre activité. Sinon, vous ne payez rien. Nos tarifs sont par entreprise, sans coût par utilisateur.",
+  },
 ];
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "OdocPilot",
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "Web",
-  description:
-    "OdocPilot réunit devis, factures, clients, documents, RH et projets dans un seul outil, avec un assistant IA qui gère l'administratif. Pour les TPE et PME françaises, hébergé en France.",
-  offers: [
-    { "@type": "Offer", name: "Solo", price: "49", priceCurrency: "EUR" },
-    { "@type": "Offer", name: "Équipe", price: "89", priceCurrency: "EUR" },
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://odocpilot.com/#organization",
+      name: "OdocPilot",
+      url: "https://odocpilot.com",
+      logo: "https://odocpilot.com/favicon.svg",
+      areaServed: "FR",
+      description: "Copilote IA français de facturation et de conformité pour les dirigeants de TPE, PME et indépendants.",
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: "OdocPilot",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      inLanguage: "fr-FR",
+      description:
+        "OdocPilot prépare votre conformité à la facturation électronique 2026/2027 : génération Factur-X, lecture IA des factures, recherche de documents en langage naturel, export FEC. L'IA prépare, vous validez. Données et IA hébergées en France.",
+      offers: {
+        "@type": "AggregateOffer",
+        priceCurrency: "EUR",
+        lowPrice: "49",
+        highPrice: "149",
+        offerCount: 3,
+        offers: [
+          { "@type": "Offer", name: "Essential", price: "49", priceCurrency: "EUR" },
+          { "@type": "Offer", name: "Pro", price: "89", priceCurrency: "EUR" },
+          { "@type": "Offer", name: "Manager", price: "149", priceCurrency: "EUR" },
+        ],
+      },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
   ],
 };
 
@@ -114,8 +188,8 @@ export default function HomePage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="OdocPilot — Devis, factures & gestion tout-en-un pour TPE/PME"
-        description="Réunissez devis, factures, clients, RH et projets dans un seul outil, avec un assistant IA qui gère l'administratif. Hébergé en France. Essai gratuit 14 jours, sans carte bancaire."
+        title="Facturation électronique 2026/2027 : préparez votre conformité avec OdocPilot"
+        description="Réception obligatoire au 1er septembre 2026, émission en 2027 : OdocPilot prépare votre conformité e-facture. Factur-X, lecture IA des factures, recherche en langage naturel, export FEC. L'IA prépare, vous validez. Données et IA hébergées en France. Essai 14 jours sans carte bancaire."
         canonical="/"
         jsonLd={jsonLd}
       />
@@ -124,74 +198,82 @@ export default function HomePage() {
       <section className="w-full relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-24 right-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
-          <div className="absolute bottom-0 -left-20 h-96 w-96 rounded-full bg-accent/10 blur-3xl" />
+          <div className="absolute bottom-0 -left-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
         </div>
-        <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16 grid lg:grid-cols-2 gap-12 items-center">
-          <div>
+        <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16">
+          <div className="max-w-3xl mx-auto text-center">
             <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold px-3 py-1.5">
-                <span className="animate-pulse">●</span> La facture électronique arrive en 2026 — prenez de l'avance
+              <span className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">
+                Conformité facturation électronique 2026 / 2027
               </span>
             </MotionDiv>
             <MotionDiv initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08, duration: 0.6 }}>
-              <h1 className="mt-6 text-4xl sm:text-5xl lg:text-[3.3rem] font-extrabold tracking-tight leading-[1.05] text-foreground">
-                Toute la gestion de votre entreprise.{" "}
-                <span className="bg-gradient-cta bg-clip-text text-transparent">Sans la paperasse.</span>
+              <h1 className="mt-4 text-4xl sm:text-5xl lg:text-[3.1rem] font-extrabold tracking-tight leading-[1.08] text-foreground">
+                La réforme de la facture électronique arrive.{" "}
+                <span className="bg-gradient-cta bg-clip-text text-transparent">OdocPilot la prépare pour vous, vous validez en un clic.</span>
               </h1>
             </MotionDiv>
             <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16, duration: 0.6 }}>
-              <p className="mt-5 max-w-xl text-lg text-muted-foreground leading-relaxed">
-                Devis, factures, clients, compta et documents — réunis dans un seul outil. Et un{" "}
-                <strong className="text-foreground">assistant IA qui fait l'administratif à votre place</strong>, pendant que vous, vous faites votre métier.
+              <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed">
+                À partir du 1ᵉʳ septembre 2026, recevoir une facture au format électronique structuré devient obligatoire pour toutes les entreprises ; l'émission suivra en 2027. OdocPilot est le copilote des dirigeants de TPE, PME et indépendants qui gèrent leur administratif{" "}
+                <strong className="text-foreground">sans expert-comptable au quotidien</strong> : une intelligence artificielle française qui lit, classe et prépare vos factures et vos relances — pendant que vous gardez la décision finale.
               </p>
             </MotionDiv>
             <MotionDiv initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24, duration: 0.5 }}>
-              <div className="mt-7 flex flex-col sm:flex-row flex-wrap gap-3">
-                <a href={SIGNUP} target="_blank" rel="noopener noreferrer" data-umami-event="cta-essai-gratuit">
+              <div className="mt-7 flex flex-col items-center sm:flex-row sm:justify-center flex-wrap gap-3">
+                <Link to={CONFORMITE} data-umami-event="cta-conformite-hero">
                   <Button size="lg" className="w-full sm:w-auto bg-gradient-cta text-primary-foreground font-bold px-7 py-6 text-base shadow-lg shadow-primary/20 hover:opacity-95">
-                    Essayer gratuitement <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </a>
-                <Link to="/fonctionnalites">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto px-7 py-6 text-base">
-                    Découvrir en 2 minutes
+                    Préparer ma conformité 2026 <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
+                <a href={SIGNUP} data-umami-event="cta-essai-hero">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto px-7 py-6 text-base">
+                    Démarrer l'essai 14 jours
+                  </Button>
+                </a>
               </div>
-              <p className="mt-3 text-xs text-muted-foreground">14 jours gratuits · Sans carte bancaire · Sans engagement</p>
-              <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium text-muted-foreground">
-                <span>🇫🇷 100% Français</span><span className="text-border">•</span>
-                <span>🔒 Hébergé en France</span><span className="text-border">•</span>
-                <span>🛡️ Conforme RGPD</span><span className="text-border">•</span>
-                <span>🧾 Prêt pour la facture 2026</span>
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium text-muted-foreground">
+                <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-primary" /> L'IA prépare, vous validez</span>
+                <span className="inline-flex items-center gap-1.5"><MapPin className="h-4 w-4 text-primary" /> Données et IA en France</span>
+                <span className="inline-flex items-center gap-1.5"><CreditCard className="h-4 w-4 text-primary" /> Essai 14 j sans carte bancaire</span>
               </div>
             </MotionDiv>
           </div>
 
-          {/* Aperçu produit (mockup — remplacé par /images/hero-dashboard.webp quand fourni) */}
-          <MotionDiv initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6 }}>
-            <div className="rounded-2xl border border-border bg-card shadow-elevated overflow-hidden">
+          {/* Aperçu produit honnête : facture lue par l'IA, à valider */}
+          <MotionDiv initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6 }} className="mt-12 max-w-2xl mx-auto">
+            <div className="rounded-2xl border border-border bg-card shadow-elevated overflow-hidden text-left">
               <div className="flex items-center gap-1.5 px-4 h-9 bg-muted/60 border-b border-border">
-                <span className="h-2.5 w-2.5 rounded-full bg-destructive/40" />
-                <span className="h-2.5 w-2.5 rounded-full bg-primary/40" />
-                <span className="h-2.5 w-2.5 rounded-full bg-accent/40" />
-                <span className="ml-3 text-[11px] text-muted-foreground">app.odocpilot.com</span>
+                <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
+                <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
+                <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
+                <span className="ml-3 text-[11px] text-muted-foreground">app.odocpilot.com — Factures reçues</span>
               </div>
-              <div className="p-4 grid grid-cols-3 gap-3">
-                <div className="col-span-3 flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-muted-foreground">Bonjour Camille 👋</p>
-                    <p className="font-bold text-foreground">Votre activité aujourd'hui</p>
+              <div className="p-5">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Facture lue par l'IA · à valider</p>
+                <div className="mt-3 rounded-xl border border-border p-4 space-y-0">
+                  {[
+                    { l: "Fournisseur", v: "Menuiserie Laurent" },
+                    { l: "Montant HT", v: "1 820,00 €" },
+                    { l: "TVA (20 %)", v: "364,00 €" },
+                    { l: "Échéance", v: "30/06/2026" },
+                  ].map((r) => (
+                    <div key={r.l} className="flex items-center justify-between py-2 border-b border-border/60 text-sm">
+                      <span className="text-muted-foreground">{r.l}</span>
+                      <span className="font-semibold text-foreground rounded bg-primary/10 px-1.5">{r.v}</span>
+                    </div>
+                  ))}
+                  <div className="flex items-center justify-between py-2 text-sm">
+                    <span className="text-muted-foreground">Compte proposé</span>
+                    <span className="font-semibold text-foreground">606 — Achats</span>
                   </div>
-                  <span className="text-[11px] rounded-md bg-primary/10 text-primary font-semibold px-2 py-1">Assistant IA actif</span>
                 </div>
-                <div className="rounded-xl bg-muted/50 p-3"><p className="text-[11px] text-muted-foreground">À encaisser</p><p className="font-extrabold text-foreground text-lg">12 480 €</p></div>
-                <div className="rounded-xl bg-muted/50 p-3"><p className="text-[11px] text-muted-foreground">Devis à signer</p><p className="font-extrabold text-foreground text-lg">5</p></div>
-                <div className="rounded-xl bg-muted/50 p-3"><p className="text-[11px] text-muted-foreground">Relances envoyées</p><p className="font-extrabold text-primary text-lg">3 ✓</p></div>
-                <div className="col-span-3 rounded-xl border border-border p-3 space-y-1.5 text-xs">
-                  <div className="flex justify-between"><span className="text-muted-foreground">FAC-041 · Dupont</span><span className="rounded bg-green-500/15 text-green-600 px-1.5 font-semibold">Payée</span></div>
-                  <div className="flex justify-between"><span className="text-muted-foreground">FAC-042 · Martin SARL</span><span className="rounded bg-amber-500/15 text-amber-600 px-1.5 font-semibold">Relancée</span></div>
-                  <div className="flex justify-between"><span className="text-muted-foreground">DEVIS-118 · Atelier B</span><span className="rounded bg-primary/15 text-primary px-1.5 font-semibold">À signer</span></div>
+                <p className="mt-3 inline-flex items-center gap-2 rounded-lg bg-primary/10 text-primary text-xs font-semibold px-2.5 py-1.5">
+                  <Sparkles className="h-3.5 w-3.5" /> L'IA a préparé — rien n'est validé sans vous
+                </p>
+                <div className="mt-3 flex gap-2">
+                  <span className="rounded-lg bg-gradient-cta text-primary-foreground text-sm font-semibold px-4 py-2">Valider</span>
+                  <span className="rounded-lg border border-border text-muted-foreground text-sm px-4 py-2">Corriger</span>
                 </div>
               </div>
             </div>
@@ -202,218 +284,257 @@ export default function HomePage() {
       {/* ───────── BANDE CONFIANCE ───────── */}
       <section className="w-full border-y border-border bg-secondary/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-muted-foreground font-medium">
-          <span className="text-foreground font-semibold">Vos données, votre entreprise, votre pays :</span>
-          <span>🇫🇷 Hébergé en France (OVH)</span>
-          <span>🛡️ Conforme RGPD</span>
-          <span>🔒 Chiffré & sauvegardé</span>
-          <span>🧾 Pensé pour la facture électronique 2026</span>
+          <span className="inline-flex items-center gap-2"><FileText className="h-4 w-4 text-primary" /> Factur-X conforme</span>
+          <span className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Données et IA en France</span>
+          <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Sans coût par utilisateur</span>
+          <span className="inline-flex items-center gap-2"><RotateCcw className="h-4 w-4 text-primary" /> Sans engagement</span>
         </div>
       </section>
 
-      {/* ───────── ROUTEUR ICP ───────── */}
-      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <MotionDiv whileInView={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 16 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <p className="text-sm font-semibold text-primary">Un seul outil, votre métier</p>
-          <h2 className="mt-1 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Vous êtes… ?</h2>
-          <p className="mt-2 text-muted-foreground">On vous montre OdocPilot avec les mots et les cas de votre activité.</p>
-        </MotionDiv>
-        <div className="mt-9 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {icp.map((c, i) => {
-            const Icon = c.icon;
+      {/* ───────── URGENCE / CALENDRIER ───────── */}
+      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Le calendrier officiel</p>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Êtes-vous prêt pour le 1ᵉʳ septembre 2026 ?</h2>
+          <p className="mt-4 text-muted-foreground leading-relaxed">
+            La réception de factures électroniques devient obligatoire pour toutes les entreprises assujetties à la TVA au 1ᵉʳ septembre 2026 ; l'émission et l'e-reporting suivent en 2027. Un détail change tout : le Portail Public de Facturation gratuit de l'État a été abandonné le 15 octobre 2024 — le passage par une plateforme agréée privée devient le chemin obligatoire.
+          </p>
+        </div>
+        <div className="mt-10 grid md:grid-cols-3 gap-5">
+          {timeline.map((t, i) => {
+            const Icon = t.icon;
+            const isPrimary = t.tone === "primary";
             return (
-              <MotionDiv key={c.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.45 }}>
-                <Link to={c.to} className="group block h-full rounded-2xl bg-card border border-border p-6 text-left hover:border-primary/40 hover:shadow-card-hover transition-all duration-300">
-                  <div className="flex items-center justify-center h-11 w-11 rounded-xl bg-primary/10"><Icon className="h-5 w-5 text-primary" /></div>
-                  <p className="mt-4 font-bold text-foreground">{c.title}</p>
-                  <p className="text-sm text-muted-foreground mt-1">{c.desc}</p>
-                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all">Découvrir <ArrowRight className="h-4 w-4" /></span>
-                </Link>
+              <MotionDiv key={t.date} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.45 }}
+                className={`rounded-2xl border p-6 ${isPrimary ? "border-primary/40 bg-primary/5 shadow-card-hover" : "border-border bg-card shadow-card"}`}>
+                <div className={`flex items-center justify-center h-10 w-10 rounded-xl ${isPrimary ? "bg-gradient-cta text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
+                  <Icon className="h-5 w-5" />
+                </div>
+                <p className={`mt-4 text-2xl font-extrabold tracking-tight tabular-nums ${isPrimary ? "text-primary" : "text-foreground"}`}>{t.date}</p>
+                <p className="mt-1 font-semibold text-foreground">{t.title}</p>
+                <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
               </MotionDiv>
             );
           })}
         </div>
+        <p className="mt-4 text-center text-xs text-muted-foreground">
+          Source :{" "}
+          <a href="https://www.impots.gouv.fr/professionnel/facturation-electronique" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">impots.gouv.fr</a>{" "}· calendrier mis à jour en juin 2026.
+        </p>
       </section>
 
-      {/* ───────── PROBLÈME / EMPATHIE ───────── */}
-      <section className="w-full bg-secondary/60 border-y border-border">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <MotionDiv initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-            <p className="text-primary font-semibold text-sm">On connaît votre quotidien</p>
-            <h2 className="mt-2 text-3xl sm:text-4xl font-bold leading-tight text-foreground">
-              Le devis du dimanche soir.<br />La facture qu'on oublie. Le client qui ne paie pas.
-            </h2>
-            <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-              Vos papiers sont éparpillés entre le mail, le Drive, le camion et le classeur. Vous jonglez avec 5 outils qui ne se parlent pas. Et vous faites, seul, le travail de trois personnes : commercial, comptable, secrétaire.
-            </p>
-            <p className="mt-6 text-xl font-bold text-foreground">Ce n'est pas une fatalité. Il vous manquait juste le bon outil.</p>
-          </MotionDiv>
-        </div>
-      </section>
-
-      {/* ───────── COMMENT ÇA MARCHE ───────── */}
-      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Simple comme bonjour.<br />Puissant comme une équipe.</h2>
-          <p className="mt-4 text-muted-foreground">Trois gestes. Le reste, l'assistant s'en occupe.</p>
-        </div>
-        <div className="mt-12 grid md:grid-cols-3 gap-6">
-          {steps.map((s, i) => (
-            <MotionDiv key={s.n} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }} className="rounded-2xl border border-border bg-card p-7 shadow-card">
-              <div className="h-9 w-9 rounded-full bg-gradient-cta text-primary-foreground flex items-center justify-center font-bold">{s.n}</div>
-              <h3 className="mt-4 font-bold text-lg text-foreground">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-            </MotionDiv>
-          ))}
-        </div>
-      </section>
-
-      {/* ───────── L'IA POUR VOUS ───────── */}
+      {/* ───────── PÉDAGOGIE — FLUX ───────── */}
       <section className="w-full bg-secondary/60 border-y border-border">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="max-w-2xl">
-            <p className="text-sm font-semibold text-primary">Votre assistant IA</p>
-            <h2 className="mt-1 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Il ne vous parle pas de technologie.<br />Il fait le travail à votre place.</h2>
+          <div className="max-w-2xl mx-auto text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Comprendre la réforme</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Comment circulera une facture électronique</h2>
+            <p className="mt-4 text-muted-foreground leading-relaxed">
+              Une facture électronique n'est pas un PDF envoyé par e-mail : c'est un fichier au format structuré, lisible par les logiciels et l'administration. À partir de 2026, elle ne voyagera plus de boîte mail à boîte mail, mais transitera par une plateforme agréée qui l'achemine et transmet les données fiscales. Le format compte autant que le canal — et c'est là qu'OdocPilot vous met en avance.
+            </p>
           </div>
-          <div className="mt-12 grid md:grid-cols-2 gap-5">
-            {aiTasks.map((t, i) => {
-              const Icon = t.icon;
-              return (
-                <MotionDiv key={t.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07, duration: 0.45 }} className="rounded-2xl bg-card border border-border p-7 shadow-card">
-                  <div className="flex items-center justify-center h-11 w-11 rounded-xl bg-primary/10"><Icon className="h-5 w-5 text-primary" /></div>
-                  <h3 className="mt-3 font-bold text-lg text-foreground">{t.title}</h3>
-                  <p className="mt-1.5 text-muted-foreground text-sm leading-relaxed">{t.desc}</p>
-                </MotionDiv>
-              );
-            })}
+
+          <div className="mt-10 flex flex-col md:flex-row md:items-stretch gap-3">
+            {flow.map((n, i) => (
+              <div key={n.title} className="contents">
+                <div className={`relative flex-1 rounded-2xl border p-5 bg-card ${n.soon ? "border-primary/40" : "border-border"}`}>
+                  {n.soon && (
+                    <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-primary/15 text-primary text-[10px] font-bold px-2.5 py-0.5 whitespace-nowrap">
+                      transmission bientôt
+                    </span>
+                  )}
+                  <p className="font-semibold text-foreground text-center">{n.title}</p>
+                  <p className="mt-1 text-xs text-muted-foreground text-center leading-relaxed">{n.desc}</p>
+                </div>
+                {i < flow.length - 1 && (
+                  <div className="flex items-center justify-center text-muted-foreground/50">
+                    <ChevronRight className="h-5 w-5 rotate-90 md:rotate-0" />
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-          <p className="mt-8 text-sm text-muted-foreground">Derrière, de la technologie de pointe. Devant, une seule chose qui compte : vous gagnez du temps.</p>
+
+          <div className="mt-6 grid sm:grid-cols-2 gap-4">
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <p className="font-semibold text-foreground flex items-center gap-2"><FileX2 className="h-4 w-4 text-primary" /> Ce n'est pas un simple PDF</p>
+              <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">Le format légal (Factur-X) est un PDF lisible doublé de données structurées intégrées, traitable sans ressaisie. Les formats UBL et CII suivent le même principe.</p>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <p className="font-semibold text-foreground flex items-center gap-2"><PlugZap className="h-4 w-4 text-primary" /> Le portail gratuit a disparu</p>
+              <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">Depuis l'abandon du Portail Public (15/10/2024), il n'existe plus de canal public gratuit : passer par une plateforme agréée privée est devenu incontournable.</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ───────── TOUT-EN-UN ───────── */}
-      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 grid lg:grid-cols-2 gap-12 items-center">
-        <MotionDiv initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Arrêtez de payer 5 logiciels<br />qui ne se parlent pas.</h2>
+      {/* ───────── PARTI PRIS — L'IA PRÉPARE, VOUS VALIDEZ ───────── */}
+      <section className="w-full bg-brand-panel text-brand-panel-foreground">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="max-w-2xl mx-auto text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-panel-foreground/70">Notre parti pris</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">L'IA prépare, vous validez :<br />la place laissée vide par les autres.</h2>
+            <p className="mt-4 text-brand-panel-foreground/80 leading-relaxed">
+              La plupart des outils s'adressent aux cabinets comptables, aux banques ou aux indépendants pour leur déclaration. Peu parlent au dirigeant qui fait lui-même son administratif et n'a ni le temps ni l'envie de tout ressaisir. Notre IA prépare le travail — puis s'arrête. Rien n'est envoyé, validé ou comptabilisé sans votre accord. Cette retenue n'est pas une limite : c'est l'engagement de vous laisser la main sur ce qui engage votre entreprise.
+            </p>
+          </div>
+
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            {["L'IA lit", "classe", "prépare les relances"].map((step) => (
+              <div key={step} className="contents">
+                <span className="rounded-xl bg-brand-panel-foreground/10 border border-brand-panel-foreground/15 px-4 py-2.5 text-sm font-semibold">{step}</span>
+                <ChevronRight className="h-5 w-5 text-brand-panel-foreground/40" />
+              </div>
+            ))}
+            <span className="inline-flex items-center gap-2 rounded-xl bg-gradient-cta text-primary-foreground px-4 py-2.5 text-sm font-semibold">
+              <MousePointerClick className="h-4 w-4" /> Vous validez en 1 clic
+            </span>
+          </div>
+
+          <div className="mt-10 max-w-xl mx-auto rounded-2xl border border-brand-panel-foreground/15 overflow-hidden">
+            {positioning.map((p) => (
+              <div key={p.name} className={`grid grid-cols-[1fr,1.4fr] text-sm ${p.highlight ? "bg-brand-panel-foreground/10" : ""}`}>
+                <div className="px-4 py-3 border-b border-brand-panel-foreground/10 font-semibold">
+                  <span className={p.highlight ? "inline-flex items-center gap-2" : ""}>{p.highlight && <Sparkles className="h-3.5 w-3.5 text-primary" />}{p.name}</span>
+                </div>
+                <div className={`px-4 py-3 border-b border-l border-brand-panel-foreground/10 ${p.highlight ? "text-brand-panel-foreground font-medium" : "text-brand-panel-foreground/75"}`}>{p.role}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── FONCTIONNALITÉS — BENTO ───────── */}
+      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Ce qu'OdocPilot fait concrètement</p>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Des fonctions réelles, montrées plutôt que promises</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            Un outil pour les devis. Un autre pour la facture. Un CRM. Un Drive. Et des heures perdues à tout recopier de l'un à l'autre. OdocPilot remplace tout ça par <strong className="text-foreground">un seul endroit</strong> où vos données circulent enfin toutes seules — un seul abonnement, clair, sans coût par utilisateur.
+            Nous distinguons toujours ce qui est actif de ce qui arrive. Voici ce que l'outil fait réellement aujourd'hui — la transmission via plateforme agréée et le rapprochement bancaire sont annoncés honnêtement comme « bientôt ».
           </p>
-          <Link to="/pricing"><Button className="mt-6 bg-gradient-cta text-primary-foreground font-semibold">Voir le tarif tout compris <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
-        </MotionDiv>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="rounded-2xl border border-border p-6 bg-card">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Aujourd'hui</p>
-            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-              <li>❌ Logiciel de devis</li><li>❌ Logiciel de facture</li><li>❌ CRM / fichier clients</li><li>❌ Drive + classeur</li><li>❌ Heures de ressaisie</li>
-            </ul>
-          </div>
-          <div className="rounded-2xl border-2 border-primary/40 bg-primary/5 p-6">
-            <p className="text-xs font-semibold text-primary uppercase tracking-wide">Avec OdocPilot</p>
-            <ul className="mt-3 space-y-2 text-sm text-foreground font-medium">
-              <li className="flex gap-2"><Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />Tout au même endroit</li>
-              <li className="flex gap-2"><Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />Données reliées</li>
-              <li className="flex gap-2"><Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />Relances automatiques</li>
-              <li className="flex gap-2"><Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />1 abonnement clair</li>
-              <li className="flex gap-2"><Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />Zéro ressaisie</li>
-            </ul>
+        </div>
+
+        <div className="mt-10 grid md:grid-cols-3 md:auto-rows-fr gap-4">
+          {/* Grande cellule : recherche en langage naturel */}
+          <MotionDiv initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }}
+            className="md:col-span-2 md:row-span-2 rounded-2xl border border-border bg-card p-6 shadow-card hover:shadow-card-hover transition-shadow flex flex-col">
+            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-primary/10"><Search className="h-5 w-5 text-primary" /></div>
+            <h3 className="mt-4 text-lg font-bold text-foreground">Retrouvez tout en langage naturel</h3>
+            <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">Demandez « toutes les factures EDF de 2025 » en français courant : la GED IA les retrouve instantanément, sans dossier à créer à la main.</p>
+            <div className="mt-5 flex-1 rounded-xl border border-border bg-muted/40 p-4 flex flex-col justify-center gap-3">
+              <div className="flex items-center gap-2 rounded-lg bg-card border border-border px-3 py-2 text-sm text-foreground">
+                <Search className="h-4 w-4 text-muted-foreground" /> factures EDF 2025
+              </div>
+              <p className="text-xs text-muted-foreground"><span className="font-semibold text-foreground">3 résultats</span> — EDF · 01/2025 · 142,80 € · EDF · 04/2025 · 138,10 € · EDF · 09/2025 · 151,40 €</p>
+            </div>
+          </MotionDiv>
+
+          {features.map((f, i) => {
+            const Icon = f.icon;
+            return (
+              <MotionDiv key={f.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.4 }}
+                className="rounded-2xl border border-border bg-card p-5 shadow-card hover:shadow-card-hover transition-shadow">
+                <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-primary/10"><Icon className="h-5 w-5 text-primary" /></div>
+                <h3 className="mt-3 font-bold text-foreground">{f.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+              </MotionDiv>
+            );
+          })}
+
+          <div className="rounded-2xl border border-dashed border-border bg-muted/40 p-5">
+            <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-muted"><Clock className="h-5 w-5 text-muted-foreground" /></div>
+            <h3 className="mt-3 font-bold text-foreground">Bientôt</h3>
+            <p className="mt-1 text-sm text-muted-foreground leading-relaxed">Transmission via plateforme agréée, rapprochement bancaire et archivage probant — en préparation, livrés avant les échéances.</p>
           </div>
         </div>
       </section>
 
-      {/* ───────── RÉSULTATS ───────── */}
+      {/* ───────── MÉTIERS (routeur ICP) ───────── */}
       <section className="w-full bg-secondary/60 border-y border-border">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid sm:grid-cols-3 gap-5">
-            {outcomes.map((o, i) => {
-              const Icon = o.icon;
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="max-w-2xl mx-auto text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Votre métier, votre quotidien</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">L'administratif préparé, selon votre activité</h2>
+            <p className="mt-4 text-muted-foreground leading-relaxed">La corvée est la même partout : des documents qui s'accumulent et qu'il faut traiter le soir ou le week-end. OdocPilot s'adapte au vocabulaire de chaque métier pour rendre la valeur immédiatement reconnaissable.</p>
+          </div>
+          <div className="mt-9 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {icp.map((c, i) => {
+              const Icon = c.icon;
               return (
-                <MotionDiv key={o.label} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.45 }} className="rounded-2xl bg-card border border-border p-7 text-center shadow-card">
-                  <div className="mx-auto flex items-center justify-center h-10 w-10 rounded-xl bg-primary/10 mb-2"><Icon className="h-5 w-5 text-primary" /></div>
-                  <p className="text-4xl font-extrabold bg-gradient-cta bg-clip-text text-transparent">{o.big}</p>
-                  <p className="mt-1 font-semibold text-foreground">{o.label}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{o.sub}</p>
+                <MotionDiv key={c.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.45 }}>
+                  <Link to={c.to} className="group block h-full rounded-2xl bg-card border border-border p-6 hover:border-primary/40 hover:shadow-card-hover transition-all duration-300">
+                    <div className="flex items-center justify-center h-11 w-11 rounded-xl bg-primary/10"><Icon className="h-5 w-5 text-primary" /></div>
+                    <p className="mt-4 font-bold text-foreground">{c.title}</p>
+                    <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{c.desc}</p>
+                    <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all">Découvrir <ArrowRight className="h-4 w-4" /></span>
+                  </Link>
                 </MotionDiv>
               );
             })}
           </div>
-          <p className="mt-3 text-center text-xs text-muted-foreground">Objectifs constatés auprès de nos premiers utilisateurs — vos résultats dépendent de votre activité.</p>
         </div>
       </section>
 
-      {/* ───────── SOUVERAINETÉ ───────── */}
-      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 grid md:grid-cols-2 gap-10 items-center">
-        <MotionDiv initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Vos données restent en France.<br /><span className="bg-gradient-cta bg-clip-text text-transparent">Point.</span></h2>
-          <p className="mt-4 text-muted-foreground leading-relaxed">Pas de serveurs américains. Pas de revente de vos informations. Vos chiffres, vos clients, vos contrats : hébergés en France chez OVH, chiffrés, conformes RGPD. Ils n'appartiennent qu'à vous — et c'est non négociable.</p>
-        </MotionDiv>
-        <div className="grid grid-cols-2 gap-4">
-          {[
-            { icon: MapPin, t: "Hébergé en France", s: "Infrastructure OVH" },
-            { icon: ShieldCheck, t: "Conforme RGPD", s: "Jamais revendues" },
-            { icon: ShieldCheck, t: "Chiffré & sauvegardé", s: "En sécurité, en continu" },
-            { icon: FileCheck2, t: "Exportables", s: "Vous partez avec tout" },
-          ].map((b) => {
+      {/* ───────── SOUVERAINETÉ / PREUVE ───────── */}
+      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Confiance et souveraineté</p>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Vos données et l'IA qui les traite restent en France.</h2>
+          <p className="mt-4 text-muted-foreground leading-relaxed">
+            Confier ses documents comptables et clients pose une question légitime : où vont mes données, et qui peut les lire ? Vos documents sont hébergés en France, et l'intelligence artificielle qui les analyse — <strong className="text-foreground">Mistral, un modèle français</strong> — l'est également : aucun transfert vers des services américains. OdocPilot s'inscrit dans une démarche <strong className="text-foreground">Numérique Responsable</strong> et d'<strong className="text-foreground">IA frugale</strong>, conforme au RGPD et alignée sur l'AI Act européen, avec un niveau de sécurité maximal sur vos données. Cette transparence est, pour nous, la meilleure preuve de fiabilité.
+          </p>
+        </div>
+        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+          {sovereignty.map((b) => {
             const Icon = b.icon;
             return (
               <div key={b.t} className="rounded-xl bg-card border border-border p-5 shadow-card">
                 <Icon className="h-6 w-6 text-primary" />
                 <p className="mt-2 font-semibold text-foreground text-sm">{b.t}</p>
-                <p className="text-xs text-muted-foreground">{b.s}</p>
+                <p className="text-xs text-muted-foreground leading-relaxed">{b.s}</p>
               </div>
             );
           })}
         </div>
+        <TrustCredentials className="mt-8" />
       </section>
 
-      {/* ───────── FACTURE 2026 ───────── */}
-      <section className="w-full bg-secondary/60 border-y border-border">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold px-3 py-1.5">🧾 Réforme 2026</span>
-          <h2 className="mt-5 text-3xl sm:text-4xl font-bold leading-tight text-foreground">La facture électronique devient obligatoire.<br />Vous, vous serez déjà prêt.</h2>
-          <p className="mt-5 text-lg text-muted-foreground leading-relaxed">Dès 2026, toutes les entreprises devront recevoir leurs factures au format électronique. Pas de panique, pas de logiciel à changer en urgence : OdocPilot vous accompagne pas à pas vers la conformité. Vous restez en règle — sans paperasse, sans stress.</p>
-          <Link to="/e-facture"><Button size="lg" className="mt-7 bg-gradient-cta text-primary-foreground font-semibold">Comprendre la réforme en 2 minutes <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
-        </div>
-      </section>
-
-      {/* ───────── PREUVE ───────── */}
-      <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-        <p className="text-sm font-semibold text-muted-foreground">Construit main dans la main avec des artisans et des TPE françaises</p>
-        <MotionDiv initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="mt-6 rounded-3xl border border-border bg-card p-9 max-w-2xl mx-auto shadow-card">
-          <Quote className="h-7 w-7 text-primary/40 mx-auto" />
-          <p className="mt-3 text-xl text-foreground leading-relaxed">« Avant, je faisais mes devis le dimanche soir. Maintenant, je les dicte entre deux chantiers et l'assistant s'occupe du reste. J'ai retrouvé mes week-ends. »</p>
-          <div className="mt-5 flex items-center justify-center gap-3 text-sm">
-            <span className="h-10 w-10 rounded-full bg-gradient-cta text-primary-foreground inline-flex items-center justify-center font-bold">K</span>
-            <span className="text-muted-foreground"><strong className="text-foreground">Karim B.</strong> · Artisan plombier, Seine-et-Marne · bêta-testeur</span>
-          </div>
-        </MotionDiv>
-        <p className="mt-4 text-sm text-muted-foreground">Vous n'achetez pas un logiciel de plus. Vous rejoignez les premiers — et on vous écoute.</p>
-      </section>
-
-      {/* ───────── TARIF TEASER ───────── */}
+      {/* ───────── TARIF TEASER (49 / 89 / 149) ───────── */}
       <section className="w-full bg-secondary/60 border-y border-border">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Un seul prix. Tout compris.</h2>
-          <p className="mt-3 text-muted-foreground">Pas de supplément par utilisateur. Pas d'option qui s'empile. Un abonnement clair qui remplace votre logiciel de facture, votre CRM et des heures de saisie.</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Tarifs clairs, par entreprise</p>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Un abonnement par entreprise, sans coût par utilisateur</h2>
+          <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">Quand votre équipe s'agrandit, votre facture ne suit pas. Chaque offre inclut l'essai gratuit de 14 jours, sans carte bancaire.</p>
           <div className="mt-10 grid sm:grid-cols-3 gap-5 text-left">
             {pricing.map((p) => (
               <div key={p.name} className={`relative rounded-2xl bg-card p-6 ${p.highlight ? "border-2 border-primary shadow-elevated ring-1 ring-primary/15" : "border border-border shadow-card"}`}>
-                {p.highlight && <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-cta text-primary-foreground text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">⭐ Le plus choisi</span>}
-                <p className="text-sm font-semibold text-muted-foreground">{p.name}</p>
-                <p className="mt-2 text-3xl font-extrabold text-foreground">{p.price}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{p.note}</p>
+                {p.highlight && <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-cta text-primary-foreground text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">Le plus choisi</span>}
+                <p className="text-sm font-semibold text-primary">{p.name}</p>
+                <p className="mt-2 text-3xl font-extrabold text-foreground tabular-nums">{p.price}<span className="text-sm font-medium text-muted-foreground">/mois</span></p>
+                <p className="text-xs text-muted-foreground tabular-nums">{p.annual}</p>
+                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{p.note}</p>
               </div>
             ))}
           </div>
-          <Link to="/pricing"><Button variant="outline" size="lg" className="mt-10">Voir tous les détails <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
+          <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-primary" /> Sans coût par utilisateur</span>
+            <span className="inline-flex items-center gap-1.5"><CreditCard className="h-3.5 w-3.5 text-primary" /> Essai 14 j sans carte bancaire</span>
+            <span className="inline-flex items-center gap-1.5"><RotateCcw className="h-3.5 w-3.5 text-primary" /> Sans engagement</span>
+          </div>
+          <Link to="/pricing"><Button variant="outline" size="lg" className="mt-8">Voir tous les détails <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
         </div>
       </section>
 
-      {/* ───────── OBJECTIONS ───────── */}
+      {/* ───────── FAQ ───────── */}
       <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <h2 className="text-3xl font-bold tracking-tight text-foreground text-center">Vos questions, nos réponses franches</h2>
+        <div className="text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Vos questions, nos réponses franches</p>
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground">La réforme et OdocPilot, sans zone d'ombre</h2>
+        </div>
         <div className="mt-10 space-y-4">
           {faqs.map((f) => (
             <div key={f.q} className="rounded-2xl border border-border bg-card p-6 shadow-card">
-              <p className="font-bold text-foreground">« {f.q} »</p>
+              <h3 className="font-bold text-foreground">{f.q}</h3>
               <p className="mt-2 text-muted-foreground text-sm leading-relaxed">{f.a}</p>
             </div>
           ))}
@@ -422,22 +543,29 @@ export default function HomePage() {
 
       {/* ───────── CTA FINAL + NEWSLETTER ───────── */}
       <section className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
-        <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
-          Et si, ce soir,<br /><span className="bg-gradient-cta bg-clip-text text-transparent">la paperasse était déjà faite ?</span>
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Prenez de l'avance, sans engagement</p>
+        <h2 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground leading-tight">
+          La facturation électronique devient obligatoire.<br />
+          <span className="bg-gradient-cta bg-clip-text text-transparent">Avec OdocPilot, vous serez déjà prêt.</span>
         </h2>
-        <p className="mt-5 text-lg text-muted-foreground">Essayez OdocPilot gratuitement. En 2 minutes, sans carte bancaire. Vous verrez la différence dès la première facture.</p>
-        <div className="mt-8 flex justify-center">
-          <a href={SIGNUP} target="_blank" rel="noopener noreferrer" data-umami-event="cta-essai-gratuit">
-            <Button size="lg" className="bg-gradient-cta text-primary-foreground text-base font-bold px-8 py-6 shadow-lg shadow-primary/20 hover:opacity-95">
-              Essayer gratuitement <ArrowRight className="ml-2 h-5 w-5" />
+        <p className="mt-5 text-lg text-muted-foreground max-w-2xl mx-auto">
+          Préparez votre conformité face aux échéances 2026 et 2027, ou lancez directement l'essai de 14 jours, sans carte bancaire, pour voir l'IA préparer votre administratif sur vos propres documents.
+        </p>
+        <div className="mt-8 flex flex-col items-center sm:flex-row sm:justify-center gap-3">
+          <Link to={CONFORMITE} data-umami-event="cta-conformite-final">
+            <Button size="lg" className="w-full sm:w-auto bg-gradient-cta text-primary-foreground text-base font-bold px-8 py-6 shadow-lg shadow-primary/20 hover:opacity-95">
+              Préparer ma conformité 2026 <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
+          </Link>
+          <a href={SIGNUP} data-umami-event="cta-essai-final">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto px-8 py-6 text-base">Démarrer l'essai 14 jours</Button>
           </a>
         </div>
-        <p className="mt-3 text-xs text-muted-foreground">14 jours gratuits · Sans engagement · Données hébergées en France</p>
+        <p className="mt-3 text-xs text-muted-foreground">Sans engagement · Sans carte bancaire · Données en France</p>
 
         <div className="mt-14 pt-10 border-t border-border">
-          <p className="text-sm font-semibold text-foreground">Restez informé des nouveautés OdocPilot</p>
-          <p className="text-xs text-muted-foreground mt-1">Conseils gestion, facture électronique, nouveautés — directement dans votre boîte mail.</p>
+          <p className="text-sm font-semibold text-foreground">Restez informé sur la réforme et OdocPilot</p>
+          <p className="text-xs text-muted-foreground mt-1">Conformité e-facture, nouveautés produit, conseils gestion — directement dans votre boîte mail.</p>
           <form onSubmit={handleNewsletter} className="mt-4 flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
             <Input type="email" placeholder="votre@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required className="flex-1" />
             <Button type="submit" disabled={loading} className="bg-gradient-cta text-primary-foreground">{loading ? "…" : "Je m'abonne"}</Button>
