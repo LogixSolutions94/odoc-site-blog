@@ -26,6 +26,7 @@ const DiagnosticPage = lazy(() => import("./pages/DiagnosticPage"));
 const GenerateurFacturXPage = lazy(() => import("./pages/GenerateurFacturXPage"));
 const VerificateurPage = lazy(() => import("./pages/VerificateurPage"));
 const LlmInfoPage = lazy(() => import("./pages/LlmInfoPage"));
+const GuidePillarPage = lazy(() => import("./pages/GuidePillarPage"));
 const ArtisansPage = lazy(() => import("./pages/ArtisansPage"));
 const MetierPage = lazy(() => import("./pages/MetierPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -67,6 +68,7 @@ const App = () => (
                 <Route path="/generateur-factur-x" element={<GenerateurFacturXPage />} />
                 <Route path="/verificateur" element={<VerificateurPage />} />
                 <Route path="/llm-info" element={<LlmInfoPage />} />
+                <Route path="/guide/:slug" element={<GuidePillarPage />} />
                 <Route path="/artisans" element={<ArtisansPage />} />
                 <Route path="/commerce" element={<MetierPage slug="commerce" />} />
                 <Route path="/professions-liberales" element={<MetierPage slug="professions-liberales" />} />

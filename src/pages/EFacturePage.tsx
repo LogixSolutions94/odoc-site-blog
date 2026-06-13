@@ -410,6 +410,25 @@ export default function EFacturePage() {
         </div>
       </section>
 
+      {/* ── GUIDES (silo pilier → clusters) ───────────────────────────── */}
+      <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-4">
+        <h2 className="text-xl font-bold tracking-tight text-foreground text-center">Guides pour approfondir</h2>
+        <div className="mt-6 grid sm:grid-cols-2 gap-3">
+          {[
+            { to: "/guide/facturation-electronique-2026", label: "Guide complet : facturation électronique 2026" },
+            { to: "/guide/obligations-2026-2027", label: "Obligations 2026/2027 : calendrier & sanctions" },
+            { to: "/guide/plateforme-agreee", label: "Plateforme agréée (PA, ex-PDP)" },
+            { to: "/guide/factur-x", label: "Le format Factur-X expliqué" },
+            { to: "/guide/tpe-sans-comptable", label: "TPE sans expert-comptable : par où commencer" },
+          ].map((g) => (
+            <Link key={g.to} to={g.to} className="group flex items-center justify-between rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground hover:border-primary/40 hover:shadow-card-hover transition-all">
+              <span>{g.label}</span>
+              <ChevronRight className="h-4 w-4 text-primary group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* ── CTA FINAL ────────────────────────────────────────────────── */}
       <section className="w-full py-24">
         <div className="max-w-3xl mx-auto px-4 text-center">
