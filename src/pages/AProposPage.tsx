@@ -62,8 +62,8 @@ export default function AProposPage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="À propos — Odoc | L'OS d'entreprise next-gen"
-        description="Odoc est né pour libérer les TPE/PME des tâches répétitives. Découvrez notre vision, notre mission et l'équipe qui construit le futur OS des entreprises françaises."
+        title="À propos — OdocPilot | L'OS d'entreprise next-gen"
+        description="OdocPilot est né pour libérer les TPE/PME des tâches répétitives. Découvrez notre vision, notre mission et l'équipe qui construit le futur OS des entreprises françaises."
         canonical="/a-propos"
       />
 
@@ -72,7 +72,7 @@ export default function AProposPage() {
         <MotionDiv>
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground">L'IA au service de votre entreprise</h1>
           <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Odoc est né d'un constat simple : les PME perdent en moyenne 8h/semaine à gérer des tâches répétitives. Nous avons créé le copilot IA qui change la donne.
+            OdocPilot est né d'un constat simple : les PME perdent en moyenne 8h/semaine à gérer des tâches répétitives. Nous avons créé le copilot IA qui change la donne.
           </p>
         </MotionDiv>
       </section>
@@ -88,7 +88,7 @@ export default function AProposPage() {
               </p>
               <h3 className="mt-8 text-xl font-bold text-foreground">Notre mission</h3>
               <p className="mt-3 text-muted-foreground leading-relaxed">
-                Automatiser les tâches répétitives pour que les équipes se concentrent sur ce qui crée vraiment de la valeur. Fondée en 2025 en Île-de-France, Odoc a été pensée par des entrepreneurs pour des entrepreneurs.
+                Automatiser les tâches répétitives pour que les équipes se concentrent sur ce qui crée vraiment de la valeur. Fondée en 2025 en Île-de-France, OdocPilot a été pensée par des entrepreneurs pour des entrepreneurs.
               </p>
             </MotionDiv>
             <MotionDiv
@@ -151,7 +151,7 @@ export default function AProposPage() {
           <div className="bg-card rounded-2xl p-10 sm:p-14 shadow-elevated border border-border">
             <MotionDiv>
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Votre copilot d'entreprise vous attend.</h2>
-              <p className="mt-4 text-lg text-muted-foreground">Démarrez gratuitement et découvrez comment Odoc peut transformer votre quotidien.</p>
+              <p className="mt-4 text-lg text-muted-foreground">Démarrez gratuitement et découvrez comment OdocPilot peut transformer votre quotidien.</p>
               <div className="mt-8">
                 <a href={`${APP_URL}/auth`} target="_blank" rel="noopener noreferrer">
                   <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">Démarrer gratuitement</Button>

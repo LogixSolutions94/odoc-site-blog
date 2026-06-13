@@ -29,8 +29,8 @@ export default function RecrutementPage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="Recrutement Odoc — Rejoignez l'équipe qui réinvente l'OS d'entreprise"
-        description="Rejoignez l'équipe Odoc et construisez le futur OS d'entreprise IA pour les TPE et PME françaises. Postes ouverts en ingénierie, design et growth."
+        title="Recrutement OdocPilot — Rejoignez l'équipe qui réinvente l'OS d'entreprise"
+        description="Rejoignez l'équipe OdocPilot et construisez le futur OS d'entreprise IA pour les TPE et PME françaises. Postes ouverts en ingénierie, design et growth."
         canonical="/recrutement"
       />
 
@@ -38,7 +38,7 @@ export default function RecrutementPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <MotionDiv className="text-center mb-16">
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
-              On construit Odoc.{" "}
+              On construit OdocPilot.{" "}
               <span className="bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
                 Rejoins-nous.
               </span>

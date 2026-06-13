@@ -11,7 +11,7 @@ const versions = [
     version: "v1.2",
     date: "Avril 2026",
     description:
-      "Refonte UI Navy Premium, performance améliorée, Odoc Brain v1.1 (réponses plus précises), nouveaux filtres Analytics.",
+      "Refonte UI Navy Premium, performance améliorée, OdocPilot Brain v1.1 (réponses plus précises), nouveaux filtres Analytics.",
   },
   {
     version: "v1.1",
@@ -23,7 +23,7 @@ const versions = [
     version: "v1.0",
     date: "Février 2026",
     description:
-      "🎉 Lancement officiel d'Odoc. Documents, Factures IA, Odoc Brain, Analytics, Gestion d'équipe.",
+      "🎉 Lancement officiel d'OdocPilot. Documents, Factures IA, OdocPilot Brain, Analytics, Gestion d'équipe.",
   },
 ];
 
@@ -56,8 +56,8 @@ export default function ChangelogPage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="Changelog Odoc — Nouveautés et mises à jour de la plateforme"
-        description="Suivez l'évolution d'Odoc : nouvelles fonctionnalités IA, améliorations de performance et correctifs. Mises à jour hebdomadaires pour votre OS d'entreprise."
+        title="Changelog OdocPilot — Nouveautés et mises à jour de la plateforme"
+        description="Suivez l'évolution d'OdocPilot : nouvelles fonctionnalités IA, améliorations de performance et correctifs. Mises à jour hebdomadaires pour votre OS d'entreprise."
         canonical="/changelog"
       />
 
@@ -68,7 +68,7 @@ export default function ChangelogPage() {
               Changelog
             </h1>
             <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed">
-              Toutes les nouveautés Odoc, version par version.
+              Toutes les nouveautés OdocPilot, version par version.
             </p>
           </MotionDiv>
 

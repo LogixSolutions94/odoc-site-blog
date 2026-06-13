@@ -10,7 +10,7 @@ const phases = [
     badgeClass: "bg-green-500/10 text-green-600 border-green-500/20",
     title: "Phase 1 — Les fondations (disponible)",
     description:
-      "Les 11 modules core disponibles dès aujourd'hui — Documents, Factures IA, Odoc Brain, Analytics, Équipe, RH, Projets, Messagerie, Portail Fournisseur, Smart Connectors, Calendrier partagé. CRM basique inclus dans le plan Essential.",
+      "Les 11 modules core disponibles dès aujourd'hui — Documents, Factures IA, OdocPilot Brain, Analytics, Équipe, RH, Projets, Messagerie, Portail Fournisseur, Smart Connectors, Calendrier partagé. CRM basique inclus dans le plan Essential.",
     icon: CheckCircle,
     iconClass: "text-green-600",
   },
@@ -19,7 +19,7 @@ const phases = [
     badgeClass: "bg-accent/10 text-accent border-accent/20",
     title: "Phase 2 — Expansion",
     description:
-      "Certification PDP (facturation électronique obligatoire 2026), intégrations avancées (Slack, Notion, HubSpot), Odoc Brain v1.2 (mémoire longue, multi-documents), mode hors-ligne, rapports dirigeant personnalisables.",
+      "Certification PDP (facturation électronique obligatoire 2026), intégrations avancées (Slack, Notion, HubSpot), OdocPilot Brain v1.2 (mémoire longue, multi-documents), mode hors-ligne, rapports dirigeant personnalisables.",
     icon: Settings,
     iconClass: "text-accent",
   },
@@ -28,7 +28,7 @@ const phases = [
     badgeClass: "bg-muted text-muted-foreground border-border",
     title: "Phase 3 — Écosystème",
     description:
-      "Application mobile iOS & Android, API publique documentée, Marketplace d'intégrations partenaires, Odoc Brain v2 (multi-agents autonomes), tableau de bord prédictif IA.",
+      "Application mobile iOS & Android, API publique documentée, Marketplace d'intégrations partenaires, OdocPilot Brain v2 (multi-agents autonomes), tableau de bord prédictif IA.",
     icon: Clock,
     iconClass: "text-muted-foreground",
   },
@@ -38,8 +38,8 @@ export default function RoadmapPage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="Roadmap Odoc — Fonctionnalités à venir et en développement"
-        description="Découvrez les prochaines fonctionnalités d'Odoc : certification PDP 2026, Odoc Brain v2, API publique et app mobile. Votez pour les features qui comptent."
+        title="Roadmap OdocPilot — Fonctionnalités à venir et en développement"
+        description="Découvrez les prochaines fonctionnalités d'OdocPilot : certification PDP 2026, OdocPilot Brain v2, API publique et app mobile. Votez pour les features qui comptent."
         canonical="/roadmap"
       />
 
@@ -50,7 +50,7 @@ export default function RoadmapPage() {
               Notre Roadmap
             </h1>
             <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed">
-              Nous construisons Odoc pour les entreprises qui avancent vite. Voici ce qui arrive.
+              Nous construisons OdocPilot pour les entreprises qui avancent vite. Voici ce qui arrive.
             </p>
           </MotionDiv>
 
