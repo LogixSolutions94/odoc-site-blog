@@ -87,15 +87,19 @@ C'est le **gold standard SEO 2026** pour les SaaS B2B. L'idée : créer un rése
 - Les clusters peuvent se lier entre eux horizontalement si logique
 - Un silo = 1 thème central + 10 à 20 clusters
 
-### 2.2 Nos 5 silos thématiques OdocPilot 2026
+### 2.2 Nos 5 silos thématiques OdocPilot 2026 (alignés sur le wedge conformité)
 
-| # | Silo (Page Pilier) | Volume estimé | Priorité |
-|---|-------------------|--------------|---------|
-| 1 | **Facturation électronique PME France 2026** | ★★★★★ | P0 — Urgent |
-| 2 | **Logiciel ERP / OS d'entreprise TPE/PME** | ★★★★ | P1 |
-| 3 | **Automatisation IA pour PME (N8N, workflows)** | ★★★ | P1 |
-| 4 | **Gestion commerciale & CRM PME France** | ★★★ | P2 |
-| 5 | **BTP & Artisans : gestion digitale chantier** | ★★★★ | P0 — Verticale principale |
+> ⚠️ Les `slug` ci-dessous sont les valeurs de la colonne `category` des `blog_posts` **ET** les filtres de `src/pages/BlogPage.tsx`. **Garder les deux strictement synchronisés** (sinon un filtre ne matche aucun article).
+
+| # | Silo (Page Pilier) | slug `category` | Priorité |
+|---|-------------------|-----------------|---------|
+| 1 | **Facturation électronique PME France 2026/2027** (pilier → /e-facture) | `facturation-electronique` | P0 — Urgent |
+| 2 | **Obligations & calendrier** (réception 01/09/2026, émission + e-reporting 01/09/2027) | `obligations-2026-2027` | P0 |
+| 3 | **Plateforme agréée (PA, ex-PDP)** — choisir, se raccorder, abandon du PPF | `plateforme-agreee` | P0 |
+| 4 | **Factur-X & formats** (PDF/A-3, UBL, CII, EN 16931) | `factur-x` | P1 |
+| 5 | **TPE / indépendant sans expert-comptable** (BTP, commerce, libéral) | `tpe-sans-comptable` | P0 — Verticale |
+
+> Ancien découpage (ERP/OS d'entreprise, automatisation N8N, CRM) **abandonné** : positionnement périmé. Le wedge est la **conformité**, pas le « tout-en-un ». Différenciateur à ancrer dans chaque article : *l'IA prépare l'admin du dirigeant de TPE, vous validez* (jamais « exécute seule »). Terme officiel **« plateforme agréée (PA) »**, plus « PDP ».
 
 ### 2.3 Structure URL recommandée
 

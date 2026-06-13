@@ -7,13 +7,14 @@ import { BlogCard } from "@/components/blog/BlogCard";
 import { Input } from "@/components/ui/input";
 import { Search, Rocket } from "lucide-react";
 
+// Silos SEO alignés sur le wedge conformité (source de vérité : SEOBlog.md §2.2).
 const CATEGORIES = [
   { value: "all", label: "Tous" },
-  { value: "facturation", label: "Facturation" },
-  { value: "comptabilite", label: "Comptabilité" },
-  { value: "ia-documents", label: "IA & Documents" },
-  { value: "gestion-pme", label: "Gestion PME" },
-  { value: "tutoriel", label: "Tutoriels" },
+  { value: "facturation-electronique", label: "Facturation électronique" },
+  { value: "obligations-2026-2027", label: "Obligations 2026/2027" },
+  { value: "plateforme-agreee", label: "Plateforme agréée" },
+  { value: "factur-x", label: "Factur-X & formats" },
+  { value: "tpe-sans-comptable", label: "TPE sans comptable" },
 ] as const;
 
 const PAGE_SIZE = 12;
@@ -68,12 +69,12 @@ export default function BlogPage() {
 
       {/* Hero */}
       <MotionDiv className="text-center">
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground">
-          Le blog Odoc
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Le blog OdocPilot</p>
+        <h1 className="mt-2 text-4xl sm:text-5xl font-bold tracking-tight text-foreground">
+          Conformité, facturation électronique & gestion sereine
         </h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Actualités, tutoriels et bonnes pratiques pour gérer vos documents et
-          factures avec l'IA
+          Guides clairs et à jour sur la réforme 2026/2027, la Factur-X et les plateformes agréées — pour les dirigeants de TPE qui veulent comprendre et se mettre en règle sans jargon.
         </p>
         <div className="mt-8 max-w-md mx-auto relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -101,7 +102,7 @@ export default function BlogPage() {
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
               activeCategory === cat.value
                 ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-secondary-foreground hover:bg-accent"
+                : "bg-secondary text-secondary-foreground hover:bg-muted"
             }`}
           >
             {cat.label}
@@ -120,10 +121,10 @@ export default function BlogPage() {
         <MotionDiv className="mt-24 text-center">
           <Rocket className="h-16 w-16 text-primary/50 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-foreground">
-            Les premiers articles arrivent bientôt 🚀
+            Les premiers guides arrivent bientôt
           </h2>
           <p className="mt-2 text-muted-foreground">
-            Notre équipe prépare du contenu de qualité pour vous.
+            Nous préparons des guides clairs sur la réforme de la facturation électronique 2026/2027.
           </p>
         </MotionDiv>
       ) : (
@@ -168,7 +169,7 @@ export default function BlogPage() {
             <div className="mt-10 text-center">
               <button
                 onClick={() => setPage((p) => p + 1)}
-                className="px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-accent transition-colors font-medium"
+                className="px-6 py-3 rounded-lg bg-secondary text-secondary-foreground hover:bg-muted transition-colors font-medium"
               >
                 Charger plus d'articles
               </button>

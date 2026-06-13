@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { FeaturePreview } from "@/components/FeaturePreview";
 import { ArrowRight, Check, Banknote, Brain, FolderKanban, Users } from "lucide-react";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
@@ -90,32 +90,11 @@ const groups: Group[] = [
   },
 ];
 
-/** Affiche la vraie capture si le fichier existe, sinon un placeholder propre. */
-function FeatureVisual({ src, label }: { src?: string; label: string }) {
-  const [failed, setFailed] = useState(false);
-  if (src && !failed) {
-    return (
-      <img
-        src={src}
-        alt={label}
-        loading="lazy"
-        onError={() => setFailed(true)}
-        className="w-full rounded-2xl border border-border shadow-elevated aspect-video object-cover"
-      />
-    );
-  }
-  return (
-    <div className="rounded-2xl bg-secondary border border-border aspect-video flex items-center justify-center shadow-card">
-      <span className="text-sm text-muted-foreground font-medium">{label}</span>
-    </div>
-  );
-}
-
 export default function FonctionnalitesPage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="Fonctionnalités — OdocPilot | Devis, factures, IA & gestion tout-en-un"
+        title="Fonctionnalités OdocPilot — Factur-X, lecture IA des factures, GED & export FEC"
         description="Tout ce qu'OdocPilot prépare pour vous : factures au format Factur-X conforme, lecture IA des factures, recherche de documents en langage naturel, copilote Brain, export FEC. L'IA prépare, vous validez. Données et IA hébergées en France."
         canonical="/fonctionnalites"
       />
@@ -154,7 +133,7 @@ export default function FonctionnalitesPage() {
                 </ul>
               </div>
               <div className={reverse ? "lg:order-1" : ""}>
-                <FeatureVisual src={g.image} label={g.label} />
+                <FeaturePreview kind={g.key} />
               </div>
             </MotionDiv>
           );

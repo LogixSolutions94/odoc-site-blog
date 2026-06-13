@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  .og {
+    width: 100vw; height: 100vh;
+    background: radial-gradient(120% 140% at 80% -10%, #134E4A 0%, #0B3B40 38%, #0A2329 100%);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #EAF3F2; position: relative; padding: 64px 80px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .glow { position: absolute; top: -160px; right: -120px; width: 520px; height: 520px; border-radius: 50%;
+          background: radial-gradient(circle, rgba(249,115,22,.32), transparent 62%); }
+  .brand { position: absolute; top: 56px; left: 80px; font-size: 30px; font-weight: 700; letter-spacing: -.01em; }
+  .brand b { color: #F97316; }
+  .eyebrow { color: #F9A05E; font-size: 22px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  h1 { font-size: 74px; line-height: 1.05; font-weight: 800; letter-spacing: -.025em; margin-top: 22px; max-width: 920px; }
+  h1 em { color: #F97316; font-style: normal; }
+  .sub { margin-top: 26px; font-size: 27px; font-weight: 500; color: #BCD6DD; max-width: 880px; line-height: 1.4; }
+  .chips { margin-top: 30px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .chip { border: 1px solid rgba(234,243,242,.22); border-radius: 999px; padding: 9px 18px; font-size: 20px; font-weight: 500; color: #DCEBEA; }
+  .foot { position: absolute; bottom: 52px; left: 80px; font-size: 22px; font-weight: 600; color: #8FB3B3; }
+</style>
+</head>
+<body>
+  <div class="og">
+    <div class="glow"></div>
+    <div class="brand">Odoc<b>Pilot</b></div>
+    <div class="eyebrow">Facturation électronique 2026 / 2027</div>
+    <h1>L'IA prépare votre administratif.<br><em>Vous validez en un clic.</em></h1>
+    <div class="sub">Mettez-vous en conformité, sans expert-comptable et sans prise de tête.</div>
+    <div class="chips">
+      <span class="chip">Factur-X conforme</span>
+      <span class="chip">Lecture IA des factures</span>
+      <span class="chip">Export FEC</span>
+      <span class="chip">Données et IA en France</span>
+    </div>
+    <div class="foot">odocpilot.com</div>
+  </div>
+</body>
+</html>

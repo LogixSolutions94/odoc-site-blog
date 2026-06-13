@@ -2,163 +2,125 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
-import { Target, Shield, Rocket, Building2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { Target, ShieldCheck, Handshake, MapPin, Check, ArrowRight, Sparkles, MousePointerClick } from "lucide-react";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
-
-function AnimatedCounter({ end, suffix, label }: { end: number; suffix: string; label: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!isInView) return;
-    let start = 0;
-    const duration = 1400;
-    const step = Math.max(1, Math.floor(end / (duration / 16)));
-    const interval = setInterval(() => {
-      start += step;
-      if (start >= end) {
-        setCount(end);
-        clearInterval(interval);
-      } else {
-        setCount(start);
-      }
-    }, 16);
-    return () => clearInterval(interval);
-  }, [isInView, end]);
-
-  return (
-    <div ref={ref} className="flex flex-col items-center gap-2">
-      <motion.span
-        className="text-4xl sm:text-5xl font-bold text-primary"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={isInView ? { opacity: 1, scale: 1 } : {}}
-        transition={{ duration: 0.5 }}
-      >
-        {count}{suffix}
-      </motion.span>
-      <span className="text-sm text-muted-foreground text-center font-medium">{label}</span>
-    </div>
-  );
-}
+const SIGNUP = `${APP_URL}/auth?mode=signup`;
 
 const values = [
-  { icon: <Target className="h-7 w-7 text-primary" />, title: "Simplicité", description: "Un outil que vos équipes adoptent en moins d'une journée." },
-  { icon: <Shield className="h-7 w-7 text-primary" />, title: "Sécurité", description: "Vos données hébergées en Europe, chiffrées, jamais revendues." },
-  { icon: <Rocket className="h-7 w-7 text-primary" />, title: "Innovation", description: "Chaque semaine, de nouvelles fonctionnalités IA pour aller plus loin." },
+  { icon: Target, title: "Simplicité", description: "Un outil qu'un dirigeant non-technicien prend en main en quelques minutes. Pas un ERP à apprendre." },
+  { icon: ShieldCheck, title: "Souveraineté", description: "Vos documents et l'intelligence artificielle qui les traite sont hébergés en France. Aucun transfert opaque vers l'étranger." },
+  { icon: Handshake, title: "Honnêteté", description: "Nous disons précisément ce qui est actif et ce qui arrive. Ce qui n'est pas encore prêt est annoncé « bientôt », jamais survendu." },
 ];
 
-const kpis = [
-  { end: 10, suffix: "+", label: "outils intégrés" },
-  { end: 1000, suffix: "", label: "entreprises visées en 2026" },
-  { end: 8, suffix: "h", label: "/ semaine économisées en moyenne" },
-  { end: 99, suffix: ".9%", label: "uptime garanti" },
+const facts = [
+  { icon: MapPin, label: "Données et IA hébergées en France" },
+  { icon: ShieldCheck, label: "Conforme RGPD, aligné sur l'AI Act" },
+  { icon: MousePointerClick, label: "L'IA prépare, vous validez" },
+  { icon: Check, label: "Sans coût par utilisateur" },
 ];
 
 export default function AProposPage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="À propos — OdocPilot | L'OS d'entreprise next-gen"
-        description="OdocPilot est né pour libérer les TPE/PME des tâches répétitives. Découvrez notre vision, notre mission et l'équipe qui construit le futur OS des entreprises françaises."
+        title="À propos — OdocPilot | Le copilote IA des dirigeants de TPE"
+        description="OdocPilot prépare la conformité à la facturation électronique 2026/2027 et l'administratif des dirigeants de TPE, PME et indépendants sans expert-comptable. L'IA prépare, vous validez. Données et IA hébergées en France."
         canonical="/a-propos"
       />
 
       {/* Hero */}
-      <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-14 text-center">
-        <MotionDiv>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground">L'IA au service de votre entreprise</h1>
-          <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground">
-            OdocPilot est né d'un constat simple : les PME perdent en moyenne 8h/semaine à gérer des tâches répétitives. Nous avons créé le copilot IA qui change la donne.
+      <section className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-14 text-center">
+        <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Qui sommes-nous</p>
+          <h1 className="mt-2 text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">
+            L'admin préparé pour vous. <span className="bg-gradient-cta bg-clip-text text-transparent">Vous gardez la main.</span>
+          </h1>
+          <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed">
+            OdocPilot est né d'un constat simple : un dirigeant de TPE qui gère lui-même son administratif passe ses soirées et ses week-ends sur la paperasse — et la réforme de la facturation électronique 2026/2027 ajoute une obligation de plus. Nous construisons l'outil qui prépare ce travail à sa place, sans jamais décider à sa place.
           </p>
         </MotionDiv>
       </section>
 
-      {/* Vision & Mission */}
-      <section className="w-full py-20 sm:py-28 border-t border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-14 items-center">
-            <MotionDiv>
-              <h2 className="text-3xl font-bold tracking-tight text-foreground">Notre vision</h2>
-              <p className="mt-6 text-muted-foreground leading-relaxed">
-                Rendre accessible à chaque entreprise un copilot IA qui était jusqu'ici réservé aux grandes corporations. Nous croyons que chaque PME mérite des outils intelligents pour se concentrer sur ce qui crée vraiment de la valeur.
-              </p>
-              <h3 className="mt-8 text-xl font-bold text-foreground">Notre mission</h3>
-              <p className="mt-3 text-muted-foreground leading-relaxed">
-                Automatiser les tâches répétitives pour que les équipes se concentrent sur ce qui crée vraiment de la valeur. Fondée en 2025 en Île-de-France, OdocPilot a été pensée par des entrepreneurs pour des entrepreneurs.
-              </p>
-            </MotionDiv>
-            <MotionDiv
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="flex items-center justify-center"
-            >
-              <div className="relative w-full max-w-sm aspect-square rounded-2xl bg-secondary border border-border flex items-center justify-center shadow-card">
-                <Building2 className="h-24 w-24 text-primary/30" />
-                <div className="absolute -bottom-3 -right-3 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-lg">
-                  Depuis 2025
+      {/* Mission */}
+      <section className="w-full py-20 border-t border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
+          <MotionDiv initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Notre mission</p>
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground">Rendre l'administratif invisible pour le dirigeant de TPE</h2>
+            <p className="mt-5 text-muted-foreground leading-relaxed">
+              La plupart des outils s'adressent aux cabinets comptables, aux banques ou aux indépendants pour leur déclaration. Presque personne ne parle au dirigeant qui fait lui-même son administratif au quotidien. C'est ce créneau qu'OdocPilot occupe : une intelligence artificielle française qui lit vos factures, classe vos documents et prépare vos relances — puis s'arrête. Rien n'est validé, envoyé ni comptabilisé sans vous.
+            </p>
+            <p className="mt-4 text-muted-foreground leading-relaxed">
+              Notre conviction : la rapidité d'un assistant ne doit jamais vous coûter le contrôle de ce qui engage votre entreprise. L'IA fait disparaître la corvée, pas votre décision.
+            </p>
+          </MotionDiv>
+          <MotionDiv initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1, duration: 0.5 }}>
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-card">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"><MapPin className="h-5 w-5 text-primary" /></div>
+                <div>
+                  <p className="font-bold text-foreground">Une équipe française, en transparence</p>
+                  <p className="text-sm text-muted-foreground">Basée en Île-de-France · build-in-public</p>
                 </div>
               </div>
-            </MotionDiv>
-          </div>
+              <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
+                OdocPilot est construit par une petite équipe française qui partage son avancement ouvertement — sur le blog et la page roadmap. Nous travaillons main dans la main avec des dirigeants de TPE et des indépendants testeurs, et nous écoutons vraiment leurs retours.
+              </p>
+              <div className="mt-5 grid grid-cols-2 gap-3">
+                {facts.map((f) => {
+                  const Icon = f.icon;
+                  return (
+                    <div key={f.label} className="flex items-start gap-2 rounded-xl bg-secondary/60 p-3 text-xs text-foreground">
+                      <Icon className="h-4 w-4 text-primary shrink-0 mt-0.5" /> {f.label}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Valeurs */}
-      <section className="w-full py-20 sm:py-28 bg-secondary/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <MotionDiv className="text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Nos valeurs</h2>
+      <section className="w-full py-20 bg-secondary/50 border-y border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <MotionDiv initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center max-w-2xl mx-auto">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Ce qui nous guide</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Nos valeurs</h2>
           </MotionDiv>
-          <div className="mt-14 grid gap-8 md:grid-cols-3">
-            {values.map((v, i) => (
-              <MotionDiv
-                key={v.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.12, duration: 0.5 }}
-                viewport={{ once: true }}
-                className="p-8 bg-card rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 text-center border border-border"
-              >
-                <div className="flex items-center justify-center h-14 w-14 rounded-xl bg-primary/10 mx-auto mb-5">{v.icon}</div>
-                <h3 className="text-xl font-bold text-foreground">{v.title}</h3>
-                <p className="mt-3 text-muted-foreground">{v.description}</p>
-              </MotionDiv>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* KPIs */}
-      <section className="w-full py-20 sm:py-28">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-10">
-            {kpis.map((kpi) => (
-              <AnimatedCounter key={kpi.label} {...kpi} />
-            ))}
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {values.map((v, i) => {
+              const Icon = v.icon;
+              return (
+                <MotionDiv key={v.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.45 }}
+                  className="rounded-2xl border border-border bg-card p-7 text-center shadow-card hover:shadow-card-hover transition-shadow">
+                  <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10"><Icon className="h-7 w-7 text-primary" /></div>
+                  <h3 className="text-xl font-bold text-foreground">{v.title}</h3>
+                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{v.description}</p>
+                </MotionDiv>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* CTA Final */}
-      <section className="w-full py-20 sm:py-28">
+      <section className="w-full py-20 sm:py-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-card rounded-2xl p-10 sm:p-14 shadow-elevated border border-border">
-            <MotionDiv>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Votre copilot d'entreprise vous attend.</h2>
-              <p className="mt-4 text-lg text-muted-foreground">Démarrez gratuitement et découvrez comment OdocPilot peut transformer votre quotidien.</p>
-              <div className="mt-8">
-                <a href={`${APP_URL}/auth`} target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">Démarrer gratuitement</Button>
-                </a>
-              </div>
-            </MotionDiv>
-          </div>
+          <MotionDiv initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
+            className="rounded-3xl border border-border bg-card p-10 sm:p-14 shadow-elevated">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Prêt à prendre de l'avance sur la réforme ?</h2>
+            <p className="mt-4 text-lg text-muted-foreground">Vérifiez votre conformité en 3 minutes, gratuitement — ou lancez l'essai de 14 jours sur vos propres documents.</p>
+            <div className="mt-8 flex flex-col items-center sm:flex-row sm:justify-center gap-3">
+              <Link to="/diagnostic" data-umami-event="apropos-diagnostic">
+                <Button size="lg" className="w-full sm:w-auto bg-gradient-cta text-primary-foreground font-bold px-8 py-6"><Sparkles className="mr-2 h-5 w-5" /> Vérifier ma conformité (3 min)</Button>
+              </Link>
+              <a href={SIGNUP} target="_blank" rel="noopener noreferrer" data-umami-event="apropos-essai">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto px-8 py-6">Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" /></Button>
+              </a>
+            </div>
+          </MotionDiv>
         </div>
       </section>
     </div>
