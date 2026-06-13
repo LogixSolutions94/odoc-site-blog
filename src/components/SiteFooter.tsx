@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { TrustCredentials } from "@/components/TrustCredentials";
 
 export function SiteFooter() {
   return (
@@ -49,8 +50,9 @@ export function SiteFooter() {
             </ul>
           </div>
         </div>
-        <div className="mt-12 border-t border-border pt-6">
-          <p className="text-center text-sm text-muted-foreground">
+        <div className="mt-12 border-t border-border pt-8">
+          <TrustCredentials />
+          <p className="mt-6 text-center text-sm text-muted-foreground">
             © {new Date().getFullYear()} OdocPilot. Tous droits réservés. 🇫🇷 Fait en France · Données hébergées en France.
           </p>
         </div>
