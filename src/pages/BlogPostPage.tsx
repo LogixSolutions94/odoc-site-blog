@@ -182,7 +182,7 @@ export default function BlogPostPage() {
         )}
 
         {/* Content part 1 */}
-        <div className="mt-12 prose prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary prose-strong:text-foreground prose-li:marker:text-primary">
+        <div className="mt-12 prose prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary prose-strong:text-foreground prose-li:marker:text-primary">
           <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} components={markdownComponents}>
             {contentWithCTA.before}
           </ReactMarkdown>
@@ -205,7 +205,7 @@ export default function BlogPostPage() {
         </div>
 
         {/* Content part 2 */}
-        <div className="prose prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary prose-strong:text-foreground prose-li:marker:text-primary">
+        <div className="prose prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary prose-strong:text-foreground prose-li:marker:text-primary">
           <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} components={markdownComponents}>
             {contentWithCTA.after}
           </ReactMarkdown>

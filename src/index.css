@@ -65,6 +65,8 @@
     --muted-foreground: 196 16% 42%;
     --accent: 194 77% 22%;
     --accent-foreground: 0 0% 100%;
+    --brand-panel: 194 77% 20%;           /* Panneau de marque (pétrole foncé) */
+    --brand-panel-foreground: 0 0% 100%;
     --destructive: 347 77% 50%;
     --destructive-foreground: 0 0% 100%;
     --border: 196 22% 90%;
@@ -110,10 +112,10 @@
      ───────────────────────────────────────────────── */
   [data-theme="dark"] {
     /* ─── Marque / accents (custom) ─── */
-    --color-primary: 199 89% 60%;         /* Cyan CTA (texte sombre) */
+    --color-primary: 19 82% 50%;         /* Cyan CTA (texte sombre) */
     --color-primary-hover: 199 89% 54%;
     --color-primary-light: 200 40% 14%;
-    --color-primary-glow: 173 70% 62%;    /* Teal glow */
+    --color-primary-glow: 22 88% 56%;    /* Teal glow */
     --color-secondary: 173 65% 50%;       /* Teal */
     --color-secondary-hover: 173 65% 44%;
     --color-secondary-light: 200 30% 16%;
@@ -140,25 +142,27 @@
     --card-foreground: 195 25% 92%;
     --popover: 198 30% 9%;
     --popover-foreground: 195 25% 92%;
-    --primary: 199 89% 60%;
-    --primary-foreground: 200 40% 7%;
-    --primary-glow: 173 70% 62%;
+    --primary: 19 82% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 22 88% 56%;
     --secondary: 200 22% 14%;
     --secondary-foreground: 195 25% 92%;
     --muted: 200 20% 15%;
     --muted-foreground: 196 16% 62%;
     --accent: 173 65% 50%;
     --accent-foreground: 200 40% 7%;
+    --brand-panel: 198 38% 12%;           /* Panneau de marque sombre (séparé du fond) */
+    --brand-panel-foreground: 195 25% 95%;
     --destructive: 347 80% 62%;
     --destructive-foreground: 200 40% 7%;
     --border: 200 18% 18%;
     --input: 200 18% 18%;
-    --ring: 199 89% 60%;
+    --ring: 22 88% 56%;
 
     /* ─── Dégradés ─── */
     --gradient-primary: linear-gradient(135deg, hsl(173 70% 62%), hsl(199 89% 60%));
     --gradient-hero: linear-gradient(135deg, hsl(173 70% 62%) 0%, hsl(199 89% 60%) 100%);
-    --gradient-cta: linear-gradient(120deg, hsl(173 70% 62%), hsl(199 89% 60%));
+    --gradient-cta: linear-gradient(135deg, hsl(22 88% 56%), hsl(19 82% 50%));
     --gradient-cool: linear-gradient(135deg, hsl(199 89% 60%), hsl(173 70% 62%));
 
     /* ─── Sidebar ─── */
@@ -191,8 +195,8 @@
       --color-text: 195 25% 92%;
       --color-text-muted: 196 16% 62%;
       --color-text-faint: 200 12% 48%;
-      --color-primary: 199 89% 60%;
-      --color-primary-glow: 173 70% 62%;
+      --color-primary: 19 82% 50%;
+      --color-primary-glow: 22 88% 56%;
       --color-secondary: 173 65% 50%;
 
       --background: 200 33% 6%;
@@ -201,9 +205,9 @@
       --card-foreground: 195 25% 92%;
       --popover: 198 30% 9%;
       --popover-foreground: 195 25% 92%;
-      --primary: 199 89% 60%;
-      --primary-foreground: 200 40% 7%;
-      --primary-glow: 173 70% 62%;
+      --primary: 19 82% 50%;
+      --primary-foreground: 0 0% 100%;
+      --primary-glow: 22 88% 56%;
       --secondary: 200 22% 14%;
       --secondary-foreground: 195 25% 92%;
       --muted: 200 20% 15%;
@@ -212,7 +216,7 @@
       --accent-foreground: 200 40% 7%;
       --border: 200 18% 18%;
       --input: 200 18% 18%;
-      --ring: 199 89% 60%;
+      --ring: 22 88% 56%;
     }
   }
 
@@ -226,6 +230,27 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
+  }
+
+  /* Prose (articles de blog) — couleurs pilotées par le thème : lisibles en CLAIR comme en SOMBRE.
+     Remplace l'usage de `prose-invert` (qui forçait un texte blanc illisible en mode clair). */
+  .prose {
+    --tw-prose-body: hsl(var(--foreground));
+    --tw-prose-headings: hsl(var(--foreground));
+    --tw-prose-lead: hsl(var(--muted-foreground));
+    --tw-prose-links: hsl(var(--primary));
+    --tw-prose-bold: hsl(var(--foreground));
+    --tw-prose-counters: hsl(var(--muted-foreground));
+    --tw-prose-bullets: hsl(var(--primary));
+    --tw-prose-hr: hsl(var(--border));
+    --tw-prose-quotes: hsl(var(--foreground));
+    --tw-prose-quote-borders: hsl(var(--primary));
+    --tw-prose-captions: hsl(var(--muted-foreground));
+    --tw-prose-code: hsl(var(--foreground));
+    --tw-prose-pre-code: hsl(var(--foreground));
+    --tw-prose-pre-bg: hsl(var(--muted));
+    --tw-prose-th-borders: hsl(var(--border));
+    --tw-prose-td-borders: hsl(var(--border));
   }
 
   h1, h2, h3, h4, h5, h6 {
