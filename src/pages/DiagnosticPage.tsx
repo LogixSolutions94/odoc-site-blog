@@ -129,7 +129,7 @@ export default function DiagnosticPage() {
                       type="button"
                       onClick={() => choose(QUESTIONS[step].key, opt)}
                       data-umami-event={`diagnostic-q${step + 1}`}
-                      className={`flex items-center justify-between rounded-xl border px-4 py-3.5 text-left text-sm font-medium transition-all ${
+                      className={`group flex items-center justify-between rounded-xl border px-4 py-3.5 text-left text-sm font-medium transition-all ${
                         active
                           ? "border-primary bg-primary/5 text-foreground"
                           : "border-border bg-card text-foreground hover:border-primary/40 hover:bg-secondary/50"
