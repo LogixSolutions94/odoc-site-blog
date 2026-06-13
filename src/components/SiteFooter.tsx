@@ -14,6 +14,7 @@ export function SiteFooter() {
               <li><Link to="/e-facture" className="text-sm text-muted-foreground hover:text-foreground transition-colors">E-facture 2026</Link></li>
               <li><Link to="/diagnostic" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Diagnostic conformité</Link></li>
               <li><Link to="/generateur-factur-x" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Générateur Factur-X</Link></li>
+              <li><Link to="/verificateur" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Vérificateur de facture</Link></li>
               <li><Link to="/roadmap" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Roadmap</Link></li>
               <li><Link to="/changelog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Changelog</Link></li>
             </ul>
@@ -42,6 +43,7 @@ export function SiteFooter() {
               <li><a href="https://docs.odocpilot.com" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Documentation</a></li>
               <li><a href="https://docs.odocpilot.com/api" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">API</a></li>
               <li><a href="https://status.odocpilot.com" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Statut</a></li>
+              <li><Link to="/llm-info" className="text-sm text-muted-foreground hover:text-foreground transition-colors">OdocPilot en bref</Link></li>
             </ul>
           </div>
           <div>

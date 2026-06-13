@@ -24,6 +24,8 @@ const staticPages = [
   { loc: "/e-facture",         priority: "0.9", changefreq: "weekly"  },
   { loc: "/diagnostic",        priority: "0.8", changefreq: "monthly" },
   { loc: "/generateur-factur-x", priority: "0.8", changefreq: "monthly" },
+  { loc: "/verificateur",      priority: "0.8", changefreq: "monthly" },
+  { loc: "/llm-info",          priority: "0.6", changefreq: "monthly" },
   { loc: "/artisans",          priority: "0.7", changefreq: "monthly" },
   { loc: "/commerce",          priority: "0.7", changefreq: "monthly" },
   { loc: "/professions-liberales", priority: "0.7", changefreq: "monthly" },
