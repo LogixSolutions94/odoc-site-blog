@@ -6,7 +6,7 @@
 > La **refonte conversion** (design system v2 clair/sombre + 4 pages orientées bénéfice + nouvelle page `/artisans`) est **mergée dans `main`** mais **PAS ENCORE DÉPLOYÉE** : la prod sert encore l'ANCIEN build (`/artisans` → 404, claims légaux retirés le 29/05 encore EN LIGNE).
 > 👉 **P0 = rebuild Docker sur le VPS** (`git pull origin main` + `docker build -t odoc-landing .` + stop/rm/run). Le `docker restart` seul ne suffit pas (image baked-in). Détails : **`TODO.md`** + **`refonte/DEPLOY-WINDOWS.md`**.
 > **Design system** : tokens dans `src/index.css` (défaut **CLAIR**) ; pour couleurs/CTA utiliser `bg-gradient-cta` / `text-primary` / `text-primary-foreground` (**adaptatifs clair↔sombre**), **jamais de couleur hardcodée**. Build local (pas de node) : `bun ./node_modules/typescript/bin/tsc --noEmit` + `bun ./node_modules/vite/bin/vite.js build` ; dev `bun run dev` → **:8080**.
-> ⚠️ Plusieurs sections **ci-dessous sont datées** (déploiement `scp`, palette « Navy Premium », « OS d'entreprise », modules en jargon…) — en cas de doute, **`TODO.md` fait foi**.
+> ⚠️ Positionnement / produit / vision / thème **rafraîchis le 14/06** (wedge conformité, 49/89/149, « l'IA prépare, vous validez »). Restent datées plus bas : déploiement `scp`, section « PAGES CLÉS » (anciennes pages 11 modules / 79€), palette « Navy Premium ». **Source de positionnement faisant foi : `refonte/PLAN-REFONTE-CONVERSION-2026.md`** (+ `refonte/ANALYSE-CONCURRENTS-2026.md`).
 
 ---
 
@@ -112,8 +112,8 @@ schema:
 
 - **Ton** : Direct, concret, terrain. Voix d'un fondateur qui connaît les PME françaises.
 - **Audience** : Dirigeants TPE/PME France, 35-55 ans, secteur BTP/artisans en priorité.
-- **Produit** : OdocPilot = SaaS IA tout-en-un (CRM + Facturation X + OCR + Automatisation N8N), 79€/mois, self-hosted OVH France, RGPD.
-- **Différenciation** : Alternative moins chère ET plus intelligente qu'Axonaut, Pennylane, Sellsy.
+- **Produit** : OdocPilot = copilote IA français de **facturation & conformité** pour TPE/PME et indépendants. Wedge = **e-facturation 2026/2027** (Factur-X EN 16931, lecture IA des factures, GED, export FEC, copilote Brain). Données ET IA en France (Mistral). Tarifs **49/89/149 €** + palier Conformité gratuit, essai 14 j sans CB. ⚠️ PÉRIMÉ : « tout-en-un CRM/N8N/79€/self-hosted ».
+- **Différenciation** : « **l'IA prépare l'admin du dirigeant de TPE, vous validez en 1 clic** » (jamais « l'IA exécute seule »). Créneau vide vs Pennylane (cabinet) / Qonto (banque) / Indy (compta TNS).
 - **CTA principal** : `<a href="https://app.odocpilot.com/signup">Essayer OdocPilot 14 jours — gratuit, sans CB</a>`
 - **Ne JAMAIS** utiliser le langage GPT générique (voir liste Section 14.3 de SEOBlog.md)
 - **Toujours** inclure au moins 1 stat/chiffre sourcé récent (< 12 mois)
@@ -123,13 +123,12 @@ schema:
 
 ## 📍 **CONTEXTE PROJET**
 
-### Vision Odoc
+### Vision OdocPilot (À JOUR 06/2026 — remplace l'ancien « OS d'entreprise »)
 ```
-Odoc = OS d'entreprise next-gen + Copilot IA pour TPE/PME
-Tagline : "Votre employé IA. 24h/24."
-
-Objectif : Remplacer 10+ outils éparpillés (Drive, Notion, Slack, Pennylane, etc.)
-          par un seul système d'exploitation d'entreprise intelligent
+OdocPilot = copilote IA français de facturation & conformité pour TPE/PME.
+Wedge : la facturation électronique obligatoire 2026/2027 (entrée par la douleur légale).
+Promesse : l'IA prépare l'administratif (Factur-X, lecture/classement, relances) — vous validez en 1 clic.
+Positionnement faisant foi : refonte/PLAN-REFONTE-CONVERSION-2026.md.
 ```
 
 ### Stack technique (NE PAS CHANGER)
@@ -140,8 +139,8 @@ Animations : Framer Motion via MotionDiv (JAMAIS motion.div)
 SEO      : react-helmet-async
 Backend  : Supabase (blog_posts, newsletter_subscribers)
 Deploy   : Nginx reverse proxy + SSL Let's Encrypt
-Font     : Plus Jakarta Sans
-Theme    : Navy Premium (dark blue)
+Font     : Cabinet Grotesk (display) + Satoshi (body), chargés via fontshare (cf index.html/index.css). NB : tailwind.config.ts dit encore « Plus Jakarta Sans » → incohérence à aligner.
+Theme    : défaut CLAIR ; thème sombre = noir + ORANGE (#F97316). « Navy Premium » = PÉRIMÉ.
 ```
 
 ---

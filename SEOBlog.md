@@ -53,12 +53,13 @@ Depuis le Google Helpful Content System (intégré au core ranking en mars 2024)
 
 ### 1.3 Positionnement OdocPilot dans la SERP
 
-Notre avantage différentiel à ancrer dans chaque article :
+Notre avantage différentiel à ancrer dans chaque article (À JOUR 06/2026 — wedge conformité) :
 
-- **IA native** : vraies automatisations (N8N, Ollama/Groq, OCR) — pas juste un chatbot
-- **Souveraineté** : self-hosted, OVH, RGPD, données en France
-- **Tout-en-un abordable** : CRM + Facturation X + OCR + Automatisation pour 79€/mois
-- **Verticale BTP/Artisans** (priorité 2026) : workflows dédiés chantier, devis terrain, suivi équipes
+- **L'IA prépare, vous validez** : l'IA lit/classe/prépare l'admin du dirigeant de TPE, qui valide en 1 clic — jamais « l'IA exécute seule ». Créneau vide vs Pennylane (cabinet) / Qonto (banque) / Indy (compta TNS).
+- **Wedge conformité e-facture 2026/2027** : génération Factur-X (EN 16931), lecture IA des factures, export FEC, copilote Brain. Porte d'entrée par la douleur légale, pas « OS d'entreprise ».
+- **Souveraineté réelle** : données **ET** IA (Mistral) hébergées en France, RGPD, AI Act, démarche Numérique Responsable / IA frugale.
+- **Cible** : dirigeant de TPE/PME et indépendant **sans expert-comptable au quotidien** (artisan/BTP, commerce/services, profession libérale). Tarifs 49/89/149 € + palier Conformité gratuit.
+- ⚠️ **Termes à BANNIR (périmés)** : « OS d'entreprise », « employé IA 24h/24 », N8N/Ollama/Groq en façade, « tout-en-un 79€ », « self-hosted ». Dire « plateforme agréée (PA) », plus « PDP ».
 
 ---
 
