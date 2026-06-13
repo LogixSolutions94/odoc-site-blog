@@ -127,7 +127,7 @@ function buildHead(post: Post): { title: string; tags: string } {
   const url = `${BASE_URL}/blog/${post.slug}`;
   const title = `${post.seo_title || post.title} — Blog OdocPilot`;
   const desc = (post.seo_description || post.excerpt || post.meta_description || "").slice(0, 300);
-  const img = post.cover_image_url || `${BASE_URL}/og-image.svg`;
+  const img = post.cover_image_url || `${BASE_URL}/og-image.png`;
 
   // JSON-LD : on réutilise celui de l'agent s'il existe, sinon on synthétise.
   let jsonLd: unknown = post.json_ld;
@@ -221,14 +221,26 @@ async function run() {
 
   console.log("[prerender-blog] Récupération des articles publiés…");
   let posts: Post[] = [];
+  // select=* (et NON une liste de colonnes figée) : si une colonne attendue
+  // (seo_title, cover_image_url, schema_faq…) n'existe pas dans le schéma prod,
+  // un select explicite renvoie 400 → 0 article pré-rendu → blog invisible des
+  // crawlers. select=* est immunisé contre ce drift (les champs absents sont
+  // juste `undefined`, déjà gérés par les fallbacks de buildHead/buildPage).
+  const headers = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
+  const fetchPosts = (q: string) => fetch(`${SUPABASE_URL}/rest/v1/blog_posts?${q}`, { headers });
   try {
-    const cols = "slug,title,seo_title,seo_description,excerpt,meta_description,content,json_ld,schema_faq,cover_image_url,author_name,category,published_at,updated_at";
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/blog_posts?select=${cols}&status=eq.published`,
-      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-    );
+    let res = await fetchPosts("select=*&status=eq.published");
+    if (!res.ok) {
+      // Le filtre `status` peut échouer si la colonne n'existe pas / diffère :
+      // on retombe sur un select=* non filtré (publication triée côté client).
+      const body = await res.text().catch(() => "");
+      console.warn(`[prerender-blog] requête filtrée ${res.status} (${body.slice(0, 160)}) — fallback select=*`);
+      res = await fetchPosts("select=*");
+    }
     if (!res.ok) { console.warn(`[prerender-blog] Supabase ${res.status} — skip.`); return; }
-    posts = await res.json() as Post[];
+    const all = (await res.json()) as Array<Post & { status?: string | null }>;
+    // Si le fallback a tout ramené, ne garder que le publié (status absent → gardé).
+    posts = all.filter((p) => !p.status || p.status === "published");
   } catch (e) {
     console.warn("[prerender-blog] fetch KO — skip :", e instanceof Error ? e.message : e);
     return;
