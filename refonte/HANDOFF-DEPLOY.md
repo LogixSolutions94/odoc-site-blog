@@ -1,6 +1,6 @@
 # 🚀 HANDOFF DÉPLOIEMENT — à lire en premier (PC Windows / opérateur)
 
-> **Mis à jour : 2026-06-13.** Ce document **remplace** les consignes datées de `TODO.md` et `refonte/DEPLOY-WINDOWS.md` (qui parlaient d'une branche `feat/refonte-conversion` — **déjà fusionnée**).
+> **Mis à jour : 2026-06-14.** Ce document **remplace** les consignes datées de `TODO.md` et `refonte/DEPLOY-WINDOWS.md` (qui parlaient d'une branche `feat/refonte-conversion` — **déjà fusionnée**).
 > **Tout le travail de refonte est sur `main`, poussé sur GitHub. Rien n'est encore en ligne.** Il reste à **déployer** + 3 réglages d'infra.
 
 ---
@@ -28,9 +28,20 @@ curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:3000      # attendu : 
 ### ✅ Vérif post-déploiement (dans le navigateur, sur https://odocpilot.com)
 - [ ] Accueil **centré**, hero « La réforme de la facture électronique arrive… », thème clair par défaut.
 - [ ] **Thème sombre = noir + ORANGE** (plus de bleu/cyan). Tester le bouton de thème.
-- [ ] `/e-facture`, `/pricing` (49/89/149), `/fonctionnalites` (aperçus produit), `/a-propos`, `/roadmap`, `/changelog`, `/diagnostic`, `/generateur-factur-x`, `/artisans`, `/commerce`, `/professions-liberales`, `/cabinets-comptables` → tous **200**, pas de 404.
+- [ ] `/e-facture`, `/pricing` (Conformité 0€ + 49/89/149), `/fonctionnalites`, `/a-propos`, `/roadmap`, `/changelog`, `/diagnostic`, `/generateur-factur-x`, **`/verificateur`** (nouveau), **`/llm-info`** (nouveau), `/artisans`, `/commerce`, `/professions-liberales`, `/cabinets-comptables` → tous **200**, pas de 404.
+- [ ] **`/pricing`** : 4 cartes (Conformité gratuit + Essential 49 / Pro 89 / Manager 149), toggle mensuel/annuel, comparatif avec colonne Conformité.
+- [ ] **`/verificateur`** (outil neuf, non smoke-testé navigateur côté Mac) : déposer une vraie facture Factur-X (PDF ou XML) → checklist EN 16931 affichée ; déposer un PDF simple → message « pas de volet structuré ».
+- [ ] **Home** : CTA primaire = « Démarrer l'essai 14 jours », secondaire = « Vérifier ma conformité ».
 - [ ] **Aucun** claim retiré encore visible (NF Z42-013, « 99.9% uptime », « OS d'entreprise », « 1000 entreprises »).
 - [ ] Un article de blog en mode clair = **texte lisible** (plus de texte blanc invisible).
+
+---
+
+## 1bis) DÉPENDANCES IN-APP (côté SaaS / odoc-pulse — PAS le site)
+Pour rendre le tunnel cohérent une fois le site en ligne :
+- [ ] **Palier « Conformité » gratuit** : annoncé sur `/pricing`. Le créer comme tier réel dans la DB/billing du SaaS (tant que `BILLING_ENFORCED=false`, tout nouvel inscrit a déjà accès → cohérent en attendant).
+- [ ] **Google SSO** : à activer (`GOOGLE_CLIENT_SECRET` manquant côté GoTrue) → débloque l'activation sans dépendre de l'email. Session secrets dédiée.
+- [x] **Email onboarding** : réparé (GoTrue SMTP, recover/magic-link 200) — ⚠️ **mirrorer l'env SMTP dans Coolify** (sinon un redeploy UI l'efface).
 
 ---
 

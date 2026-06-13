@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
 import { BackButton } from "@/components/BackButton";
@@ -299,6 +300,9 @@ th,td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left}th{background:
                 Vous obtenez le <strong className="text-foreground">volet XML structuré</strong> (CII, profil EN 16931) + un PDF.
                 La fusion XML + PDF/A-3 et la <strong className="text-foreground">transmission via plateforme agréée</strong> se font dans OdocPilot.
               </p>
+              <Link to="/verificateur" className="block text-center text-xs font-semibold text-primary hover:underline" data-umami-event="generateur-to-verificateur">
+                Déjà une facture ? Vérifiez sa conformité →
+              </Link>
             </div>
 
             {/* Capture email après valeur */}

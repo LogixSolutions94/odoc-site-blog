@@ -135,10 +135,11 @@ const jsonLd = {
       offers: {
         "@type": "AggregateOffer",
         priceCurrency: "EUR",
-        lowPrice: "49",
+        lowPrice: "0",
         highPrice: "149",
-        offerCount: 3,
+        offerCount: 4,
         offers: [
+          { "@type": "Offer", name: "Conformité", price: "0", priceCurrency: "EUR" },
           { "@type": "Offer", name: "Essential", price: "49", priceCurrency: "EUR" },
           { "@type": "Offer", name: "Pro", price: "89", priceCurrency: "EUR" },
           { "@type": "Offer", name: "Manager", price: "149", priceCurrency: "EUR" },

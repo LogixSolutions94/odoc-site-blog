@@ -14,6 +14,7 @@ const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
 // Lead magnets (pages construites en parallèle) : le funnel /e-facture y mène.
 const DIAGNOSTIC = "/diagnostic";
 const GENERATEUR = "/generateur-factur-x";
+const VERIFICATEUR = "/verificateur";
 
 const heroFade = (delay = 0) => ({
   initial: { opacity: 0, y: 16 },
@@ -431,6 +432,11 @@ export default function EFacturePage() {
                 </Button>
               </Link>
             </div>
+            <p className="mt-4 text-sm">
+              <Link to={VERIFICATEUR} data-umami-event="cta-efacture-verificateur-final" className="font-semibold text-primary-foreground underline underline-offset-2 hover:no-underline">
+                Vous avez déjà une facture ? Vérifiez sa conformité (gratuit)
+              </Link>
+            </p>
             <p className="mt-4 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-primary-foreground/80">
               <span className="inline-flex items-center gap-1"><BadgeCheck className="h-3 w-3" /> Sans carte bancaire</span>
               <span className="inline-flex items-center gap-1"><BadgeCheck className="h-3 w-3" /> Sans engagement</span>
