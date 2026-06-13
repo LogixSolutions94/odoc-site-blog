@@ -1,24 +1,30 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
 import { BackButton } from "@/components/BackButton";
 import { TrustCredentials } from "@/components/TrustCredentials";
 import { Button } from "@/components/ui/button";
 import {
-  ArrowRight, CheckCircle, Shield, FileText,
+  ArrowRight, Check, CheckCircle2, Shield, FileText,
   Brain, Search, BadgeCheck, Globe, FileOutput,
-  PlugZap, Clock, Calendar, ChevronRight, MapPin,
+  PlugZap, Clock, Calendar, ChevronRight, MapPin, Sparkles,
 } from "lucide-react";
 
-const ORANGE = "hsl(30 100% 50%)";
-const PETRIOL = "hsl(201 85% 22%)";
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
-const SIGNUP = `${APP_URL}/auth?mode=signup`;
+// Lead magnets (pages construites en parallèle) : le funnel /e-facture y mène.
+const DIAGNOSTIC = "/diagnostic";
+const GENERATEUR = "/generateur-factur-x";
 
-const fade = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
+const heroFade = (delay = 0) => ({
+  initial: { opacity: 0, y: 16 },
   animate: { opacity: 1, y: 0 },
   transition: { delay, duration: 0.55, ease: [0.32, 0.72, 0, 1] as const },
+});
+const inView = (delay = 0) => ({
+  initial: { opacity: 0, y: 18 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { delay, duration: 0.45 },
 });
 
 // ─── DONNÉES ────────────────────────────────────────────────────────────────
@@ -31,8 +37,8 @@ const LOIS = [
     loi: "Décision DGFiP — abandon du Portail Public de Facturation",
     detail:
       "L'État a abandonné le Portail Public de Facturation : passer par une plateforme agréée (PA) privée devient le chemin obligatoire pour émettre, recevoir et transmettre ses factures.",
-    urgence: "Acté",
-    urgenceColor: PETRIOL,
+    badge: "Acté",
+    tone: "muted" as const,
   },
   {
     icon: Calendar,
@@ -41,8 +47,8 @@ const LOIS = [
     loi: "Ordonnance n°2021-1190 · Décret n°2022-1299",
     detail:
       "Toute entreprise assujettie à la TVA (y compris les micro-entreprises) doit pouvoir recevoir ses factures fournisseurs au format électronique structuré via une plateforme agréée.",
-    urgence: "Échéance n°1",
-    urgenceColor: "#ef4444",
+    badge: "Échéance n°1",
+    tone: "primary" as const,
   },
   {
     icon: Calendar,
@@ -51,8 +57,8 @@ const LOIS = [
     loi: "Ordonnance n°2021-1190 · Décret n°2022-1299",
     detail:
       "Les TPE, PME et micro-entreprises doivent à leur tour émettre leurs factures au format électronique et transmettre leur e-reporting (données de transaction et de paiement).",
-    urgence: "Échéance n°2",
-    urgenceColor: ORANGE,
+    badge: "Échéance n°2",
+    tone: "primary" as const,
   },
   {
     icon: Globe,
@@ -61,8 +67,8 @@ const LOIS = [
     loi: "Directive UE 2014/55/UE · norme EN 16931",
     detail:
       "Une facture électronique n'est pas un PDF par e-mail : c'est un fichier structuré (Factur-X = PDF lisible + données XML intégrées). OdocPilot génère vos factures directement à ce format conforme, sans paramétrage.",
-    urgence: "Disponible",
-    urgenceColor: PETRIOL,
+    badge: "Disponible",
+    tone: "muted" as const,
   },
 ];
 
@@ -71,48 +77,48 @@ const FEATURES = [
     icon: FileText,
     title: "Génération Factur-X conforme",
     desc: "Vos factures sortent au format Factur-X (PDF/A-3 + données structurées) attendu par la réforme, prêtes à télécharger — sans paramétrage technique.",
-    badge: "Disponible",
+    soon: false,
   },
   {
     icon: Brain,
     title: "Lecture IA de vos factures reçues",
     desc: "Déposez une facture : l'IA en extrait le fournisseur, le montant, la TVA et l'échéance, et propose le compte. Vous validez d'un clic — rien n'est engagé sans vous.",
-    badge: "Disponible",
+    soon: false,
   },
   {
     icon: Search,
     title: "Recherche en langage naturel",
     desc: "« Toutes les factures EDF de 2025 » en français courant : la GED retrouve vos documents instantanément, sans dossier à créer.",
-    badge: "Disponible",
+    soon: false,
   },
   {
     icon: FileOutput,
     title: "Export FEC pour l'expert-comptable",
     desc: "Un Fichier des Écritures Comptables propre, exporté en un clic, à transmettre à votre cabinet sans manipulation.",
-    badge: "Disponible",
+    soon: false,
   },
   {
     icon: Brain,
     title: "Copilote qui répond sur vos données",
     desc: "« Qui me doit de l'argent ce mois-ci ? » : réponse claire, sourcée sur vos documents, et action préparée que vous validez.",
-    badge: "Disponible",
+    soon: false,
   },
   {
     icon: Clock,
     title: "Transmission & rapprochement bancaire",
     desc: "Transmission via plateforme agréée partenaire et rapprochement bancaire : raccordement en cours, livrés avant les échéances.",
-    badge: "Bientôt",
+    soon: true,
   },
 ];
 
 const COMPARISON = [
-  { feature: "Génération Factur-X (PDF/A-3 + XML)",   odoc: true,  excel: "Non conforme", other: true  },
-  { feature: "Lecture IA des factures reçues",        odoc: true,  excel: false, other: false },
-  { feature: "Recherche en langage naturel",          odoc: true,  excel: false, other: false },
-  { feature: "Export FEC pour l'expert-comptable",    odoc: true,  excel: false, other: true  },
-  { feature: "Données et IA hébergées en France",     odoc: true,  excel: "—",   other: "Variable" },
-  { feature: "Vous gardez le dernier mot (validation)", odoc: true, excel: "—",  other: false },
-  { feature: "Prix mensuel (par entreprise)",         odoc: "dès 49€", excel: "—", other: "Variable" },
+  { feature: "Génération Factur-X (PDF/A-3 + XML)",      odoc: true,      excel: "Non conforme", other: true },
+  { feature: "Lecture IA des factures reçues",           odoc: true,      excel: false,          other: false },
+  { feature: "Recherche en langage naturel",             odoc: true,      excel: false,          other: false },
+  { feature: "Export FEC pour l'expert-comptable",       odoc: true,      excel: false,          other: true },
+  { feature: "Données et IA hébergées en France",        odoc: true,      excel: "—",            other: "Variable" },
+  { feature: "Vous gardez le dernier mot (validation)",  odoc: true,      excel: "—",            other: false },
+  { feature: "Prix mensuel (par entreprise)",            odoc: "dès 49€", excel: "—",            other: "Variable" },
 ];
 
 const FAQ = [
@@ -144,18 +150,31 @@ const FAQ = [
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  name: "Facturation électronique 2026/2027 — préparez votre conformité avec OdocPilot",
-  description:
-    "Réception obligatoire au 1ᵉʳ septembre 2026, émission en 2027 : OdocPilot prépare votre conformité e-facture. Génération Factur-X, lecture IA des factures, export FEC. Données et IA hébergées en France.",
-  mainEntity: {
-    "@type": "FAQPage",
-    mainEntity: FAQ.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  },
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://odocpilot.com/e-facture",
+      name: "Facturation électronique 2026/2027 — préparez votre conformité avec OdocPilot",
+      description:
+        "Réception obligatoire au 1ᵉʳ septembre 2026, émission en 2027 : OdocPilot prépare votre conformité e-facture. Génération Factur-X, lecture IA des factures, export FEC. Données et IA hébergées en France.",
+      inLanguage: "fr-FR",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQ.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://odocpilot.com" },
+        { "@type": "ListItem", position: 2, name: "Conformité facture électronique", item: "https://odocpilot.com/e-facture" },
+      ],
+    },
+  ],
 };
 
 // ─── PAGE ───────────────────────────────────────────────────────────────────
@@ -175,95 +194,64 @@ export default function EFacturePage() {
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section className="w-full relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-32 left-1/3 w-[500px] h-[500px] rounded-full blur-[120px] opacity-15" style={{ background: ORANGE }} />
-          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full blur-[100px] opacity-10" style={{ background: PETRIOL }} />
+          <div className="absolute -top-32 left-1/3 h-[500px] w-[500px] rounded-full bg-primary/10 blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
         </div>
 
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20 text-center z-10">
-          <motion.div {...fade(0)}>
-            <div
-              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold mb-6"
-              style={{ background: "#ef444418", border: "1px solid #ef444444", color: "#ef4444" }}
-            >
-              Réception obligatoire au 1ᵉʳ septembre 2026 — êtes-vous prêt ?
-            </div>
-          </motion.div>
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20 text-center">
+          <MotionDiv {...heroFade(0)}>
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary">
+              <Clock className="h-3.5 w-3.5" /> Réception obligatoire au 1ᵉʳ septembre 2026 — êtes-vous prêt ?
+            </span>
+          </MotionDiv>
 
-          <motion.div {...fade(0.08)}>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tighter leading-[1.05] text-foreground">
+          <MotionDiv {...heroFade(0.08)}>
+            <h1 className="mt-6 text-4xl sm:text-5xl lg:text-[3.3rem] font-extrabold tracking-tight leading-[1.07] text-foreground">
               La facturation électronique devient obligatoire.{" "}
-              <span
-                style={{
-                  background: `linear-gradient(135deg, ${ORANGE}, ${PETRIOL})`,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                OdocPilot vous y prépare, vous validez en un clic.
-              </span>
+              <span className="bg-gradient-cta bg-clip-text text-transparent">OdocPilot vous y prépare, vous validez en un clic.</span>
             </h1>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div {...fade(0.16)}>
+          <MotionDiv {...heroFade(0.16)}>
             <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed">
-              Dès le <strong>1ᵉʳ septembre 2026</strong>, toute entreprise assujettie à la TVA devra recevoir ses factures
-              au format électronique structuré via une <strong>plateforme agréée</strong> ; l'émission suivra en 2027.
-              OdocPilot génère vos factures au format légal <strong>Factur-X</strong>, lit et classe vos factures reçues,
-              et prépare votre administratif — pendant que vous gardez la décision finale.
+              Dès le <strong className="text-foreground">1ᵉʳ septembre 2026</strong>, toute entreprise assujettie à la TVA devra recevoir ses factures au format électronique structuré via une <strong className="text-foreground">plateforme agréée</strong> ; l'émission suivra en 2027. OdocPilot génère vos factures au format légal <strong className="text-foreground">Factur-X</strong>, lit et classe vos factures reçues, et prépare votre administratif — pendant que vous gardez la décision finale.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div {...fade(0.24)}>
-            <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground font-medium">
-              {[
-                "Factur-X conforme",
-                "Lecture IA des factures",
-                "Export FEC en 1 clic",
-                "Données et IA en France",
-                "L'IA prépare, vous validez",
-              ].map((b) => (
+          <MotionDiv {...heroFade(0.24)}>
+            <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs font-medium text-muted-foreground">
+              {["Factur-X conforme", "Lecture IA des factures", "Export FEC en 1 clic", "Données et IA en France", "L'IA prépare, vous validez"].map((b) => (
                 <span key={b} className="inline-flex items-center gap-1.5">
-                  <CheckCircle className="h-3.5 w-3.5" style={{ color: ORANGE }} /> {b}
+                  <Check className="h-3.5 w-3.5 text-primary" /> {b}
                 </span>
               ))}
             </div>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div {...fade(0.32)}>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-              <a href={SIGNUP} data-umami-event="cta-efacture-hero">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto text-base px-10 py-6 font-bold text-white transition-all duration-200 hover:scale-[1.03]"
-                  style={{
-                    background: `linear-gradient(135deg, ${ORANGE}, ${PETRIOL})`,
-                    boxShadow: `0 0 32px rgba(249,115,22,0.45)`,
-                  }}
-                >
-                  Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" />
+          <MotionDiv {...heroFade(0.32)}>
+            <div className="mt-8 flex flex-col items-center sm:flex-row sm:justify-center gap-3">
+              <Link to={DIAGNOSTIC} data-umami-event="cta-efacture-diagnostic-hero">
+                <Button size="lg" className="w-full sm:w-auto bg-gradient-cta text-primary-foreground font-bold px-8 py-6 text-base shadow-lg shadow-primary/20 hover:opacity-95">
+                  <Sparkles className="mr-2 h-5 w-5" /> Vérifier ma conformité (3 min)
                 </Button>
-              </a>
-              <Link to="/pricing">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto text-base px-8 py-6">
-                  Voir les tarifs →
+              </Link>
+              <Link to={GENERATEUR} data-umami-event="cta-efacture-generateur-hero">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto px-8 py-6 text-base">
+                  Générer une facture Factur-X <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
             </div>
-            <p className="mt-3 text-xs text-muted-foreground">
-              <CheckCircle className="inline h-3 w-3 mr-1" style={{ color: ORANGE }} />
-              Sans carte bancaire ·{" "}
-              <CheckCircle className="inline h-3 w-3 mr-1" style={{ color: ORANGE }} />
-              Sans engagement ·{" "}
-              <MapPin className="inline h-3 w-3 mr-1" style={{ color: ORANGE }} />
-              Données en France
+            <p className="mt-3 text-xs text-muted-foreground inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+              <span className="inline-flex items-center gap-1"><Check className="h-3 w-3 text-primary" /> Gratuit</span>
+              <span className="inline-flex items-center gap-1"><Check className="h-3 w-3 text-primary" /> Sans carte bancaire</span>
+              <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3 text-primary" /> Données en France</span>
             </p>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* ── STATS (faits réglementaires) ─────────────────────────────── */}
-      <section className="w-full py-10 border-y border-border" style={{ background: `linear-gradient(90deg, ${ORANGE}08, ${PETRIOL}08)` }}>
+      <section className="w-full py-10 border-y border-border bg-secondary/60">
         <div className="max-w-4xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
             { val: "01/09/2026", label: "Réception obligatoire (toutes entreprises)" },
@@ -271,15 +259,10 @@ export default function EFacturePage() {
             { val: "500 €", label: "Par manquement à l'e-reporting" },
             { val: "100 % France", label: "Données et IA hébergées en France" },
           ].map((s, i) => (
-            <motion.div key={s.label} {...fade(i * 0.08)}>
-              <p className="text-2xl sm:text-3xl font-extrabold tabular-nums" style={{
-                background: `linear-gradient(135deg, ${ORANGE}, ${PETRIOL})`,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}>{s.val}</p>
-              <p className="text-xs text-muted-foreground mt-1 leading-snug">{s.label}</p>
-            </motion.div>
+            <MotionDiv key={s.label} {...inView(i * 0.08)}>
+              <p className="text-2xl sm:text-3xl font-extrabold tabular-nums bg-gradient-cta bg-clip-text text-transparent">{s.val}</p>
+              <p className="mt-1 text-xs text-muted-foreground leading-snug">{s.label}</p>
+            </MotionDiv>
           ))}
         </div>
         <p className="mt-6 text-center text-xs text-muted-foreground">
@@ -289,114 +272,79 @@ export default function EFacturePage() {
       </section>
 
       {/* ── CALENDRIER & OBLIGATIONS ─────────────────────────────────── */}
-      <section className="w-full py-24 sm:py-32">
+      <section className="w-full py-24">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div {...fade(0)} className="text-center mb-14">
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold mb-4"
-              style={{ border: `1px solid ${PETRIOL}44`, background: `${PETRIOL}10`, color: PETRIOL }}
-            >
-              Le calendrier officiel
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-              Ce que la réforme impose —
-              <span style={{
-                background: `linear-gradient(135deg, ${ORANGE}, ${PETRIOL})`,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}> et comment OdocPilot vous y prépare.</span>
+          <MotionDiv {...inView(0)} className="text-center max-w-2xl mx-auto mb-14">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Le calendrier officiel</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+              Ce que la réforme impose — <span className="bg-gradient-cta bg-clip-text text-transparent">et comment OdocPilot vous y prépare.</span>
             </h2>
-            <p className="mt-3 max-w-2xl mx-auto text-muted-foreground">
+            <p className="mt-3 text-muted-foreground">
               Chaque échéance a une date. OdocPilot vous prépare à chacune, en distinguant toujours ce qui est actif de ce qui arrive.
             </p>
-          </motion.div>
+          </MotionDiv>
 
           <div className="grid gap-5 sm:grid-cols-2">
             {LOIS.map((loi, i) => {
               const Icon = loi.icon;
+              const isPrimary = loi.tone === "primary";
               return (
-                <motion.div
-                  key={loi.titre}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="p-6 rounded-xl border border-border bg-card"
-                >
+                <MotionDiv key={loi.titre} {...inView(i * 0.08)} className="rounded-2xl border border-border bg-card p-6 shadow-card">
                   <div className="flex items-start justify-between gap-3 mb-3">
-                    <div className="h-10 w-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${ORANGE}14` }}>
-                      <Icon className="h-5 w-5" style={{ color: ORANGE }} />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                      <Icon className="h-5 w-5 text-primary" />
                     </div>
-                    <span
-                      className="text-xs font-bold px-2.5 py-1 rounded-full"
-                      style={{ background: `${loi.urgenceColor}18`, color: loi.urgenceColor, border: `1px solid ${loi.urgenceColor}44` }}
-                    >
-                      {loi.urgence}
+                    <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${isPrimary ? "bg-primary/10 text-primary border border-primary/30" : "bg-muted text-muted-foreground border border-border"}`}>
+                      {loi.badge}
                     </span>
                   </div>
-                  <p className="text-2xl font-extrabold tracking-tight tabular-nums" style={{ color: ORANGE }}>{loi.date}</p>
-                  <h3 className="mt-1 text-sm font-bold text-foreground">{loi.titre}</h3>
-                  <p className="mt-1 text-xs font-mono text-muted-foreground opacity-70">{loi.loi}</p>
+                  <p className="text-2xl font-extrabold tracking-tight tabular-nums text-primary">{loi.date}</p>
+                  <h3 className="mt-1 font-bold text-foreground">{loi.titre}</h3>
+                  <p className="mt-1 text-xs font-mono text-muted-foreground/70">{loi.loi}</p>
                   <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{loi.detail}</p>
-                </motion.div>
+                </MotionDiv>
               );
             })}
           </div>
 
           {/* Encart transmission honnête */}
-          <motion.div {...fade(0.2)} className="mt-6 rounded-xl border border-border bg-card p-5 flex items-start gap-3">
-            <Shield className="h-5 w-5 flex-shrink-0" style={{ color: ORANGE }} />
+          <MotionDiv {...inView(0.1)} className="mt-6 flex items-start gap-3 rounded-2xl border border-border bg-card p-5">
+            <Shield className="h-5 w-5 flex-shrink-0 text-primary" />
             <p className="text-sm text-muted-foreground leading-relaxed">
               <strong className="text-foreground">En toute transparence :</strong> aujourd'hui, OdocPilot génère vos factures au format légal Factur-X et prépare votre conformité. La <strong className="text-foreground">transmission via une plateforme agréée partenaire</strong> est en cours de raccordement — vous serez prêt le jour J.
             </p>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* ── FEATURES ─────────────────────────────────────────────────── */}
-      <section className="w-full py-24 sm:py-32" style={{ background: `${PETRIOL}06` }}>
+      <section className="w-full py-24 bg-secondary/60 border-y border-border">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div {...fade(0)} className="text-center mb-14">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-              Des fonctions réelles,{" "}
-              <span style={{
-                background: `linear-gradient(135deg, ${ORANGE}, ${PETRIOL})`,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}>montrées plutôt que promises.</span>
+          <MotionDiv {...inView(0)} className="text-center max-w-2xl mx-auto mb-14">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Ce qu'OdocPilot fait pour votre conformité</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+              Des fonctions réelles, <span className="bg-gradient-cta bg-clip-text text-transparent">montrées plutôt que promises.</span>
             </h2>
-            <p className="mt-3 max-w-2xl mx-auto text-muted-foreground">
+            <p className="mt-3 text-muted-foreground">
               Ce que l'outil fait aujourd'hui — la transmission via plateforme agréée et le rapprochement bancaire sont annoncés honnêtement comme « bientôt ».
             </p>
-          </motion.div>
+          </MotionDiv>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((f, i) => {
               const Icon = f.icon;
-              const soon = f.badge === "Bientôt";
               return (
-                <motion.div
-                  key={f.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.06, duration: 0.5 }}
-                  className={`relative p-5 rounded-xl border bg-card ${soon ? "border-dashed border-border" : "border-border"}`}
-                >
-                  <span
-                    className="absolute top-3 right-3 text-xs font-semibold px-2 py-0.5 rounded-full"
-                    style={soon
-                      ? { background: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }
-                      : { background: `${ORANGE}18`, color: ORANGE, border: `1px solid ${ORANGE}33` }}
-                  >
-                    {f.badge}
+                <MotionDiv key={f.title} {...inView(i * 0.06)}
+                  className={`relative rounded-2xl border bg-card p-5 shadow-card ${f.soon ? "border-dashed" : "border-border"}`}>
+                  <span className={`absolute right-3 top-3 rounded-full px-2 py-0.5 text-xs font-semibold ${f.soon ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary border border-primary/30"}`}>
+                    {f.soon ? "Bientôt" : "Disponible"}
                   </span>
-                  <div className="h-10 w-10 rounded-lg flex items-center justify-center mb-3" style={{ background: `${ORANGE}14` }}>
-                    <Icon className="h-5 w-5" style={{ color: ORANGE }} />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 mb-3">
+                    <Icon className="h-5 w-5 text-primary" />
                   </div>
-                  <h3 className="text-sm font-bold text-foreground leading-snug">{f.title}</h3>
-                  <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">{f.desc}</p>
-                </motion.div>
+                  <h3 className="font-bold text-foreground leading-snug">{f.title}</h3>
+                  <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+                </MotionDiv>
               );
             })}
           </div>
@@ -404,67 +352,56 @@ export default function EFacturePage() {
       </section>
 
       {/* ── COMPARATIF ───────────────────────────────────────────────── */}
-      <section className="w-full py-24 sm:py-32">
+      <section className="w-full py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div {...fade(0)} className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-              OdocPilot, le tableur et les logiciels classiques
-            </h2>
-            <p className="mt-3 text-muted-foreground">Ce qui change concrètement pour préparer l'échéance 2026</p>
-          </motion.div>
+          <MotionDiv {...inView(0)} className="text-center max-w-2xl mx-auto mb-12">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Comparatif</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">OdocPilot, le tableur et les logiciels classiques</h2>
+            <p className="mt-3 text-muted-foreground">Ce qui change concrètement pour préparer l'échéance 2026.</p>
+          </MotionDiv>
 
-          <motion.div {...fade(0.1)} className="rounded-2xl border border-border overflow-hidden bg-card">
-            <div className="grid grid-cols-4 text-xs font-bold text-center py-3 border-b border-border" style={{ background: `${ORANGE}08` }}>
-              <div className="text-left pl-5 text-foreground">Critère</div>
-              <div style={{ color: ORANGE }}>OdocPilot</div>
+          <MotionDiv {...inView(0.1)} className="overflow-hidden rounded-2xl border border-border bg-card">
+            <div className="grid grid-cols-4 border-b border-border bg-primary/5 py-3 text-center text-xs font-bold">
+              <div className="pl-5 text-left text-foreground">Critère</div>
+              <div className="text-primary">OdocPilot</div>
               <div className="text-muted-foreground">Tableur / PDF</div>
               <div className="text-muted-foreground">Logiciels classiques</div>
             </div>
             {COMPARISON.map((row, i) => (
-              <div
-                key={row.feature}
-                className={`grid grid-cols-4 text-xs text-center py-3 border-b border-border last:border-0 items-center ${i % 2 === 0 ? "" : "bg-secondary/30"}`}
-              >
-                <div className="text-left pl-5 text-foreground font-medium text-xs">{row.feature}</div>
-                <div className="font-semibold" style={{ color: typeof row.odoc === "string" ? ORANGE : undefined }}>
-                  {typeof row.odoc === "string" ? row.odoc : row.odoc ? <CheckCircle className="h-4 w-4 mx-auto text-green-500" /> : <span className="text-muted-foreground">✗</span>}
+              <div key={row.feature} className={`grid grid-cols-4 items-center border-b border-border py-3 text-center text-xs last:border-0 ${i % 2 === 0 ? "" : "bg-secondary/40"}`}>
+                <div className="pl-5 text-left font-medium text-foreground">{row.feature}</div>
+                <div className="font-semibold text-primary">
+                  {typeof row.odoc === "string" ? row.odoc : row.odoc ? <CheckCircle2 className="mx-auto h-4 w-4 text-primary" /> : <span className="text-muted-foreground">✗</span>}
                 </div>
                 <div>
-                  {typeof row.excel === "string" ? <span className="text-xs text-muted-foreground">{row.excel}</span> : row.excel ? <CheckCircle className="h-4 w-4 mx-auto text-green-500" /> : <span className="text-muted-foreground">✗</span>}
+                  {typeof row.excel === "string" ? <span className="text-muted-foreground">{row.excel}</span> : row.excel ? <CheckCircle2 className="mx-auto h-4 w-4 text-primary" /> : <span className="text-muted-foreground">✗</span>}
                 </div>
                 <div>
-                  {typeof row.other === "string" ? <span className="text-xs text-muted-foreground">{row.other}</span> : row.other ? <CheckCircle className="h-4 w-4 mx-auto text-green-500" /> : <span className="text-muted-foreground">✗</span>}
+                  {typeof row.other === "string" ? <span className="text-muted-foreground">{row.other}</span> : row.other ? <CheckCircle2 className="mx-auto h-4 w-4 text-primary" /> : <span className="text-muted-foreground">✗</span>}
                 </div>
               </div>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* ── FAQ SEO ──────────────────────────────────────────────────── */}
-      <section className="w-full py-24 sm:py-32" style={{ background: `${PETRIOL}06` }}>
+      <section className="w-full py-24 bg-secondary/60 border-y border-border">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div {...fade(0)} className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-              La réforme e-facture, sans zone d'ombre
-            </h2>
-            <p className="mt-3 text-muted-foreground">Les vraies questions que se posent les dirigeants</p>
-          </motion.div>
+          <MotionDiv {...inView(0)} className="text-center mb-12">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Vos questions, nos réponses franches</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">La réforme e-facture, sans zone d'ombre</h2>
+            <p className="mt-3 text-muted-foreground">Les vraies questions que se posent les dirigeants.</p>
+          </MotionDiv>
           <div className="space-y-4">
             {FAQ.map((item, i) => (
-              <motion.div
-                key={item.q}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.07, duration: 0.5 }}
-                className="p-6 rounded-xl border border-border bg-card"
-              >
-                <h3 className="text-sm font-bold text-foreground flex items-start gap-2">
-                  <ChevronRight className="h-4 w-4 flex-shrink-0 mt-0.5" style={{ color: ORANGE }} />
+              <MotionDiv key={item.q} {...inView(i * 0.06)} className="rounded-2xl border border-border bg-card p-6 shadow-card">
+                <h3 className="flex items-start gap-2 font-bold text-foreground">
+                  <ChevronRight className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
                   {item.q}
                 </h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed pl-6">{item.a}</p>
-              </motion.div>
+                <p className="mt-2 pl-6 text-sm text-muted-foreground leading-relaxed">{item.a}</p>
+              </MotionDiv>
             ))}
           </div>
 
@@ -473,45 +410,33 @@ export default function EFacturePage() {
       </section>
 
       {/* ── CTA FINAL ────────────────────────────────────────────────── */}
-      <section className="w-full py-24 sm:py-32">
+      <section className="w-full py-24">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <motion.div
-            {...fade(0)}
-            className="rounded-2xl p-10 sm:p-16"
-            style={{
-              background: `linear-gradient(135deg, ${ORANGE}, ${PETRIOL})`,
-              boxShadow: `0 8px 64px rgba(249,115,22,0.35)`,
-            }}
-          >
-            <h2 className="text-2xl sm:text-3xl font-bold text-white leading-tight">
+          <MotionDiv {...inView(0)} className="rounded-3xl bg-gradient-cta p-10 sm:p-16 shadow-elevated">
+            <h2 className="text-2xl sm:text-3xl font-bold leading-tight text-primary-foreground">
               Prenez de l'avance sur la réforme 2026.
             </h2>
-            <p className="mt-3 text-white/80 text-sm leading-relaxed">
-              Générez vos factures au format légal Factur-X, laissez l'IA préparer votre administratif sur vos propres documents,
-              et gardez le dernier mot. Mise en route en quelques minutes, sans carte bancaire.
+            <p className="mt-3 text-sm leading-relaxed text-primary-foreground/85">
+              Vérifiez votre conformité en 3 minutes, générez vos factures au format légal Factur-X, et laissez l'IA préparer votre administratif sur vos propres documents — vous gardez le dernier mot. Gratuit, sans carte bancaire.
             </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-              <a href={SIGNUP} data-umami-event="cta-efacture-final">
-                <Button
-                  size="lg"
-                  className="px-10 py-6 font-bold transition-all duration-200 hover:scale-[1.04]"
-                  style={{ background: "white", color: PETRIOL, boxShadow: "0 4px 24px rgba(0,0,0,0.18)" }}
-                >
-                  Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" />
+            <div className="mt-8 flex flex-col items-center sm:flex-row sm:justify-center gap-3">
+              <Link to={DIAGNOSTIC} data-umami-event="cta-efacture-diagnostic-final">
+                <Button size="lg" className="w-full sm:w-auto bg-background text-foreground hover:bg-background/90 px-8 py-6 font-bold shadow-lg">
+                  <Sparkles className="mr-2 h-5 w-5 text-primary" /> Vérifier ma conformité (3 min)
                 </Button>
-              </a>
-              <Link to="/pricing">
-                <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-6">
-                  Voir les tarifs →
+              </Link>
+              <Link to={GENERATEUR} data-umami-event="cta-efacture-generateur-final">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 px-8 py-6">
+                  Générer ma facture Factur-X <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
             </div>
-            <p className="mt-4 text-xs text-white/70 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+            <p className="mt-4 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-primary-foreground/80">
               <span className="inline-flex items-center gap-1"><BadgeCheck className="h-3 w-3" /> Sans carte bancaire</span>
               <span className="inline-flex items-center gap-1"><BadgeCheck className="h-3 w-3" /> Sans engagement</span>
               <span className="inline-flex items-center gap-1"><BadgeCheck className="h-3 w-3" /> Données en France</span>
             </p>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
     </div>
