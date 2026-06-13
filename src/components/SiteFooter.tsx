@@ -15,6 +15,8 @@ export function SiteFooter() {
               <li><Link to="/diagnostic" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Diagnostic conformité</Link></li>
               <li><Link to="/generateur-factur-x" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Générateur Factur-X</Link></li>
               <li><Link to="/verificateur" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Vérificateur de facture</Link></li>
+              <li><Link to="/comparatif/pennylane" className="text-sm text-muted-foreground hover:text-foreground transition-colors">OdocPilot vs Pennylane</Link></li>
+              <li><Link to="/comparatif/qonto" className="text-sm text-muted-foreground hover:text-foreground transition-colors">OdocPilot vs Qonto</Link></li>
               <li><Link to="/roadmap" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Roadmap</Link></li>
               <li><Link to="/changelog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Changelog</Link></li>
             </ul>

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
 import { TrustCredentials } from "@/components/TrustCredentials";
-import { Check, MapPin, CreditCard, RotateCcw, Sparkles, Receipt } from "lucide-react";
+import { Check, MapPin, CreditCard, RotateCcw, Sparkles, Receipt, ArrowRight } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -264,6 +264,27 @@ export default function PricingPage() {
             <h3 className="font-bold text-foreground mb-1">Essayez sans risque, sans carte bancaire</h3>
             <p className="text-sm text-muted-foreground">14 jours d'essai gratuit sur tous les plans, sans carte bancaire et sans engagement. À la fin de l'essai, vous n'êtes prélevé que si vous choisissez d'activer un abonnement. Sinon, vous ne payez rien et vous gardez l'accès à vos données.</p>
           </div>
+        </div>
+      </section>
+
+      {/* COMPARATIFS (BOFU) */}
+      <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground text-center">OdocPilot face aux autres</h2>
+        <p className="mt-2 text-center text-sm text-muted-foreground">Des comparatifs honnêtes : qui fait quoi, et pour qui.</p>
+        <div className="mt-8 grid sm:grid-cols-2 gap-3">
+          {[
+            { to: "/comparatif/pennylane", label: "OdocPilot vs Pennylane" },
+            { to: "/comparatif/qonto", label: "OdocPilot vs Qonto" },
+            { to: "/comparatif/indy", label: "OdocPilot vs Indy" },
+            { to: "/comparatif/sellsy", label: "OdocPilot vs Sellsy" },
+            { to: "/comparatif/axonaut", label: "OdocPilot vs Axonaut" },
+            { to: "/comparatif/abby", label: "OdocPilot vs Abby" },
+          ].map((cmp) => (
+            <Link key={cmp.to} to={cmp.to} className="group flex items-center justify-between rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground hover:border-primary/40 hover:shadow-card-hover transition-all">
+              <span>{cmp.label}</span>
+              <ArrowRight className="h-4 w-4 text-primary group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          ))}
         </div>
       </section>
 
