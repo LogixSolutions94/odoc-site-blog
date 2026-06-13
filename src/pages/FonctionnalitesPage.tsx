@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Check, Banknote, Brain, FolderKanban, Users } from "lucide-react";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
-const SIGNUP = `${APP_URL}/auth`;
+const SIGNUP = `${APP_URL}/auth?mode=signup`;
 
 type Group = {
   key: string;
@@ -30,9 +30,9 @@ const groups: Group[] = [
     points: [
       "Devis et factures pros en quelques clics",
       "Signature en ligne du devis par le client",
-      "Relances d'impayés automatiques, au bon moment",
-      "Suivi des encaissements en temps réel",
-      "Prêt pour la facture électronique 2026",
+      "Relances d'impayés préparées automatiquement",
+      "Suivi des encaissements",
+      "Factures au format légal Factur-X (réforme 2026)",
     ],
     image: "/images/features/facturation.webp",
     label: "Aperçu — Devis, factures & relances",
@@ -62,11 +62,11 @@ const groups: Group[] = [
     intro:
       "Prenez une facture fournisseur en photo : montants, TVA, échéance sont extraits et rangés automatiquement au bon endroit. Vos documents sont centralisés, retrouvables en une recherche, et reliés au reste de votre activité.",
     points: [
-      "Saisie automatique des factures (photo ou import)",
+      "Lecture IA des factures (photo ou import) : montant, TVA, échéance extraits",
       "Classement intelligent, plus de dossiers perdus",
       "Recherche d'un document en langage naturel",
-      "Import depuis Google Drive et Dropbox",
-      "Portail fournisseur : ils déposent, vous recevez",
+      "Vos documents reliés à vos factures et à vos clients",
+      "Export FEC pour votre expert-comptable, en un clic",
     ],
     image: "/images/features/documents.webp",
     label: "Aperçu — Documents & saisie automatique",
@@ -116,17 +116,17 @@ export default function FonctionnalitesPage() {
     <div className="flex flex-col items-center">
       <SEOHead
         title="Fonctionnalités — OdocPilot | Devis, factures, IA & gestion tout-en-un"
-        description="Découvrez tout ce qu'OdocPilot fait pour vous : devis et factures, relances automatiques, assistant IA, saisie automatique des documents, équipe et projets. Un seul outil, hébergé en France."
+        description="Tout ce qu'OdocPilot prépare pour vous : factures au format Factur-X conforme, lecture IA des factures, recherche de documents en langage naturel, copilote Brain, export FEC. L'IA prépare, vous validez. Données et IA hébergées en France."
         canonical="/fonctionnalites"
       />
 
       {/* Hero */}
       <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-14 text-center">
         <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold px-3 py-1.5">Tout-en-un</span>
-          <h1 className="mt-5 text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">Tout ce qu'OdocPilot fait à votre place</h1>
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold px-3 py-1.5">Conformité 2026 + gestion par l'IA</span>
+          <h1 className="mt-5 text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">Tout ce qu'OdocPilot prépare pour vous</h1>
           <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Pas une liste de fonctions techniques — une liste de soucis en moins. Voici concrètement ce que vous gagnez, jour après jour.
+            Pas une liste de fonctions techniques — une liste de soucis en moins. L'IA prépare votre administratif et votre conformité à la facturation électronique ; vous validez d'un clic. Voici concrètement ce que vous gagnez.
           </p>
         </MotionDiv>
       </section>
@@ -170,7 +170,7 @@ export default function FonctionnalitesPage() {
             <a href={SIGNUP} target="_blank" rel="noopener noreferrer" data-umami-event="cta-essai-gratuit">
               <Button size="lg" className="bg-gradient-cta text-primary-foreground font-bold">Essayer gratuitement <ArrowRight className="ml-2 h-5 w-5" /></Button>
             </a>
-            <Link to="/contact"><Button size="lg" variant="outline">Demander une démo</Button></Link>
+            <Link to="/diagnostic" data-umami-event="cta-diagnostic"><Button size="lg" variant="outline">Vérifier ma conformité (3 min)</Button></Link>
           </div>
         </div>
       </section>

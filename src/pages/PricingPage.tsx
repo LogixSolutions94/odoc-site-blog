@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
 import { TrustCredentials } from "@/components/TrustCredentials";
-import { Check, ShieldCheck } from "lucide-react";
+import { Check, MapPin, CreditCard, RotateCcw, Sparkles, Receipt } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/accordion";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
+const SIGNUP = `${APP_URL}/auth?mode=signup`;
 
 const plans = [
   {
@@ -23,34 +25,34 @@ const plans = [
     highlight: false,
     features: [
       "Devis & factures illimités",
-      "Relances d'impayés automatiques",
-      "Saisie automatique des documents",
-      "Suivi de trésorerie & export SEPA",
-      "Fichier clients (CRM)",
+      "Factures au format Factur-X conforme",
+      "Lecture IA des factures reçues",
+      "Recherche de documents en langage naturel",
+      "Export FEC pour votre expert-comptable",
       "Hébergé en France · conforme RGPD",
       "Support par email",
     ],
     cta: "Commencer l'essai gratuit",
-    ctaLink: `${APP_URL}/auth`,
+    ctaLink: SIGNUP,
   },
   {
     name: "Pro",
     monthlyPrice: 89,
     annualPrice: 71,
-    target: "Équipes 3 à 20 personnes",
-    badge: "⭐ Le plus choisi",
+    target: "Le copilote IA complet",
+    badge: "Le plus choisi",
     highlight: true,
     features: [
-      "Tout Essential, pour toute l'équipe",
-      "Assistant IA sur tous vos documents",
-      "Automatisations (relances, rappels, workflows)",
-      "Tableaux de bord avancés",
-      "Module RH (congés, fiches)",
-      "Projets & messagerie d'équipe",
+      "Tout Essential, multi-utilisateurs sans surcoût",
+      "Copilote Brain : répond sur vos données, prépare les actions",
+      "Relances clients préparées automatiquement",
+      "Suivi de trésorerie",
+      "Tableaux de bord & automatisations",
+      "Classement intelligent des documents",
       "Support prioritaire",
     ],
     cta: "Commencer l'essai gratuit",
-    ctaLink: `${APP_URL}/auth`,
+    ctaLink: SIGNUP,
   },
   {
     name: "Manager",
@@ -62,14 +64,13 @@ const plans = [
     features: [
       "Tout Pro",
       "Multi-équipes & délégation",
-      "Portail fournisseur",
-      "Connexions Google Drive / Dropbox",
       "Rapports dirigeant personnalisés",
       "Documents illimités",
-      "Support dédié + accompagnement",
+      "Accompagnement à la mise en conformité",
+      "Support dédié",
     ],
     cta: "Commencer l'essai gratuit",
-    ctaLink: `${APP_URL}/auth`,
+    ctaLink: SIGNUP,
   },
   {
     name: "Entreprise",
@@ -81,10 +82,9 @@ const plans = [
     features: [
       "Tout Manager",
       "Instance dédiée (sur étude)",
-      "Connexion SSO (sur demande)",
       "Accompagnement & formation",
       "Stockage illimité",
-      "Support 24h/24 7j/7",
+      "Support prioritaire",
     ],
     cta: "Nous contacter",
     ctaLink: "mailto:contact@odocpilot.com",
@@ -93,29 +93,31 @@ const plans = [
 
 const compare = [
   { label: "Devis & factures", essential: "Illimités", pro: "Illimités", manager: "Illimités", entreprise: "Illimités" },
-  { label: "Utilisateurs", essential: "1", pro: "Jusqu'à 20", manager: "Illimités", entreprise: "Illimités" },
-  { label: "Relances automatiques", essential: true, pro: true, manager: true, entreprise: true },
-  { label: "Assistant IA", essential: false, pro: true, manager: true, entreprise: true },
-  { label: "Automatisations", essential: false, pro: true, manager: true, entreprise: true },
-  { label: "Module RH", essential: false, pro: true, manager: true, entreprise: true },
-  { label: "Portail fournisseur", essential: false, pro: false, manager: true, entreprise: true },
-  { label: "Connexion SSO", essential: false, pro: false, manager: false, entreprise: true },
+  { label: "Factures Factur-X conformes", essential: true, pro: true, manager: true, entreprise: true },
+  { label: "Lecture IA des factures reçues", essential: true, pro: true, manager: true, entreprise: true },
+  { label: "Recherche en langage naturel", essential: true, pro: true, manager: true, entreprise: true },
+  { label: "Export FEC", essential: true, pro: true, manager: true, entreprise: true },
+  { label: "Utilisateurs", essential: "1", pro: "Illimités", manager: "Illimités", entreprise: "Illimités" },
+  { label: "Copilote Brain", essential: false, pro: true, manager: true, entreprise: true },
+  { label: "Relances préparées automatiquement", essential: false, pro: true, manager: true, entreprise: true },
+  { label: "Multi-équipes & délégation", essential: false, pro: false, manager: true, entreprise: true },
+  { label: "Accompagnement à la conformité", essential: false, pro: false, manager: true, entreprise: true },
 ];
 
 const faqItems = [
-  { question: "Y a-t-il un coût par utilisateur ?", answer: "Non. Le prix de votre plan est tout compris : vous ajoutez vos collaborateurs sans supplément caché. Vous savez exactement ce que vous payez." },
-  { question: "Puis-je changer de plan à tout moment ?", answer: "Oui, vous montez ou descendez de plan quand vous voulez. Le changement prend effet immédiatement, avec un prorata automatique." },
-  { question: "Y a-t-il une période d'essai ?", answer: "Oui : 14 jours gratuits sur tous les plans, sans carte bancaire. Vous testez en conditions réelles avant de décider." },
-  { question: "Êtes-vous prêt pour la facture électronique 2026 ?", answer: "Oui. OdocPilot vous accompagne pas à pas vers la conformité à la réforme de la facturation électronique, pour que vous soyez en règle sans stress." },
-  { question: "Mes données sont-elles en sécurité ?", answer: "Vos données sont hébergées en France (OVH), chiffrées et conformes au RGPD. Nous ne les revendons jamais, et vous pouvez les exporter à tout moment." },
-  { question: "Que se passe-t-il si j'arrête ?", answer: "Aucun engagement : vous résiliez en un clic et repartez avec toutes vos données. Vous gardez un accès en lecture seule pendant 30 jours." },
+  { question: "Y a-t-il un coût par utilisateur ?", answer: "Non. Le prix de votre plan est tout compris : à partir du plan Pro, vous ajoutez vos collaborateurs sans aucun supplément. Vous savez exactement ce que vous payez, et votre facture ne gonfle pas quand votre équipe grandit." },
+  { question: "Suis-je prêt pour la facturation électronique 2026 ?", answer: "Dès le 1ᵉʳ septembre 2026, toute entreprise assujettie à la TVA devra recevoir ses factures au format électronique structuré ; l'émission suivra en 2027. OdocPilot génère vos factures au format légal Factur-X et prépare votre conformité étape par étape. La transmission via une plateforme agréée partenaire est en cours de raccordement et sera prête avant l'échéance." },
+  { question: "L'essai engage-t-il quelque chose ?", answer: "Non : 14 jours gratuits sur tous les plans, sans carte bancaire. Vous testez en conditions réelles et vous n'êtes prélevé que si vous choisissez d'activer un abonnement à la fin de l'essai. Sinon, vous ne payez rien." },
+  { question: "Puis-je changer de plan à tout moment ?", answer: "Oui, vous montez ou descendez de plan quand vous voulez. Le changement prend effet immédiatement, avec un prorata automatique. Aucun engagement de durée." },
+  { question: "L'IA fait-elle ma comptabilité toute seule ?", answer: "Non, et c'est un choix assumé. L'IA prépare le travail — lecture des factures, classement, relances — mais rien n'est validé ni comptabilisé sans vous. Vous gardez toujours le dernier mot, et vous exportez votre FEC pour votre expert-comptable en un clic." },
+  { question: "Mes données sont-elles en sécurité ?", answer: "Vos documents comme l'intelligence artificielle qui les traite (Mistral, un modèle français) sont hébergés en France : aucun transfert vers l'étranger. OdocPilot est conforme au RGPD, aligné sur l'AI Act, et s'inscrit dans une démarche Numérique Responsable. Vous pouvez exporter vos données à tout moment." },
 ];
 
 const trustBadges = [
-  { icon: "🔒", label: "Paiement sécurisé Stripe" },
-  { icon: "🇫🇷", label: "Hébergé en France" },
-  { icon: "↩️", label: "Satisfait ou remboursé 30 jours" },
-  { icon: "📞", label: "Support réactif en français" },
+  { icon: MapPin, label: "Données et IA en France" },
+  { icon: CreditCard, label: "Essai sans carte bancaire" },
+  { icon: RotateCcw, label: "Sans engagement" },
+  { icon: Check, label: "Sans coût par utilisateur" },
 ];
 
 function Cell({ value }: { value: boolean | string }) {
@@ -130,7 +132,7 @@ export default function PricingPage() {
     <div className="flex flex-col items-center">
       <SEOHead
         title="Tarifs OdocPilot — un seul prix, tout compris | Essai 14 jours gratuit"
-        description="Des tarifs simples et transparents, sans coût par utilisateur. Essential 49€, Pro 89€, Manager 149€. Essai gratuit 14 jours sans carte bancaire. Hébergé en France."
+        description="Des tarifs simples et transparents, sans coût par utilisateur. Essential 49€, Pro 89€, Manager 149€. Préparez votre conformité facture électronique 2026/2027. Essai gratuit 14 jours sans carte bancaire. Données et IA en France."
         canonical="/pricing"
         jsonLd={{
           "@context": "https://schema.org",
@@ -146,11 +148,17 @@ export default function PricingPage() {
       {/* HERO */}
       <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-12 text-center">
         <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">Un seul prix. Tout compris.</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Tarifs clairs, par entreprise</p>
+          <h1 className="mt-2 text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">Un seul prix. Tout compris.</h1>
           <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Pas de coût par utilisateur. Pas d'option qui s'empile. Un abonnement clair qui remplace votre logiciel de facture, votre CRM et des heures de saisie.
+            Sans coût par utilisateur, sans option qui s'empile. Un abonnement clair qui prépare votre conformité à la facturation électronique 2026/2027 et laisse l'IA préparer votre administratif — vous gardez le dernier mot.
           </p>
           <p className="mt-3 text-sm text-muted-foreground">14 jours gratuits · Sans carte bancaire · Résiliable en 1 clic</p>
+          <p className="mt-4 text-sm">
+            <Link to="/diagnostic" className="inline-flex items-center gap-1.5 font-semibold text-primary hover:gap-2 transition-all" data-umami-event="pricing-diagnostic">
+              <Sparkles className="h-4 w-4" /> Pas sûr d'être concerné ? Vérifiez votre conformité en 3 min
+            </Link>
+          </p>
         </MotionDiv>
 
         {/* Toggle */}
@@ -183,10 +191,10 @@ export default function PricingPage() {
                   {isCustom ? (
                     <span className="text-2xl sm:text-3xl font-bold text-foreground">Sur mesure</span>
                   ) : (
-                    <><span className="text-3xl font-extrabold text-foreground">{price}€</span><span className="text-muted-foreground text-sm">/mois</span></>
+                    <><span className="text-3xl font-extrabold text-foreground tabular-nums">{price}€</span><span className="text-muted-foreground text-sm">/mois</span></>
                   )}
                 </div>
-                {annual && !isCustom && <p className="mt-1 text-xs text-muted-foreground">soit {plan.annualPrice * 12}€ /an</p>}
+                {annual && !isCustom && <p className="mt-1 text-xs text-muted-foreground tabular-nums">soit {plan.annualPrice * 12}€ /an</p>}
                 <ul className="mt-6 flex-1 space-y-2.5">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground"><Check className="h-4 w-4 text-primary shrink-0 mt-0.5" /><span>{f}</span></li>
@@ -199,6 +207,23 @@ export default function PricingPage() {
             );
           })}
         </div>
+      </section>
+
+      {/* ANCRAGE DOULEUR — coût de la non-conformité */}
+      <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <MotionDiv initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
+          className="rounded-2xl border border-border bg-secondary/60 p-6 sm:p-8 flex flex-col sm:flex-row items-start gap-4">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 shrink-0">
+            <Receipt className="h-6 w-6 text-primary" />
+          </div>
+          <div>
+            <h3 className="font-bold text-foreground">La conformité coûte moins cher que l'amende</h3>
+            <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+              La loi de finances 2026 prévoit <strong className="text-foreground tabular-nums">50 € par facture</strong> émise dans un format non conforme et <strong className="text-foreground tabular-nums">500 € par manquement</strong> à l'e-reporting. À partir de <strong className="text-foreground tabular-nums">49 €/mois</strong>, OdocPilot vous met en conformité <em>et</em> prépare votre administratif au quotidien.{" "}
+              <a href="https://www.impots.gouv.fr/professionnel/facturation-electronique" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Source : impots.gouv.fr</a>.
+            </p>
+          </div>
+        </MotionDiv>
       </section>
 
       {/* COMPARATIF */}
@@ -229,12 +254,12 @@ export default function PricingPage() {
           </table>
         </div>
 
-        {/* Garantie */}
+        {/* Réassurance honnête */}
         <div className="mt-10 rounded-2xl bg-card border border-border p-6 sm:p-8 flex items-start gap-4 shadow-card">
-          <ShieldCheck className="h-6 w-6 text-primary shrink-0 mt-0.5" />
+          <CreditCard className="h-6 w-6 text-primary shrink-0 mt-0.5" />
           <div>
-            <h3 className="font-bold text-foreground mb-1">Satisfait ou remboursé 30 jours</h3>
-            <p className="text-sm text-muted-foreground">Essayez OdocPilot sans risque. Si vous n'êtes pas convaincu dans les 30 jours, on vous rembourse intégralement. Sans question.</p>
+            <h3 className="font-bold text-foreground mb-1">Essayez sans risque, sans carte bancaire</h3>
+            <p className="text-sm text-muted-foreground">14 jours d'essai gratuit sur tous les plans, sans carte bancaire et sans engagement. À la fin de l'essai, vous n'êtes prélevé que si vous choisissez d'activer un abonnement. Sinon, vous ne payez rien et vous gardez l'accès à vos données.</p>
           </div>
         </div>
       </section>
@@ -255,9 +280,12 @@ export default function PricingPage() {
       {/* TRUST */}
       <section className="w-full py-10 border-t border-border bg-secondary/40">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-center gap-6 sm:gap-10">
-          {trustBadges.map((b, i) => (
-            <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground font-medium"><span className="text-lg">{b.icon}</span><span>{b.label}</span></div>
-          ))}
+          {trustBadges.map((b, i) => {
+            const Icon = b.icon;
+            return (
+              <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground font-medium"><Icon className="h-4 w-4 text-primary" /><span>{b.label}</span></div>
+            );
+          })}
         </div>
         <TrustCredentials className="mt-8 max-w-5xl mx-auto px-4" />
       </section>

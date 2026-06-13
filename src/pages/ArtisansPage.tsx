@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Check, HardHat, FileSignature, BellRing, Wallet, Quote } from "lucide-react";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
-const SIGNUP = `${APP_URL}/auth`;
+const SIGNUP = `${APP_URL}/auth?mode=signup`;
 
 const pains = [
   "Le devis tapé le dimanche soir, après le chantier",
@@ -27,7 +27,7 @@ const jsonLd = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   description:
-    "Logiciel de gestion tout-en-un pour artisans et entreprises du BTP : devis de chantier, factures, relances d'impayés automatiques et facture électronique 2026. Hébergé en France.",
+    "OdocPilot pour les artisans du BTP : devis de chantier et factures au format Factur-X conforme, relances préparées automatiquement, lecture IA des factures. L'IA prépare, vous validez. Conformité facture électronique 2026/2027. Données et IA hébergées en France.",
   offers: [{ "@type": "Offer", price: "49", priceCurrency: "EUR" }],
 };
 
@@ -45,7 +45,7 @@ export default function ArtisansPage() {
       <section className="w-full relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-24 right-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
-          <div className="absolute bottom-0 -left-20 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
+          <div className="absolute bottom-0 -left-20 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
         </div>
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-16 grid lg:grid-cols-2 gap-12 items-center">
           <div>
@@ -62,8 +62,8 @@ export default function ArtisansPage() {
             </MotionDiv>
             <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16, duration: 0.6 }}>
               <p className="mt-5 max-w-xl text-lg text-muted-foreground leading-relaxed">
-                OdocPilot gère vos <strong className="text-foreground">devis, factures et relances</strong>, et un{" "}
-                <strong className="text-foreground">assistant IA</strong> s'occupe de l'administratif pendant que vous êtes sur le terrain.
+                OdocPilot prépare vos <strong className="text-foreground">devis, factures et relances</strong>, et une{" "}
+                <strong className="text-foreground">IA</strong> prépare votre administratif pendant que vous êtes sur le terrain — vous validez d'un clic.
               </p>
             </MotionDiv>
             <MotionDiv initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24, duration: 0.5 }}>
@@ -82,16 +82,16 @@ export default function ArtisansPage() {
           <MotionDiv initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6 }}>
             <div className="rounded-2xl border border-border bg-card shadow-elevated overflow-hidden">
               <div className="flex items-center gap-1.5 px-4 h-9 bg-muted/60 border-b border-border">
-                <span className="h-2.5 w-2.5 rounded-full bg-destructive/40" /><span className="h-2.5 w-2.5 rounded-full bg-primary/40" /><span className="h-2.5 w-2.5 rounded-full bg-accent/40" />
+                <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" /><span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" /><span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
                 <span className="ml-3 text-[11px] text-muted-foreground">app.odocpilot.com</span>
               </div>
               <div className="p-4 space-y-3">
-                <div className="flex items-center justify-between"><p className="font-bold text-foreground">Bonjour Karim 👋</p><span className="text-[11px] rounded-md bg-primary/10 text-primary font-semibold px-2 py-1">Assistant IA</span></div>
+                <div className="flex items-center justify-between"><p className="font-bold text-foreground">Bonjour Karim</p><span className="text-[11px] rounded-md bg-primary/10 text-primary font-semibold px-2 py-1">Copilote IA</span></div>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-xl bg-muted/50 p-3"><p className="text-[11px] text-muted-foreground">À encaisser</p><p className="font-extrabold text-foreground text-lg">12 480 €</p></div>
-                  <div className="rounded-xl bg-muted/50 p-3"><p className="text-[11px] text-muted-foreground">Relances envoyées</p><p className="font-extrabold text-primary text-lg">3 ✓</p></div>
+                  <div className="rounded-xl bg-muted/50 p-3"><p className="text-[11px] text-muted-foreground">À encaisser</p><p className="font-extrabold text-foreground text-lg tabular-nums">12 480 €</p></div>
+                  <div className="rounded-xl bg-muted/50 p-3"><p className="text-[11px] text-muted-foreground">Relances préparées</p><p className="font-extrabold text-primary text-lg">3</p></div>
                 </div>
-                <div className="rounded-xl border border-border p-3 text-sm text-muted-foreground flex items-center gap-2"><span>💬</span> « Le devis du chantier Bât. C est prêt à envoyer. »</div>
+                <div className="rounded-xl border border-border p-3 text-sm text-muted-foreground flex items-start gap-2"><FileSignature className="h-4 w-4 text-primary shrink-0 mt-0.5" /> « Le devis du chantier Bât. C est prêt — à valider et envoyer. »</div>
               </div>
             </div>
           </MotionDiv>
@@ -133,14 +133,17 @@ export default function ArtisansPage() {
       {/* FACTURE 2026 ARTISAN */}
       <section className="w-full bg-secondary/60 border-y border-border">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold px-3 py-1.5">🧾 Réforme 2026</span>
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold px-3 py-1.5"><FileSignature className="h-3.5 w-3.5" /> Réforme 2026</span>
           <h2 className="mt-5 text-3xl sm:text-4xl font-bold leading-tight text-foreground">La facture électronique, sans prise de tête</h2>
-          <p className="mt-5 text-lg text-muted-foreground leading-relaxed">Dès 2026, vous devrez recevoir vos factures au format électronique. Avec OdocPilot, pas de logiciel à changer en catastrophe : on vous accompagne pas à pas pour être en règle, l'esprit tranquille.</p>
+          <p className="mt-5 text-lg text-muted-foreground leading-relaxed">Dès le 1ᵉʳ septembre 2026, vous devrez recevoir vos factures au format électronique ; l'émission suivra en 2027. OdocPilot génère vos factures au format légal Factur-X et vous accompagne pas à pas — pas de logiciel à changer en catastrophe.</p>
           <ul className="mt-8 flex flex-wrap justify-center gap-3 text-sm">
-            {["En règle sans paperasse", "Accompagnement humain en français", "Pensé pour les artisans"].map((t) => (
+            {["Factur-X conforme", "Accompagnement en français", "Pensé pour les artisans"].map((t) => (
               <li key={t} className="flex items-center gap-2 rounded-full bg-card border border-border px-4 py-2 text-foreground"><Check className="h-4 w-4 text-primary" />{t}</li>
             ))}
           </ul>
+          <div className="mt-8">
+            <Link to="/diagnostic" data-umami-event="cta-diagnostic"><Button size="lg" variant="outline">Vérifier ma conformité (3 min) <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
+          </div>
         </div>
       </section>
 

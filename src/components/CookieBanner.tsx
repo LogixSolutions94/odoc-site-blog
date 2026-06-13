@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { loadAnalytics } from "@/lib/analytics";
 
 const STORAGE_KEY = "odoc_cookie_consent";
 
@@ -19,6 +20,8 @@ export function CookieBanner() {
   function handleChoice(accepted: boolean) {
     localStorage.setItem(STORAGE_KEY, accepted ? "accepted" : "refused");
     setVisible(false);
+    // RGPD : la mesure d'audience ne démarre QUE si l'utilisateur accepte (refus = aucun tracking).
+    if (accepted) loadAnalytics();
   }
 
   return (
@@ -33,7 +36,8 @@ export function CookieBanner() {
         >
           <div className="rounded-xl border border-border bg-card p-5 shadow-elevated">
             <p className="text-sm text-foreground leading-relaxed">
-              Nous utilisons des cookies pour améliorer votre expérience. En continuant, vous acceptez notre{" "}
+              Nous utilisons une <strong>mesure d'audience anonyme</strong> (Umami, hébergée en France) pour améliorer le site.
+              Aucune donnée n'est collectée sans votre accord. Voir notre{" "}
               <Link to="/politique-confidentialite" className="text-primary font-medium underline underline-offset-2 hover:text-primary-glow">
                 politique de confidentialité
               </Link>.
@@ -42,9 +46,9 @@ export function CookieBanner() {
               <Button
                 size="sm"
                 onClick={() => handleChoice(true)}
-                className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground"
+                className="w-full sm:w-auto bg-gradient-cta text-primary-foreground hover:opacity-95"
               >
-                Tout accepter
+                Accepter
               </Button>
               <Button
                 variant="outline"

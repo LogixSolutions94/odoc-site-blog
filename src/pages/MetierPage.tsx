@@ -137,7 +137,7 @@ export default function MetierPage({ slug }: { slug: string }) {
       <section className="w-full relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-24 right-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
-          <div className="absolute bottom-0 -left-20 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
+          <div className="absolute bottom-0 -left-20 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
         </div>
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-14 text-center">
           <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -200,14 +200,17 @@ export default function MetierPage({ slug }: { slug: string }) {
       {/* FACTURE 2026 */}
       <section className="w-full bg-secondary/60 border-y border-border">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold px-3 py-1.5">🧾 Réforme 2026</span>
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold px-3 py-1.5"><ReceiptText className="h-3.5 w-3.5" /> Réforme 2026</span>
           <h2 className="mt-5 text-3xl sm:text-4xl font-bold leading-tight text-foreground">La facture électronique, sans prise de tête</h2>
-          <p className="mt-5 text-lg text-muted-foreground leading-relaxed">Dès 2026, toutes les entreprises devront recevoir leurs factures au format électronique. OdocPilot vous accompagne pas à pas vers la conformité — en règle, sans paperasse, sans stress.</p>
+          <p className="mt-5 text-lg text-muted-foreground leading-relaxed">Dès le 1ᵉʳ septembre 2026, toute entreprise assujettie à la TVA devra recevoir ses factures au format électronique ; l'émission suivra en 2027. OdocPilot génère vos factures au format légal Factur-X et vous accompagne pas à pas vers la conformité.</p>
           <ul className="mt-8 flex flex-wrap justify-center gap-3 text-sm">
-            {["En règle sans paperasse", "Accompagnement en français", "Hébergé en France"].map((t) => (
+            {["Factur-X conforme", "Accompagnement en français", "Données et IA en France"].map((t) => (
               <li key={t} className="flex items-center gap-2 rounded-full bg-card border border-border px-4 py-2 text-foreground"><Check className="h-4 w-4 text-primary" />{t}</li>
             ))}
           </ul>
+          <div className="mt-8">
+            <Link to="/diagnostic" data-umami-event="cta-diagnostic"><Button size="lg" variant="outline">Vérifier ma conformité (3 min) <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
+          </div>
         </div>
       </section>
 
