@@ -1,8 +1,10 @@
 # ✅ TODO — odoc-site-blog (site + blog odocpilot.com)
 
-> Pour la prochaine IA / le prochain dev. Lis aussi **`CLAUDE.md`** (règles repo) et **`refonte/DEPLOY-WINDOWS.md`** (déploiement) + **`refonte/HANDOFF-CAPTURES.md`** (captures).
+> ## 🚀 POUR DÉPLOYER / SAVOIR QUOI FAIRE → lire **`refonte/HANDOFF-DEPLOY.md`** (à jour 2026-06-13)
+> Ce TODO ci-dessous et `refonte/DEPLOY-WINDOWS.md` **datent du 08/06** et sont **périmés** (ils parlent d'une branche `feat/refonte-conversion` déjà fusionnée). **Tout le travail de refonte conversion/conformité est sur `main`, poussé, à déployer.** Le handoff donne : déploiement VPS, 4 secrets auto-deploy, sous-domaine HTTPS Umami, génération OG image, captures, bug prerender.
+>
 > Ce repo = le **SITE marketing public** (odocpilot.com), **SÉPARÉ** du SaaS odoc-pulse (app.odocpilot.com).
-> Dernière mise à jour : **2026-06-08 (soir)**.
+> Dernière mise à jour : **2026-06-08 (soir)** — *voir HANDOFF-DEPLOY.md pour l'état réel au 13/06.*
 
 ---
 
