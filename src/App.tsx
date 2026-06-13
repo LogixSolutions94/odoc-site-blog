@@ -22,6 +22,8 @@ const RoadmapPage = lazy(() => import("./pages/RoadmapPage"));
 const ChangelogPage = lazy(() => import("./pages/ChangelogPage"));
 const RecrutementPage = lazy(() => import("./pages/RecrutementPage"));
 const EFacturePage = lazy(() => import("./pages/EFacturePage"));
+const DiagnosticPage = lazy(() => import("./pages/DiagnosticPage"));
+const GenerateurFacturXPage = lazy(() => import("./pages/GenerateurFacturXPage"));
 const ArtisansPage = lazy(() => import("./pages/ArtisansPage"));
 const MetierPage = lazy(() => import("./pages/MetierPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -59,6 +61,8 @@ const App = () => (
                 <Route path="/changelog" element={<ChangelogPage />} />
                 <Route path="/recrutement" element={<RecrutementPage />} />
                 <Route path="/e-facture" element={<EFacturePage />} />
+                <Route path="/diagnostic" element={<DiagnosticPage />} />
+                <Route path="/generateur-factur-x" element={<GenerateurFacturXPage />} />
                 <Route path="/artisans" element={<ArtisansPage />} />
                 <Route path="/commerce" element={<MetierPage slug="commerce" />} />
                 <Route path="/professions-liberales" element={<MetierPage slug="professions-liberales" />} />

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
+import { TrustCredentials } from "@/components/TrustCredentials";
 import { Check, ShieldCheck } from "lucide-react";
 import {
   Accordion,
@@ -258,6 +259,7 @@ export default function PricingPage() {
             <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground font-medium"><span className="text-lg">{b.icon}</span><span>{b.label}</span></div>
           ))}
         </div>
+        <TrustCredentials className="mt-8 max-w-5xl mx-auto px-4" />
       </section>
     </div>
   );

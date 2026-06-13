@@ -11,6 +11,9 @@ export function SiteFooter() {
             <ul className="space-y-2.5">
               <li><Link to="/fonctionnalites" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Fonctionnalités</Link></li>
               <li><Link to="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Tarifs</Link></li>
+              <li><Link to="/e-facture" className="text-sm text-muted-foreground hover:text-foreground transition-colors">E-facture 2026</Link></li>
+              <li><Link to="/diagnostic" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Diagnostic conformité</Link></li>
+              <li><Link to="/generateur-factur-x" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Générateur Factur-X</Link></li>
               <li><Link to="/roadmap" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Roadmap</Link></li>
               <li><Link to="/changelog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Changelog</Link></li>
             </ul>

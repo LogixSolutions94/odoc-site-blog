@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { TrustCredentials } from "@/components/TrustCredentials";
 import {
   ArrowRight,
   Check,
@@ -19,7 +20,7 @@ import {
 } from "lucide-react";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
-const SIGNUP = `${APP_URL}/auth`;
+const SIGNUP = `${APP_URL}/auth?mode=signup`;
 
 type Win = { icon: typeof Store; title: string; desc: string };
 type Metier = {
@@ -222,12 +223,13 @@ export default function MetierPage({ slug }: { slug: string }) {
       {/* CTA */}
       <section className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 text-center">
         <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground leading-tight">Prêt à vous simplifier la vie ?</h2>
-        <p className="mt-5 text-lg text-muted-foreground">Testez OdocPilot gratuitement. 2 minutes, sans carte bancaire.</p>
+        <p className="mt-5 text-lg text-muted-foreground">Essayez OdocPilot 14 jours, sans carte bancaire.</p>
         <div className="mt-8 flex justify-center">
-          <a href={SIGNUP} target="_blank" rel="noopener noreferrer" data-umami-event="cta-essai-gratuit">
+          <a href={SIGNUP} data-umami-event="cta-essai-gratuit">
             <Button size="lg" className="bg-gradient-cta text-primary-foreground text-base font-bold px-8 py-6 shadow-lg shadow-primary/20 hover:opacity-95">{m.ctaA} <ArrowRight className="ml-2 h-5 w-5" /></Button>
           </a>
         </div>
+        <TrustCredentials className="mt-10" />
       </section>
     </div>
   );

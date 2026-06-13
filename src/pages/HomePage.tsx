@@ -34,9 +34,8 @@ import {
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
 const SIGNUP = `${APP_URL}/auth?mode=signup`;
-// CTA conformité : pointe vers la page pilier /e-facture (le diagnostic interactif /diagnostic
-// sera branché au LOT suivant — repointer ici à ce moment-là).
-const CONFORMITE = "/e-facture";
+// CTA conformité : pointe vers le diagnostic interactif (lead magnet n°1).
+const CONFORMITE = "/diagnostic";
 
 /* ───────── Données ───────── */
 
