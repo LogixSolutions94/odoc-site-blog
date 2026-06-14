@@ -17,6 +17,9 @@
  */
 import { writeFileSync, readFileSync, mkdirSync, existsSync } from "fs";
 import { resolve } from "path";
+// Module PUR partagé avec le client (BlogPostPage/BlogSEOHead) → garantit la PARITÉ
+// du JSON-LD et de la FAQ entre le HTML statique (crawlers IA) et le SPA (humains).
+import { buildArticleGraph, parseFaq } from "../src/lib/blogContent";
 
 // ── Charger .env sans dépendance (même pattern que generate-sitemap.ts) ─────────
 try {
@@ -41,14 +44,14 @@ type Post = {
   title: string;
   seo_title: string | null;
   seo_description: string | null;
+  seo_keywords: string | null;
   excerpt: string | null;
-  meta_description: string | null;
   content: string | null;
-  json_ld: unknown;
-  schema_faq: unknown;
   cover_image_url: string | null;
+  og_image_url: string | null;
   author_name: string | null;
   category: string | null;
+  tags: string[] | null;
   published_at: string | null;
   updated_at: string | null;
 };
@@ -126,33 +129,23 @@ export function renderMarkdown(md: string): string {
 function buildHead(post: Post): { title: string; tags: string } {
   const url = `${BASE_URL}/blog/${post.slug}`;
   const title = `${post.seo_title || post.title} — Blog OdocPilot`;
-  const desc = (post.seo_description || post.excerpt || post.meta_description || "").slice(0, 300);
-  const img = post.cover_image_url || `${BASE_URL}/og-image.png`;
+  const desc = (post.seo_description || post.excerpt || "").slice(0, 300);
+  const img = post.cover_image_url || post.og_image_url || `${BASE_URL}/og-image.png`;
 
-  // JSON-LD : on réutilise celui de l'agent s'il existe, sinon on synthétise.
-  let jsonLd: unknown = post.json_ld;
-  if (!jsonLd || (typeof jsonLd === "object" && Object.keys(jsonLd as object).length === 0)) {
-    const graph: unknown[] = [{
-      "@type": "BlogPosting", headline: post.title, description: desc,
-      author: { "@type": "Person", name: post.author_name || "Lucas Belloc" },
-      publisher: { "@type": "Organization", name: "OdocPilot", url: BASE_URL },
-      url, datePublished: (post.published_at || "").slice(0, 10),
-      dateModified: (post.updated_at || post.published_at || "").slice(0, 10),
-      image: img, inLanguage: "fr-FR",
-    }];
-    if (Array.isArray(post.schema_faq) && post.schema_faq.length > 0) {
-      graph.push({ "@type": "FAQPage", mainEntity: post.schema_faq });
-    }
-    jsonLd = { "@context": "https://schema.org", "@graph": graph };
-  }
-  const breadcrumb = {
-    "@context": "https://schema.org", "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Accueil", item: BASE_URL },
-      { "@type": "ListItem", position: 2, name: "Blog", item: `${BASE_URL}/blog` },
-      { "@type": "ListItem", position: 3, name: post.title, item: url },
-    ],
-  };
+  // @graph UNIQUE construit par le helper partagé client/SSR (parité stricte).
+  // La FAQPage est DÉRIVÉE du markdown (## FAQ) → fini la branche morte schema_faq.
+  const jsonLd = buildArticleGraph({
+    slug: post.slug,
+    title: post.seo_title || post.title,
+    description: desc,
+    authorName: post.author_name,
+    image: post.cover_image_url || post.og_image_url,
+    datePublished: post.published_at,
+    dateModified: post.updated_at,
+    category: post.category,
+    keywords: post.seo_keywords || (post.tags && post.tags.length ? post.tags.join(", ") : null),
+    faq: parseFaq(post.content || ""),
+  });
 
   const tags = [
     `<link rel="canonical" href="${attr(url)}" />`,
@@ -162,12 +155,12 @@ function buildHead(post: Post): { title: string; tags: string } {
     `<meta property="og:description" content="${attr(desc)}" />`,
     `<meta property="og:image" content="${attr(img)}" />`,
     post.published_at ? `<meta property="article:published_time" content="${attr(post.published_at)}" />` : "",
+    post.updated_at ? `<meta property="article:modified_time" content="${attr(post.updated_at)}" />` : "",
     `<meta name="twitter:card" content="summary_large_image" />`,
     `<meta name="twitter:title" content="${attr(post.title)}" />`,
     `<meta name="twitter:description" content="${attr(desc)}" />`,
     `<meta name="twitter:image" content="${attr(img)}" />`,
     `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`,
-    `<script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>`,
   ].filter(Boolean).join("\n    ");
 
   return { title, tags };
@@ -176,7 +169,7 @@ function buildHead(post: Post): { title: string; tags: string } {
 // ── Injecte head + corps dans le shell index.html ───────────────────────────────
 export function buildPage(shell: string, post: Post): string {
   const { title, tags } = buildHead(post);
-  const desc = (post.seo_description || post.excerpt || post.meta_description || "").slice(0, 300);
+  const desc = (post.seo_description || post.excerpt || "").slice(0, 300);
   let html = shell;
 
   // <title> et meta description génériques → spécifiques à l'article

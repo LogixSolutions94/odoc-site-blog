@@ -264,6 +264,33 @@
   }
 }
 
+/* ── Masquer la scrollbar (barre de filtres du blog) ──────────── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Liens prose : toujours soulignés = signal non-coloré (a11y WCAG 1.4.1,
+   l'orange sur blanc seul n'atteint pas 4.5:1) ───────────────── */
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+/* ── Encart TL;DR d'article (cible Speakable AEO si la convention est adoptée) ── */
+.prose .article-tldr,
+.article-tldr {
+  border-left: 2px solid hsl(var(--primary));
+  background: hsl(var(--muted) / 0.5);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-weight: 500;
+}
+
 /* ── Styles tableaux prose (remark-gfm) ──────────────────────── */
 .prose table {
   border-collapse: collapse;

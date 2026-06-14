@@ -14,6 +14,15 @@ const defaultTransition = {
 export const MotionDiv = ({ children, forceAnimate, ...props }: MotionDivProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
+  const [reduce, setReduce] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduce(mq.matches);
+    const onChange = () => setReduce(mq.matches);
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, []);
 
   useEffect(() => {
     const el = ref.current;
@@ -40,6 +49,17 @@ export const MotionDiv = ({ children, forceAnimate, ...props }: MotionDivProps) 
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
+
+  // prefers-reduced-motion : contenu immédiatement visible, aucune animation.
+  if (reduce) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { initial, animate, transition, whileInView, exit, ...rest } = props;
+    return (
+      <motion.div ref={ref} initial={false} animate={{ opacity: 1, y: 0 }} {...rest}>
+        {children}
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
