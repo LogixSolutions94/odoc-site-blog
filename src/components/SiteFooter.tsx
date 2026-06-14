@@ -46,6 +46,8 @@ export function SiteFooter() {
               <li><a href="https://docs.odocpilot.com/api" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">API</a></li>
               <li><a href="https://status.odocpilot.com" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Statut</a></li>
               <li><Link to="/llm-info" className="text-sm text-muted-foreground hover:text-foreground transition-colors">OdocPilot en bref</Link></li>
+              <li><Link to="/livre-blanc" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Livre blanc 2026/2027</Link></li>
+              <li><Link to="/lexique" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Lexique e-facture</Link></li>
               <li><Link to="/guide/facturation-electronique-2026" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Guide e-facture 2026</Link></li>
               <li><Link to="/guide/obligations-2026-2027" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Obligations &amp; calendrier</Link></li>
               <li><Link to="/guide/factur-x" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Le format Factur-X</Link></li>

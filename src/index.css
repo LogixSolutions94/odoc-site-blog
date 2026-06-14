@@ -264,6 +264,23 @@
   }
 }
 
+/* ── Impression / « enregistrer en PDF » (livre blanc) ──────────── */
+@media print {
+  header,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+  .print-article {
+    max-width: none !important;
+    margin: 0 !important;
+  }
+  .print-article a {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
+}
+
 /* ── Masquer la scrollbar (barre de filtres du blog) ──────────── */
 .scrollbar-hide {
   -ms-overflow-style: none;

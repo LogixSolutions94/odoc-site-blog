@@ -5,11 +5,25 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Check, Mail } from "lucide-react";
 
+interface NewsletterInlineProps {
+  source: string;
+  title?: string;
+  description?: string;
+  cta?: string;
+  placeholder?: string;
+}
+
 /**
  * Capture email INLINE (jamais en popup), avec une promesse précise et honnête liée
  * à l'échéance e-facture. Aucun chiffre d'abonnés fabriqué. Réutilisable.
  */
-export function NewsletterInline({ source }: { source: string }) {
+export function NewsletterInline({
+  source,
+  title = "Veille e-facturation",
+  description = "On vous prévient quand quelque chose change vraiment dans la réforme 2026/2027 — pas de spam, juste l'essentiel.",
+  cta = "Me tenir au courant",
+  placeholder = "vous@entreprise.fr",
+}: NewsletterInlineProps) {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
@@ -38,15 +52,12 @@ export function NewsletterInline({ source }: { source: string }) {
           <Mail className="h-5 w-5" />
         </span>
         <div className="flex-1">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">Veille e-facturation</h2>
-          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-            On vous prévient quand quelque chose change vraiment dans la réforme 2026/2027 — pas de spam,
-            juste l'essentiel.
-          </p>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">{title}</h2>
+          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{description}</p>
 
           {done ? (
             <p className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-foreground">
-              <Check className="h-4 w-4 text-primary" /> Inscription confirmée.
+              <Check className="h-4 w-4 text-primary" /> C'est confirmé — vérifiez votre boîte mail.
             </p>
           ) : (
             <form onSubmit={submit} className="mt-4 flex flex-col gap-2 sm:flex-row">
@@ -55,12 +66,12 @@ export function NewsletterInline({ source }: { source: string }) {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="vous@entreprise.fr"
+                placeholder={placeholder}
                 aria-label="Votre adresse email"
                 className="h-11 sm:max-w-xs"
               />
               <Button type="submit" disabled={loading} className="h-11 bg-gradient-cta text-primary-foreground">
-                {loading ? "…" : "Me tenir au courant"}
+                {loading ? "…" : cta}
               </Button>
             </form>
           )}
