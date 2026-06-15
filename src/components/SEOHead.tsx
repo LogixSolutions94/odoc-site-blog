@@ -46,9 +46,13 @@ export function SEOHead({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
 
-      {/* JSON-LD */}
+      {/* JSON-LD — on échappe « < » et « > » (→ </>, JSON toujours valide)
+          pour empêcher tout « </script> »/« <!-- » présent dans des données de contenu
+          (titre, FAQ, etc.) de s'échapper du contexte <script> (XSS stocké). */}
       {jsonLd && (
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">
+          {JSON.stringify(jsonLd).replace(/</g, "\\u003c").replace(/>/g, "\\u003e")}
+        </script>
       )}
     </Helmet>
   );

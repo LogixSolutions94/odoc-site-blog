@@ -31,7 +31,8 @@ export interface FaqItem {
 /** Retire le balisage inline (gras, italique, code, liens) d'un texte de titre/question. */
 export function stripInlineMd(s: string): string {
   return s
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1") // [texte](url) → texte
+    // [texte](url) → texte. Classe du texte SANS « [ » (sinon backtracking O(n²) sur « [a[a[a… »).
+    .replace(/\[([^[\]]+)\]\([^)\s]*\)/g, "$1")
     .replace(/\*\*([^*]+)\*\*/g, "$1")
     .replace(/\*([^*]+)\*/g, "$1")
     .replace(/`([^`]+)`/g, "$1")
@@ -71,10 +72,12 @@ export function extractHeadings(markdown: string): Heading[] {
   const out: Heading[] = [];
   const seen: Record<string, number> = {};
   eachContentLine(markdown, (line) => {
-    const m = line.match(/^(#{2,3})\s+(.+?)\s*#*\s*$/);
-    if (!m) return;
-    const depth = m[1].length as 2 | 3;
-    const text = stripInlineMd(m[2]);
+    // Amorce SANS quantificateur ambigu (l'ancienne `(.+?)\s*#*\s*$` était ReDoS O(n²+)) :
+    // on détecte « ##/### + espace », puis on retire les « # » de fermeture ATX en linéaire.
+    const hm = line.match(/^(#{2,3})[ \t]/);
+    if (!hm) return;
+    const depth = hm[1].length as 2 | 3;
+    const text = stripInlineMd(line.slice(hm[1].length).replace(/[ \t#]+$/, "").trim());
     if (!text) return;
     let id = slugify(text) || "section";
     if (seen[id] != null) {
@@ -146,11 +149,12 @@ function parseFaqLines(faqLines: string[]): FaqItem[] {
   };
   for (const raw of faqLines) {
     const line = raw.trim();
-    const h3 = line.match(/^###\s+(.+?)\s*#*$/);
+    // Amorce non ambiguë (évite le ReDoS de `(.+?)\s*#*$`) ; « # » de fin retirés en linéaire.
+    const h3 = line.match(/^###[ \t]+(.+)$/);
     const boldQ = line.match(/^\*\*(.+?)\*\*$/);
     if (h3) {
       push();
-      curQ = stripInlineMd(h3[1]);
+      curQ = stripInlineMd(h3[1].replace(/[ \t#]+$/, ""));
     } else if (boldQ && /\?/.test(boldQ[1])) {
       push();
       curQ = stripInlineMd(boldQ[1]);

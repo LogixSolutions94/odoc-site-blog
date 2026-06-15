@@ -63,11 +63,21 @@ function attr(s: string): string {
   return esc(s).replace(/\n/g, " ");
 }
 
+// Allowlist d'URL : neutralise javascript:/data:/vbscript:… (le contenu d'article
+// n'est pas fiable). On n'autorise que le relatif/ancre et http(s)/mailto/tel.
+function safeUrl(u: string): string {
+  const t = u.trim();
+  // relatif/ancre — « / » mais PAS « // » (URL protocol-relative = open redirect)
+  if (/^\/(?!\/)/.test(t) || t.startsWith("#") || /^\.\.?\//.test(t)) return t;
+  if (/^(https?:\/\/|mailto:|tel:)/i.test(t)) return t;
+  return "#";
+}
+
 // ── Mini-rendu markdown → HTML (suffisant pour l'extraction crawler/IA) ─────────
 function inline(md: string): string {
   let s = esc(md);
-  // liens [texte](url)
-  s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_m, t, u) => `<a href="${attr(u)}">${t}</a>`);
+  // liens [texte](url) — href via allowlist safeUrl ; texte SANS « [ » (anti-ReDoS O(n²))
+  s = s.replace(/\[([^[\]]+)\]\(([^)\s]+)\)/g, (_m, t, u) => `<a href="${attr(safeUrl(u))}">${t}</a>`);
   // gras **x** puis italique *x* ; code `x`
   s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
   s = s.replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>");
@@ -160,7 +170,9 @@ function buildHead(post: Post): { title: string; tags: string } {
     `<meta name="twitter:title" content="${attr(post.title)}" />`,
     `<meta name="twitter:description" content="${attr(desc)}" />`,
     `<meta name="twitter:image" content="${attr(img)}" />`,
-    `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`,
+    // « < »/« > » échappés (→ </>, JSON valide) : empêche un « </script> »
+    // présent dans le contenu (titre, FAQ…) de s'échapper du <script> (XSS stocké).
+    `<script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, "\\u003c").replace(/>/g, "\\u003e")}</script>`,
   ].filter(Boolean).join("\n    ");
 
   return { title, tags };
@@ -243,6 +255,12 @@ async function run() {
   let ok = 0;
   for (const post of posts) {
     if (!post.slug || !post.content) continue;
+    // slug = composant de chemin : on n'accepte que [a-z0-9-] (anti path-traversal « ../ »
+    // — le slug vient de la DB/LLM, non fiable, et sert à construire dist/blog/<slug>/…).
+    if (!/^[a-z0-9][a-z0-9-]*$/i.test(post.slug)) {
+      console.warn(`[prerender-blog] slug ignoré (caractères non autorisés) : ${post.slug}`);
+      continue;
+    }
     try {
       const page = buildPage(shell, post);
       const dir = resolve(DIST, "blog", post.slug);

@@ -152,9 +152,12 @@ export default function BlogPostPage() {
     h3: ({ children }) => <h3 id={nextHeadingId()}>{children}</h3>,
     a: ({ href, children }) => {
       const h = href || "";
-      const internal = h.startsWith("/") || /^https?:\/\/(www\.)?odocpilot\.com/.test(h);
+      // Interne = chemin « / » (mais pas « // » protocol-relative) ou host odocpilot.com exact.
+      const internal =
+        (h.startsWith("/") && !h.startsWith("//")) ||
+        /^https?:\/\/(www\.)?odocpilot\.com(?=[/?#]|$)/i.test(h);
       if (internal) {
-        const to = h.replace(/^https?:\/\/(www\.)?odocpilot\.com/, "") || "/";
+        const to = h.replace(/^https?:\/\/(www\.)?odocpilot\.com/i, "") || "/";
         return <Link to={to}>{children}</Link>;
       }
       return (
