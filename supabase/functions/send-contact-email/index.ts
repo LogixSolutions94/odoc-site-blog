@@ -68,11 +68,13 @@ Deno.serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Odoc Contact <noreply@odoc.fr>",
-        to: ["contact@odoc.fr"],
+        // Domaine d'envoi = odocpilot.com (SPF/DMARC actifs, vérifié sur Resend).
+        // odoc.fr n'a aucun TXT DNS → emails marqués spam, voire rejetés.
+        from: "OdocPilot Contact <noreply@odocpilot.com>",
+        to: ["contact@odocpilot.com"],
         reply_to: email,
         // stripCrlf garantit pas de CRLF dans le subject (anti header-injection).
-        subject: `[Odoc] Nouveau message de ${name}`.slice(0, 200),
+        subject: `[OdocPilot] Nouveau message de ${name}`.slice(0, 200),
         html,
       }),
     });

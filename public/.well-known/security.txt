@@ -1,0 +1,11 @@
+# OdocPilot — Politique de divulgation responsable (RFC 9116)
+# Si vous découvrez une faille de sécurité, contactez-nous AVANT toute divulgation publique.
+# Nous nous engageons à répondre sous 72 h.
+
+Contact: mailto:security@odocpilot.com
+Contact: https://odocpilot.com/contact
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: fr, en
+Canonical: https://odocpilot.com/.well-known/security.txt
+Policy: https://odocpilot.com/politique-confidentialite
+Acknowledgments: https://odocpilot.com/security-hall-of-fame
