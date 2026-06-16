@@ -7,6 +7,8 @@ interface SEOHeadProps {
   ogImage?: string;
   ogType?: string;
   jsonLd?: Record<string, unknown>;
+  /** Si true, ajoute <meta name="robots" content="noindex,nofollow"> (pour pages d'action type /unsubscribe). */
+  noindex?: boolean;
 }
 
 const BASE_URL = "https://odocpilot.com";
@@ -19,6 +21,7 @@ export function SEOHead({
   ogImage = DEFAULT_OG_IMAGE,
   ogType = "website",
   jsonLd,
+  noindex,
 }: SEOHeadProps) {
   const fullCanonical = canonical ? `${BASE_URL}${canonical}` : undefined;
 
@@ -26,6 +29,7 @@ export function SEOHead({
     <Helmet>
       <title>{title}</title>
       <meta name="description" content={description} />
+      {noindex && <meta name="robots" content="noindex,nofollow" />}
       {fullCanonical && <link rel="canonical" href={fullCanonical} />}
 
       {/* Open Graph */}

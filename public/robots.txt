@@ -2,6 +2,8 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /unsubscribe
+Disallow: /unsubscribe?*
 
 # Moteurs de réponse / IA explicitement bienvenus (AEO/GEO)
 User-agent: GPTBot

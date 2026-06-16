@@ -47,6 +47,7 @@ export default function UnsubscribePage() {
         title="Désinscription newsletter — OdocPilot"
         description="Désinscription de la newsletter OdocPilot."
         canonical="/unsubscribe"
+        noindex
       />
       <div className="text-center">
         {status === "loading" && (
