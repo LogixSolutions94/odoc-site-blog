@@ -7,7 +7,7 @@ import { TrustCredentials } from "@/components/TrustCredentials";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { subscribeNewsletter } from "@/lib/newsletter";
 import {
   ArrowRight, Plus, Trash2, FileCode2, Printer, CheckCircle, AlertTriangle,
   MapPin, CreditCard, ShieldCheck,
@@ -162,7 +162,7 @@ ${taxXml}${due}
         (l) => `<tr><td>${esc(l.designation)}</td><td style="text-align:right">${fmt(Number(l.qte) || 0)}</td><td style="text-align:right">${fmt(Number(l.puHt) || 0)} €</td><td style="text-align:right">${fmt(Number(l.tva) || 0)} %</td><td style="text-align:right">${fmt((Number(l.qte) || 0) * (Number(l.puHt) || 0))} €</td></tr>`
       )
       .join("");
-    const w = window.open("", "_blank", "width=800,height=900");
+    const w = window.open("", "_blank", "noopener,noreferrer,width=800,height=900");
     if (!w) { toast({ title: "Pop-up bloquée", description: "Autorisez les pop-ups pour générer le PDF.", variant: "destructive" }); return; }
     w.document.write(`<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Facture ${esc(meta.numero)}</title>
 <style>body{font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#1a1d2e;padding:40px;max-width:720px;margin:auto}
@@ -183,17 +183,17 @@ th,td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left}th{background:
     w.document.close();
   }
 
+  const [website, setWebsite] = useState(""); // honeypot
+
   async function captureEmail(e: React.FormEvent) {
     e.preventDefault();
-    if (!email.trim()) return;
-    try {
-      const { error } = await supabase.from("newsletter_subscribers").insert({ email: email.trim(), source: "generateur" });
-      if (error && error.code !== "23505") throw error;
-      setSent(true);
-      toast({ title: "✓ Merci !", description: "Vous recevrez la checklist conformité + nos modèles." });
-    } catch {
-      toast({ title: "Erreur", description: "Réessayez dans un instant.", variant: "destructive" });
+    const result = await subscribeNewsletter(email, "generateur", website);
+    if (!result.ok) {
+      toast({ title: "Erreur", description: result.error, variant: "destructive" });
+      return;
     }
+    setSent(true);
+    toast({ title: "✓ Merci !", description: "Vous recevrez la checklist conformité + nos modèles." });
   }
 
   const field = "h-10 w-full rounded-lg border border-border bg-card px-3 text-sm";
@@ -309,6 +309,10 @@ th,td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left}th{background:
             {!sent ? (
               <form onSubmit={captureEmail} className="rounded-2xl border border-primary/30 bg-primary/5 p-5">
                 <p className="text-sm font-semibold text-foreground">Recevez la checklist conformité + nos modèles de factures</p>
+                <div className="absolute opacity-0 pointer-events-none" aria-hidden="true">
+                  <label htmlFor="gen-website">Website</label>
+                  <input type="text" id="gen-website" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+                </div>
                 <div className="mt-3 flex flex-col gap-2">
                   <Input type="email" required placeholder="votre@email.com" value={email} onChange={(e) => setEmail(e.target.value)} />
                   <Button type="submit" className="bg-gradient-cta text-primary-foreground font-semibold" data-umami-event="generateur-email">Recevoir</Button>

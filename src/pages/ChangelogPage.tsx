@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { subscribeNewsletter } from "@/lib/newsletter";
 
 const versions = [
   {
@@ -32,27 +32,20 @@ const versions = [
 export default function ChangelogPage() {
   const { toast } = useToast();
   const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState(""); // honeypot
   const [loading, setLoading] = useState(false);
 
   async function handleNewsletter(e: React.FormEvent) {
     e.preventDefault();
-    if (!email.trim()) return;
     setLoading(true);
-    try {
-      const { error } = await supabase.from("newsletter_subscribers").insert({ email: email.trim(), source: "changelog" });
-      if (error && error.code === "23505") {
-        toast({ title: "✓ Vous êtes déjà inscrit !", description: "Cette adresse est déjà dans notre liste." });
-      } else if (error) {
-        throw error;
-      } else {
-        toast({ title: "✓ Merci ! Vous êtes inscrit.", description: "Vous recevrez nos prochaines actualités." });
-      }
-      setEmail("");
-    } catch {
-      toast({ title: "Erreur", description: "Une erreur est survenue. Veuillez réessayer.", variant: "destructive" });
-    } finally {
-      setLoading(false);
+    const result = await subscribeNewsletter(email, "changelog", website);
+    setLoading(false);
+    if (!result.ok) {
+      toast({ title: "Erreur", description: result.error, variant: "destructive" });
+      return;
     }
+    toast({ title: "✓ Merci ! Vous êtes inscrit.", description: "Vous recevrez nos prochaines actualités." });
+    setEmail("");
   }
 
   return (
@@ -92,6 +85,10 @@ export default function ChangelogPage() {
             <h3 className="text-lg font-bold text-foreground">Restez informé des prochaines nouveautés</h3>
             <p className="mt-2 text-sm text-muted-foreground">Conformité e-facture, nouveautés produit — directement dans votre boîte mail.</p>
             <form onSubmit={handleNewsletter} className="mt-6 flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
+              <div className="absolute opacity-0 pointer-events-none" aria-hidden="true">
+                <label htmlFor="cl-website">Website</label>
+                <input type="text" id="cl-website" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+              </div>
               <Input type="email" placeholder="votre@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required className="flex-1" />
               <Button type="submit" disabled={loading} className="bg-gradient-cta text-primary-foreground">{loading ? "…" : "S'abonner"}</Button>
             </form>

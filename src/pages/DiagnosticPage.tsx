@@ -6,7 +6,7 @@ import { TrustCredentials } from "@/components/TrustCredentials";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { subscribeNewsletter } from "@/lib/newsletter";
 import {
   ArrowRight, ArrowLeft, CheckCircle, Calendar, FileText, ScanLine,
   Send, ShieldCheck, MapPin, CreditCard, RotateCcw, Sparkles,
@@ -64,23 +64,22 @@ export default function DiagnosticPage() {
     setStep((s) => s + 1);
   }
 
+  const [website, setWebsite] = useState(""); // honeypot
+
   async function captureEmail(e: React.FormEvent) {
     e.preventDefault();
-    if (!email.trim()) return;
     setLoading(true);
-    try {
-      const { error } = await supabase
-        .from("newsletter_subscribers")
-        .insert({ email: email.trim(), source: "diagnostic" });
-      if (error && error.code !== "23505") throw error;
-      setSent(true);
-      toast({ title: "✓ C'est noté !", description: "Votre feuille de route et la checklist arrivent par email." });
-    } catch {
-      toast({ title: "Erreur", description: "Réessayez dans un instant.", variant: "destructive" });
-    } finally {
-      setLoading(false);
+    const result = await subscribeNewsletter(email, "diagnostic", website);
+    setLoading(false);
+    if (!result.ok) {
+      toast({ title: "Erreur", description: result.error, variant: "destructive" });
+      return;
     }
+    setSent(true);
+    toast({ title: "✓ C'est noté !", description: "Votre feuille de route et la checklist arrivent par email." });
   }
+
+  function setWebsiteHoneypot(v: string) { setWebsite(v); }
 
   const soloMode = answers.comptable === "Non, je gère seul";
 
@@ -218,6 +217,10 @@ export default function DiagnosticPage() {
                 <form onSubmit={captureEmail} className="mt-7 rounded-xl border border-border bg-card p-5">
                   <p className="text-sm font-semibold text-foreground">Recevez votre feuille de route + la checklist conformité</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">Un email clair, daté, sans spam. Vous pouvez vous désinscrire à tout moment.</p>
+                  <div className="absolute opacity-0 pointer-events-none" aria-hidden="true">
+                    <label htmlFor="diag-website">Website</label>
+                    <input type="text" id="diag-website" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsiteHoneypot(e.target.value)} />
+                  </div>
                   <div className="mt-3 flex flex-col sm:flex-row gap-2">
                     <Input type="email" required placeholder="votre@email.com" value={email} onChange={(e) => setEmail(e.target.value)} className="flex-1" />
                     <Button type="submit" disabled={loading} className="bg-gradient-cta text-primary-foreground font-semibold" data-umami-event="diagnostic-email">

@@ -59,6 +59,20 @@ export function SiteFooter() {
               <li><Link to="/mentions-legales" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Mentions légales</Link></li>
               <li><Link to="/cgu" className="text-sm text-muted-foreground hover:text-foreground transition-colors">CGU</Link></li>
               <li><Link to="/politique-confidentialite" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Politique de confidentialité</Link></li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    try {
+                      localStorage.removeItem("odoc_cookie_consent");
+                      window.dispatchEvent(new CustomEvent("odoc:cookie-consent-reset"));
+                    } catch { /* ignore */ }
+                  }}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors text-left"
+                >
+                  Gérer mes cookies
+                </button>
+              </li>
             </ul>
           </div>
         </div>

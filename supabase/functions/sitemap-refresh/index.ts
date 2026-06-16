@@ -1,9 +1,20 @@
+import { corsHeaders, preflight, timingSafeEqual } from "../_shared/cors.ts";
+
 const SITEMAP_URL = "https://odocpilot.com/sitemap.xml";
 
 Deno.serve(async (req) => {
-  // Supabase DB webhooks send OPTIONS preflight
-  if (req.method === "OPTIONS") {
-    return new Response(null, { status: 204 });
+  if (req.method === "OPTIONS") return preflight(req);
+
+  // Auth : secret partagé entre le trigger Postgres et cette EF.
+  // (audit sécu 2026-06-16, finding C3 — endpoint était ouvert sur Internet)
+  const secret = Deno.env.get("SITEMAP_WEBHOOK_SECRET");
+  if (!secret) {
+    console.error("[sitemap-refresh] SITEMAP_WEBHOOK_SECRET not configured");
+    return new Response("server misconfiguration", { status: 500 });
+  }
+  const provided = req.headers.get("x-webhook-secret") ?? "";
+  if (!timingSafeEqual(provided, secret)) {
+    return new Response("unauthorized", { status: 401 });
   }
 
   let body: { type?: string; record?: { status?: string; slug?: string } };
@@ -13,17 +24,13 @@ Deno.serve(async (req) => {
     return new Response("invalid json", { status: 400 });
   }
 
-  // Only react to INSERT / UPDATE events
   if (!["INSERT", "UPDATE"].includes(body.type ?? "")) {
     return new Response("skip: wrong event type", { status: 200 });
   }
-
-  // Only ping Google when the article is published
   if (body.record?.status !== "published") {
     return new Response("skip: not published", { status: 200 });
   }
 
-  // Ping Google Search Console
   const pingUrl = `https://www.google.com/ping?sitemap=${encodeURIComponent(SITEMAP_URL)}`;
   try {
     const pingRes = await fetch(pingUrl);
@@ -34,6 +41,6 @@ Deno.serve(async (req) => {
 
   return new Response(
     JSON.stringify({ ok: true, slug: body.record?.slug, pinged: SITEMAP_URL }),
-    { headers: { "Content-Type": "application/json" } }
+    { headers: { ...corsHeaders(req), "Content-Type": "application/json" } }
   );
 });

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { subscribeNewsletter } from "@/lib/newsletter";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -25,20 +25,18 @@ export function NewsletterInline({
   placeholder = "vous@entreprise.fr",
 }: NewsletterInlineProps) {
   const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState(""); // honeypot
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const { toast } = useToast();
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const value = email.trim();
-    if (!value) return;
     setLoading(true);
-    const { error } = await supabase.from("newsletter_subscribers").insert({ email: value, source });
+    const result = await subscribeNewsletter(email, source, website);
     setLoading(false);
-    // Un email déjà inscrit (contrainte d'unicité) = succès côté utilisateur.
-    if (error && !/duplicate|unique/i.test(error.message)) {
-      toast({ title: "Une erreur est survenue", description: "Réessayez dans un instant.", variant: "destructive" });
+    if (!result.ok) {
+      toast({ title: "Une erreur est survenue", description: result.error, variant: "destructive" });
       return;
     }
     setDone(true);
@@ -61,6 +59,18 @@ export function NewsletterInline({
             </p>
           ) : (
             <form onSubmit={submit} className="mt-4 flex flex-col gap-2 sm:flex-row">
+              <div className="absolute opacity-0 pointer-events-none" aria-hidden="true">
+                <label htmlFor="nl-website">Website</label>
+                <input
+                  type="text"
+                  id="nl-website"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                />
+              </div>
               <Input
                 type="email"
                 required

@@ -1,10 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
+import { corsHeaders, preflight, timingSafeEqual } from "../_shared/cors.ts";
 
 interface PublishBlogPostPayload {
   action: "create" | "update" | "publish" | "unpublish";
@@ -25,27 +20,29 @@ interface PublishBlogPostPayload {
 }
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+  if (req.method === "OPTIONS") return preflight(req);
+  const cors = corsHeaders(req);
+  const json = (status: number, body: unknown) =>
+    new Response(JSON.stringify(body), {
+      status,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
 
   try {
-    // Auth check
-    const authHeader = req.headers.get("Authorization");
+    // Auth check (constant-time, audit 2026-06-16, finding M3).
+    const authHeader = req.headers.get("Authorization") ?? "";
     const secret = Deno.env.get("BLOG_WEBHOOK_SECRET");
-    if (!secret || authHeader !== `Bearer ${secret}`) {
-      return new Response(
-        JSON.stringify({ success: false, error: "Unauthorized" }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    if (!secret) {
+      console.error("[publish-blog-post] BLOG_WEBHOOK_SECRET missing");
+      return json(500, { success: false, error: "Server misconfiguration" });
+    }
+    if (!timingSafeEqual(authHeader, `Bearer ${secret}`)) {
+      return json(401, { success: false, error: "Unauthorized" });
     }
 
     const payload: PublishBlogPostPayload = await req.json();
     if (!payload.slug || !payload.action) {
-      return new Response(
-        JSON.stringify({ success: false, error: "Missing slug or action" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return json(400, { success: false, error: "Missing slug or action" });
     }
 
     const supabase = createClient(
@@ -53,7 +50,6 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Auto-calculate read_time if content provided and read_time not provided
     let readTime = payload.read_time_minutes;
     if (!readTime && payload.content) {
       readTime = Math.ceil(payload.content.split(/\s+/).length / 200);
@@ -85,10 +81,7 @@ Deno.serve(async (req) => {
         .single();
 
       if (error) throw error;
-      return new Response(
-        JSON.stringify({ success: true, action, slug, id: data.id }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return json(200, { success: true, action, slug, id: data.id });
     }
 
     if (action === "update") {
@@ -115,37 +108,21 @@ Deno.serve(async (req) => {
         .single();
 
       if (error) throw error;
-      if (!data) {
-        return new Response(
-          JSON.stringify({ success: false, error: "Article not found", slug }),
-          { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      return new Response(
-        JSON.stringify({ success: true, action, slug, id: data.id }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      if (!data) return json(404, { success: false, error: "Article not found", slug });
+      return json(200, { success: true, action, slug, id: data.id });
     }
 
     if (action === "publish") {
-      // Only set published_at if not already set
       const { data: existing } = await supabase
         .from("blog_posts")
         .select("id, published_at")
         .eq("slug", slug)
         .single();
 
-      if (!existing) {
-        return new Response(
-          JSON.stringify({ success: false, error: "Article not found", slug }),
-          { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
+      if (!existing) return json(404, { success: false, error: "Article not found", slug });
 
       const updateObj: Record<string, unknown> = { status: "published" };
-      if (!existing.published_at) {
-        updateObj.published_at = new Date().toISOString();
-      }
+      if (!existing.published_at) updateObj.published_at = new Date().toISOString();
 
       const { error } = await supabase
         .from("blog_posts")
@@ -154,13 +131,8 @@ Deno.serve(async (req) => {
 
       if (error) throw error;
 
-      // Ping Google to trigger immediate sitemap re-crawl
       fetch(`https://www.google.com/ping?sitemap=${encodeURIComponent("https://odocpilot.com/sitemap.xml")}`).catch(() => {});
-
-      return new Response(
-        JSON.stringify({ success: true, action, slug, id: existing.id }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return json(200, { success: true, action, slug, id: existing.id });
     }
 
     if (action === "unpublish") {
@@ -172,26 +144,13 @@ Deno.serve(async (req) => {
         .single();
 
       if (error) throw error;
-      if (!data) {
-        return new Response(
-          JSON.stringify({ success: false, error: "Article not found", slug }),
-          { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      return new Response(
-        JSON.stringify({ success: true, action, slug, id: data.id }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      if (!data) return json(404, { success: false, error: "Article not found", slug });
+      return json(200, { success: true, action, slug, id: data.id });
     }
 
-    return new Response(
-      JSON.stringify({ success: false, error: "Invalid action" }),
-      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return json(400, { success: false, error: "Invalid action" });
   } catch (err) {
-    return new Response(
-      JSON.stringify({ success: false, error: err.message }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    console.error("[publish-blog-post] uncaught:", err);
+    return json(500, { success: false, error: "Internal error" });
   }
 });
