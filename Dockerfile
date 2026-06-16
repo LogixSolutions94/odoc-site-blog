@@ -1,9 +1,11 @@
-FROM node:22-alpine AS builder
+FROM oven/bun:1.3-alpine AS builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
+# bun.lock est l'unique source de vérité (cf. CLAUDE.md, on bosse en bun en local).
+# package-lock.json est obsolète depuis le lot E (bun update). On l'ignore.
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
 COPY . .
-RUN npm run build
+RUN bun run build
 
 FROM nginx:1.27-alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
