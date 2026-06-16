@@ -1,0 +1,40 @@
+node_modules
+dist
+dist-ssr
+.git
+.github
+.vscode
+.idea
+.DS_Store
+.claude
+
+# Secrets / env
+.env
+.env.*
+!.env.example
+
+# Audits / docs internes (pas besoin dans l'image)
+docs
+refonte
+SEOBlog.md
+SITE-AUDIT-*.json
+SITE-AUDIT-*.md
+SITE-ROADMAP-*.md
+TODO.md
+CLAUDE.md
+
+# Migrations Supabase (appliquées via psql, pas via le site statique)
+supabase
+
+# Tests
+playwright.config.ts
+playwright-fixture.ts
+*.test.ts
+*.test.tsx
+
+# SQL utilitaires
+*.sql
+
+# Logs / lock alternatifs
+*.log
+bun.lockb
