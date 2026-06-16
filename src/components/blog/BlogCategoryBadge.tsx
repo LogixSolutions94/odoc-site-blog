@@ -1,25 +1,29 @@
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-
-const categoryConfig: Record<string, { label: string; className: string }> = {
-  facturation: { label: "Facturation", className: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
-  comptabilite: { label: "Comptabilité", className: "bg-violet-500/20 text-violet-400 border-violet-500/30" },
-  "ia-documents": { label: "IA & Documents", className: "bg-indigo-500/20 text-indigo-400 border-indigo-500/30" },
-  "gestion-pme": { label: "Gestion PME", className: "bg-green-500/20 text-green-400 border-green-500/30" },
-  tutoriel: { label: "Tutoriel", className: "bg-orange-500/20 text-orange-400 border-orange-500/30" },
-  general: { label: "Général", className: "bg-muted text-muted-foreground border-border" },
-};
+import { categoryLabel } from "@/lib/blogTaxonomy";
 
 interface BlogCategoryBadgeProps {
   category: string;
+  /** Mise en avant (accent orange rare) — réservé à 1 badge structurant par écran. */
+  accent?: boolean;
   className?: string;
 }
 
-export function BlogCategoryBadge({ category, className }: BlogCategoryBadgeProps) {
-  const config = categoryConfig[category] || categoryConfig.general;
+/**
+ * Pastille de silo, pilotée par la taxonomie partagée (blogTaxonomy) et les tokens
+ * de marque — fini les couleurs bleu/violet en dur et le repli trompeur « Général ».
+ */
+export function BlogCategoryBadge({ category, accent = false, className }: BlogCategoryBadgeProps) {
   return (
-    <Badge variant="outline" className={cn(config.className, className)}>
-      {config.label}
-    </Badge>
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium",
+        accent
+          ? "border-primary/30 bg-primary/10 text-primary"
+          : "border-border bg-secondary text-secondary-foreground",
+        className,
+      )}
+    >
+      {categoryLabel(category)}
+    </span>
   );
 }

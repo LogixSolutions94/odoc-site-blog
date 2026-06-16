@@ -1,56 +1,27 @@
 import { SEOHead } from "@/components/SEOHead";
 
-const BASE_URL = "https://odocpilot.com";
-
 interface BlogSEOHeadProps {
   title?: string;
   description?: string;
   canonical?: string;
   ogImage?: string;
   ogType?: string;
-  publishedTime?: string;
-  modifiedTime?: string;
-  category?: string;
-  keywords?: string;
+  /**
+   * @graph JSON-LD complet (BlogPosting + Person + Organization + BreadcrumbList +
+   * FAQPage pour un article ; Blog + BreadcrumbList pour la liste). Construit par
+   * l'appelant via blogContent.buildArticleGraph pour garantir la parité avec le SSR.
+   */
+  jsonLd?: Record<string, unknown>;
 }
 
 export function BlogSEOHead({
-  title = "Blog OdocPilot — Facturation IA et gestion documentaire pour PME",
-  description = "Tutoriels, bonnes pratiques et actualités sur la facturation automatique, la gestion documentaire IA et la comptabilité pour TPE/PME.",
+  title = "Blog OdocPilot — Conformité, facturation électronique & gestion sereine",
+  description = "Guides clairs et à jour sur la réforme 2026/2027, la Factur-X et les plateformes agréées — pour les dirigeants de TPE qui veulent se mettre en règle sans jargon.",
   canonical = "/blog",
   ogImage,
   ogType = "website",
-  publishedTime,
-  modifiedTime,
+  jsonLd,
 }: BlogSEOHeadProps) {
-  const articleJsonLd =
-    ogType === "article" && publishedTime
-      ? {
-          "@context": "https://schema.org",
-          "@type": "Article",
-          headline: title,
-          description: description,
-          author: {
-            "@type": "Organization",
-            name: "OdocPilot",
-            url: BASE_URL,
-          },
-          publisher: {
-            "@type": "Organization",
-            name: "OdocPilot",
-            logo: {
-              "@type": "ImageObject",
-              url: `${BASE_URL}/og-image.png`,
-            },
-          },
-          datePublished: publishedTime,
-          dateModified: modifiedTime || publishedTime,
-          url: `${BASE_URL}${canonical}`,
-          inLanguage: "fr-FR",
-          ...(ogImage ? { image: ogImage } : {}),
-        }
-      : undefined;
-
   return (
     <SEOHead
       title={title}
@@ -58,7 +29,7 @@ export function BlogSEOHead({
       canonical={canonical}
       ogImage={ogImage}
       ogType={ogType}
-      jsonLd={articleJsonLd}
+      jsonLd={jsonLd}
     />
   );
 }

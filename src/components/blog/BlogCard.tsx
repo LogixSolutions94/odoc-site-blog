@@ -12,90 +12,97 @@ interface BlogCardProps {
     category: string;
     author_name: string;
     published_at: string | null;
-    read_time_minutes: number;
-    view_count: number;
     featured?: boolean;
   };
-  variant?: "default" | "compact" | "featured";
+  variant?: "default" | "featured";
 }
 
-function formatRelativeDate(dateStr: string | null): string {
+function formatDate(dateStr: string | null): string {
   if (!dateStr) return "";
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  return new Date(dateStr).toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
 
-  if (diffDays < 1) return "Aujourd'hui";
-  if (diffDays === 1) return "Hier";
-  if (diffDays < 7) return `Il y a ${diffDays} jours`;
-  return date.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+function CoverImage({
+  src,
+  alt,
+  className,
+  iconClassName,
+}: {
+  src?: string | null;
+  alt: string;
+  className?: string;
+  iconClassName?: string;
+}) {
+  return (
+    <div className={cn("relative overflow-hidden bg-muted", className)}>
+      {src ? (
+        <img
+          src={src}
+          alt={alt}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          loading="lazy"
+        />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center">
+          <FileText className={cn("text-primary/40", iconClassName)} />
+        </div>
+      )}
+    </div>
+  );
 }
 
 export function BlogCard({ post, variant = "default" }: BlogCardProps) {
   if (variant === "featured") {
     return (
-      <Link to={`/blog/${post.slug}`} className="block group">
-        <div className="flex flex-col md:flex-row gap-6 bg-card rounded-xl overflow-hidden shadow-md group-hover:shadow-xl transition-shadow border border-border/50">
-          <div className="md:w-1/2 aspect-video md:aspect-auto relative overflow-hidden">
-            {post.cover_image_url ? (
-              <img src={post.cover_image_url} alt={post.title} className="w-full h-full object-cover" loading="lazy" />
-            ) : (
-              <div className="w-full h-full min-h-[200px] bg-gradient-to-br from-primary/20 to-accent/30 flex items-center justify-center">
-                <FileText className="h-16 w-16 text-primary/50" />
-              </div>
-            )}
-          </div>
-          <div className="md:w-1/2 p-6 flex flex-col justify-center">
-            <BlogCategoryBadge category={post.category} className="w-fit mb-3" />
-            <h2 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+      <Link to={`/blog/${post.slug}`} className="group block">
+        <article className="grid overflow-hidden rounded-2xl border border-border bg-card shadow-card transition-shadow hover:shadow-card-hover md:grid-cols-2">
+          <CoverImage
+            src={post.cover_image_url}
+            alt={post.title}
+            className="aspect-[16/10] md:aspect-auto md:h-full"
+            iconClassName="h-16 w-16"
+          />
+          <div className="flex flex-col justify-center p-7 sm:p-9">
+            <BlogCategoryBadge category={post.category} accent className="w-fit" />
+            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-3xl">
               {post.title}
             </h2>
-            <p className="mt-2 text-muted-foreground line-clamp-3">{post.excerpt}</p>
-            <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-              <span>{post.author_name}</span>
-              <span>·</span>
-              <span>{formatRelativeDate(post.published_at)}</span>
-              <span>·</span>
-              <span>{post.read_time_minutes} min de lecture</span>
+            <p className="mt-3 line-clamp-3 text-muted-foreground">{post.excerpt}</p>
+            <div className="mt-5 flex items-center gap-2 text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">{post.author_name}</span>
+              <span aria-hidden>·</span>
+              <span>{formatDate(post.published_at)}</span>
             </div>
-            <p className="mt-4 text-sm font-medium text-primary group-hover:underline">Lire l'article →</p>
+            <span className="mt-5 text-sm font-semibold text-primary">
+              Lire le guide <span aria-hidden>→</span>
+            </span>
           </div>
-        </div>
+        </article>
       </Link>
     );
   }
 
   return (
-    <Link to={`/blog/${post.slug}`} className="block group h-full">
-      <div className={cn(
-        "h-full bg-card rounded-xl overflow-hidden shadow-md group-hover:shadow-xl transition-shadow border border-border/50 flex flex-col",
-        variant === "compact" && "flex-row"
-      )}>
-        <div className={cn("aspect-video relative overflow-hidden", variant === "compact" && "w-1/3 aspect-auto")}>
-          {post.cover_image_url ? (
-            <img src={post.cover_image_url} alt={post.title} className="w-full h-full object-cover" loading="lazy" />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/30 flex items-center justify-center">
-              <FileText className="h-10 w-10 text-primary/50" />
-            </div>
-          )}
-        </div>
-        <div className="p-5 flex flex-col flex-1">
-          <BlogCategoryBadge category={post.category} className="w-fit mb-2" />
-          <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+    <Link to={`/blog/${post.slug}`} className="group block h-full">
+      <article className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card shadow-card transition-shadow hover:shadow-card-hover">
+        <CoverImage src={post.cover_image_url} alt={post.title} className="aspect-[16/9]" iconClassName="h-10 w-10" />
+        <div className="flex flex-1 flex-col p-5">
+          <BlogCategoryBadge category={post.category} className="w-fit" />
+          <h3 className="mt-3 line-clamp-2 text-lg font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
             {post.title}
           </h3>
-          <p className="mt-2 text-sm text-muted-foreground line-clamp-3 flex-1">{post.excerpt}</p>
-          <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
-            <span>{post.author_name}</span>
-            <span>·</span>
-            <span>{formatRelativeDate(post.published_at)}</span>
-            <span>·</span>
-            <span>{post.read_time_minutes} min</span>
+          <p className="mt-2 line-clamp-2 flex-1 text-sm text-muted-foreground">{post.excerpt}</p>
+          <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+            <span className="font-medium text-foreground">{post.author_name}</span>
+            <span aria-hidden>·</span>
+            <span>{formatDate(post.published_at)}</span>
           </div>
         </div>
-      </div>
+      </article>
     </Link>
   );
 }
