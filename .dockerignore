@@ -35,6 +35,7 @@ playwright-fixture.ts
 # SQL utilitaires
 *.sql
 
-# Logs / lock alternatifs
+# Logs / lockfiles alternatifs (on garde bun.lock seulement)
 *.log
 bun.lockb
+package-lock.json
