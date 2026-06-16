@@ -53,18 +53,30 @@ const staticPages = [
 ];
 
 async function run() {
-  console.log("[sitemap] Fetching published posts from Supabase…");
+  // Résilience build (audit 2026-06-16) : sans clé Supabase (CI/Docker sans .env),
+  // on génère quand même le sitemap avec uniquement les routes statiques. Le build
+  // doit JAMAIS être bloqué par l'absence de clé — le sitemap dynamique sera
+  // rafraîchi par l'EF sitemap-refresh à chaque publication d'article.
+  let posts: { slug: string; updated_at: string }[] = [];
 
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/blog_posts?select=slug,updated_at&status=eq.published&order=published_at.desc`,
-    { headers: { apikey: SUPABASE_KEY, "Content-Type": "application/json" } }
-  );
-
-  if (!res.ok) {
-    throw new Error(`Supabase REST error ${res.status}: ${await res.text()}`);
+  if (!SUPABASE_KEY) {
+    console.warn("[sitemap] VITE_SUPABASE_PUBLISHABLE_KEY absente — sitemap = routes statiques uniquement.");
+  } else {
+    console.log("[sitemap] Fetching published posts from Supabase…");
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/blog_posts?select=slug,updated_at&status=eq.published&order=published_at.desc`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, "Content-Type": "application/json" } }
+      );
+      if (!res.ok) {
+        console.warn(`[sitemap] Supabase REST ${res.status} (${(await res.text()).slice(0, 120)}) — sitemap statique seulement.`);
+      } else {
+        posts = await res.json();
+      }
+    } catch (e) {
+      console.warn("[sitemap] fetch KO — sitemap statique seulement :", e instanceof Error ? e.message : e);
+    }
   }
-
-  const posts: { slug: string; updated_at: string }[] = await res.json();
 
   const staticUrls = staticPages
     .map(
