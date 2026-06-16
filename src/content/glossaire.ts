@@ -207,6 +207,121 @@ export const GLOSSARY: GlossaryTerm[] = [
       "Un format de facture électronique en XML, normalisé par OASIS, admis par la réforme française au même titre que le CII.",
     body: "UBL est très répandu à l'international. En France, Factur-X (qui embarque du CII) reste le plus simple à adopter pour une TPE.",
   },
+  {
+    term: "Sanctions",
+    slug: "sanctions",
+    short:
+      "Les amendes applicables en cas de non-respect de la facturation électronique : 15 € par facture non conforme (plafond 15 000 €/an) côté émission, 250 € par e-reporting manquant (plafond 15 000 €/an).",
+    body: "Une seule mise en demeure préalable est prévue. Au-delà, les pénalités s'accumulent jusqu'à régularisation. La conformité préventive coûte moins cher que la régularisation.",
+    related: { to: "/guide/obligations-2026-2027", label: "Calendrier et sanctions" },
+  },
+  {
+    term: "Acompte",
+    acronym: "facture d'acompte",
+    slug: "acompte",
+    short:
+      "Une facture émise avant la livraison ou la prestation, qui constate un paiement partiel reçu. Elle doit elle aussi être électronique et porter toutes les mentions d'une facture conforme.",
+    body: "L'acompte se déduit ensuite sur la facture définitive. La réforme ne change pas cette mécanique : seul le canal (plateforme agréée) et le format (Factur-X) deviennent obligatoires.",
+  },
+  {
+    term: "Avoir",
+    acronym: "facture d'avoir",
+    slug: "avoir",
+    short:
+      "Une facture négative qui annule ou réduit une facture précédente (retour produit, remise commerciale, erreur). Elle doit faire référence à la facture d'origine et passer par la même plateforme agréée.",
+    body: "Émettre un avoir au lieu de supprimer ou réécrire une facture est obligatoire dès qu'elle est comptabilisée. Le canal électronique trace l'opération de bout en bout.",
+  },
+  {
+    term: "Auto-liquidation de TVA",
+    slug: "auto-liquidation",
+    short:
+      "Mécanisme par lequel c'est le client (et non le fournisseur) qui déclare et paie la TVA. Cas fréquents : sous-traitance BTP en France, achats intracommunautaires B2B.",
+    body: "La facture porte la mention « Auto-liquidation » et n'affiche pas de TVA. La réforme ajoute un code d'opération structuré dans le XML pour distinguer ce cas. À ne pas oublier dans les mentions obligatoires.",
+    related: { to: "/verificateur", label: "Contrôler les mentions de ma facture" },
+  },
+  {
+    term: "DGFiP",
+    acronym: "Direction générale des Finances publiques",
+    slug: "dgfip",
+    short:
+      "L'administration fiscale française. C'est elle qui immatricule les plateformes agréées, reçoit les données via l'annuaire et publie les spécifications officielles de la réforme.",
+    body: "Les spécifications externes (formats CII/UBL, profils Factur-X, codes d'opération) sont publiées par la DGFiP et tenues à jour sur impots.gouv.fr. Source officielle de référence.",
+  },
+  {
+    term: "Délais de paiement",
+    acronym: "LME",
+    slug: "delais-paiement",
+    short:
+      "Le délai légal de règlement entre entreprises, fixé par la Loi de Modernisation de l'Économie : 60 jours date de facture, ou 45 jours fin de mois. À adapter par contrat.",
+    body: "Le dépassement déclenche des pénalités de retard. Sur une facture conforme, le délai (ou la date d'échéance) doit figurer en clair et est repris dans les données structurées.",
+  },
+  {
+    term: "Pénalités de retard",
+    slug: "penalites-retard",
+    short:
+      "Les intérêts dus en cas de paiement tardif d'une facture B2B : au minimum 3× le taux d'intérêt légal, ou le taux BCE + 10 points. Mention obligatoire sur toute facture entre professionnels.",
+    body: "S'ajoute automatiquement l'indemnité forfaitaire de recouvrement (40 €). Ces deux mentions sont contrôlées sur les factures électroniques conformes.",
+  },
+  {
+    term: "Indemnité forfaitaire de recouvrement",
+    slug: "indemnite-recouvrement",
+    short:
+      "L'indemnité forfaitaire de 40 € due de plein droit par le débiteur en retard d'une facture B2B. Sa mention sur la facture est obligatoire depuis 2013.",
+    body: "Cette mention doit apparaître textuellement (« Indemnité forfaitaire de recouvrement : 40 € »). Notre vérificateur la contrôle.",
+    related: { to: "/verificateur", label: "Vérifier les mentions de ma facture" },
+  },
+  {
+    term: "Numéro de facture",
+    slug: "numero-facture",
+    short:
+      "Le numéro unique attribué à chaque facture, selon une séquence continue et sans rupture (par année ou par série). C'est l'une des mentions obligatoires les plus contrôlées en cas de vérification.",
+    body: "Une rupture dans la numérotation (sauts ou doublons) est un signal d'alerte fiscal. Les outils de facturation modernes la garantissent automatiquement.",
+  },
+  {
+    term: "TVA en franchise",
+    slug: "franchise-tva",
+    short:
+      "Le régime des micro-entrepreneurs et petites entreprises sous certains seuils : pas de TVA facturée, mais facture électronique tout de même obligatoire à compter de 2026/2027.",
+    body: "La mention « TVA non applicable, art. 293 B du CGI » remplace la ventilation de TVA. Le format structuré le prévoit explicitement. La franchise n'exonère pas de la réforme.",
+    related: { to: "/diagnostic", label: "Ma situation : suis-je concerné ?" },
+  },
+  {
+    term: "Coffre-fort numérique",
+    slug: "coffre-fort-numerique",
+    short:
+      "Un service d'archivage à valeur probante, conforme à la norme NF Z42-013 / eIDAS, qui garantit l'intégrité et la lisibilité d'un document sur dix ans (durée de conservation des factures).",
+    body: "Stocker une facture dans un simple dossier ne suffit pas : il faut un coffre-fort numérique (ou un archivage équivalent) pour préserver la valeur probante exigée en cas de contrôle.",
+  },
+  {
+    term: "eIDAS",
+    slug: "eidas",
+    short:
+      "Le règlement européen (n° 910/2014, révisé en 2024) qui définit les niveaux de signature et de cachet électroniques, et leur valeur probante équivalente à la signature manuscrite.",
+    body: "Les plateformes agréées s'appuient sur eIDAS pour cacheter électroniquement les factures et garantir leur intégrité dans la durée. C'est un fondement juridique de la réforme.",
+  },
+  {
+    term: "API de dépôt",
+    slug: "api-depot",
+    short:
+      "L'interface technique par laquelle un logiciel de facturation transmet une facture à une plateforme agréée pour qu'elle soit acheminée vers le destinataire et la DGFiP.",
+    body: "C'est le canal qu'utilise OdocPilot pour envoyer vos factures sans copier-coller : votre logiciel parle à la plateforme via l'API, en tâche de fond.",
+    related: { to: "/guide/plateforme-agreee", label: "Choisir sa plateforme agréée" },
+  },
+  {
+    term: "Sceau électronique",
+    slug: "sceau-electronique",
+    short:
+      "L'équivalent de la signature électronique pour une personne morale (entreprise) : il garantit l'origine et l'intégrité d'une facture sans qu'une personne physique ait à signer.",
+    body: "Les plateformes agréées apposent un sceau électronique qualifié (au sens eIDAS) sur chaque facture transmise. C'est cette empreinte qui rend la facture inaltérable et opposable.",
+  },
+  {
+    term: "OGA",
+    acronym: "Organisme de Gestion Agréé",
+    slug: "oga",
+    short:
+      "Un organisme agréé par l'administration qui aide les TPE non adhérentes d'un cabinet d'expertise à tenir une comptabilité conforme. Inclut les centres de gestion agréés (CGA) et associations agréées (AGA).",
+    body: "Pour les TPE BNC/BIC qui ne passent pas par un expert-comptable, l'OGA reste un acteur utile. La réforme e-facturation s'applique indépendamment de l'adhésion à un OGA.",
+  },
 ];
 
 export const GLOSSARY_BY_SLUG: Record<string, GlossaryTerm> = Object.fromEntries(

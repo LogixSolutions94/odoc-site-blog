@@ -1,0 +1,42 @@
+name: Lighthouse CI
+
+# Audit performance/accessibilité/SEO de la landing sur PR.
+# Tourne sur les URLs PROD (rapide, fidèle). Si une PR introduit une
+# régression observable (route absente, ressource lourde, balise SEO
+# manquante), lhci le signale avant le merge.
+#
+# Score baseline initial : tout en "warn" (non bloquant) — le founder
+# pourra basculer en "error" via .lighthouserc.json après un mois de
+# stabilité, pour rendre le check requis.
+
+on:
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'refonte/**'
+  workflow_dispatch: {}
+
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lhci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Audit Lighthouse
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            https://odocpilot.com/
+            https://odocpilot.com/blog
+            https://odocpilot.com/pricing
+            https://odocpilot.com/e-facture
+            https://odocpilot.com/diagnostic
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          configPath: ./.lighthouserc.json
