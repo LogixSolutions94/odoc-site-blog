@@ -1,10 +1,17 @@
 import { Link } from "react-router-dom";
 import { TrustCredentials } from "@/components/TrustCredentials";
+import { Logo } from "@/components/Logo";
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-border py-14 bg-card">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 max-w-sm">
+          <Logo size="md" variant="full" />
+          <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
+            L'IA prépare votre administratif, vous validez en un clic. Copilote IA français de facturation et de conformité, hébergé en France.
+          </p>
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
           <div>
             <h3 className="text-sm font-bold text-foreground mb-4">Produit</h3>
