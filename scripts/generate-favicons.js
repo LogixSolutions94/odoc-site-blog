@@ -1,44 +1,49 @@
 #!/usr/bin/env node
+/**
+ * Vérifie que les icônes raster de public/ sont de VRAIS binaires (PNG/ICO),
+ * et NON du SVG renommé.
+ *
+ * ⚠️ Historique : l'ancienne version de ce script copiait bêtement favicon.svg
+ *    en favicon.ico et apple-touch-icon.png → fichiers SVG déguisés (741 o),
+ *    l'icône iOS/Safari ne s'affichait pas. Ne JAMAIS refaire ça.
+ *
+ * Les vrais fichiers sont committés dans public/. Pour les RÉGÉNÉRER (macOS) :
+ *
+ *   # apple-touch-icon.png (180×180, carré orange plein)
+ *   qlmanage -t -s 180 -o /tmp icon-apple.svg && mv /tmp/icon-apple.svg.png public/apple-touch-icon.png
+ *   # favicon.ico = assemblage de PNG 16/32/48 (carré arrondi) en ICO multi-tailles
+ *   for s in 16 32 48; do qlmanage -t -s $s -o /tmp favicon.svg && mv /tmp/favicon.svg.png /tmp/f$s.png; done
+ *   # puis assembler /tmp/f{16,32,48}.png en ICO (PNG-in-ICO)
+ *
+ * Source de la marque : public/logo.svg / public/favicon.svg (orbitale orange #F97316).
+ */
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const publicDir = path.join(__dirname, '../public');
+const publicDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '../public');
 
-// Simple 1x1 PNG (orange pixel) as placeholder
-const createSimplePNG = () => {
-  const width = 1;
-  const height = 1;
-  // PNG header
-  const signature = Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]);
-  const ihdr = Buffer.concat([
-    Buffer.from([0x00, 0x00, 0x00, 0x0D]), // chunk length
-    Buffer.from('IHDR'),
-    Buffer.from([0x00, 0x00, 0x00, width]), // width
-    Buffer.from([0x00, 0x00, 0x00, height]), // height
-    Buffer.from([0x08, 0x02, 0x00, 0x00, 0x00]), // bit depth, color type, compression, filter, interlace
-    Buffer.from([0x90, 0x77, 0x53, 0xDE]), // CRC
-  ]);
-  return Buffer.concat([signature, ihdr]);
-};
+const PNG_SIG = Buffer.from([0x89, 0x50, 0x4e, 0x47]); // \x89PNG
+const ICO_SIG = Buffer.from([0x00, 0x00, 0x01, 0x00]); // ICONDIR (reserved, type=icon)
 
-// For now, just use the SVG as the base and create symbolic files
-// Modern browsers support SVG favicons
-try {
-  // Copy favicon.svg to favicon.ico (browsers support this)
-  const faviconSvg = fs.readFileSync(path.join(publicDir, 'favicon.svg'));
-  fs.writeFileSync(path.join(publicDir, 'favicon.ico'), faviconSvg);
-  console.log('✓ Created favicon.ico (symlink to SVG)');
+const checks = [
+  { file: 'apple-touch-icon.png', sig: PNG_SIG, label: 'PNG' },
+  { file: 'favicon.ico', sig: ICO_SIG, label: 'ICO' },
+];
 
-  // Create a simple apple-touch-icon.png by copying the SVG
-  // (iOS will render SVG)
-  fs.writeFileSync(path.join(publicDir, 'apple-touch-icon.png'), faviconSvg);
-  console.log('✓ Created apple-touch-icon.png (symlink to SVG)');
-
-  console.log('\n✅ All favicon files ready!');
-  console.log('Note: Using SVG for maximum compatibility and scalability');
-} catch (error) {
-  console.error('❌ Error:', error.message);
-  process.exit(1);
+let failed = false;
+for (const { file, sig, label } of checks) {
+  const p = path.join(publicDir, file);
+  const head = fs.readFileSync(p).subarray(0, 4);
+  const ok = head.equals(sig);
+  if (!ok) {
+    failed = true;
+    console.error(`❌ ${file} n'est PAS un vrai ${label} (entête: ${head.toString('hex')}). ` +
+      `Probablement du SVG renommé — régénérer (voir entête de ce script).`);
+  } else {
+    console.log(`✓ ${file} est un vrai ${label}`);
+  }
 }
+
+if (failed) process.exit(1);
+console.log('\n✅ Icônes raster valides.');
