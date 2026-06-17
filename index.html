@@ -59,14 +59,22 @@
     }
     </script>
 
-    <!-- Schema.org JSON-LD: Organization -->
+    <!-- Schema.org JSON-LD: Organization
+         TODO sameAs : une fois les profils créés, ré-ajouter après "address" (avec une virgule) :
+         "sameAs": [ "https://www.linkedin.com/company/odocpilot", "https://x.com/odocpilot" ]
+         Retirés pour l'instant car les profils n'existent pas (liens 404 = signal négatif). -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "OdocPilot",
       "url": "https://odocpilot.com",
-      "logo": "https://odocpilot.com/logo.svg",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://odocpilot.com/logo.svg",
+        "width": 512,
+        "height": 512
+      },
       "description": "OdocPilot — copilote IA français de facturation et de conformité (facturation électronique 2026/2027) pour les dirigeants de TPE, PME et indépendants. Données et IA hébergées en France.",
       "contactPoint": {
         "@type": "ContactPoint",
@@ -77,11 +85,7 @@
       "address": {
         "@type": "PostalAddress",
         "addressCountry": "FR"
-      },
-      "sameAs": [
-        "https://twitter.com/odocpilot",
-        "https://linkedin.com/company/odocpilot"
-      ]
+      }
     }
     </script>
 
