@@ -21,54 +21,26 @@ export function Logo({
       className="flex-shrink-0"
       aria-label="OdocPilot"
     >
-      {/* Sphère orbitale avec points de connexion */}
+      {/* Sphère orbitale animée : anneaux et sphère en contre-rotation
+          (centre de rotation = centre du symbole via transform-box: fill-box) */}
       <g transform={`translate(0, ${4 * s})`} opacity="0.9">
-        {/* Orbite principale */}
-        <circle
-          cx="20"
-          cy="20"
-          r="18"
-          stroke={symbolColor}
-          strokeWidth="1.5"
-          fill="none"
-        />
-        {/* Orbite équatoriale */}
-        <ellipse
-          cx="20"
-          cy="20"
-          rx="18"
-          ry="8"
-          stroke={symbolColor}
-          strokeWidth="1.5"
-          fill="none"
-        />
-        {/* Orbite diagonale 1 */}
-        <ellipse
-          cx="20"
-          cy="20"
-          rx="8"
-          ry="18"
-          stroke={symbolColor}
-          strokeWidth="1.5"
-          fill="none"
-          transform={`rotate(45 ${20 * s} ${20 * s})`}
-        />
-        {/* Orbite diagonale 2 */}
-        <ellipse
-          cx="20"
-          cy="20"
-          rx="8"
-          ry="18"
-          stroke={symbolColor}
-          strokeWidth="1.5"
-          fill="none"
-          transform={`rotate(-45 ${20 * s} ${20 * s})`}
-        />
-        {/* Points de connexion */}
-        <circle cx="20" cy="2" r="2.5" fill={symbolColor} />
-        <circle cx="38" cy="20" r="2.5" fill={symbolColor} />
-        <circle cx="20" cy="38" r="2.5" fill={symbolColor} />
-        <circle cx="2" cy="20" r="2.5" fill={symbolColor} />
+        {/* Anneaux orbitaux — rotation sens inverse */}
+        <g className="motion-safe:animate-spin-slow-reverse [transform-box:fill-box] [transform-origin:center]">
+          {/* Orbite équatoriale */}
+          <ellipse cx="20" cy="20" rx="18" ry="8" stroke={symbolColor} strokeWidth="1.5" fill="none" />
+          {/* Orbite diagonale 1 */}
+          <ellipse cx="20" cy="20" rx="8" ry="18" stroke={symbolColor} strokeWidth="1.5" fill="none" transform="rotate(45 20 20)" />
+          {/* Orbite diagonale 2 */}
+          <ellipse cx="20" cy="20" rx="8" ry="18" stroke={symbolColor} strokeWidth="1.5" fill="none" transform="rotate(-45 20 20)" />
+        </g>
+        {/* Sphère principale + points de connexion — rotation sens direct */}
+        <g className="motion-safe:animate-spin-slow [transform-box:fill-box] [transform-origin:center]">
+          <circle cx="20" cy="20" r="18" stroke={symbolColor} strokeWidth="1.5" fill="none" />
+          <circle cx="20" cy="2" r="2.5" fill={symbolColor} />
+          <circle cx="38" cy="20" r="2.5" fill={symbolColor} />
+          <circle cx="20" cy="38" r="2.5" fill={symbolColor} />
+          <circle cx="2" cy="20" r="2.5" fill={symbolColor} />
+        </g>
       </g>
 
       {/* Texte "OdocPilot" */}
