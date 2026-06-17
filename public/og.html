@@ -15,8 +15,12 @@
   }
   .glow { position: absolute; top: -170px; right: -130px; width: 540px; height: 540px; border-radius: 50%;
           background: radial-gradient(circle, rgba(249,115,22,.42), transparent 62%); }
-  .brand { position: absolute; top: 56px; left: 80px; font-size: 30px; font-weight: 700; letter-spacing: -.01em; }
-  .brand b { color: #F97316; }
+  .brand { position: absolute; top: 52px; left: 80px; display: flex; align-items: center; gap: 16px; }
+  .brand .mark { width: 46px; height: 46px; flex: none; }
+  .brand .wm { display: flex; flex-direction: column; line-height: 1; }
+  .brand .wm .name { font-size: 30px; font-weight: 700; letter-spacing: -.01em; }
+  .brand .wm .name b { color: #F97316; }
+  .brand .wm .desc { margin-top: 5px; font-size: 15px; font-weight: 500; color: #B9B4B0; letter-spacing: .02em; }
   .eyebrow { color: #F9A05E; font-size: 22px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
   h1 { font-size: 74px; line-height: 1.05; font-weight: 800; letter-spacing: -.025em; margin-top: 22px; max-width: 920px; }
   h1 em { color: #F97316; font-style: normal; }
@@ -29,7 +33,17 @@
 <body>
   <div class="og">
     <div class="glow"></div>
-    <div class="brand">Odoc<b>Pilot</b></div>
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(32,32)">
+          <ellipse rx="18" ry="7" stroke="#C2C2C2" stroke-width="2.4"/>
+          <ellipse rx="7" ry="18" stroke="#C2C2C2" stroke-width="2.4" transform="rotate(45)"/>
+          <circle r="18" stroke="#fff" stroke-width="2.4"/>
+          <g fill="#fff"><circle cx="0" cy="-18" r="2.8"/><circle cx="18" cy="0" r="2.8"/><circle cx="0" cy="18" r="2.8"/><circle cx="-18" cy="0" r="2.8"/></g>
+        </g>
+      </svg>
+      <div class="wm"><div class="name">Odoc<b>Pilot</b></div><div class="desc">Copilote IA de gestion</div></div>
+    </div>
     <div class="eyebrow">Facturation électronique 2026 / 2027</div>
     <h1>L'IA prépare votre administratif.<br><em>Vous validez en un clic.</em></h1>
     <div class="sub">Mettez-vous en conformité, sans expert-comptable et sans prise de tête.</div>

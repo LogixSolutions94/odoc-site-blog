@@ -56,7 +56,7 @@ export function Logo({
         OdocPilot
       </text>
 
-      {/* Sous-titre "BUSINESS OS" */}
+      {/* Descripteur (clair, sans jargon) */}
       <text
         x={49}
         y={40}
@@ -65,9 +65,9 @@ export function Logo({
         fontWeight="500"
         fill={textColor === 'transparent' ? symbolColor : textColor}
         opacity={textColor === 'transparent' ? 0 : 0.7}
-        letterSpacing="3"
+        letterSpacing="0.3"
       >
-        BUSINESS OS
+        Copilote IA de gestion
       </text>
     </svg>
   )
