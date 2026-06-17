@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" role="img" aria-label="OdocPilot">
+  <!-- Fond carré arrondi orange (marque OdocPilot) -->
+  <rect width="512" height="512" rx="112" fill="#F97316"/>
+  <!-- Sphère orbitale blanche centrée -->
+  <g transform="translate(256,256)">
+    <circle cx="0" cy="0" r="144" stroke="white" stroke-width="16" fill="none"/>
+    <ellipse cx="0" cy="0" rx="144" ry="56" stroke="white" stroke-width="16" fill="none"/>
+    <ellipse cx="0" cy="0" rx="56" ry="144" stroke="white" stroke-width="16" fill="none" transform="rotate(45)"/>
+    <circle cx="0" cy="-144" r="20" fill="white"/>
+    <circle cx="144" cy="0" r="20" fill="white"/>
+    <circle cx="0" cy="144" r="20" fill="white"/>
+    <circle cx="-144" cy="0" r="20" fill="white"/>
+  </g>
+</svg>
