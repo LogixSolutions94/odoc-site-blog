@@ -7,6 +7,7 @@ import {
   clientIp,
   isValidEmail,
 } from "../_shared/cors.ts";
+import { smtpSend, stalwartEnv } from "../_shared/smtp.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return preflight(req);
@@ -25,9 +26,10 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-    if (!RESEND_API_KEY) {
-      console.error("[send-contact-email] RESEND_API_KEY missing");
+    // Envoi 100% Stalwart (souverain). Mêmes identifiants que les EF du SaaS (même conteneur).
+    const st = stalwartEnv();
+    if (!st.user || !st.pass) {
+      console.error("[send-contact-email] STALWART_USER/PASS manquants");
       return json(500, { success: false, error: "L'envoi est temporairement indisponible." });
     }
 
@@ -53,7 +55,7 @@ Deno.serve(async (req) => {
 
     // Construction du HTML : TOUT escapé (anti XSS dans le client mail du destinataire).
     const html = `
-      <h2>Nouveau message depuis le site Odoc</h2>
+      <h2>Nouveau message depuis le site OdocPilot</h2>
       <p><strong>Nom :</strong> ${escapeHtml(name)}</p>
       <p><strong>Email :</strong> ${escapeHtml(email)}</p>
       <p><strong>Société :</strong> ${escapeHtml(company || "Non renseigné")}</p>
@@ -61,32 +63,28 @@ Deno.serve(async (req) => {
       <p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>
     `;
 
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        // Domaine d'envoi = odocpilot.com (SPF/DMARC actifs, vérifié sur Resend).
-        // odoc.fr n'a aucun TXT DNS → emails marqués spam, voire rejetés.
-        from: "OdocPilot Contact <noreply@odocpilot.com>",
-        to: ["contact@odocpilot.com"],
-        reply_to: email,
+    // Destinataire / expéditeur configurables (adresses hébergées Stalwart, domaine odocpilot.com).
+    const to = Deno.env.get("CONTACT_TO") || "contact@odocpilot.com";
+    const fromEmail = Deno.env.get("CONTACT_FROM") || "noreply@odocpilot.com";
+
+    try {
+      await smtpSend({
+        ...st,
+        fromEmail,
+        fromName: "OdocPilot — formulaire de contact",
+        to,
         // stripCrlf garantit pas de CRLF dans le subject (anti header-injection).
         subject: `[OdocPilot] Nouveau message de ${name}`.slice(0, 200),
+        // reply_to = l'email du visiteur → répondre lui revient directement.
+        replyTo: email,
         html,
-      }),
-    });
-
-    if (!res.ok) {
-      const errorBody = await res.text();
-      console.error(`[send-contact-email] Resend ${res.status}: ${errorBody}`);
+      });
+    } catch (err) {
+      console.error("[send-contact-email] SMTP:", err);
       return json(502, { success: false, error: "L'envoi a échoué, réessayez plus tard." });
     }
 
-    const data = await res.json();
-    return json(200, { success: true, id: data.id });
+    return json(200, { success: true });
   } catch (error: unknown) {
     // Erreur générique côté client — détail uniquement dans les logs serveur.
     console.error("[send-contact-email] uncaught:", error);
