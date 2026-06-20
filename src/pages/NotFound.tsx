@@ -7,7 +7,7 @@ const NotFound = () => {
   return (
     <div className="flex min-h-[70svh] items-center justify-center px-4">
       <SEOHead
-        title="Page introuvable — Odoc"
+        title="Page introuvable — OdocPilot"
         description="La page que vous recherchez n'existe pas ou a été déplacée."
       />
       <div className="text-center max-w-lg">
@@ -27,7 +27,7 @@ const NotFound = () => {
         >
           <h1 className="mt-4 text-2xl sm:text-3xl font-bold text-foreground">Cette page a pris congé.</h1>
           <p className="mt-3 text-muted-foreground">
-            Elle est peut-être en train de traiter des factures avec Odoc.
+            Elle est peut-être en train de traiter des factures avec OdocPilot.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link to="/">

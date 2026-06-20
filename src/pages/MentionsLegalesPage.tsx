@@ -14,7 +14,7 @@ export default function MentionsLegalesPage() {
           <h2 className="text-xl font-semibold text-foreground">Éditeur du site</h2>
           <div className="mt-3 space-y-1">
             <p><strong className="text-foreground">Raison sociale :</strong> Logix Solutions SASU</p>
-            <p><strong className="text-foreground">Noms commerciaux :</strong> OdocPilot, Odoc — marques appartenant à Logix Solutions SASU</p>
+            <p><strong className="text-foreground">Noms commerciaux :</strong> OdocPilot, OdocPilot — marques appartenant à Logix Solutions SASU</p>
             <p><strong className="text-foreground">Siège social :</strong> 89-91 Avenue de la République, 75011 Paris, France</p>
             <p><strong className="text-foreground">Email :</strong> contact@odocpilot.com</p>
             <p><strong className="text-foreground">Directeur de la publication :</strong> Lucas Belloc</p>
@@ -34,7 +34,7 @@ export default function MentionsLegalesPage() {
         <section>
           <h2 className="text-xl font-semibold text-foreground">Propriété intellectuelle</h2>
           <p className="mt-3">
-            L'ensemble des contenus présents sur le site Odoc (textes, images, logos, graphismes, icônes, logiciels, base de données) sont la propriété exclusive de Logix Solutions SASU ou de ses partenaires et sont protégés par les lois françaises et internationales relatives à la propriété intellectuelle. Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite sans l'autorisation écrite préalable de Logix Solutions SASU.
+            L'ensemble des contenus présents sur le site OdocPilot (textes, images, logos, graphismes, icônes, logiciels, base de données) sont la propriété exclusive de Logix Solutions SASU ou de ses partenaires et sont protégés par les lois françaises et internationales relatives à la propriété intellectuelle. Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite sans l'autorisation écrite préalable de Logix Solutions SASU.
           </p>
         </section>
 

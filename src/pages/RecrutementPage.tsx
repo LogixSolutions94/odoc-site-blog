@@ -29,8 +29,8 @@ export default function RecrutementPage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="Recrutement OdocPilot — Rejoignez l'équipe qui réinvente l'OS d'entreprise"
-        description="Rejoignez l'équipe OdocPilot et construisez le futur OS d'entreprise IA pour les TPE et PME françaises. Postes ouverts en ingénierie, design et growth."
+        title="Recrutement OdocPilot — Rejoignez l'équipe qui réinvente la gestion des TPE/PME"
+        description="Rejoignez l'équipe OdocPilot et construisez le copilote IA de facturation et de conformité des TPE et PME françaises. Postes ouverts en ingénierie, design et growth."
         canonical="/recrutement"
       />
 

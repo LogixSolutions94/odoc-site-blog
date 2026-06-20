@@ -132,9 +132,9 @@ const STATIC_ROUTES: RouteMeta[] = [
   },
   {
     path: "contact",
-    title: "Contact — Odoc | Demandez une démo",
+    title: "Contact — OdocPilot | Demandez une démo",
     description:
-      "Contactez l'équipe Odoc pour une démonstration personnalisée de la plateforme d'intelligence documentaire.",
+      "Contactez l'équipe OdocPilot pour une démonstration personnalisée de notre solution de facturation et de conformité.",
   },
   {
     path: "mentions-legales",
@@ -144,8 +144,8 @@ const STATIC_ROUTES: RouteMeta[] = [
   },
   {
     path: "cgu",
-    title: "CGU — Odoc | Conditions Générales d'Utilisation",
-    description: "Conditions générales d'utilisation de la plateforme Odoc.",
+    title: "CGU — OdocPilot | Conditions Générales d'Utilisation",
+    description: "Conditions générales d'utilisation de la plateforme OdocPilot.",
   },
   // /artisans — ArtisansPage.tsx (PAS MetierPage), SEOHead propre.
   {

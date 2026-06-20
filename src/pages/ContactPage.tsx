@@ -76,15 +76,15 @@ export default function ContactPage() {
   return (
     <div className="mx-auto max-w-2xl py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
       <SEOHead
-        title="Contact — Odoc | Demandez une démo"
-        description="Contactez l'équipe Odoc pour une démonstration personnalisée de la plateforme d'intelligence documentaire."
+        title="Contact — OdocPilot | Demandez une démo"
+        description="Contactez l'équipe OdocPilot pour une démonstration personnalisée de notre solution de facturation et de conformité."
         canonical="/contact"
       />
 
       <MotionDiv className="text-center">
         <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground">Contactez-nous</h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          Discutons de la manière dont Odoc peut aider votre entreprise. Remplissez le formulaire ou demandez une démo.
+          Discutons de la manière dont OdocPilot peut aider votre entreprise. Remplissez le formulaire ou demandez une démo.
         </p>
       </MotionDiv>
 

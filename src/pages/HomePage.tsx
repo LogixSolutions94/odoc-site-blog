@@ -18,6 +18,8 @@ import {
   FileText,
   ScanLine,
   FileOutput,
+  FileCheck2,
+  ClipboardCheck,
   MessageSquareText,
   Sparkles,
   HardHat,
@@ -279,6 +281,43 @@ export default function HomePage() {
           <span className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Données et IA en France</span>
           <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Sans coût par utilisateur</span>
           <span className="inline-flex items-center gap-2"><RotateCcw className="h-4 w-4 text-primary" /> Sans engagement</span>
+        </div>
+      </section>
+
+      {/* ───────── OUTILS GRATUITS (sans compte) ───────── */}
+      <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Gratuit, sans inscription</p>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Essayez tout de suite, sans créer de compte</h2>
+          <p className="mt-4 text-muted-foreground leading-relaxed">
+            Pas besoin de vous inscrire pour démarrer : générez une vraie facture au format légal, vérifiez qu'une facture est conforme, ou faites le point sur vos obligations. Trois outils 100 % gratuits, directement dans votre navigateur.
+          </p>
+        </div>
+        <div className="mt-9 grid sm:grid-cols-3 gap-4">
+          <MotionDiv initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }}>
+            <Link to="/generateur-factur-x" className="group block h-full rounded-2xl bg-card border border-border p-6 hover:border-primary/40 hover:shadow-card-hover transition-all duration-300" data-umami-event="home-outil-generateur">
+              <div className="flex items-center justify-center h-11 w-11 rounded-xl bg-primary/10"><FileOutput className="h-5 w-5 text-primary" /></div>
+              <p className="mt-4 font-bold text-foreground">Générer une facture Factur-X</p>
+              <p className="text-sm text-muted-foreground mt-1 leading-relaxed">Créez une facture au format légal Factur-X (norme EN 16931) et téléchargez-la. Gratuit, sans compte.</p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all">Créer ma facture <ArrowRight className="h-4 w-4" /></span>
+            </Link>
+          </MotionDiv>
+          <MotionDiv initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.06, duration: 0.45 }}>
+            <Link to="/verificateur" className="group block h-full rounded-2xl bg-card border border-border p-6 hover:border-primary/40 hover:shadow-card-hover transition-all duration-300" data-umami-event="home-outil-verificateur">
+              <div className="flex items-center justify-center h-11 w-11 rounded-xl bg-primary/10"><FileCheck2 className="h-5 w-5 text-primary" /></div>
+              <p className="mt-4 font-bold text-foreground">Vérifier une facture</p>
+              <p className="text-sm text-muted-foreground mt-1 leading-relaxed">Déposez une facture (PDF ou XML) : on contrôle ses mentions obligatoires et sa conformité à la réforme. Gratuit, sans compte.</p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all">Vérifier une facture <ArrowRight className="h-4 w-4" /></span>
+            </Link>
+          </MotionDiv>
+          <MotionDiv initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.12, duration: 0.45 }}>
+            <Link to="/diagnostic" className="group block h-full rounded-2xl bg-card border border-border p-6 hover:border-primary/40 hover:shadow-card-hover transition-all duration-300" data-umami-event="home-outil-diagnostic">
+              <div className="flex items-center justify-center h-11 w-11 rounded-xl bg-primary/10"><ClipboardCheck className="h-5 w-5 text-primary" /></div>
+              <p className="mt-4 font-bold text-foreground">Diagnostic de conformité</p>
+              <p className="text-sm text-muted-foreground mt-1 leading-relaxed">En 3 minutes : votre date butoir et un plan d'action daté, adapté à votre activité. Gratuit, sans compte.</p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all">Faire le diagnostic <ArrowRight className="h-4 w-4" /></span>
+            </Link>
+          </MotionDiv>
         </div>
       </section>
 
