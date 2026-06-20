@@ -64,7 +64,7 @@ const METIERS: Record<string, Metier> = {
     ctaA: "Je teste gratuitement",
     ctaB: "Voir le tarif",
     seoTitle: "Logiciel de gestion pour commerçants & TPE de services | OdocPilot",
-    seoDesc: "OdocPilot réunit facturation, fichier clients et trésorerie pour les commerces et prestataires, avec un assistant IA qui gère l'administratif. Hébergé en France, essai gratuit 14 jours.",
+    seoDesc: "OdocPilot réunit facturation, fichier clients et trésorerie pour les commerces et prestataires, avec un assistant IA qui gère l'administratif. Hébergé en France, palier Conformité gratuit, sans carte bancaire.",
   },
   "professions-liberales": {
     slug: "professions-liberales",
@@ -89,7 +89,7 @@ const METIERS: Record<string, Metier> = {
     ctaA: "Je teste gratuitement",
     ctaB: "Voir le tarif",
     seoTitle: "Logiciel de gestion pour professions libérales | OdocPilot",
-    seoDesc: "OdocPilot gère notes d'honoraires, factures, documents et rendez-vous pour les professions libérales, avec un assistant IA. Hébergé en France, conforme RGPD, essai gratuit 14 jours.",
+    seoDesc: "OdocPilot gère notes d'honoraires, factures, documents et rendez-vous pour les professions libérales, avec un assistant IA. Hébergé en France, conforme RGPD, palier Conformité gratuit, sans carte bancaire.",
   },
   "cabinets-comptables": {
     slug: "cabinets-comptables",
@@ -160,7 +160,7 @@ export default function MetierPage({ slug }: { slug: string }) {
               </a>
               <Link to="/pricing"><Button size="lg" variant="outline" className="w-full sm:w-auto px-7 py-6 text-base">{m.ctaB}</Button></Link>
             </div>
-            <p className="mt-3 text-xs text-muted-foreground">14 jours gratuits · Sans carte bancaire · Hébergé en France</p>
+            <p className="mt-3 text-xs text-muted-foreground">Palier gratuit · Sans carte bancaire · Hébergé en France</p>
           </MotionDiv>
         </div>
       </section>
@@ -226,7 +226,7 @@ export default function MetierPage({ slug }: { slug: string }) {
       {/* CTA */}
       <section className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 text-center">
         <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground leading-tight">Prêt à vous simplifier la vie ?</h2>
-        <p className="mt-5 text-lg text-muted-foreground">Essayez OdocPilot 14 jours, sans carte bancaire.</p>
+        <p className="mt-5 text-lg text-muted-foreground">Essayer OdocPilot gratuitement</p>
         <div className="mt-8 flex justify-center">
           <a href={SIGNUP} data-umami-event="cta-essai-gratuit">
             <Button size="lg" className="bg-gradient-cta text-primary-foreground text-base font-bold px-8 py-6 shadow-lg shadow-primary/20 hover:opacity-95">{m.ctaA} <ArrowRight className="ml-2 h-5 w-5" /></Button>

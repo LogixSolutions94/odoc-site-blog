@@ -185,7 +185,7 @@ export default function EFacturePage() {
     <div className="flex flex-col items-center">
       <SEOHead
         title="Facturation électronique 2026/2027 : préparez votre conformité | OdocPilot"
-        description="Réception obligatoire au 1ᵉʳ septembre 2026, émission en 2027 : OdocPilot prépare votre conformité e-facture. Génération Factur-X, lecture IA des factures, export FEC. L'IA prépare, vous validez. Données et IA hébergées en France. Essai 14 jours sans carte bancaire."
+        description="Réception obligatoire au 1ᵉʳ septembre 2026, émission en 2027 : OdocPilot prépare votre conformité e-facture. Génération Factur-X, lecture IA des factures, export FEC. L'IA prépare, vous validez. Données et IA hébergées en France. Palier Conformité gratuit, sans carte bancaire."
         canonical="/e-facture"
         jsonLd={jsonLd}
       />

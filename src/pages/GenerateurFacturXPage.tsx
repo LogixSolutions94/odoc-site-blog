@@ -329,7 +329,7 @@ th,td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left}th{background:
           <h2 className="text-2xl font-bold text-foreground">Et si l'IA préparait toutes vos factures&nbsp;?</h2>
           <p className="mt-2 text-muted-foreground max-w-xl mx-auto">Dans OdocPilot, vos factures reçues sont lues et classées automatiquement, et vos factures sortent au format conforme — vous validez en un clic.</p>
           <a href={SIGNUP} data-umami-event="generateur-cta-essai">
-            <Button size="lg" className="mt-4 bg-gradient-cta text-primary-foreground font-bold px-8">Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" /></Button>
+            <Button size="lg" className="mt-4 bg-gradient-cta text-primary-foreground font-bold px-8">Commencer gratuitement <ArrowRight className="ml-2 h-5 w-5" /></Button>
           </a>
           <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1"><CreditCard className="h-3.5 w-3.5 text-primary" /> Sans carte bancaire</span>

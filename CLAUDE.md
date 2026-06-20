@@ -112,9 +112,9 @@ schema:
 
 - **Ton** : Direct, concret, terrain. Voix d'un fondateur qui connaît les PME françaises.
 - **Audience** : Dirigeants TPE/PME France, 35-55 ans, secteur BTP/artisans en priorité.
-- **Produit** : OdocPilot = copilote IA français de **facturation & conformité** pour TPE/PME et indépendants. Wedge = **e-facturation 2026/2027** (Factur-X EN 16931, lecture IA des factures, GED, export FEC, copilote Brain). Données ET IA en France (Mistral). Tarifs **49/89/149 €** + palier Conformité gratuit, essai 14 j sans CB. ⚠️ PÉRIMÉ : « tout-en-un CRM/N8N/79€/self-hosted ».
+- **Produit** : OdocPilot = copilote IA français de **facturation & conformité** pour TPE/PME et indépendants. Wedge = **e-facturation 2026/2027** (Factur-X EN 16931, lecture IA des factures, GED, export FEC, copilote Brain). Données ET IA en France (Mistral). Tarifs **49/89/149 €** + palier Conformité gratuit, sans CB. ⚠️ PÉRIMÉ : « tout-en-un CRM/N8N/79€/self-hosted ».
 - **Différenciation** : « **l'IA prépare l'admin du dirigeant de TPE, vous validez en 1 clic** » (jamais « l'IA exécute seule »). Créneau vide vs Pennylane (cabinet) / Qonto (banque) / Indy (compta TNS).
-- **CTA principal** : `<a href="https://app.odocpilot.com/signup">Essayer OdocPilot 14 jours — gratuit, sans CB</a>`
+- **CTA principal** : `<a href="https://app.odocpilot.com/signup">Essayer OdocPilot — gratuit, sans CB</a>`
 - **Ne JAMAIS** utiliser le langage GPT générique (voir liste Section 14.3 de SEOBlog.md)
 - **Toujours** inclure au moins 1 stat/chiffre sourcé récent (< 12 mois)
 - **Toujours** inclure la section FAQ avec 4-6 questions + schema FAQPage JSON-LD

@@ -144,7 +144,7 @@ export default function FonctionnalitesPage() {
       <section className="w-full py-20 bg-secondary/60 border-t border-border">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold tracking-tight text-foreground">Le plus simple, c'est d'essayer.</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Gratuit 14 jours, sans carte bancaire. Vous verrez la différence dès la première facture.</p>
+          <p className="mt-4 text-lg text-muted-foreground">Gratuit pour démarrer, sans carte bancaire. Vous verrez la différence dès la première facture.</p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
             <a href={SIGNUP} target="_blank" rel="noopener noreferrer" data-umami-event="cta-essai-gratuit">
               <Button size="lg" className="bg-gradient-cta text-primary-foreground font-bold">Essayer gratuitement <ArrowRight className="ml-2 h-5 w-5" /></Button>

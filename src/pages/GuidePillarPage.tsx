@@ -74,7 +74,7 @@ export default function GuidePillarPage() {
         {/* CTA rapide */}
         <div className="mt-6 flex flex-wrap gap-2">
           <Link to="/diagnostic"><Button size="sm" className="bg-gradient-cta text-primary-foreground font-semibold"><Sparkles className="mr-1.5 h-4 w-4" /> Vérifier ma conformité</Button></Link>
-          <a href={SIGNUP}><Button size="sm" variant="outline">Démarrer l'essai 14 jours</Button></a>
+          <a href={SIGNUP}><Button size="sm" variant="outline">Commencer gratuitement</Button></a>
         </div>
 
         {/* Sections */}
@@ -130,7 +130,7 @@ export default function GuidePillarPage() {
           <h2 className="text-2xl font-bold tracking-tight">Préparez votre conformité maintenant</h2>
           <p className="mt-2 text-brand-panel-foreground/80 max-w-xl mx-auto leading-relaxed">Vérifiez votre situation en 3 minutes, générez une facture conforme gratuitement, ou laissez l'IA préparer votre administratif — vous validez en un clic.</p>
           <div className="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a href={SIGNUP}><Button size="lg" className="bg-gradient-cta text-primary-foreground font-bold px-7">Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" /></Button></a>
+            <a href={SIGNUP}><Button size="lg" className="bg-gradient-cta text-primary-foreground font-bold px-7">Commencer gratuitement <ArrowRight className="ml-2 h-5 w-5" /></Button></a>
             <Link to="/diagnostic"><Button size="lg" variant="outline" className="border-brand-panel-foreground/40 bg-transparent text-brand-panel-foreground hover:bg-brand-panel-foreground/10 px-7">Vérifier ma conformité (3 min)</Button></Link>
           </div>
           <TrustCredentials className="mt-8" />

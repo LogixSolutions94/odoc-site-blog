@@ -36,7 +36,7 @@ export default function ArtisansPage() {
     <div className="flex flex-col items-center">
       <SEOHead
         title="Logiciel de gestion pour artisans & BTP — devis, factures, relances | OdocPilot"
-        description="OdocPilot gère vos devis de chantier, vos factures, vos relances d'impayés et la facture électronique 2026 — pendant que vous êtes sur le terrain. Hébergé en France, essai gratuit 14 jours."
+        description="OdocPilot gère vos devis de chantier, vos factures, vos relances d'impayés et la facture électronique 2026 — pendant que vous êtes sur le terrain. Hébergé en France, palier Conformité gratuit, sans carte bancaire."
         canonical="/artisans"
         jsonLd={jsonLd}
       />
@@ -75,7 +75,7 @@ export default function ArtisansPage() {
                 </a>
                 <Link to="/pricing"><Button size="lg" variant="outline" className="w-full sm:w-auto px-7 py-6 text-base">Voir le tarif</Button></Link>
               </div>
-              <p className="mt-3 text-xs text-muted-foreground">14 jours gratuits · Sans carte bancaire · Hébergé en France</p>
+              <p className="mt-3 text-xs text-muted-foreground">Palier gratuit · Sans carte bancaire · Hébergé en France</p>
             </MotionDiv>
           </div>
 

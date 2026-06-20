@@ -28,7 +28,7 @@ const ODOC = {
   facturX: "Oui (EN 16931)",
   iaPrepare: true,
   souverainete: "Données ET IA en France (Mistral)",
-  gratuit: "Palier Conformité 0€ + essai 14 j sans CB",
+  gratuit: "Palier Conformité 0€, sans CB",
   prix: "Par entreprise, sans coût par utilisateur (0€ / 49 / 89 / 149)",
 };
 
@@ -137,7 +137,7 @@ export const COMPARISONS: Comparison[] = [
     ],
     faqs: [
       { q: "Indy fait-il la facturation électronique ?", a: "Oui, Indy propose la génération de factures conformes. OdocPilot aussi (Factur-X EN 16931, avec un générateur gratuit sans compte), et ajoute la lecture IA des factures reçues et leur classement." },
-      { q: "Indy a un plan gratuit à vie, et OdocPilot ?", a: "OdocPilot propose un palier Conformité gratuit (générateur, diagnostic, vérificateur, aperçu lecture IA) et un essai 14 jours sans carte bancaire sur les offres payantes." },
+      { q: "Indy a un plan gratuit à vie, et OdocPilot ?", a: "OdocPilot propose un palier Conformité gratuit (générateur, diagnostic, vérificateur, aperçu lecture IA)." },
       { q: "Lequel si je n'ai pas d'expert-comptable ?", a: "Les deux s'adressent à des dirigeants autonomes. Indy est orienté déclaration TNS ; OdocPilot est orienté préparation de l'admin par l'IA (vous validez)." },
     ],
   },
@@ -245,7 +245,7 @@ export const COMPARISONS: Comparison[] = [
     ],
     faqs: [
       { q: "Abby est-il adapté à une PME ?", a: "Abby est surtout pensé pour le micro-entrepreneur. Pour une TPE/PME avec davantage de factures reçues à lire, classer et relancer, OdocPilot ajoute une couche d'IA qui prépare ce travail." },
-      { q: "Les deux ont un plan gratuit ?", a: "Oui : Abby a un plan gratuit pour la micro, et OdocPilot a un palier Conformité gratuit (générateur, diagnostic, vérificateur, aperçu lecture IA) + un essai 14 jours sans carte bancaire." },
+      { q: "Les deux ont un plan gratuit ?", a: "Oui : Abby a un plan gratuit pour la micro, et OdocPilot a un palier Conformité gratuit (générateur, diagnostic, vérificateur, aperçu lecture IA)." },
       { q: "Lequel pour la facturation électronique 2026 ?", a: "Les deux génèrent des factures conformes. OdocPilot se distingue par la lecture IA des factures reçues, l'export FEC et le wedge conformité, avec données et IA hébergées en France." },
     ],
   },

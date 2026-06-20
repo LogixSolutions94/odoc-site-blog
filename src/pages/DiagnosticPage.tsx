@@ -239,7 +239,7 @@ export default function DiagnosticPage() {
                 <p className="text-sm text-muted-foreground">Envie de voir l'IA préparer votre administratif sur vos propres documents&nbsp;?</p>
                 <a href={SIGNUP} data-umami-event="diagnostic-cta-essai">
                   <Button size="lg" className="mt-3 bg-gradient-cta text-primary-foreground font-bold px-8">
-                    Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" />
+                    Commencer gratuitement <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </a>
                 <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground">

@@ -69,7 +69,7 @@ export function SiteHeader() {
               size="sm"
               className="bg-gradient-to-r from-[hsl(30_100%_50%)] to-[hsl(30_90%_55%)] text-white font-semibold shadow-[0_0_20px_rgba(249,115,22,0.35)] hover:shadow-[0_0_28px_rgba(249,115,22,0.5)] hover:scale-[1.03] transition-all duration-200"
             >
-              Essai gratuit →
+              Commencer gratuitement →
             </Button>
           </a>
 
@@ -120,7 +120,7 @@ export function SiteHeader() {
                 size="sm"
                 className="w-full bg-gradient-to-r from-[hsl(30_100%_50%)] to-[hsl(30_90%_55%)] text-white font-semibold hover:scale-[1.02] transition-all duration-200"
               >
-                Essai gratuit →
+                Commencer gratuitement →
               </Button>
             </a>
           </div>

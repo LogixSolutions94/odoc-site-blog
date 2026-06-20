@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "bun scripts/generate-sitemap.ts && tsc --noEmit && vite build && bun scripts/prerender-blog.ts",
+    "build": "bun scripts/generate-sitemap.ts && tsc --noEmit && vite build && bun scripts/prerender-blog.ts && bun scripts/prerender-marketing.ts",
     "sitemap": "bun scripts/generate-sitemap.ts",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",

@@ -273,7 +273,7 @@ export default function VerificateurPage() {
               <Button className="bg-gradient-cta text-primary-foreground font-bold px-6">Générer une Factur-X gratuite</Button>
             </Link>
             <a href={SIGNUP} data-umami-event="verificateur-cta-essai">
-              <Button variant="outline" className="px-6">Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-4 w-4" /></Button>
+              <Button variant="outline" className="px-6">Commencer gratuitement <ArrowRight className="ml-2 h-4 w-4" /></Button>
             </a>
           </div>
           <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground">

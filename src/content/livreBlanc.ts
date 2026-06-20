@@ -132,7 +132,7 @@ export const WHITE_PAPER = {
     },
     {
       q: "Combien ça coûte ?",
-      a: "Vous pouvez commencer gratuitement : diagnostic, générateur Factur-X et vérificateur sont sans compte. Les offres OdocPilot démarrent à 49 €/mois par entreprise, sans coût par utilisateur, avec un essai de 14 jours sans carte bancaire.",
+      a: "Vous pouvez commencer gratuitement : diagnostic, générateur Factur-X et vérificateur sont sans compte. Les offres OdocPilot démarrent à 49 €/mois par entreprise, sans coût par utilisateur.",
     },
   ] as WpFaq[],
 };

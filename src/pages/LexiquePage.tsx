@@ -166,7 +166,7 @@ export default function LexiquePage() {
                 variant="outline"
                 className="border-brand-panel-foreground/40 bg-transparent px-7 text-brand-panel-foreground hover:bg-brand-panel-foreground/10"
               >
-                Démarrer l'essai 14 jours
+                Commencer gratuitement
               </Button>
             </a>
           </div>

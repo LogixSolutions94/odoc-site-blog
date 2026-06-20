@@ -178,7 +178,7 @@ Exemple : /blog/facturation-electronique/facture-x-artisan-btp-2026
 - [ ] Capture écran OdocPilot (fonctionnalité liée au sujet)
 - [ ] Donnée chiffrée originale ou stats récentes (< 12 mois)
 - [ ] Témoignage / cas client OU anecdote terrain
-- [ ] CTA principal : [ex: "Essai gratuit 14 jours — sans CB"]
+- [ ] CTA principal : [ex: "Essayer OdocPilot — gratuit, sans CB"]
 - [ ] CTA secondaire : [ex: "Télécharger notre guide Facture X artisans"]
 
 ## SCHEMA MARKUP CIBLE
@@ -226,7 +226,7 @@ Exemple : /blog/facturation-electronique/facture-x-artisan-btp-2026
 │  • Schema FAQPage en JSON-LD                        │
 ├─────────────────────────────────────────────────────┤
 │  CTA FINAL                                          │
-│  • Bouton : "Essayer OdocPilot 14 jours — gratuit" │
+│  • Bouton : "Essayer OdocPilot — gratuit, sans CB" │
 │  • Ou : Télécharger [ressource liée au sujet]       │
 └─────────────────────────────────────────────────────┘
 ```
@@ -329,7 +329,7 @@ charge la génération et l'envoi automatique en Facture X.
 
 ### 🎯 Conversion
 - [ ] CTA principal visible sans scroll (above the fold ou fin de section 1)
-- [ ] CTA final en bas d'article ("Essayer OdocPilot 14 jours — sans CB")
+- [ ] CTA final en bas d'article ("Essayer OdocPilot — gratuit, sans CB")
 - [ ] Lien vers page de démo ou pricing présent
 
 ---

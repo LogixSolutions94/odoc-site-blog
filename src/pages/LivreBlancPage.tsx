@@ -189,7 +189,7 @@ export default function LivreBlancPage() {
         <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a href={SIGNUP}>
             <Button size="lg" className="bg-gradient-cta px-7 font-bold text-primary-foreground">
-              Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" />
+              Commencer gratuitement <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </a>
           <Link to="/lexique">

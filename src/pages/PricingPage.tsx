@@ -49,7 +49,7 @@ const plans = [
       "Hébergé en France · conforme RGPD",
       "Support par email",
     ],
-    cta: "Commencer l'essai gratuit",
+    cta: "Commencer gratuitement",
     ctaLink: SIGNUP,
   },
   {
@@ -68,7 +68,7 @@ const plans = [
       "Classement intelligent des documents",
       "Support prioritaire",
     ],
-    cta: "Commencer l'essai gratuit",
+    cta: "Commencer gratuitement",
     ctaLink: SIGNUP,
   },
   {
@@ -86,7 +86,7 @@ const plans = [
       "Accompagnement à la mise en conformité",
       "Support dédié",
     ],
-    cta: "Commencer l'essai gratuit",
+    cta: "Commencer gratuitement",
     ctaLink: SIGNUP,
   },
 ];
@@ -106,7 +106,7 @@ const compare = [
 const faqItems = [
   { question: "Y a-t-il un coût par utilisateur ?", answer: "Non. Le prix de votre plan est tout compris : à partir du plan Pro, vous ajoutez vos collaborateurs sans aucun supplément. Vous savez exactement ce que vous payez, et votre facture ne gonfle pas quand votre équipe grandit." },
   { question: "Suis-je prêt pour la facturation électronique 2026 ?", answer: "Dès le 1ᵉʳ septembre 2026, toute entreprise assujettie à la TVA devra recevoir ses factures au format électronique structuré ; l'émission suivra en 2027. OdocPilot génère vos factures au format légal Factur-X et prépare votre conformité étape par étape. La transmission via une plateforme agréée partenaire est en cours de raccordement et sera prête avant l'échéance." },
-  { question: "L'essai engage-t-il quelque chose ?", answer: "Non : 14 jours gratuits sur tous les plans, sans carte bancaire. Vous testez en conditions réelles et vous n'êtes prélevé que si vous choisissez d'activer un abonnement à la fin de l'essai. Sinon, vous ne payez rien." },
+  { question: "Dois-je payer pour commencer ?", answer: "Non. Vous démarrez gratuitement avec le palier Conformité (0€) et les outils sans compte (générateur Factur-X, diagnostic, vérificateur), sans carte bancaire. Les offres payantes (Essential, Pro, Manager) sont une montée en gamme explicite que vous choisissez : jamais de prélèvement surprise." },
   { question: "Puis-je changer de plan à tout moment ?", answer: "Oui, vous montez ou descendez de plan quand vous voulez. Le changement prend effet immédiatement, avec un prorata automatique. Aucun engagement de durée." },
   { question: "L'IA fait-elle ma comptabilité toute seule ?", answer: "Non, et c'est un choix assumé. L'IA prépare le travail — lecture des factures, classement, relances — mais rien n'est validé ni comptabilisé sans vous. Vous gardez toujours le dernier mot, et vous exportez votre FEC pour votre expert-comptable en un clic." },
   { question: "Mes données sont-elles en sécurité ?", answer: "Vos documents comme l'intelligence artificielle qui les traite (Mistral, un modèle français) sont hébergés en France : aucun transfert vers l'étranger. OdocPilot est conforme au RGPD, aligné sur l'AI Act, et s'inscrit dans une démarche Numérique Responsable. Vous pouvez exporter vos données à tout moment." },
@@ -114,7 +114,7 @@ const faqItems = [
 
 const trustBadges = [
   { icon: MapPin, label: "Données et IA en France" },
-  { icon: CreditCard, label: "Essai sans carte bancaire" },
+  { icon: CreditCard, label: "Sans carte bancaire" },
   { icon: RotateCcw, label: "Sans engagement" },
   { icon: Check, label: "Sans coût par utilisateur" },
 ];
@@ -130,8 +130,8 @@ export default function PricingPage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="Tarifs OdocPilot — un seul prix, tout compris | Essai 14 jours gratuit"
-        description="Des tarifs simples et transparents, sans coût par utilisateur. Palier Conformité gratuit, puis Essential 49€, Pro 89€, Manager 149€. Préparez votre conformité facture électronique 2026/2027. Essai 14 jours sans carte bancaire. Données et IA en France."
+        title="Tarifs OdocPilot — un seul prix, tout compris | Palier gratuit, sans carte bancaire"
+        description="Des tarifs simples et transparents, sans coût par utilisateur. Palier Conformité gratuit, puis Essential 49€, Pro 89€, Manager 149€. Préparez votre conformité facture électronique 2026/2027. Palier Conformité gratuit, sans carte bancaire. Données et IA en France."
         canonical="/pricing"
         jsonLd={{
           "@context": "https://schema.org",
@@ -152,7 +152,7 @@ export default function PricingPage() {
           <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground">
             Sans coût par utilisateur, sans option qui s'empile. Un abonnement clair qui prépare votre conformité à la facturation électronique 2026/2027 et laisse l'IA préparer votre administratif — vous gardez le dernier mot.
           </p>
-          <p className="mt-3 text-sm text-muted-foreground">14 jours gratuits · Sans carte bancaire · Résiliable en 1 clic</p>
+          <p className="mt-3 text-sm text-muted-foreground">Palier gratuit · Sans carte bancaire · Résiliable en 1 clic</p>
           <p className="mt-4 text-sm">
             <Link to="/diagnostic" className="inline-flex items-center gap-1.5 font-semibold text-primary hover:gap-2 transition-all" data-umami-event="pricing-diagnostic">
               <Sparkles className="h-4 w-4" /> Pas sûr d'être concerné ? Vérifiez votre conformité en 3 min
@@ -262,7 +262,7 @@ export default function PricingPage() {
           <CreditCard className="h-6 w-6 text-primary shrink-0 mt-0.5" />
           <div>
             <h3 className="font-bold text-foreground mb-1">Essayez sans risque, sans carte bancaire</h3>
-            <p className="text-sm text-muted-foreground">14 jours d'essai gratuit sur tous les plans, sans carte bancaire et sans engagement. À la fin de l'essai, vous n'êtes prélevé que si vous choisissez d'activer un abonnement. Sinon, vous ne payez rien et vous gardez l'accès à vos données.</p>
+            <p className="text-sm text-muted-foreground">Vous démarrez gratuitement avec le palier Conformité (0€) et les outils sans compte (générateur Factur-X, diagnostic, vérificateur), sans carte bancaire et sans engagement. Les offres payantes sont une montée en gamme explicite que vous choisissez : jamais de prélèvement surprise, et vous gardez l'accès à vos données.</p>
           </div>
         </div>
       </section>

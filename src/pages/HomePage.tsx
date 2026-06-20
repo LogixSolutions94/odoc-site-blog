@@ -107,8 +107,8 @@ const faqs = [
     a: "Oui, totalement. OdocPilot ne remplace pas votre expert-comptable : il prépare des données propres et structurées qui lui facilitent le travail. Vous exportez votre FEC en un clic pour le lui transmettre, et vos documents sont déjà classés. L'outil s'intègre à votre organisation au lieu de la bousculer.",
   },
   {
-    q: "Que se passe-t-il à la fin de l'essai de 14 jours ?",
-    a: "Rien d'automatique et aucune mauvaise surprise. L'essai gratuit ne demande pas de carte bancaire : à son terme, vous n'êtes pas prélevé tant que vous n'avez pas choisi un abonnement. Si OdocPilot vous convient, vous activez l'offre adaptée à votre activité. Sinon, vous ne payez rien. Nos tarifs sont par entreprise, sans coût par utilisateur.",
+    q: "Dois-je payer pour commencer à utiliser OdocPilot ?",
+    a: "Non, et aucune mauvaise surprise. Vous démarrez gratuitement avec le palier Conformité (0€) et les outils sans compte (générateur Factur-X, diagnostic, vérificateur), sans carte bancaire. Les offres payantes sont une montée en gamme explicite que vous choisissez : jamais de prélèvement surprise. Nos tarifs sont par entreprise, sans coût par utilisateur.",
   },
 ];
 
@@ -180,7 +180,7 @@ export default function HomePage() {
     <div className="flex flex-col items-center">
       <SEOHead
         title="Facturation électronique 2026/2027 : préparez votre conformité avec OdocPilot"
-        description="Réception obligatoire au 1er septembre 2026, émission en 2027 : OdocPilot prépare votre conformité e-facture. Factur-X, lecture IA des factures, recherche en langage naturel, export FEC. L'IA prépare, vous validez. Données et IA hébergées en France. Essai 14 jours sans carte bancaire."
+        description="Réception obligatoire au 1er septembre 2026, émission en 2027 : OdocPilot prépare votre conformité e-facture. Factur-X, lecture IA des factures, recherche en langage naturel, export FEC. L'IA prépare, vous validez. Données et IA hébergées en France. Palier Conformité gratuit, sans carte bancaire."
         canonical="/"
         jsonLd={jsonLd}
       />
@@ -214,7 +214,7 @@ export default function HomePage() {
               <div className="mt-7 flex flex-col items-center sm:flex-row sm:justify-center flex-wrap gap-3">
                 <a href={SIGNUP} data-umami-event="cta-essai-hero">
                   <Button size="lg" className="w-full sm:w-auto bg-gradient-cta text-primary-foreground font-bold px-7 py-6 text-base shadow-lg shadow-primary/20 hover:opacity-95">
-                    Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" />
+                    Commencer gratuitement <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </a>
                 <Link to={CONFORMITE} data-umami-event="cta-conformite-hero">
@@ -226,7 +226,7 @@ export default function HomePage() {
               <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-primary" /> L'IA prépare, vous validez</span>
                 <span className="inline-flex items-center gap-1.5"><MapPin className="h-4 w-4 text-primary" /> Données et IA en France</span>
-                <span className="inline-flex items-center gap-1.5"><CreditCard className="h-4 w-4 text-primary" /> Essai 14 j sans carte bancaire</span>
+                <span className="inline-flex items-center gap-1.5"><CreditCard className="h-4 w-4 text-primary" /> Sans carte bancaire</span>
               </div>
             </MotionDiv>
           </div>
@@ -495,7 +495,7 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Tarifs clairs, par entreprise</p>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Un abonnement par entreprise, sans coût par utilisateur</h2>
-          <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">Commencez gratuitement avec le palier <strong className="text-foreground">Conformité</strong> (0€), puis passez à l'offre adaptée. Chaque offre payante inclut l'essai gratuit de 14 jours, sans carte bancaire — et quand votre équipe s'agrandit, votre facture ne suit pas.</p>
+          <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">Commencez gratuitement avec le palier <strong className="text-foreground">Conformité</strong> (0€), puis passez à l'offre adaptée — sans carte bancaire, et quand votre équipe s'agrandit, votre facture ne suit pas.</p>
           <div className="mt-10 grid sm:grid-cols-3 gap-5 text-left">
             {pricing.map((p) => (
               <div key={p.name} className={`relative rounded-2xl bg-card p-6 ${p.highlight ? "border-2 border-primary shadow-elevated ring-1 ring-primary/15" : "border border-border shadow-card"}`}>
@@ -509,7 +509,7 @@ export default function HomePage() {
           </div>
           <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1.5"><Check className="h-3.5 w-3.5 text-primary" /> Sans coût par utilisateur</span>
-            <span className="inline-flex items-center gap-1.5"><CreditCard className="h-3.5 w-3.5 text-primary" /> Essai 14 j sans carte bancaire</span>
+            <span className="inline-flex items-center gap-1.5"><CreditCard className="h-3.5 w-3.5 text-primary" /> Sans carte bancaire</span>
             <span className="inline-flex items-center gap-1.5"><RotateCcw className="h-3.5 w-3.5 text-primary" /> Sans engagement</span>
           </div>
           <Link to="/pricing"><Button variant="outline" size="lg" className="mt-8">Voir tous les détails <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
@@ -540,12 +540,12 @@ export default function HomePage() {
           <span className="bg-gradient-cta bg-clip-text text-transparent">Avec OdocPilot, vous serez déjà prêt.</span>
         </h2>
         <p className="mt-5 text-lg text-muted-foreground max-w-2xl mx-auto">
-          Préparez votre conformité face aux échéances 2026 et 2027, ou lancez directement l'essai de 14 jours, sans carte bancaire, pour voir l'IA préparer votre administratif sur vos propres documents.
+          Préparez votre conformité face aux échéances 2026 et 2027, ou commencez directement gratuitement, sans carte bancaire, pour voir l'IA préparer votre administratif sur vos propres documents.
         </p>
         <div className="mt-8 flex flex-col items-center sm:flex-row sm:justify-center gap-3">
           <a href={SIGNUP} data-umami-event="cta-essai-final">
             <Button size="lg" className="w-full sm:w-auto bg-gradient-cta text-primary-foreground text-base font-bold px-8 py-6 shadow-lg shadow-primary/20 hover:opacity-95">
-              Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" />
+              Commencer gratuitement <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </a>
           <Link to={CONFORMITE} data-umami-event="cta-conformite-final">

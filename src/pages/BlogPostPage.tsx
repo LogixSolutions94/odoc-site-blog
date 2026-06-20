@@ -258,7 +258,7 @@ export default function BlogPostPage() {
               </p>
               <a href={SIGNUP} data-umami-event="blog-cta-article" className="mt-4 inline-block">
                 <Button className="bg-gradient-cta text-primary-foreground">
-                  Essayer OdocPilot — 14 jours gratuits
+                  Essayer OdocPilot gratuitement
                 </Button>
               </a>
               <Link

@@ -161,7 +161,7 @@ export default function ComparePage() {
           <h2 className="text-2xl font-bold tracking-tight">Essayez OdocPilot par vous-même</h2>
           <p className="mt-2 text-brand-panel-foreground/80 max-w-xl mx-auto leading-relaxed">Vérifiez votre conformité en 3 minutes, ou laissez l'IA préparer votre administratif sur vos propres documents — vous validez en un clic.</p>
           <div className="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a href={SIGNUP}><Button size="lg" className="bg-gradient-cta text-primary-foreground font-bold px-7">Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" /></Button></a>
+            <a href={SIGNUP}><Button size="lg" className="bg-gradient-cta text-primary-foreground font-bold px-7">Commencer gratuitement <ArrowRight className="ml-2 h-5 w-5" /></Button></a>
             <Link to="/diagnostic"><Button size="lg" variant="outline" className="border-brand-panel-foreground/40 bg-transparent text-brand-panel-foreground hover:bg-brand-panel-foreground/10 px-7">Vérifier ma conformité (3 min)</Button></Link>
           </div>
           <p className="mt-4 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-brand-panel-foreground/80">

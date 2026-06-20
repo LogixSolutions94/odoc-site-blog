@@ -111,13 +111,13 @@ export default function AProposPage() {
           <MotionDiv initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
             className="rounded-3xl border border-border bg-card p-10 sm:p-14 shadow-elevated">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Prêt à prendre de l'avance sur la réforme ?</h2>
-            <p className="mt-4 text-lg text-muted-foreground">Vérifiez votre conformité en 3 minutes, gratuitement — ou lancez l'essai de 14 jours sur vos propres documents.</p>
+            <p className="mt-4 text-lg text-muted-foreground">Vérifiez votre conformité en 3 minutes, gratuitement — ou commencez gratuitement sur vos propres documents.</p>
             <div className="mt-8 flex flex-col items-center sm:flex-row sm:justify-center gap-3">
               <Link to="/diagnostic" data-umami-event="apropos-diagnostic">
                 <Button size="lg" className="w-full sm:w-auto bg-gradient-cta text-primary-foreground font-bold px-8 py-6"><Sparkles className="mr-2 h-5 w-5" /> Vérifier ma conformité (3 min)</Button>
               </Link>
               <a href={SIGNUP} target="_blank" rel="noopener noreferrer" data-umami-event="apropos-essai">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto px-8 py-6">Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" /></Button>
+                <Button size="lg" variant="outline" className="w-full sm:w-auto px-8 py-6">Commencer gratuitement <ArrowRight className="ml-2 h-5 w-5" /></Button>
               </a>
             </div>
           </MotionDiv>
