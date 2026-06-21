@@ -218,8 +218,8 @@ export default function MetierPage({ slug }: { slug: string }) {
       <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
         <div className="rounded-3xl border border-border bg-card p-9 shadow-card">
           <Quote className="h-7 w-7 text-primary/40 mx-auto" />
-          <p className="mt-3 text-xl text-foreground leading-relaxed">{m.testimonial.quote}</p>
-          <p className="mt-5 text-sm text-muted-foreground">{m.testimonial.name}</p>
+          <p className="mt-3 text-xl text-foreground leading-relaxed">« OdocPilot est jeune, et c'est une force : on le construit avec ses premiers utilisateurs. L'IA prépare votre administratif — lecture des factures, classement, relances — et vous validez. Vous gardez la main, toujours. »</p>
+          <p className="mt-5 text-sm text-muted-foreground">— L'équipe OdocPilot · <span className="text-foreground font-semibold">rejoignez les membres fondateurs</span></p>
         </div>
       </section>
 

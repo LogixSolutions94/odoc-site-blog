@@ -5,6 +5,9 @@ import { BackButton } from "@/components/BackButton";
 import { TrustCredentials } from "@/components/TrustCredentials";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { subscribeNewsletter } from "@/lib/newsletter";
 import {
   Upload, CheckCircle, AlertTriangle, XCircle, FileX2, ArrowRight,
   ShieldCheck, FileCheck2, MapPin, CreditCard,
@@ -155,6 +158,18 @@ export default function VerificateurPage() {
   const [busy, setBusy] = useState(false);
   const [drag, setDrag] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+  const [email, setEmail] = useState("");
+  const [sent, setSent] = useState(false);
+  const [website, setWebsite] = useState(""); // honeypot anti-bot
+
+  async function captureEmail(e: React.FormEvent) {
+    e.preventDefault();
+    const res = await subscribeNewsletter(email, "verificateur", website);
+    if (!res.ok) { toast({ title: "Erreur", description: res.error, variant: "destructive" }); return; }
+    setSent(true);
+    toast({ title: "✓ Envoyé !", description: "Votre rapport de conformité + la checklist des mentions 2026 arrivent par email." });
+  }
 
   const handleFile = useCallback(async (file: File) => {
     setFileName(file.name);
@@ -262,6 +277,26 @@ export default function VerificateurPage() {
             <p className="flex items-center gap-2 font-bold text-foreground"><XCircle className="h-5 w-5 text-red-500" /> Fichier illisible</p>
             <p className="mt-1.5 text-sm text-muted-foreground">Le fichier n'a pas pu être analysé comme un Factur-X. Déposez le volet XML (CII) ou un PDF Factur-X valide.</p>
           </div>
+        )}
+
+        {/* Capture email — soft-gate du résultat enrichi (l'outil reste 100% gratuit) */}
+        {result && (
+          sent ? (
+            <div className="mt-8 rounded-2xl border border-primary/30 bg-card p-5 flex items-center gap-2 text-sm"><CheckCircle className="h-5 w-5 text-primary" /> C'est envoyé — vérifiez votre boîte mail.</div>
+          ) : (
+            <form onSubmit={captureEmail} className="mt-8 rounded-2xl border border-primary/30 bg-primary/5 p-5">
+              <p className="text-sm font-semibold text-foreground">Recevez votre rapport de conformité + la checklist des mentions obligatoires 2026</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">Un email clair, sans spam. Désinscription en un clic.</p>
+              <div className="absolute opacity-0 pointer-events-none" aria-hidden="true">
+                <label htmlFor="verif-website">Website</label>
+                <input type="text" id="verif-website" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+              </div>
+              <div className="mt-3 flex flex-col sm:flex-row gap-2">
+                <Input type="email" required placeholder="votre@email.com" value={email} onChange={(e) => setEmail(e.target.value)} className="flex-1" />
+                <Button type="submit" className="bg-gradient-cta text-primary-foreground font-semibold" data-umami-event="verificateur-email">Recevoir mon rapport</Button>
+              </div>
+            </form>
+          )
         )}
 
         {/* CTA */}

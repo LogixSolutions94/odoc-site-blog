@@ -202,8 +202,8 @@ export default function HomePage() {
             </MotionDiv>
             <MotionDiv initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08, duration: 0.6 }}>
               <h1 className="mt-4 text-4xl sm:text-5xl lg:text-[3.1rem] font-extrabold tracking-tight leading-[1.08] text-foreground">
-                La réforme de la facture électronique arrive.{" "}
-                <span className="bg-gradient-cta bg-clip-text text-transparent">OdocPilot la prépare pour vous, vous validez en un clic.</span>
+                Votre facturation électronique 2026, préparée par l'IA.{" "}
+                <span className="bg-gradient-cta bg-clip-text text-transparent">Vous validez en un clic.</span>
               </h1>
             </MotionDiv>
             <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16, duration: 0.6 }}>
@@ -227,9 +227,14 @@ export default function HomePage() {
               </div>
               <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-primary" /> L'IA prépare, vous validez</span>
-                <span className="inline-flex items-center gap-1.5"><MapPin className="h-4 w-4 text-primary" /> Données et IA en France</span>
-                <span className="inline-flex items-center gap-1.5"><CreditCard className="h-4 w-4 text-primary" /> Sans carte bancaire</span>
+                <span className="inline-flex items-center gap-1.5"><MapPin className="h-4 w-4 text-primary" /> Données et IA en France (Mistral)</span>
+                <span className="inline-flex items-center gap-1.5"><CreditCard className="h-4 w-4 text-primary" /> 0€ pour démarrer, sans carte bancaire</span>
               </div>
+              <p className="mt-4 text-sm text-muted-foreground">
+                Ou testez sans même créer de compte :{" "}
+                <Link to="/generateur-factur-x" className="font-semibold text-primary hover:underline" data-umami-event="hero-outil-generateur">générer</Link>{" "}ou{" "}
+                <Link to="/verificateur" className="font-semibold text-primary hover:underline" data-umami-event="hero-outil-verificateur">vérifier</Link>{" "}une facture, gratuitement.
+              </p>
             </MotionDiv>
           </div>
 

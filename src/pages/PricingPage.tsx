@@ -222,7 +222,7 @@ export default function PricingPage() {
           <div>
             <h3 className="font-bold text-foreground">La conformité coûte moins cher que l'amende</h3>
             <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
-              La loi de finances 2026 prévoit <strong className="text-foreground tabular-nums">50 € par facture</strong> émise dans un format non conforme et <strong className="text-foreground tabular-nums">500 € par manquement</strong> à l'e-reporting. À partir de <strong className="text-foreground tabular-nums">49 €/mois</strong>, OdocPilot vous met en conformité <em>et</em> prépare votre administratif au quotidien.{" "}
+              La loi de finances 2026 prévoit <strong className="text-foreground tabular-nums">50 € par facture</strong> émise dans un format non conforme et <strong className="text-foreground tabular-nums">500 € par manquement</strong> à l'e-reporting (plafond 15 000 €/an). À partir de <strong className="text-foreground tabular-nums">49 €/mois</strong>, OdocPilot vous met en conformité <em>et</em> prépare votre administratif au quotidien.{" "}
               <a href="https://www.impots.gouv.fr/professionnel/facturation-electronique" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Source : impots.gouv.fr</a>.
             </p>
           </div>

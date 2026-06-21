@@ -151,11 +151,8 @@ export default function ArtisansPage() {
       <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
         <div className="rounded-3xl border border-border bg-card p-9 shadow-card">
           <Quote className="h-7 w-7 text-primary/40 mx-auto" />
-          <p className="mt-3 text-xl text-foreground leading-relaxed">« Avant, je faisais mes devis le dimanche soir. Maintenant, je les dicte entre deux chantiers et l'assistant s'occupe du reste. J'ai retrouvé mes week-ends. »</p>
-          <div className="mt-5 flex items-center justify-center gap-3 text-sm">
-            <span className="h-10 w-10 rounded-full bg-gradient-cta text-primary-foreground inline-flex items-center justify-center font-bold">K</span>
-            <span className="text-muted-foreground"><strong className="text-foreground">Karim B.</strong> · Artisan plombier, Seine-et-Marne · bêta-testeur</span>
-          </div>
+          <p className="mt-3 text-xl text-foreground leading-relaxed">« OdocPilot est jeune, et c'est une force : on le construit avec les premiers artisans qui veulent prendre de l'avance sur 2026. L'IA prépare vos devis et vos factures — vous gardez la main, toujours. »</p>
+          <p className="mt-5 text-sm text-muted-foreground">— L'équipe OdocPilot · <span className="text-foreground font-semibold">rejoignez les membres fondateurs</span></p>
         </div>
       </section>
 
