@@ -9,6 +9,7 @@ const NotFound = () => {
       <SEOHead
         title="Page introuvable — Odoc"
         description="La page que vous recherchez n'existe pas ou a été déplacée."
+        noindex
       />
       <div className="text-center max-w-lg">
         <MotionDiv
