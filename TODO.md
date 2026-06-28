@@ -1,5 +1,13 @@
 # ✅ TODO — odoc-site-blog (site + blog odocpilot.com)
 
+> ## ✅ RÉSOLU 2026-06-28 — DÉPLOIEMENT AUTO ACTIF, REFONTE EN LIGNE
+> Le **P0 « redéployer » ci-dessous est CLOS** : l'auto-deploy GitHub Actions (`.github/workflows/deploy.yml`)
+> est **opérationnel et vérifié** — les 4 secrets `VPS_*` sont posés, le run du merge PR #12 (`4f9bf7e`) =
+> **success**, image `odoc-landing` reconstruite, HTTP 200, et le **sitemap live contient toutes les nouvelles
+> pages** (`/artisans`, `/e-facture`, `/guide/*`, `/comparatif/*`, métiers). **`/artisans` ne renvoie plus 404.**
+> ➡️ **Désormais : un merge de code sur `main` déploie tout seul.** Plus de rebuild manuel sauf si le workflow échoue.
+> Vérifier : `gh run list --workflow=deploy.yml`. Les blocs P0 ci-dessous sont conservés comme **fallback manuel**.
+
 > ## 🚀 POUR DÉPLOYER / SAVOIR QUOI FAIRE → lire **`refonte/HANDOFF-DEPLOY.md`** (à jour 2026-06-13)
 > Ce TODO ci-dessous et `refonte/DEPLOY-WINDOWS.md` **datent du 08/06** et sont **périmés** (ils parlent d'une branche `feat/refonte-conversion` déjà fusionnée). **Tout le travail de refonte conversion/conformité est sur `main`, poussé, à déployer.** Le handoff donne : déploiement VPS, 4 secrets auto-deploy, sous-domaine HTTPS Umami, génération OG image, captures, bug prerender.
 >
@@ -37,16 +45,11 @@ curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:3000     # attendu : 2
 ⚠️ **NE JAMAIS toucher `odoc-frontend`** (le SaaS, port 3001). Détails pas-à-pas : `refonte/DEPLOY-WINDOWS.md`.
 👉 **Déployer corrige d'un coup : la refonte EN LIGNE + les claims légaux encore exposés.**
 
-### ✅ Mieux : AUTO-DÉPLOIEMENT (workflow CI créé — `.github/workflows/deploy.yml`)
-Pour ne plus jamais revivre « mergé mais pas en ligne », un workflow GitHub Actions a été ajouté : **chaque push de code sur `main` rebuild le VPS tout seul**.
-**À activer UNE fois** — ajouter 4 secrets (Repo → Settings → Secrets and variables → Actions) :
-- `VPS_HOST` = `151.80.144.236`
-- `VPS_USER` = `root`
-- `VPS_SSH_KEY` = la **clé privée SSH** qui a accès au VPS (celle du PC Windows)
-- `VPS_REPO_DIR` = chemin du repo odoc-landing sur le VPS
-
-Une fois les secrets posés : push = déploiement auto. Ou déclenchement manuel : onglet **Actions → « Déploiement odoc-landing (VPS) » → Run workflow** (ou `gh workflow run deploy.yml`).
-> ⛏️ Pour déployer **les finitions actuelles** : pose les secrets, puis lance le workflow manuellement (ou fais le rebuild manuel ci-dessus une dernière fois). Tant que les secrets ne sont pas là, le workflow ne peut pas joindre le VPS.
+### ✅ AUTO-DÉPLOIEMENT — ACTIF & VÉRIFIÉ (2026-06-28)
+Workflow `.github/workflows/deploy.yml` : **chaque push de code sur `main` rebuild le VPS tout seul** (paths `*.md`, `refonte/**`, `.github/**` ignorés). **Les 4 secrets sont posés** (`VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`, `VPS_REPO_DIR` → repo VPS = `/root/odoc-site-blog`) et le pipeline est **confirmé fonctionnel** (run du merge PR #12 = `success`, HTTP 200).
+- Déclenchement **auto** : merge/push de code sur `main`.
+- Déclenchement **manuel** : onglet **Actions → « Déploiement odoc-landing (VPS) » → Run workflow** (ou `gh workflow run deploy.yml`).
+- **Suivi** : `gh run list --workflow=deploy.yml` puis `gh run view <id> --log`.
 
 **Vérif post-deploy (navigateur)** : home en **CLAIR** par défaut · hero « Toute la gestion de votre entreprise. Sans la paperasse. » · section « Vous êtes…? » · **`/artisans` s'ouvre** (plus de 404) · `/pricing` = « Un seul prix. Tout compris. » · **aucun** « SHA-256 / N8N / OS d'entreprise / NF Z42-013 / +200 équipes » visible.
 

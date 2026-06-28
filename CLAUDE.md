@@ -2,9 +2,9 @@
 
 **Document de référence pour tous les travaux de développement sur Odoc (landing page + blog)**
 
-> ## ⚡ ÉTAT 2026-06-08 — LIRE `TODO.md` EN PREMIER
-> La **refonte conversion** (design system v2 clair/sombre + 4 pages orientées bénéfice + nouvelle page `/artisans`) est **mergée dans `main`** mais **PAS ENCORE DÉPLOYÉE** : la prod sert encore l'ANCIEN build (`/artisans` → 404, claims légaux retirés le 29/05 encore EN LIGNE).
-> 👉 **P0 = rebuild Docker sur le VPS** (`git pull origin main` + `docker build -t odoc-landing .` + stop/rm/run). Le `docker restart` seul ne suffit pas (image baked-in). Détails : **`TODO.md`** + **`refonte/DEPLOY-WINDOWS.md`**.
+> ## ⚡ ÉTAT 2026-06-28 — DÉPLOIEMENT AUTOMATISÉ & REFONTE EN LIGNE
+> La **refonte conversion** (design system v2 clair/sombre + pages orientées bénéfice + `/artisans`, `/e-facture`, `/guide/*`, `/comparatif/*`, pages métiers) est **DÉPLOYÉE EN PROD** ✅ (vérifié 2026-06-28 : `/artisans` ne 404 plus, sitemap live = toutes les nouvelles pages).
+> 👉 **Le déploiement est désormais AUTOMATIQUE** : `.github/workflows/deploy.yml` rebuild `odoc-landing` sur le VPS **à chaque push de code sur `main`** (secrets `VPS_*` posés et vérifiés OK). Donc **un merge sur `main` = déploiement auto** — plus besoin de rebuild manuel. Le rebuild manuel (bloc « Déploiement Landing » ci-dessous) ne sert plus que de **fallback** si le workflow échoue. Vérifier un déploiement : `gh run list --workflow=deploy.yml`.
 > **Design system** : tokens dans `src/index.css` (défaut **CLAIR**) ; pour couleurs/CTA utiliser `bg-gradient-cta` / `text-primary` / `text-primary-foreground` (**adaptatifs clair↔sombre**), **jamais de couleur hardcodée**. Build local (pas de node) : `bun ./node_modules/typescript/bin/tsc --noEmit` + `bun ./node_modules/vite/bin/vite.js build` ; dev `bun run dev` → **:8080**.
 > ⚠️ Positionnement / produit / vision / thème **rafraîchis le 14/06** (wedge conformité, 49/89/149, « l'IA prépare, vous validez »). Restent datées plus bas : déploiement `scp`, section « PAGES CLÉS » (anciennes pages 11 modules / 79€), palette « Navy Premium ». **Source de positionnement faisant foi : `refonte/PLAN-REFONTE-CONVERSION-2026.md`** (+ `refonte/ANALYSE-CONCURRENTS-2026.md`).
 
@@ -28,7 +28,11 @@ Ce VPS héberge DEUX applications DISTINCTES. Ne JAMAIS les confondre.
 
 ### Déploiement Landing — Workflow CORRECT
 
-⚠️ **RÈGLE ABSOLUE** : Ce repo utilise une image Docker **baked-in** (pas de volume mount).
+✅ **PAR DÉFAUT, NE RIEN FAIRE À LA MAIN** : depuis le 2026-06-28, `.github/workflows/deploy.yml`
+déploie tout seul `odoc-landing` à chaque push de code sur `main` (git pull + docker build + stop/rm/run + check HTTP 200).
+Le bloc manuel ci-dessous n'est qu'un **fallback** (workflow KO, ou test hors `main`).
+
+⚠️ **RÈGLE ABSOLUE** (fallback manuel) : Ce repo utilise une image Docker **baked-in** (pas de volume mount).
 `docker restart odoc-landing` seul **NE rebuild PAS l'image** → les changements ne sont **PAS** déployés !
 
 ```bash
