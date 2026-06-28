@@ -1,6 +1,7 @@
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
+import NotFound from "./NotFound";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -16,7 +17,6 @@ import { ShareLink } from "@/components/blog/ShareLink";
 import { NewsletterInline } from "@/components/blog/NewsletterInline";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, ArrowLeft, ArrowRight, FileText } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import {
   splitFaq,
   extractHeadings,
@@ -36,8 +36,6 @@ function formatDate(dateStr: string | null | undefined): string {
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate();
-  const { toast } = useToast();
 
   const { data: post, isLoading, error } = useQuery({
     queryKey: ["blog-post", slug],
@@ -87,13 +85,6 @@ export default function BlogPostPage() {
     enabled: !!post,
   });
 
-  useEffect(() => {
-    if (error || (!isLoading && !post)) {
-      toast({ title: "Article introuvable", variant: "destructive" });
-      navigate("/blog");
-    }
-  }, [error, isLoading, post]);
-
   // Sépare la FAQ du corps, extrait les titres pour le sommaire, scinde pour le CTA.
   const { body, faq } = useMemo(() => splitFaq(post?.content || ""), [post?.content]);
   const headings = useMemo(() => extractHeadings(body), [body]);
@@ -134,7 +125,10 @@ export default function BlogPostPage() {
       </div>
     );
   }
-  if (!post) return null;
+  // Slug supprimé/inexistant : on rend une vraie 404 noindex (cf. NotFound) plutôt
+  // qu'un redirect JS vers /blog — sinon Google reste sur un 200 « soft-404 »
+  // (statuts GSC « doublon sans canonique » / « explorée, non indexée »).
+  if (error || !post) return <NotFound />;
 
   const articleUrl = `${BASE_URL}/blog/${post.slug}`;
   const authorName = (post.author_name || "").trim() || DEFAULT_AUTHOR;
