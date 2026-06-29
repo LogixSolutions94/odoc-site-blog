@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { subscribeNewsletter } from "@/lib/newsletter";
 import { TrustCredentials } from "@/components/TrustCredentials";
+import { HeroVideo } from "@/components/HeroVideo";
 import {
   ArrowRight,
   ChevronRight,
@@ -187,6 +188,7 @@ export default function HomePage() {
 
       {/* ───────── HERO ───────── */}
       <section className="w-full relative overflow-hidden">
+        <HeroVideo />
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-24 right-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
           <div className="absolute bottom-0 -left-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
