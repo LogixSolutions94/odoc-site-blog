@@ -113,6 +113,15 @@ export default {
           from: { transform: "rotate(0deg)" },
           to: { transform: "rotate(-360deg)" },
         },
+        "aurora": {
+          "0%, 100%": { transform: "translate3d(0, 0, 0) scale(1)" },
+          "33%": { transform: "translate3d(4%, -6%, 0) scale(1.12)" },
+          "66%": { transform: "translate3d(-4%, 4%, 0) scale(0.94)" },
+        },
+        "shimmer": {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -120,6 +129,8 @@ export default {
         "float": "float 3s ease-in-out infinite",
         "spin-slow": "spin-slow 28s linear infinite",
         "spin-slow-reverse": "spin-slow-reverse 20s linear infinite",
+        "aurora": "aurora 22s ease-in-out infinite",
+        "shimmer": "shimmer 2.5s linear infinite",
       },
     },
   },
