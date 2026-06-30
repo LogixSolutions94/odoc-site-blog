@@ -9,6 +9,7 @@ import { subscribeNewsletter } from "@/lib/newsletter";
 import { TrustCredentials } from "@/components/TrustCredentials";
 import { HeroSection } from "@/components/HeroSection";
 import { HeroSectionLab } from "@/components/HeroSectionLab";
+import { HeroSectionUS } from "@/components/HeroSectionUS";
 import {
   ArrowRight,
   ChevronRight,
@@ -189,8 +190,8 @@ export default function HomePage() {
         jsonLd={jsonLd}
       />
 
-      {/* ───────── HERO (variante testable via ?hero=lab) ───────── */}
-      {heroVariant === "lab" ? <HeroSectionLab /> : <HeroSection />}
+      {/* ───────── HERO — défaut = US ; ?hero=demo (Copilote) / ?hero=lab (sombre) ───────── */}
+      {heroVariant === "lab" ? <HeroSectionLab /> : heroVariant === "demo" ? <HeroSection /> : <HeroSectionUS />}
 
       {/* ───────── BANDE CONFIANCE ───────── */}
       <section className="w-full border-y border-border bg-secondary/60">
