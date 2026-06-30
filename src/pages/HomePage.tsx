@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { subscribeNewsletter } from "@/lib/newsletter";
 import { TrustCredentials } from "@/components/TrustCredentials";
 import { HeroSection } from "@/components/HeroSection";
+import { HeroSectionLab } from "@/components/HeroSectionLab";
 import {
   ArrowRight,
   ChevronRight,
@@ -163,6 +164,8 @@ export default function HomePage() {
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState(""); // honeypot
   const [loading, setLoading] = useState(false);
+  // Variante de hero testable via ?hero=lab (comparaison A/B en preview).
+  const heroVariant = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("hero") : null;
 
   async function handleNewsletter(e: React.FormEvent) {
     e.preventDefault();
@@ -186,8 +189,8 @@ export default function HomePage() {
         jsonLd={jsonLd}
       />
 
-      {/* ───────── HERO ───────── */}
-      <HeroSection />
+      {/* ───────── HERO (variante testable via ?hero=lab) ───────── */}
+      {heroVariant === "lab" ? <HeroSectionLab /> : <HeroSection />}
 
       {/* ───────── BANDE CONFIANCE ───────── */}
       <section className="w-full border-y border-border bg-secondary/60">

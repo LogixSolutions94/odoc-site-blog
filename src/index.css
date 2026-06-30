@@ -352,3 +352,16 @@
 .hero-spotlight {
   background: radial-gradient(440px circle at var(--mx, 72%) var(--my, 24%), hsl(var(--primary-glow) / 0.13), transparent 72%);
 }
+
+/* ── Variante « Aceternity Max » (hero sombre / labo IA) ──────── */
+.lab-grid {
+  background-image:
+    linear-gradient(hsl(var(--brand-panel-foreground) / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--brand-panel-foreground) / 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse 72% 62% at 50% 36%, #000 34%, transparent 78%);
+  mask-image: radial-gradient(ellipse 72% 62% at 50% 36%, #000 34%, transparent 78%);
+}
+.lab-spotlight {
+  background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 28%), hsl(var(--primary-glow) / 0.18), transparent 70%);
+}

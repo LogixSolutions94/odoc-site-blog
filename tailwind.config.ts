@@ -156,6 +156,10 @@ export default {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
+        "grid-pan": {
+          "0%": { backgroundPosition: "0 0" },
+          "100%": { backgroundPosition: "44px 44px" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -172,6 +176,7 @@ export default {
         "beam-x": "beam-x 5s linear infinite",
         "beam-y": "beam-y 6.5s linear infinite",
         "marquee": "marquee 30s linear infinite",
+        "grid-pan": "grid-pan 6s linear infinite",
       },
     },
   },
