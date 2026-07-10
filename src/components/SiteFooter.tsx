@@ -2,92 +2,109 @@ import { Link } from "react-router-dom";
 import { TrustCredentials } from "@/components/TrustCredentials";
 import { Logo } from "@/components/Logo";
 
+// Footer allégé (07/2026) : ~30 liens → l'essentiel uniquement.
+// Sortis du footer : liens morts (docs/status.odocpilot.com), pages secondaires
+// (roadmap, changelog, recrutement, comparatifs, guides…) — elles restent
+// accessibles depuis les contenus et le sitemap. Légal = ligne inline en bas.
+
+const COLUMNS: Array<{ title: string; links: Array<{ to: string; label: string }> }> = [
+  {
+    title: "Produit",
+    links: [
+      { to: "/fonctionnalites", label: "Fonctionnalités" },
+      { to: "/pricing", label: "Tarifs" },
+      { to: "/e-facture", label: "E-facture 2026" },
+      { to: "/diagnostic", label: "Diagnostic conformité" },
+    ],
+  },
+  {
+    title: "Outils gratuits",
+    links: [
+      { to: "/generateur-factur-x", label: "Générateur Factur-X" },
+      { to: "/verificateur", label: "Vérificateur de facture" },
+      { to: "/lexique", label: "Lexique e-facture" },
+    ],
+  },
+  {
+    title: "Métiers",
+    links: [
+      { to: "/artisans", label: "Artisans & BTP" },
+      { to: "/commerce", label: "Commerce & Services" },
+      { to: "/professions-liberales", label: "Professions libérales" },
+      { to: "/cabinets-comptables", label: "Cabinets comptables" },
+    ],
+  },
+  {
+    title: "Entreprise",
+    links: [
+      { to: "/a-propos", label: "À propos" },
+      { to: "/blog", label: "Blog" },
+      { to: "/contact", label: "Contact" },
+    ],
+  },
+];
+
+const LEGAL_LINKS = [
+  { to: "/mentions-legales", label: "Mentions légales" },
+  { to: "/cgu", label: "CGU" },
+  { to: "/politique-confidentialite", label: "Confidentialité" },
+];
+
 export function SiteFooter() {
   return (
     <footer className="border-t border-border py-14 bg-card">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 max-w-sm">
-          <Logo size="md" variant="full" />
-          <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
-            L'IA prépare votre administratif, vous validez en un clic. Copilote IA français de facturation et de conformité, hébergé en France.
-          </p>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,320px)_1fr] lg:gap-16">
           <div>
-            <h3 className="text-sm font-bold text-foreground mb-4">Produit</h3>
-            <ul className="space-y-2.5">
-              <li><Link to="/fonctionnalites" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Fonctionnalités</Link></li>
-              <li><Link to="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Tarifs</Link></li>
-              <li><Link to="/e-facture" className="text-sm text-muted-foreground hover:text-foreground transition-colors">E-facture 2026</Link></li>
-              <li><Link to="/diagnostic" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Diagnostic conformité</Link></li>
-              <li><Link to="/generateur-factur-x" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Générateur Factur-X</Link></li>
-              <li><Link to="/verificateur" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Vérificateur de facture</Link></li>
-              <li><Link to="/comparatif/pennylane" className="text-sm text-muted-foreground hover:text-foreground transition-colors">OdocPilot vs Pennylane</Link></li>
-              <li><Link to="/comparatif/qonto" className="text-sm text-muted-foreground hover:text-foreground transition-colors">OdocPilot vs Qonto</Link></li>
-              <li><Link to="/roadmap" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Roadmap</Link></li>
-              <li><Link to="/changelog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Changelog</Link></li>
-            </ul>
+            <Logo size="md" variant="full" />
+            <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
+              L'IA prépare votre administratif, vous validez en un clic. Copilote IA français de facturation et de conformité, hébergé en France.
+            </p>
           </div>
-          <div>
-            <h3 className="text-sm font-bold text-foreground mb-4">Métiers</h3>
-            <ul className="space-y-2.5">
-              <li><Link to="/artisans" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Artisans &amp; BTP</Link></li>
-              <li><Link to="/commerce" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Commerce &amp; Services</Link></li>
-              <li><Link to="/professions-liberales" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Professions libérales</Link></li>
-              <li><Link to="/cabinets-comptables" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Cabinets comptables</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-foreground mb-4">Entreprise</h3>
-            <ul className="space-y-2.5">
-              <li><Link to="/a-propos" className="text-sm text-muted-foreground hover:text-foreground transition-colors">À propos</Link></li>
-              <li><Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Blog</Link></li>
-              <li><Link to="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Contact</Link></li>
-              <li><Link to="/recrutement" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Recrutement</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-foreground mb-4">Ressources</h3>
-            <ul className="space-y-2.5">
-              <li><a href="https://docs.odocpilot.com" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Documentation</a></li>
-              <li><a href="https://docs.odocpilot.com/api" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">API</a></li>
-              <li><a href="https://status.odocpilot.com" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Statut</a></li>
-              <li><Link to="/llm-info" className="text-sm text-muted-foreground hover:text-foreground transition-colors">OdocPilot en bref</Link></li>
-              <li><Link to="/livre-blanc" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Livre blanc 2026/2027</Link></li>
-              <li><Link to="/lexique" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Lexique e-facture</Link></li>
-              <li><Link to="/guide/facturation-electronique-2026" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Guide e-facture 2026</Link></li>
-              <li><Link to="/guide/obligations-2026-2027" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Obligations &amp; calendrier</Link></li>
-              <li><Link to="/guide/factur-x" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Le format Factur-X</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-foreground mb-4">Légal</h3>
-            <ul className="space-y-2.5">
-              <li><Link to="/mentions-legales" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Mentions légales</Link></li>
-              <li><Link to="/cgu" className="text-sm text-muted-foreground hover:text-foreground transition-colors">CGU</Link></li>
-              <li><Link to="/politique-confidentialite" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Politique de confidentialité</Link></li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => {
-                    try {
-                      localStorage.removeItem("odoc_cookie_consent");
-                      window.dispatchEvent(new CustomEvent("odoc:cookie-consent-reset"));
-                    } catch { /* ignore */ }
-                  }}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors text-left"
-                >
-                  Gérer mes cookies
-                </button>
-              </li>
-            </ul>
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+            {COLUMNS.map((col) => (
+              <div key={col.title}>
+                <h3 className="text-sm font-bold text-foreground mb-4">{col.title}</h3>
+                <ul className="space-y-2.5">
+                  {col.links.map((link) => (
+                    <li key={link.to}>
+                      <Link
+                        to={link.to}
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
         <div className="mt-12 border-t border-border pt-8">
           <TrustCredentials />
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} OdocPilot. Tous droits réservés. 🇫🇷 Fait en France · Données hébergées en France.
-          </p>
+          <div className="mt-6 flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground sm:flex-row">
+            <p>© {new Date().getFullYear()} OdocPilot. 🇫🇷 Fait et hébergé en France.</p>
+            <nav aria-label="Liens légaux" className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+              {LEGAL_LINKS.map((link) => (
+                <Link key={link.to} to={link.to} className="hover:text-foreground transition-colors">
+                  {link.label}
+                </Link>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  try {
+                    localStorage.removeItem("odoc_cookie_consent");
+                    window.dispatchEvent(new CustomEvent("odoc:cookie-consent-reset"));
+                  } catch { /* ignore */ }
+                }}
+                className="hover:text-foreground transition-colors"
+              >
+                Gérer mes cookies
+              </button>
+            </nav>
+          </div>
         </div>
       </div>
     </footer>
