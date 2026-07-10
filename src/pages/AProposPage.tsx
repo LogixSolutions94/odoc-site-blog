@@ -121,6 +121,15 @@ export default function AProposPage() {
               </a>
             </div>
           </MotionDiv>
+
+          {/* Liens secondaires — pages sorties du footer mais gardées accessibles */}
+          <nav aria-label="Liens complémentaires" className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+            <Link to="/recrutement" className="hover:text-foreground transition-colors">Nous recrutons</Link>
+            <span aria-hidden="true" className="text-border">·</span>
+            <Link to="/llm-info" className="hover:text-foreground transition-colors">OdocPilot en bref</Link>
+            <span aria-hidden="true" className="text-border">·</span>
+            <Link to="/pricing" className="hover:text-foreground transition-colors">Comparatifs concurrents</Link>
+          </nav>
         </div>
       </section>
     </div>
