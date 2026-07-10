@@ -1,3 +1,4 @@
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
   corsHeaders,
   preflight,
@@ -26,13 +27,6 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Envoi 100% Stalwart (souverain). Mêmes identifiants que les EF du SaaS (même conteneur).
-    const st = stalwartEnv();
-    if (!st.user || !st.pass) {
-      console.error("[send-contact-email] STALWART_USER/PASS manquants");
-      return json(500, { success: false, error: "L'envoi est temporairement indisponible." });
-    }
-
     let payload: { name?: string; email?: string; company?: string; message?: string };
     try {
       payload = await req.json();
@@ -51,6 +45,34 @@ Deno.serve(async (req) => {
     }
     if (!isValidEmail(email)) {
       return json(400, { success: false, error: "Email invalide." });
+    }
+
+    // 1) Persister AVANT tout envoi : la table contact_messages (migration
+    // 20260710170000, repo odoc-pulse) est lue par l'admin SaaS
+    // (/admin/clients?tab=messages). Le message ne peut plus se perdre même
+    // si le SMTP tombe. Best-effort symétrique : un échec DB n'empêche pas l'email.
+    let stored = false;
+    try {
+      const admin = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      );
+      const { error: dbError } = await admin
+        .from("contact_messages")
+        .insert({ name, email, company: company || null, message });
+      if (dbError) console.error("[send-contact-email] db insert:", dbError);
+      else stored = true;
+    } catch (err) {
+      console.error("[send-contact-email] db insert threw:", err);
+    }
+
+    // 2) Notification email via Stalwart (souverain). Mêmes identifiants que les EF du SaaS.
+    const st = stalwartEnv();
+    if (!st.user || !st.pass) {
+      console.error("[send-contact-email] STALWART_USER/PASS manquants");
+      // Message déjà visible dans l'admin → succès pour le visiteur quand même.
+      if (stored) return json(200, { success: true });
+      return json(500, { success: false, error: "L'envoi est temporairement indisponible." });
     }
 
     // Construction du HTML : TOUT escapé (anti XSS dans le client mail du destinataire).
@@ -81,7 +103,10 @@ Deno.serve(async (req) => {
       });
     } catch (err) {
       console.error("[send-contact-email] SMTP:", err);
-      return json(502, { success: false, error: "L'envoi a échoué, réessayez plus tard." });
+      // Stocké en base → le message est déjà dans l'admin, ne pas faire échouer le visiteur.
+      if (!stored) {
+        return json(502, { success: false, error: "L'envoi a échoué, réessayez plus tard." });
+      }
     }
 
     return json(200, { success: true });
