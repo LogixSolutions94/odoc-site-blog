@@ -1,33 +1,65 @@
-// CORS partagé entre toutes les Edge Functions du site marketing.
-// Restreint aux origines OdocPilot — fini le "*" qui permettait à
-// n'importe quel site d'invoquer nos EF au nom du visiteur.
+// CORS + helpers sécurité PARTAGÉS entre TOUTES les Edge Functions (SaaS + landing).
+//
+// ⚠️ FICHIER MIROIR — existe à l'identique dans DEUX repos :
+//   - odoc-pulse/supabase/functions/_shared/cors.ts        (SaaS — déployé par deploy-vps.yml en SYNC COMPLET)
+//   - odoc-insights-hub/supabase/functions/_shared/cors.ts (landing — déployé par scp manuel)
+// Le conteneur edge-functions du VPS est UNIQUE : le sync complet de deploy-vps écrase ce
+// fichier pour tout le monde. Toute modification doit donc rester un SUPERSET des deux
+// usages et être recopiée dans l'autre repo. (Incident 10/07/2026 : le sync a déployé une
+// version sans clientIp/rateLimit → toutes les EF de la landing en InvalidWorkerCreation.)
 
-const ALLOWED_ORIGINS = new Set([
+const ALLOWED_ORIGINS = new Set<string>([
+  "https://app.odocpilot.com",
   "https://odocpilot.com",
   "https://www.odocpilot.com",
-  "https://app.odocpilot.com",
-  // Dev local (toléré uniquement quand origin est explicitement présent)
+  // Dev local
   "http://localhost:5173",
+  "http://localhost:3000",
+  "http://localhost:4173",
   "http://localhost:8080",
 ]);
 
-/** Headers CORS à renvoyer pour un request donné. */
-export function corsHeaders(req: Request): Record<string, string> {
+const ALLOW_HEADERS =
+  "authorization, x-client-info, apikey, content-type, stripe-signature, x-webhook-secret";
+const ALLOW_METHODS = "GET, POST, OPTIONS";
+
+function pickOrigin(req: Request): string {
   const origin = req.headers.get("origin") ?? "";
-  const allow = ALLOWED_ORIGINS.has(origin) ? origin : "https://odocpilot.com";
+  if (ALLOWED_ORIGINS.has(origin)) return origin;
+  // Callers serveur→serveur (webhooks Stripe, curl…) : origin absent — on n'expose
+  // pas l'origine credentialed de l'app dans ce cas.
+  return "https://app.odocpilot.com";
+}
+
+export function corsHeaders(req: Request): Record<string, string> {
   return {
-    "Access-Control-Allow-Origin": allow,
-    "Access-Control-Allow-Headers":
-      "authorization, x-client-info, apikey, content-type, x-webhook-secret",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Origin": pickOrigin(req),
+    "Access-Control-Allow-Methods": ALLOW_METHODS,
+    "Access-Control-Allow-Headers": ALLOW_HEADERS,
     "Vary": "Origin",
   };
 }
 
-/** Réponse OPTIONS standard pour le preflight. */
+/** Réponse OPTIONS standard — pattern landing : `if (req.method === "OPTIONS") return preflight(req);` */
 export function preflight(req: Request): Response {
   return new Response(null, { status: 204, headers: corsHeaders(req) });
 }
+
+/** Pattern SaaS : `const pf = handlePreflight(req); if (pf) return pf;` */
+export function handlePreflight(req: Request): Response | null {
+  if (req.method !== "OPTIONS") return null;
+  return new Response("ok", { headers: corsHeaders(req) });
+}
+
+/**
+ * Webhooks publics (Stripe, Dropbox, SuperDPD) — pas de souci CORS navigateur,
+ * mais on garde un allow minimal pour le tooling type curl.
+ */
+export const webhookCorsHeaders: Record<string, string> = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "content-type, stripe-signature",
+};
 
 /** Comparaison constant-time de deux chaînes (anti timing attack). */
 export function timingSafeEqual(a: string, b: string): boolean {
