@@ -26,6 +26,23 @@ on:
       - 'refonte/**'
       - '.github/**'
   workflow_dispatch: {}
+  # ── Rebuild QUOTIDIEN : indispensable, pas un confort ────────────────────────
+  # Le blog est PRÉ-RENDU au build (`prerender-blog.ts` → dist/blog/<slug>/index.html)
+  # et le sitemap est GÉNÉRÉ au build (`generate-sitemap.ts`). Or l'agent blog publie
+  # 3 articles/jour DIRECTEMENT EN BASE, sans jamais toucher au repo → aucun push,
+  # donc aucun rebuild, donc les nouveaux articles n'existent ni en HTML pré-rendu
+  # ni dans le sitemap.
+  #
+  # Constaté le 31/07/2026 : dernier build le 10/07 → 84 articles publiés mais
+  # seulement 37 pré-rendus et 37 dans le sitemap. Les 47 autres étaient servis
+  # comme une coquille SPA de 5,9 ko portant le titre générique du site (au lieu
+  # de 30 ko avec les vraies balises title/description/og) et restaient absents du
+  # sitemap, donc indécouvrables. Un mois de production de contenu invisible.
+  #
+  # 17:00 UTC = après le dernier créneau de publication du jour (06/11/16 UTC),
+  # donc les 3 articles quotidiens sont ramassés dans le même build.
+  schedule:
+    - cron: '0 17 * * *'
 
 concurrency:
   group: deploy-odoc-landing
