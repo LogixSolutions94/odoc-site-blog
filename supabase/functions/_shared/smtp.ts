@@ -1,13 +1,26 @@
-// Minimal SMTP client pour le relais Stalwart auto-hébergé (souveraineté : tout part du VPS).
-// Copié à l'identique du repo odoc-pulse (même instance Supabase api.odocpilot.com → même
-// conteneur EF → même réseau interne 10.0.1.1, mêmes variables STALWART_*).
+// ⚠️ FICHIER PARTAGÉ AU DÉPLOIEMENT — LES DEUX REPOS DOIVENT RESTER SYNCHRONISÉS.
+// odoc-pulse et odoc-insights-hub déploient leurs Edge Functions dans le MÊME conteneur,
+// au MÊME chemin : …/volumes/functions/_shared/smtp.ts. Le dernier déploiement écrase
+// l'autre. Toute modification doit donc être répercutée **à l'identique (byte-for-byte)** dans :
+//   - odoc-pulse/supabase/functions/_shared/smtp.ts
+//   - odoc-insights-hub/supabase/functions/_shared/smtp.ts
+// Vérifier avant tout déploiement EF : les deux fichiers ont le même hash.
 //
-// Supporte AUTH LOGIN (Stalwart exige l'auth depuis le hardening 19/05) et un STARTTLS optionnel.
-// Connexion en clair par défaut (réseau Docker interne) ; poser STALWART_STARTTLS=true si imposé.
+// Minimal SMTP client for the self-hosted Stalwart relay (souveraineté : tout part du VPS).
 //
-// ⚠️ À TESTER UNE FOIS EN LIVE :
-//   - « 530 Must issue a STARTTLS command first » → STALWART_STARTTLS=true
+// Pourquoi maison plutôt qu'un SDK : on n'envoie que du transactionnel simple (1 destinataire,
+// HTML), et on veut zéro dépendance externe (choix « tout sur Stalwart »).
+//
+// Supporte AUTH LOGIN (Stalwart exige l'auth depuis le hardening 19/05 — c'est l'absence d'AUTH
+// qui faisait planter le welcome en « 503 5.5.1 You must authenticate first ») et un STARTTLS
+// optionnel. Connexion en clair par défaut (réseau Docker interne 10.0.1.1) ; poser
+// STALWART_STARTTLS=true si le relais l'impose.
+//
+// Prouvé en live le 07/08/2026 sur le relais OVH (ssl0.ovh.net:587, STARTTLS + AUTH LOGIN).
+// Diagnostic si ça casse à nouveau :
+//   - « 530 Must issue a STARTTLS command first » → poser STALWART_STARTTLS=true
 //   - « 535 authentication failed » → vérifier STALWART_USER / STALWART_PASS
+//   - « rejected: 250-... » → une réponse multiligne est mal consommée (cf. read() ci-dessous)
 
 export interface SmtpSendOpts {
   host: string;
@@ -25,15 +38,34 @@ export interface SmtpSendOpts {
 
 const noCrlf = (s: string) => s.replace(/[\r\n]+/g, " ");
 
-/** Lit la config Stalwart depuis l'environnement (valeurs par défaut = réseau Docker interne). */
+/**
+ * Config du relais SMTP pour les emails transactionnels.
+ * Chemin 1 : Stalwart (souverain) si `STALWART_USER`/`STALWART_PASS` sont posés.
+ * Chemin 2 (fallback) : relais **OVH** via les `SMTP_*` (mêmes identifiants que GoTrue,
+ *   déjà en prod et prouvés). Indispensable : sans ce fallback, Stalwart n'ayant pas
+ *   d'identifiants configurés rejetait TOUT (« 503 5.5.1 You must authenticate first »)
+ *   → welcome, invitations d'équipe et relances de factures étaient tous cassés.
+ *   OVH submission 587 exige STARTTLS → activé.
+ */
 export function stalwartEnv() {
   const env = (k: string) => (globalThis as { Deno?: { env: { get(k: string): string | undefined } } }).Deno?.env.get(k);
+  const sUser = env("STALWART_USER") || env("STALWART_SMTP_USER");
+  const sPass = env("STALWART_PASS") || env("STALWART_SMTP_PASS");
+  if (sUser && sPass) {
+    return {
+      host: env("STALWART_HOST") || "10.0.1.1",
+      port: Number(env("STALWART_SMTP_PORT")) || 587,
+      user: sUser,
+      pass: sPass,
+      startTls: (env("STALWART_STARTTLS") || "").toLowerCase() === "true",
+    };
+  }
   return {
-    host: env("STALWART_HOST") || "10.0.1.1",
-    port: Number(env("STALWART_SMTP_PORT")) || 587,
-    user: env("STALWART_USER") || env("STALWART_SMTP_USER"),
-    pass: env("STALWART_PASS") || env("STALWART_SMTP_PASS"),
-    startTls: (env("STALWART_STARTTLS") || "").toLowerCase() === "true",
+    host: env("SMTP_HOST") || "ssl0.ovh.net",
+    port: Number(env("SMTP_PORT")) || 587,
+    user: env("SMTP_USER"),
+    pass: env("SMTP_PASS"),
+    startTls: true,
   };
 }
 
@@ -43,10 +75,25 @@ export async function smtpSend(o: SmtpSendOpts): Promise<void> {
   const enc = new TextEncoder();
   const dec = new TextDecoder();
 
+  // Lit une réponse SMTP **complète**. Une réponse peut être multiligne
+  // (« 250-STARTTLS » … « 250 HELP ») et/ou arriver en plusieurs paquets TCP :
+  // on accumule jusqu'à la ligne finale « NNN <texte> » (espace après le code, pas tiret).
+  // Sans cette boucle, le reliquat de l'EHLO était lu comme réponse de la commande
+  // suivante → « SMTP STARTTLS rejected: 250-STARTTLS » et AUCUN email transactionnel
+  // ne partait via OVH (constaté en prod le 07/08/2026 sur le formulaire de contact).
   const read = async (): Promise<string> => {
-    const buf = new Uint8Array(8192);
-    const n = await conn.read(buf);
-    return dec.decode(buf.subarray(0, n ?? 0));
+    let data = "";
+    for (;;) {
+      const buf = new Uint8Array(8192);
+      const n = await conn.read(buf);
+      if (n === null) break;                        // connexion fermée
+      data += dec.decode(buf.subarray(0, n));
+      // Réponse complète = se termine par CRLF et la dernière ligne est « NNN texte ».
+      const lines = data.split("\r\n");
+      const last = lines[lines.length - 1] === "" ? lines[lines.length - 2] : undefined;
+      if (last && /^\d{3} /.test(last)) break;
+    }
+    return data;
   };
   const write = async (line: string) => { await conn.write(enc.encode(line + "\r\n")); };
   const expect = async (code: string, ctx: string): Promise<string> => {
@@ -78,14 +125,18 @@ export async function smtpSend(o: SmtpSendOpts): Promise<void> {
       await expect("235", "AUTH");
     }
 
-    await write(`MAIL FROM:<${noCrlf(o.fromEmail)}>`);
+    // OVH/Stalwart (submission authentifiée) imposent l'expéditeur = boîte authentifiée.
+    // On force donc le From (enveloppe + en-tête) sur o.user quand une auth est présente,
+    // sinon OVH rejette (« sender not allowed ») ou l'email part en spam.
+    const fromAddr = o.user && o.user.includes("@") ? o.user : o.fromEmail;
+    await write(`MAIL FROM:<${noCrlf(fromAddr)}>`);
     await expect("250", "MAIL FROM");
     await write(`RCPT TO:<${noCrlf(o.to)}>`);
     await expect("250", "RCPT TO");
     await write("DATA");
     await expect("354", "DATA");
 
-    const fromHeader = o.fromName ? `${noCrlf(o.fromName)} <${noCrlf(o.fromEmail)}>` : noCrlf(o.fromEmail);
+    const fromHeader = o.fromName ? `${noCrlf(o.fromName)} <${noCrlf(fromAddr)}>` : noCrlf(fromAddr);
     const headers = [
       `From: ${fromHeader}`,
       `To: ${noCrlf(o.to)}`,
@@ -94,6 +145,7 @@ export async function smtpSend(o: SmtpSendOpts): Promise<void> {
       "MIME-Version: 1.0",
       "Content-Type: text/html; charset=utf-8",
     ].filter(Boolean).join("\r\n");
+    // Normalise les fins de ligne + dot-stuffing (une ligne « . » terminerait le message).
     const safeBody = o.html.replace(/\r?\n/g, "\r\n").replace(/\r\n\./g, "\r\n..");
     await write(`${headers}\r\n\r\n${safeBody}\r\n.`);
     await expect("250", "message body");
