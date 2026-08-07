@@ -66,10 +66,11 @@ Deno.serve(async (req) => {
       console.error("[send-contact-email] db insert threw:", err);
     }
 
-    // 2) Notification email via Stalwart (souverain). Mêmes identifiants que les EF du SaaS.
+    // 2) Notification email. stalwartEnv() prend Stalwart (souverain) s'il est configuré,
+    // sinon retombe sur le relais OVH (SMTP_*) — mêmes identifiants que les EF du SaaS.
     const st = stalwartEnv();
     if (!st.user || !st.pass) {
-      console.error("[send-contact-email] STALWART_USER/PASS manquants");
+      console.error("[send-contact-email] aucun identifiant SMTP (ni STALWART_USER/PASS, ni SMTP_USER/PASS)");
       // Message déjà visible dans l'admin → succès pour le visiteur quand même.
       if (stored) return json(200, { success: true });
       return json(500, { success: false, error: "L'envoi est temporairement indisponible." });
