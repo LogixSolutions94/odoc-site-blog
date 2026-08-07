@@ -39,6 +39,52 @@ export interface SmtpSendOpts {
 const noCrlf = (s: string) => s.replace(/[\r\n]+/g, " ");
 
 /**
+ * Encode une valeur d'en-tête en « encoded-words » RFC 2047 (base64 UTF-8).
+ *
+ * Les en-têtes SMTP sont **ASCII-only** : tout octet non-ASCII écrit brut est réaffiché en
+ * mojibake par le client mail. Constaté en prod le 07/08/2026 sur le formulaire de contact —
+ * `From: OdocPilot â€" formulaire de contact` (le tiret cadratin) — et le même bug frappe le
+ * `Subject`, construit à partir d'une saisie visiteur : « Benoît Dupont » → « BenoÃ®t Dupont ».
+ *
+ * No-op si la chaîne est déjà en ASCII imprimable (cas ultra-majoritaire) : on n'encode que
+ * ce qui en a besoin, les en-têtes restent lisibles en clair.
+ *
+ * Découpage : un encoded-word fait au plus 75 octets (RFC 2047 §2). L'enveloppe
+ * `=?UTF-8?B?` + `?=` coûte 12 octets ⇒ 63 octets de base64 ⇒ **45 octets source**
+ * (multiple de 3 : pas de padding intermédiaire). Les mots sont repliés par CRLF+espace
+ * (folding RFC 5322), ce qui garde chaque ligne très loin de la limite de 998 octets.
+ * La coupe respecte les frontières de caractères UTF-8 (jamais au milieu d'un « é »).
+ */
+export function encodeHeaderWord(s: string): string {
+  if (/^[\x20-\x7E]*$/.test(s)) return s; // ASCII imprimable → tel quel
+  const bytes = new TextEncoder().encode(s);
+  const MAX_SRC = 45;
+  const words: string[] = [];
+  for (let i = 0; i < bytes.length; ) {
+    let end = Math.min(i + MAX_SRC, bytes.length);
+    // Reculer tant qu'on tomberait sur un octet de continuation UTF-8 (10xxxxxx).
+    while (end > i + 1 && end < bytes.length && (bytes[end] & 0xc0) === 0x80) end--;
+    let bin = "";
+    for (const b of bytes.subarray(i, end)) bin += String.fromCharCode(b);
+    words.push(`=?UTF-8?B?${btoa(bin)}?=`);
+    i = end;
+  }
+  return words.join("\r\n ");
+}
+
+/**
+ * Prépare un display-name pour un en-tête d'adresse (`From`).
+ * Non-ASCII → encoded-word (jamais entre guillemets : RFC 2047 l'interdit).
+ * ASCII contenant un « special » RFC 5322 (`,` `<` `:` `;` …) → quoted-string, sinon
+ * le nom casserait le parsing de l'adresse.
+ */
+function displayName(s: string): string {
+  const enc = encodeHeaderWord(s);
+  if (enc !== s) return enc; // encoded-word : déjà sûr, ne pas quoter
+  return /[()<>[\]:;@\\,."]/.test(s) ? `"${s.replace(/(["\\])/g, "\\$1")}"` : s;
+}
+
+/**
  * Config du relais SMTP pour les emails transactionnels.
  * Chemin 1 : Stalwart (souverain) si `STALWART_USER`/`STALWART_PASS` sont posés.
  * Chemin 2 (fallback) : relais **OVH** via les `SMTP_*` (mêmes identifiants que GoTrue,
@@ -136,12 +182,17 @@ export async function smtpSend(o: SmtpSendOpts): Promise<void> {
     await write("DATA");
     await expect("354", "DATA");
 
-    const fromHeader = o.fromName ? `${noCrlf(o.fromName)} <${noCrlf(fromAddr)}>` : noCrlf(fromAddr);
+    // RFC 2047 : on encode le display-name du From et le Subject (construits à partir de
+    // texte français / de saisies visiteur). Les adresses nues (`<addr>`, To, Reply-To) sont
+    // ASCII par construction et restent intactes — les encoder les rendrait inutilisables.
+    const fromHeader = o.fromName
+      ? `${displayName(noCrlf(o.fromName))} <${noCrlf(fromAddr)}>`
+      : noCrlf(fromAddr);
     const headers = [
       `From: ${fromHeader}`,
       `To: ${noCrlf(o.to)}`,
       o.replyTo ? `Reply-To: ${noCrlf(o.replyTo)}` : null,
-      `Subject: ${noCrlf(o.subject)}`,
+      `Subject: ${encodeHeaderWord(noCrlf(o.subject))}`,
       "MIME-Version: 1.0",
       "Content-Type: text/html; charset=utf-8",
     ].filter(Boolean).join("\r\n");
