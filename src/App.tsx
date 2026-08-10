@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { MarketingLayout } from "@/components/MarketingLayout";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const HomePage = lazy(() => import("./pages/HomePage"));
 const PricingPage = lazy(() => import("./pages/PricingPage"));
@@ -44,8 +45,9 @@ const PageLoader = () => (
 );
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <HelmetProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <HelmetProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -87,8 +89,9 @@ const App = () => (
           </Suspense>
         </BrowserRouter>
       </TooltipProvider>
-    </HelmetProvider>
-  </QueryClientProvider>
+      </HelmetProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;
