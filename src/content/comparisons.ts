@@ -29,7 +29,7 @@ const ODOC = {
   iaPrepare: true,
   souverainete: "Données ET IA en France (Mistral)",
   gratuit: "Palier Conformité 0€ + essai 14 j sans CB",
-  prix: "Par entreprise, sans coût par utilisateur (0€ / 49 / 89 / 149)",
+  prix: "Par entreprise, sans coût par utilisateur (0 € / 49,99 / 89,99 / 149,99)",
 };
 
 export const COMPARISONS: Comparison[] = [
@@ -209,7 +209,7 @@ export const COMPARISONS: Comparison[] = [
     ],
     faqs: [
       { q: "Axonaut a-t-il une IA qui prépare l'admin ?", a: "Axonaut est un ERP de gestion piloté manuellement, avec des fonctions IA limitées. OdocPilot met l'IA au cœur : elle lit, classe et prépare vos factures, et vous validez en un clic." },
-      { q: "Lequel est le moins cher pour démarrer ?", a: "OdocPilot propose un palier Conformité gratuit et des offres dès 49 €/mois par entreprise (sans coût par utilisateur). Axonaut fonctionne par utilisateur, avec un essai gratuit de 15 jours mais pas de palier gratuit permanent." },
+      { q: "Lequel est le moins cher pour démarrer ?", a: "OdocPilot propose un palier Conformité gratuit et des offres dès 49,99 €/mois par entreprise (sans coût par utilisateur). Axonaut fonctionne par utilisateur, avec un essai gratuit de 15 jours mais pas de palier gratuit permanent." },
       { q: "Les deux préparent-ils à la facturation électronique 2026 ?", a: "Oui, les deux génèrent des factures au format conforme. OdocPilot ajoute la lecture IA des factures reçues, l'export FEC et un générateur Factur-X gratuit sans compte." },
     ],
   },

@@ -35,8 +35,8 @@ const plans = [
   },
   {
     name: "Essential",
-    monthlyPrice: 49,
-    annualPrice: 39,
+    monthlyPrice: 49.99,
+    annualPrice: 39.2,
     target: "Indépendant, solo, TPE",
     badge: null as string | null,
     highlight: false,
@@ -54,8 +54,8 @@ const plans = [
   },
   {
     name: "Pro",
-    monthlyPrice: 89,
-    annualPrice: 71,
+    monthlyPrice: 89.99,
+    annualPrice: 71.2,
     target: "Le copilote IA complet",
     badge: "Le plus choisi",
     highlight: true,
@@ -73,8 +73,8 @@ const plans = [
   },
   {
     name: "Manager",
-    monthlyPrice: 149,
-    annualPrice: 119,
+    monthlyPrice: 149.99,
+    annualPrice: 119.2,
     target: "Multi-équipes, dirigeants",
     badge: null,
     highlight: false,
@@ -119,6 +119,16 @@ const trustBadges = [
   { icon: Check, label: "Sans coût par utilisateur" },
 ];
 
+/** « 49,99 € » / « 470,40 € » — prix alignés sur le store Lemon Squeezy live (23/08/2026). */
+function fmtEur(n: number): string {
+  return new Intl.NumberFormat("fr-FR", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: Number.isInteger(n) ? 0 : 2,
+    maximumFractionDigits: 2,
+  }).format(n);
+}
+
 function Cell({ value }: { value: boolean | string }) {
   if (typeof value === "string") return <span className="font-semibold text-foreground">{value}</span>;
   return value ? <Check className="h-4 w-4 text-primary mx-auto" /> : <span className="text-muted-foreground/40">—</span>;
@@ -131,7 +141,7 @@ export default function PricingPage() {
     <div className="flex flex-col items-center">
       <SEOHead
         title="Tarifs OdocPilot — un seul prix, tout compris | Essai 14 jours gratuit"
-        description="Des tarifs simples et transparents, sans coût par utilisateur. Palier Conformité gratuit, puis Essential 49€, Pro 89€, Manager 149€. Préparez votre conformité facture électronique 2026/2027. Essai 14 jours sans carte bancaire. Données et IA en France."
+        description="Des tarifs simples et transparents, sans coût par utilisateur. Palier Conformité gratuit, puis Essential 49,99 €, Pro 89,99 €, Manager 149,99 €. Préparez votre conformité facture électronique 2026/2027. Essai 14 jours sans carte bancaire. Données et IA en France."
         canonical="/pricing"
         jsonLd={{
           "@context": "https://schema.org",
@@ -190,10 +200,10 @@ export default function PricingPage() {
                   {isFree ? (
                     <span className="text-3xl font-extrabold text-foreground">Gratuit</span>
                   ) : (
-                    <><span className="text-3xl font-extrabold text-foreground tabular-nums">{price}€</span><span className="text-muted-foreground text-sm">/mois</span></>
+                    <><span className="text-3xl font-extrabold text-foreground tabular-nums">{fmtEur(price)}</span><span className="text-muted-foreground text-sm">/mois</span></>
                   )}
                 </div>
-                {annual && !isFree && <p className="mt-1 text-xs text-muted-foreground tabular-nums">soit {plan.annualPrice * 12}€ /an</p>}
+                {annual && !isFree && <p className="mt-1 text-xs text-muted-foreground tabular-nums">soit {fmtEur(Math.round(plan.annualPrice * 12 * 100) / 100)} /an</p>}
                 <ul className="mt-6 flex-1 space-y-2.5">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground"><Check className="h-4 w-4 text-primary shrink-0 mt-0.5" /><span>{f}</span></li>
@@ -222,7 +232,7 @@ export default function PricingPage() {
           <div>
             <h3 className="font-bold text-foreground">La conformité coûte moins cher que l'amende</h3>
             <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
-              La loi de finances 2026 prévoit <strong className="text-foreground tabular-nums">50 € par facture</strong> émise dans un format non conforme et <strong className="text-foreground tabular-nums">500 € par manquement</strong> à l'e-reporting. À partir de <strong className="text-foreground tabular-nums">49 €/mois</strong>, OdocPilot vous met en conformité <em>et</em> prépare votre administratif au quotidien.{" "}
+              La loi de finances 2026 prévoit <strong className="text-foreground tabular-nums">50 € par facture</strong> émise dans un format non conforme et <strong className="text-foreground tabular-nums">500 € par manquement</strong> à l'e-reporting. À partir de <strong className="text-foreground tabular-nums">49,99 €/mois</strong>, OdocPilot vous met en conformité <em>et</em> prépare votre administratif au quotidien.{" "}
               <a href="https://www.impots.gouv.fr/professionnel/facturation-electronique" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Source : impots.gouv.fr</a>.
             </p>
           </div>

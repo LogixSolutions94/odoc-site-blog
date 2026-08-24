@@ -90,7 +90,7 @@ export const GUIDES: Guide[] = [
       { q: "Une facture électronique, c'est juste un PDF par email ?", a: "Non. La loi impose un format structuré, lisible automatiquement par les logiciels et l'administration : Factur-X (PDF + données XML), UBL ou CII. Un simple PDF envoyé par email ne sera plus suffisant à partir de 2026." },
       { q: "Suis-je concerné même si je suis micro-entreprise ?", a: "Oui. La réforme s'applique à toutes les entreprises assujetties à la TVA, y compris les micro-entreprises. La réception devient obligatoire au 1er septembre 2026, l'émission et l'e-reporting au 1er septembre 2027." },
       { q: "Faut-il un expert-comptable pour se mettre en conformité ?", a: "Non. OdocPilot est justement conçu pour les dirigeants qui pilotent leur administratif eux-mêmes : génération Factur-X sans paramétrage, lecture IA des factures, export FEC pour transmettre à un comptable si besoin." },
-      { q: "Combien ça coûte de se mettre en conformité ?", a: "Vous pouvez commencer gratuitement : générateur Factur-X, diagnostic et vérificateur sont sans compte. Les offres OdocPilot démarrent à 49 €/mois, par entreprise et sans coût par utilisateur, avec un essai de 14 jours sans carte bancaire." },
+      { q: "Combien ça coûte de se mettre en conformité ?", a: "Vous pouvez commencer gratuitement : générateur Factur-X, diagnostic et vérificateur sont sans compte. Les offres OdocPilot démarrent à 49,99 €/mois, par entreprise et sans coût par utilisateur, avec un essai de 14 jours sans carte bancaire." },
     ],
     related: [
       { to: "/e-facture", label: "La réforme e-facture (page pilier)" },
@@ -318,7 +318,7 @@ export const GUIDES: Guide[] = [
       {
         h2: "Commencer gratuitement",
         atomic:
-          "Vous pouvez commencer sans rien payer : le diagnostic, le générateur Factur-X et le vérificateur sont gratuits et sans inscription. Le palier Conformité d'OdocPilot est gratuit ; les offres complètes démarrent à 49 €/mois, sans coût par utilisateur.",
+          "Vous pouvez commencer sans rien payer : le diagnostic, le générateur Factur-X et le vérificateur sont gratuits et sans inscription. Le palier Conformité d'OdocPilot est gratuit ; les offres complètes démarrent à 49,99 €/mois, sans coût par utilisateur.",
         body: [
           "Pas besoin de carte bancaire pour tester. Faites le diagnostic, générez une facture conforme, et voyez l'IA préparer votre administratif sur vos propres documents.",
         ],

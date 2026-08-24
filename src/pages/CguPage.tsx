@@ -37,7 +37,7 @@ export default function CguPage() {
         <section>
           <h2 className="text-xl font-semibold text-foreground">Article 3 — Abonnements et facturation</h2>
           <p className="mt-3">
-            Odoc propose plusieurs formules d'abonnement selon le plan tarifaire en vigueur, consultable sur la page <a href="/pricing" className="text-primary hover:underline">Tarifs</a> (à partir de 49 € HT/mois). Les prix peuvent évoluer ; seule la page Tarifs fait foi.
+            Odoc propose plusieurs formules d'abonnement selon le plan tarifaire en vigueur, consultable sur la page <a href="/pricing" className="text-primary hover:underline">Tarifs</a> (à partir de 49,99 € HT/mois). Les prix peuvent évoluer ; seule la page Tarifs fait foi.
           </p>
           <p className="mt-2">
             Les abonnements sont <strong className="text-foreground">sans engagement</strong> : l'utilisateur peut résilier à tout moment depuis son espace client. En cas de paiement annuel, l'abonnement reste actif jusqu'à la fin de la période payée. Aucun remboursement n'est effectué pour la période en cours.

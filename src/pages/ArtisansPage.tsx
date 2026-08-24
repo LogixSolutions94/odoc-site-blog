@@ -28,7 +28,7 @@ const jsonLd = {
   operatingSystem: "Web",
   description:
     "OdocPilot pour les artisans du BTP : devis de chantier et factures au format Factur-X conforme, relances préparées automatiquement, lecture IA des factures. L'IA prépare, vous validez. Conformité facture électronique 2026/2027. Données et IA hébergées en France.",
-  offers: [{ "@type": "Offer", price: "49", priceCurrency: "EUR" }],
+  offers: [{ "@type": "Offer", price: "49.99", priceCurrency: "EUR" }],
 };
 
 export default function ArtisansPage() {

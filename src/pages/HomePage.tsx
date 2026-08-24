@@ -80,9 +80,9 @@ const sovereignty = [
 ];
 
 const pricing = [
-  { name: "Essential", price: "49€", annual: "39€/mois en annuel", note: "Pour l'indépendant qui centralise documents, factures et conformité." },
-  { name: "Pro", price: "89€", annual: "71€/mois en annuel", note: "Le copilote IA complet : lecture, classement, relances, factures conformes.", highlight: true },
-  { name: "Manager", price: "149€", annual: "119€/mois en annuel", note: "Pour les structures multi-équipes, avec un accompagnement dédié." },
+  { name: "Essential", price: "49,99 €", annual: "39,20 €/mois en annuel", note: "Pour l'indépendant qui centralise documents, factures et conformité." },
+  { name: "Pro", price: "89,99 €", annual: "71,20 €/mois en annuel", note: "Le copilote IA complet : lecture, classement, relances, factures conformes.", highlight: true },
+  { name: "Manager", price: "149,99 €", annual: "119,20 €/mois en annuel", note: "Pour les structures multi-équipes, avec un accompagnement dédié." },
 ];
 
 const faqs = [
@@ -136,13 +136,13 @@ const jsonLd = {
         "@type": "AggregateOffer",
         priceCurrency: "EUR",
         lowPrice: "0",
-        highPrice: "149",
+        highPrice: "149.99",
         offerCount: 4,
         offers: [
           { "@type": "Offer", name: "Conformité", price: "0", priceCurrency: "EUR" },
-          { "@type": "Offer", name: "Essential", price: "49", priceCurrency: "EUR" },
-          { "@type": "Offer", name: "Pro", price: "89", priceCurrency: "EUR" },
-          { "@type": "Offer", name: "Manager", price: "149", priceCurrency: "EUR" },
+          { "@type": "Offer", name: "Essential", price: "49.99", priceCurrency: "EUR" },
+          { "@type": "Offer", name: "Pro", price: "89.99", priceCurrency: "EUR" },
+          { "@type": "Offer", name: "Manager", price: "149.99", priceCurrency: "EUR" },
         ],
       },
     },
@@ -490,7 +490,7 @@ export default function HomePage() {
         <TrustCredentials className="mt-8" />
       </section>
 
-      {/* ───────── TARIF TEASER (49 / 89 / 149) ───────── */}
+      {/* ───────── TARIF TEASER (49,99 / 89,99 / 149,99 — aligné Lemon live 23/08/2026) ───────── */}
       <section className="w-full bg-secondary/60 border-y border-border">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Tarifs clairs, par entreprise</p>

@@ -119,7 +119,7 @@ const COMPARISON = [
   { feature: "Export FEC pour l'expert-comptable",       odoc: true,      excel: false,          other: true },
   { feature: "Données et IA hébergées en France",        odoc: true,      excel: "—",            other: "Variable" },
   { feature: "Vous gardez le dernier mot (validation)",  odoc: true,      excel: "—",            other: false },
-  { feature: "Prix mensuel (par entreprise)",            odoc: "dès 49€", excel: "—",            other: "Variable" },
+  { feature: "Prix mensuel (par entreprise)",            odoc: "dès 49,99 €", excel: "—",            other: "Variable" },
 ];
 
 const FAQ = [
