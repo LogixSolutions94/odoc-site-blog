@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { subscribeNewsletter } from "@/lib/newsletter";
 import { TrustCredentials } from "@/components/TrustCredentials";
+import { HeroSection } from "@/components/HeroSection";
+import { HeroSectionLab } from "@/components/HeroSectionLab";
+import { HeroSectionUS } from "@/components/HeroSectionUS";
 import {
   ArrowRight,
   ChevronRight,
@@ -162,6 +165,8 @@ export default function HomePage() {
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState(""); // honeypot
   const [loading, setLoading] = useState(false);
+  // Variante de hero testable via ?hero=lab (comparaison A/B en preview).
+  const heroVariant = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("hero") : null;
 
   async function handleNewsletter(e: React.FormEvent) {
     e.preventDefault();
@@ -185,92 +190,8 @@ export default function HomePage() {
         jsonLd={jsonLd}
       />
 
-      {/* ───────── HERO ───────── */}
-      <section className="w-full relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-24 right-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
-          <div className="absolute bottom-0 -left-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
-        </div>
-        <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16">
-          <div className="max-w-3xl mx-auto text-center">
-            <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              <span className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">
-                Conformité facturation électronique 2026 / 2027
-              </span>
-            </MotionDiv>
-            <MotionDiv initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08, duration: 0.6 }}>
-              <h1 className="mt-4 text-4xl sm:text-5xl lg:text-[3.1rem] font-extrabold tracking-tight leading-[1.08] text-foreground">
-                La réforme de la facture électronique arrive.{" "}
-                <span className="bg-gradient-cta bg-clip-text text-transparent">OdocPilot la prépare pour vous, vous validez en un clic.</span>
-              </h1>
-            </MotionDiv>
-            <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16, duration: 0.6 }}>
-              <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed">
-                À partir du 1ᵉʳ septembre 2026, recevoir une facture au format électronique structuré devient obligatoire pour toutes les entreprises ; l'émission suivra en 2027. OdocPilot est le copilote des dirigeants de TPE, PME et indépendants qui gèrent leur administratif{" "}
-                <strong className="text-foreground">sans expert-comptable au quotidien</strong> : une intelligence artificielle française qui lit, classe et prépare vos factures et vos relances — pendant que vous gardez la décision finale.
-              </p>
-            </MotionDiv>
-            <MotionDiv initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24, duration: 0.5 }}>
-              <div className="mt-7 flex flex-col items-center sm:flex-row sm:justify-center flex-wrap gap-3">
-                <a href={SIGNUP} data-umami-event="cta-essai-hero">
-                  <Button size="lg" className="w-full sm:w-auto bg-gradient-cta text-primary-foreground font-bold px-7 py-6 text-base shadow-lg shadow-primary/20 hover:opacity-95">
-                    Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </a>
-                <Link to={CONFORMITE} data-umami-event="cta-conformite-hero">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto px-7 py-6 text-base">
-                    Vérifier ma conformité (3 min)
-                  </Button>
-                </Link>
-              </div>
-              <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium text-muted-foreground">
-                <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-primary" /> L'IA prépare, vous validez</span>
-                <span className="inline-flex items-center gap-1.5"><MapPin className="h-4 w-4 text-primary" /> Données et IA en France</span>
-                <span className="inline-flex items-center gap-1.5"><CreditCard className="h-4 w-4 text-primary" /> Essai 14 j sans carte bancaire</span>
-              </div>
-            </MotionDiv>
-          </div>
-
-          {/* Aperçu produit honnête : facture lue par l'IA, à valider */}
-          <MotionDiv initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6 }} className="mt-12 max-w-2xl mx-auto">
-            <div className="rounded-2xl border border-border bg-card shadow-elevated overflow-hidden text-left">
-              <div className="flex items-center gap-1.5 px-4 h-9 bg-muted/60 border-b border-border">
-                <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
-                <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
-                <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
-                <span className="ml-3 text-[11px] text-muted-foreground">app.odocpilot.com — Factures reçues</span>
-              </div>
-              <div className="p-5">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Facture lue par l'IA · à valider</p>
-                <div className="mt-3 rounded-xl border border-border p-4 space-y-0">
-                  {[
-                    { l: "Fournisseur", v: "Menuiserie Laurent" },
-                    { l: "Montant HT", v: "1 820,00 €" },
-                    { l: "TVA (20 %)", v: "364,00 €" },
-                    { l: "Échéance", v: "30/06/2026" },
-                  ].map((r) => (
-                    <div key={r.l} className="flex items-center justify-between py-2 border-b border-border/60 text-sm">
-                      <span className="text-muted-foreground">{r.l}</span>
-                      <span className="font-semibold text-foreground rounded bg-primary/10 px-1.5">{r.v}</span>
-                    </div>
-                  ))}
-                  <div className="flex items-center justify-between py-2 text-sm">
-                    <span className="text-muted-foreground">Compte proposé</span>
-                    <span className="font-semibold text-foreground">606 — Achats</span>
-                  </div>
-                </div>
-                <p className="mt-3 inline-flex items-center gap-2 rounded-lg bg-primary/10 text-primary text-xs font-semibold px-2.5 py-1.5">
-                  <Sparkles className="h-3.5 w-3.5" /> L'IA a préparé — rien n'est validé sans vous
-                </p>
-                <div className="mt-3 flex gap-2">
-                  <span className="rounded-lg bg-gradient-cta text-primary-foreground text-sm font-semibold px-4 py-2">Valider</span>
-                  <span className="rounded-lg border border-border text-muted-foreground text-sm px-4 py-2">Corriger</span>
-                </div>
-              </div>
-            </div>
-          </MotionDiv>
-        </div>
-      </section>
+      {/* ───────── HERO — défaut = US ; ?hero=demo (Copilote) / ?hero=lab (sombre) ───────── */}
+      {heroVariant === "lab" ? <HeroSectionLab /> : heroVariant === "demo" ? <HeroSection /> : <HeroSectionUS />}
 
       {/* ───────── BANDE CONFIANCE ───────── */}
       <section className="w-full border-y border-border bg-secondary/60">
