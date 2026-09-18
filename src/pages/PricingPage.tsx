@@ -12,99 +12,38 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+import { PLANS, EXTRA_SEAT_PRICE, SEATS_CLAIM, ENTRY_PRICE_LABEL, fmtEur } from "@/content/pricing";
+
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
 const SIGNUP = `${APP_URL}/auth?mode=signup`;
 
-const plans = [
-  {
-    name: "Conformité",
-    monthlyPrice: 0,
-    annualPrice: 0,
-    target: "Se mettre en conformité, gratuitement",
-    badge: "Gratuit" as string | null,
-    highlight: false,
-    features: [
-      "Générateur de factures Factur-X illimité",
-      "Diagnostic + vérificateur de conformité",
-      "Recevez et lisez vos premières factures avec l'IA",
-      "1 utilisateur · hébergé en France",
-      "Sans carte bancaire, sans engagement",
-    ],
-    cta: "Commencer gratuitement",
-    ctaLink: SIGNUP,
-  },
-  {
-    name: "Essential",
-    monthlyPrice: 49.99,
-    annualPrice: 39.2,
-    target: "Indépendant, solo, TPE",
-    badge: null as string | null,
-    highlight: false,
-    features: [
-      "Devis & factures illimités",
-      "Factures au format Factur-X conforme",
-      "Lecture IA des factures reçues",
-      "Recherche de documents en langage naturel",
-      "Export FEC pour votre expert-comptable",
-      "Hébergé en France · conforme RGPD",
-      "Support par email",
-    ],
-    cta: "Commencer l'essai gratuit",
-    ctaLink: SIGNUP,
-  },
-  {
-    name: "Pro",
-    monthlyPrice: 89.99,
-    annualPrice: 71.2,
-    target: "Le copilote IA complet",
-    badge: "Le plus choisi",
-    highlight: true,
-    features: [
-      "Tout Essential, multi-utilisateurs sans surcoût",
-      "Copilote Brain : répond sur vos données, prépare les actions",
-      "Relances clients préparées automatiquement",
-      "Suivi de trésorerie",
-      "Tableaux de bord & automatisations",
-      "Classement intelligent des documents",
-      "Support prioritaire",
-    ],
-    cta: "Commencer l'essai gratuit",
-    ctaLink: SIGNUP,
-  },
-  {
-    name: "Manager",
-    monthlyPrice: 149.99,
-    annualPrice: 119.2,
-    target: "Multi-équipes, dirigeants",
-    badge: null,
-    highlight: false,
-    features: [
-      "Tout Pro",
-      "Multi-équipes & délégation",
-      "Rapports dirigeant personnalisés",
-      "Documents illimités",
-      "Accompagnement à la mise en conformité",
-      "Support dédié",
-    ],
-    cta: "Commencer l'essai gratuit",
-    ctaLink: SIGNUP,
-  },
-];
+/** Grille : source unique `src/content/pricing.ts`, miroir de `plan_limits`. */
+const plans = PLANS.map((p) => ({
+  ...p,
+  cta: p.monthlyPrice === 0 ? "Commencer gratuitement" : "Commencer l'essai gratuit",
+  ctaLink: SIGNUP,
+}));
 
+/**
+ * Comparatif — chaque ligne doit correspondre à `plan_limits`.
+ * Avant le 18/09/2026 ce tableau annonçait « Utilisateurs : Illimités » sur Pro
+ * et Manager alors que la base plafonnait à 5 et 10, et donnait le copilote pour
+ * absent d'Essentiel alors qu'il y était. Deux erreurs en sens inverse.
+ */
 const compare = [
-  { label: "Générateur de factures Factur-X", gratuit: "Illimité", essential: "Illimité", pro: "Illimité", manager: "Illimité" },
-  { label: "Diagnostic + vérificateur de conformité", gratuit: true, essential: true, pro: true, manager: true },
-  { label: "Lecture IA des factures reçues", gratuit: "Découverte", essential: true, pro: true, manager: true },
-  { label: "Recherche en langage naturel", gratuit: false, essential: true, pro: true, manager: true },
-  { label: "Export FEC pour l'expert-comptable", gratuit: false, essential: true, pro: true, manager: true },
-  { label: "Utilisateurs", gratuit: "1", essential: "1", pro: "Illimités", manager: "Illimités" },
-  { label: "Copilote Brain", gratuit: false, essential: false, pro: true, manager: true },
-  { label: "Relances préparées automatiquement", gratuit: false, essential: false, pro: true, manager: true },
-  { label: "Multi-équipes & délégation", gratuit: false, essential: false, pro: false, manager: true },
+  { label: "Générateur de factures Factur-X", gratuit: "Illimité", essentiel: "Illimité", pro: "Illimité", equipe: "Illimité", manager: "Illimité" },
+  { label: "Diagnostic + vérificateur de conformité", gratuit: true, essentiel: true, pro: true, equipe: true, manager: true },
+  { label: "Documents traités par mois", gratuit: "50", essentiel: "200", pro: "2 000", equipe: "4 000", manager: "6 000" },
+  { label: "Copilote IA sur vos données", gratuit: false, essentiel: true, pro: true, equipe: true, manager: true },
+  { label: "Recherche en langage naturel", gratuit: false, essentiel: true, pro: true, equipe: true, manager: true },
+  { label: "Export FEC pour l'expert-comptable", gratuit: false, essentiel: true, pro: true, equipe: true, manager: true },
+  { label: "Relances préparées automatiquement", gratuit: false, essentiel: false, pro: true, equipe: true, manager: true },
+  { label: "Utilisateurs inclus", gratuit: "1", essentiel: "1", pro: "1", equipe: "5", manager: "10" },
+  { label: "Multi-équipes & délégation", gratuit: false, essentiel: false, pro: false, equipe: true, manager: true },
 ];
 
 const faqItems = [
-  { question: "Y a-t-il un coût par utilisateur ?", answer: "Non. Le prix de votre plan est tout compris : à partir du plan Pro, vous ajoutez vos collaborateurs sans aucun supplément. Vous savez exactement ce que vous payez, et votre facture ne gonfle pas quand votre équipe grandit." },
+  { question: "Y a-t-il un coût par utilisateur ?", answer: SEATS_CLAIM + " Vous n'êtes donc jamais facturé à l'utilisateur : vous choisissez un plan qui inclut le nombre de sièges dont vous avez besoin, et vous n'ajoutez un siège payant que si vous dépassez." },
   { question: "Suis-je prêt pour la facturation électronique 2026 ?", answer: "Dès le 1ᵉʳ septembre 2026, toute entreprise assujettie à la TVA devra recevoir ses factures au format électronique structuré ; l'émission suivra en 2027. OdocPilot génère vos factures au format légal Factur-X et prépare votre conformité étape par étape. La transmission via une plateforme agréée partenaire est en cours de raccordement et sera prête avant l'échéance." },
   { question: "L'essai engage-t-il quelque chose ?", answer: "Non : 14 jours gratuits sur tous les plans, sans carte bancaire. Vous testez en conditions réelles et vous n'êtes prélevé que si vous choisissez d'activer un abonnement à la fin de l'essai. Sinon, vous ne payez rien." },
   { question: "Puis-je changer de plan à tout moment ?", answer: "Oui, vous montez ou descendez de plan quand vous voulez. Le changement prend effet immédiatement, avec un prorata automatique. Aucun engagement de durée." },
@@ -116,18 +55,8 @@ const trustBadges = [
   { icon: MapPin, label: "Données et IA en France" },
   { icon: CreditCard, label: "Essai sans carte bancaire" },
   { icon: RotateCcw, label: "Sans engagement" },
-  { icon: Check, label: "Sans coût par utilisateur" },
+  { icon: Check, label: `Sièges supplémentaires à ${EXTRA_SEAT_PRICE} €` },
 ];
-
-/** « 49,99 € » / « 470,40 € » — prix alignés sur le store Lemon Squeezy live (23/08/2026). */
-function fmtEur(n: number): string {
-  return new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "EUR",
-    minimumFractionDigits: Number.isInteger(n) ? 0 : 2,
-    maximumFractionDigits: 2,
-  }).format(n);
-}
 
 function Cell({ value }: { value: boolean | string }) {
   if (typeof value === "string") return <span className="font-semibold text-foreground">{value}</span>;
@@ -141,7 +70,7 @@ export default function PricingPage() {
     <div className="flex flex-col items-center">
       <SEOHead
         title="Tarifs OdocPilot — un seul prix, tout compris | Essai 14 jours gratuit"
-        description="Des tarifs simples et transparents, sans coût par utilisateur. Palier Conformité gratuit, puis Essential 49,99 €, Pro 89,99 €, Manager 149,99 €. Préparez votre conformité facture électronique 2026/2027. Essai 14 jours sans carte bancaire. Données et IA en France."
+        description={`Des tarifs simples et transparents, par entreprise. Palier Conformité gratuit, puis Essentiel ${fmtEur(29)}, Pro ${fmtEur(49)}, Équipe ${fmtEur(89)}, Manager ${fmtEur(149)} par mois. Préparez votre conformité facture électronique 2026/2027. Essai 14 jours sans carte bancaire. Données et IA en France.`}
         canonical="/pricing"
         jsonLd={{
           "@context": "https://schema.org",
@@ -232,7 +161,7 @@ export default function PricingPage() {
           <div>
             <h3 className="font-bold text-foreground">La conformité coûte moins cher que l'amende</h3>
             <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
-              La loi de finances 2026 prévoit <strong className="text-foreground tabular-nums">50 € par facture</strong> émise dans un format non conforme et <strong className="text-foreground tabular-nums">500 € par manquement</strong> à l'e-reporting. À partir de <strong className="text-foreground tabular-nums">49,99 €/mois</strong>, OdocPilot vous met en conformité <em>et</em> prépare votre administratif au quotidien.{" "}
+              La loi de finances 2026 prévoit <strong className="text-foreground tabular-nums">50 € par facture</strong> émise dans un format non conforme et <strong className="text-foreground tabular-nums">500 € par manquement</strong> à l'e-reporting. À partir de <strong className="text-foreground tabular-nums">{ENTRY_PRICE_LABEL}</strong>, OdocPilot vous met en conformité <em>et</em> prépare votre administratif au quotidien.{" "}
               <a href="https://www.impots.gouv.fr/professionnel/facturation-electronique" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Source : impots.gouv.fr</a>.
             </p>
           </div>
@@ -248,8 +177,9 @@ export default function PricingPage() {
               <tr className="border-b border-border bg-secondary/60">
                 <th className="px-4 sm:px-6 py-4 text-left font-semibold text-foreground">Inclus</th>
                 <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Conformité</th>
-                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Essential</th>
-                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-primary">Pro</th>
+                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-primary">Essentiel</th>
+                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Pro</th>
+                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Équipe</th>
                 <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Manager</th>
               </tr>
             </thead>
@@ -258,8 +188,9 @@ export default function PricingPage() {
                 <tr key={row.label} className="border-b border-border last:border-0">
                   <td className="px-4 sm:px-6 py-3.5 font-medium text-foreground">{row.label}</td>
                   <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.gratuit} /></td>
-                  <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.essential} /></td>
+                  <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.essentiel} /></td>
                   <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.pro} /></td>
+                  <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.equipe} /></td>
                   <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.manager} /></td>
                 </tr>
               ))}

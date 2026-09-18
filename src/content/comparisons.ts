@@ -29,7 +29,7 @@ const ODOC = {
   iaPrepare: true,
   souverainete: "Données ET IA en France (Mistral)",
   gratuit: "Palier Conformité 0€ + essai 14 j sans CB",
-  prix: "Par entreprise, sans coût par utilisateur (0 € / 49,99 / 89,99 / 149,99)",
+  prix: "Par entreprise (0 € / 29 / 49 / 89 / 149), sièges inclus selon le plan",
 };
 
 export const COMPARISONS: Comparison[] = [
@@ -149,7 +149,7 @@ export const COMPARISONS: Comparison[] = [
       "Comparatif honnête OdocPilot vs Sellsy : Sellsy est une suite CRM + facturation pour équipes ; OdocPilot est un copilote IA simple et sans engagement pour le dirigeant de TPE. Facturation électronique, IA, prix, engagement.",
     h1: "OdocPilot vs Sellsy : copilote IA simple ou suite CRM ?",
     intro:
-      "Sellsy est une suite complète CRM + facturation pour les équipes commerciales. OdocPilot vise la simplicité pour le dirigeant de TPE : l'IA prépare l'admin, vous validez, sans engagement et sans coût par utilisateur.",
+      "Sellsy est une suite complète CRM + facturation pour les équipes commerciales. OdocPilot vise la simplicité pour le dirigeant de TPE : l'IA prépare l'admin, vous validez, sans engagement et avec un tarif par entreprise.",
     themStrength:
       "Sellsy est une suite riche (CRM, prospection, facturation, trésorerie) très adaptée aux équipes commerciales qui veulent tout piloter au même endroit. Si vous gérez un pipe commercial avec une équipe, Sellsy a de la profondeur.",
     odocAngle:
@@ -159,7 +159,7 @@ export const COMPARISONS: Comparison[] = [
       { dim: "Génération Factur-X (EN 16931)", odoc: ODOC.facturX, them: "Oui" },
       { dim: "L'IA prépare l'admin, vous validez en 1 clic", odoc: ODOC.iaPrepare, them: "Non (suite de gestion)" },
       { dim: "Palier / essai gratuit", odoc: ODOC.gratuit, them: "Essai 15 j sans CB (pas de palier gratuit)" },
-      { dim: "Engagement / utilisateurs", odoc: "Sans engagement, sans coût par utilisateur", them: "Souvent min. 2 utilisateurs + engagement annuel" },
+      { dim: "Engagement / utilisateurs", odoc: "Sans engagement, tarif par entreprise (1 à 10 sièges selon le plan)", them: "Souvent min. 2 utilisateurs + engagement annuel" },
       { dim: "Prise en main", odoc: "Immédiate (l'IA fait le travail)", them: "Suite riche à paramétrer" },
     ],
     chooseThem: [
@@ -209,7 +209,7 @@ export const COMPARISONS: Comparison[] = [
     ],
     faqs: [
       { q: "Axonaut a-t-il une IA qui prépare l'admin ?", a: "Axonaut est un ERP de gestion piloté manuellement, avec des fonctions IA limitées. OdocPilot met l'IA au cœur : elle lit, classe et prépare vos factures, et vous validez en un clic." },
-      { q: "Lequel est le moins cher pour démarrer ?", a: "OdocPilot propose un palier Conformité gratuit et des offres dès 49,99 €/mois par entreprise (sans coût par utilisateur). Axonaut fonctionne par utilisateur, avec un essai gratuit de 15 jours mais pas de palier gratuit permanent." },
+      { q: "Lequel est le moins cher pour démarrer ?", a: "OdocPilot propose un palier Conformité gratuit et des offres dès 29 €/mois par entreprise, copilote IA inclus. Axonaut fonctionne par utilisateur, avec un essai gratuit de 15 jours mais pas de palier gratuit permanent." },
       { q: "Les deux préparent-ils à la facturation électronique 2026 ?", a: "Oui, les deux génèrent des factures au format conforme. OdocPilot ajoute la lecture IA des factures reçues, l'export FEC et un générateur Factur-X gratuit sans compte." },
     ],
   },

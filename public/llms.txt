@@ -12,22 +12,24 @@ Dirigeants TPE/PME et indépendants français sans expert-comptable au quotidien
 
 ## Tarifs (2026)
 
-- **Essential** — 49 €/mois
-- **Pro** — 89 €/mois
-- **Manager** — 149 €/mois
-- **Conformité** — palier gratuit (e-facture seule)
+- **Conformité** — gratuit : 50 documents/mois, sans copilote IA
+- **Essentiel** — 29 €/mois, copilote IA inclus, 1 utilisateur
+- **Pro** — 49 €/mois, tous les modules, 1 utilisateur
+- **Équipe** — 89 €/mois, 5 utilisateurs inclus
+- **Manager** — 149 €/mois, 10 utilisateurs inclus
+- Siège supplémentaire : 12 €/mois. Annuel : −20 %.
 - Essai 14 jours, sans carte bancaire
 
 ## Différenciation
 
-- Souveraineté réelle : données **et** IA hébergées en France
+- Souveraineté réelle : données **et** IA hébergées en France. Mistral est le SEUL fournisseur de modèles, sans repli vers un fournisseur non européen (depuis le 18/09/2026). Seul transfert hors UE : le paiement des abonnements (Lemon Squeezy), qui n'accède à aucun document.
 - RGPD, AI Act, démarche Numérique Responsable / IA frugale (Mistral FR)
 - Wedge = conformité e-facture (réception 01/09/2026, émission + e-reporting 01/09/2027)
 
 ## Pages clés
 
 - [Accueil](https://odocpilot.com/) — Pitch produit et CTA essai
-- [Tarifs](https://odocpilot.com/pricing) — 49/89/149 € + Conformité gratuit
+- [Tarifs](https://odocpilot.com/pricing) — 29/49/89/149 € + Conformité gratuit
 - [Fonctionnalités](https://odocpilot.com/fonctionnalites) — Modules détaillés
 - [E-facture 2026/2027](https://odocpilot.com/e-facture) — Préparer sa conformité
 - [Diagnostic conformité](https://odocpilot.com/diagnostic) — Quiz 3 questions, feuille de route datée
@@ -63,7 +65,7 @@ Ne pas dire : « OS d'entreprise », « employé IA 24h/24 », « tout-en-un 79�
 - Application : https://app.odocpilot.com
 - Email sécurité : security@odocpilot.com (cf. /.well-known/security.txt)
 - Email RGPD : privacy@odocpilot.com
-- Éditeur : Logix Solutions SASU, France (Le Plessis-Trévise)
+- Éditeur : Riad Brahimi, entrepreneur individuel exerçant sous le nom commercial Logix Solutions, SIREN 842 920 084, Paris, France
 
 ## Optional
 

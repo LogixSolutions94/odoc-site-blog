@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
+import { PLANS, JSONLD_OFFERS, JSONLD_PRICE_RANGE, fmtEur } from "@/content/pricing";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -79,11 +80,21 @@ const sovereignty = [
   { icon: FileOutput, t: "Vos données sont à vous", s: "Exportables à tout moment (FEC inclus)" },
 ];
 
-const pricing = [
-  { name: "Essential", price: "49,99 €", annual: "39,20 €/mois en annuel", note: "Pour l'indépendant qui centralise documents, factures et conformité." },
-  { name: "Pro", price: "89,99 €", annual: "71,20 €/mois en annuel", note: "Le copilote IA complet : lecture, classement, relances, factures conformes.", highlight: true },
-  { name: "Manager", price: "149,99 €", annual: "119,20 €/mois en annuel", note: "Pour les structures multi-équipes, avec un accompagnement dédié." },
-];
+/** Prix issus de la source unique `src/content/pricing.ts` (miroir de `plan_limits`). */
+const NOTES: Record<string, string> = {
+  essential: "Pour l'indépendant qui centralise documents, factures et conformité — copilote IA inclus.",
+  pro: "Le copilote complet : lecture, classement, relances, factures conformes.",
+  team: "Quand vous êtes plusieurs : 5 utilisateurs inclus.",
+  manager: "Pour les structures multi-entités, avec un accompagnement dédié.",
+};
+
+const pricing = PLANS.filter((p) => p.monthlyPrice > 0).map((p) => ({
+  name: p.name,
+  price: fmtEur(p.monthlyPrice),
+  annual: `${fmtEur(p.annualPrice)}/mois en annuel`,
+  note: NOTES[p.key] ?? p.target,
+  highlight: p.highlight,
+}));
 
 const faqs = [
   {
@@ -108,7 +119,7 @@ const faqs = [
   },
   {
     q: "Que se passe-t-il à la fin de l'essai de 14 jours ?",
-    a: "Rien d'automatique et aucune mauvaise surprise. L'essai gratuit ne demande pas de carte bancaire : à son terme, vous n'êtes pas prélevé tant que vous n'avez pas choisi un abonnement. Si OdocPilot vous convient, vous activez l'offre adaptée à votre activité. Sinon, vous ne payez rien. Nos tarifs sont par entreprise, sans coût par utilisateur.",
+    a: "Rien d'automatique et aucune mauvaise surprise. L'essai gratuit ne demande pas de carte bancaire : à son terme, vous n'êtes pas prélevé tant que vous n'avez pas choisi un abonnement. Si OdocPilot vous convient, vous activez l'offre adaptée à votre activité. Sinon, vous ne payez rien. Nos tarifs sont par entreprise : les sièges sont inclus selon le plan, et un siège supplémentaire coûte 12 €.",
   },
 ];
 
@@ -135,14 +146,12 @@ const jsonLd = {
       offers: {
         "@type": "AggregateOffer",
         priceCurrency: "EUR",
-        lowPrice: "0",
-        highPrice: "149.99",
-        offerCount: 4,
+        lowPrice: JSONLD_PRICE_RANGE.lowPrice,
+        highPrice: JSONLD_PRICE_RANGE.highPrice,
+        offerCount: PLANS.length,
         offers: [
           { "@type": "Offer", name: "Conformité", price: "0", priceCurrency: "EUR" },
-          { "@type": "Offer", name: "Essential", price: "49.99", priceCurrency: "EUR" },
-          { "@type": "Offer", name: "Pro", price: "89.99", priceCurrency: "EUR" },
-          { "@type": "Offer", name: "Manager", price: "149.99", priceCurrency: "EUR" },
+          ...JSONLD_OFFERS,
         ],
       },
     },
@@ -277,7 +286,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-muted-foreground font-medium">
           <span className="inline-flex items-center gap-2"><FileText className="h-4 w-4 text-primary" /> Factur-X conforme</span>
           <span className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Données et IA en France</span>
-          <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Sans coût par utilisateur</span>
+          <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Tarif par entreprise</span>
           <span className="inline-flex items-center gap-2"><RotateCcw className="h-4 w-4 text-primary" /> Sans engagement</span>
         </div>
       </section>
@@ -490,11 +499,11 @@ export default function HomePage() {
         <TrustCredentials className="mt-8" />
       </section>
 
-      {/* ───────── TARIF TEASER (49,99 / 89,99 / 149,99 — aligné Lemon live 23/08/2026) ───────── */}
+      {/* ───────── TARIF TEASER — prix issus de src/content/pricing.ts ───────── */}
       <section className="w-full bg-secondary/60 border-y border-border">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Tarifs clairs, par entreprise</p>
-          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Un abonnement par entreprise, sans coût par utilisateur</h2>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Un abonnement par entreprise, pas par utilisateur</h2>
           <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">Commencez gratuitement avec le palier <strong className="text-foreground">Conformité</strong> (0€), puis passez à l'offre adaptée. Chaque offre payante inclut l'essai gratuit de 14 jours, sans carte bancaire — et quand votre équipe s'agrandit, votre facture ne suit pas.</p>
           <div className="mt-10 grid sm:grid-cols-3 gap-5 text-left">
             {pricing.map((p) => (

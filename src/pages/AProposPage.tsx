@@ -17,7 +17,7 @@ const facts = [
   { icon: MapPin, label: "Données et IA hébergées en France" },
   { icon: ShieldCheck, label: "Conforme RGPD, aligné sur l'AI Act" },
   { icon: MousePointerClick, label: "L'IA prépare, vous validez" },
-  { icon: Check, label: "Sans coût par utilisateur" },
+  { icon: Check, label: "Tarif par entreprise" },
 ];
 
 export default function AProposPage() {
