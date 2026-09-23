@@ -1,0 +1,352 @@
+{
+ "/blog/brain-ia-vs-chatgpt-gestion-entreprise-comparatif": {
+  "status": 301,
+  "to": "/blog/copilot-ia-gestion-entreprise-tpe-pme"
+ },
+ "/blog/calendrier-facturation-electronique-pme": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/centraliser-gestion-petite-entreprise": {
+  "status": 301,
+  "to": "/blog/logiciel-gestion-tpe-pme-2026"
+ },
+ "/blog/conditions-de-paiement-artisan": {
+  "status": 301,
+  "to": "/blog/delais-de-paiement-artisan-obligations-risques-solutions"
+ },
+ "/blog/copilot-ia-entreprise-pme": {
+  "status": 301,
+  "to": "/blog/copilot-ia-gestion-entreprise-tpe-pme"
+ },
+ "/blog/d-couvrez-odoc-copilote-ia-pour-tpe-gestion-docs-factures": {
+  "status": 301,
+  "to": "/blog/copilot-ia-gestion-entreprise-tpe-pme"
+ },
+ "/blog/demo-brain-ia-odocpilot-5-questions-5-actions-reelles": {
+  "status": 301,
+  "to": "/blog/brain-ia-odocpilot-liste-complete-actions-disponibles"
+ },
+ "/blog/devis-artisan-btp-guide-complet-2026": {
+  "status": 301,
+  "to": "/blog/logiciel-devis-facture-artisan-batiment-guide-2026"
+ },
+ "/blog/devis-numerique-artisan": {
+  "status": 301,
+  "to": "/blog/logiciel-devis-facture-artisan-batiment-guide-2026"
+ },
+ "/blog/erp-vs-saas-gestion-pme-2026": {
+  "status": 301,
+  "to": "/blog/erp-vs-saas-gestion-pme"
+ },
+ "/blog/extraction-factures-ia-mistral-vs-groq-vs-gpt4": {
+  "status": 301,
+  "to": "/blog/logiciel-ocr-facture-automatiser-saisie"
+ },
+ "/blog/extraction-factures-odocpilot-30-secondes-demo-reelle": {
+  "status": 301,
+  "to": "/blog/extraction-factures-odocpilot-30-secondes-demo"
+ },
+ "/blog/extraction-factures-odocpilot-demo-reelle": {
+  "status": 301,
+  "to": "/blog/extraction-factures-odocpilot-30-secondes-demo"
+ },
+ "/blog/facturation-electronique-2026-pme-guide-ultime": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/facturation-electronique-france-pme-obligations-2026": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/facturation-electronique-obligatoire-2026-guide-dirigeant": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/facturation-electronique-obligatoire-2026-seuil": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/facturation-electronique-obligatoire-pme-2026": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/facturation-electronique-pme-2027-obligations-risques-solutions": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/facturation-electronique-pme-date-obligations-2026": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/facturation-electronique-pme-guide-2026": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/facturation-electronique-seuil-pme-obligations-2026": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/facturation-electronique-tpe-pme-guide-pratique": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/facture-electronique-2026-guide-dirigeant-complet": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/facture-electronique-2026-guide-pme": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/facture-electronique-odocpilot-superdpd-2026": {
+  "status": 301,
+  "to": "/e-facture"
+ },
+ "/blog/fec-comptable-obligation-expert-comptable": {
+  "status": 301,
+  "to": "/blog/fec-comptable"
+ },
+ "/blog/fec-comptable-pourquoi-expert-comptable-demande-comment-eviter": {
+  "status": 301,
+  "to": "/blog/fec-comptable"
+ },
+ "/blog/fec-export-odocpilot-conformite-dgfip": {
+  "status": 301,
+  "to": "/blog/fec-comptable"
+ },
+ "/blog/gestion-documentaire-tpe-gagner-du-temps": {
+  "status": 301,
+  "to": "/blog/ged-pme-ged-vs-cloud-vs-ia-que-choisir"
+ },
+ "/blog/gestion-rh-pme-conges-fiches-paie": {
+  "status": 410
+ },
+ "/blog/hebergement-donnees-france-pme-2026": {
+  "status": 301,
+  "to": "/blog/souverainete-numerique-entreprise-heberger-donnees-france"
+ },
+ "/blog/lire-bilan-comptable-10-minutes": {
+  "status": 410
+ },
+ "/blog/logiciel-compta-tpe-guide-2026": {
+  "status": 301,
+  "to": "/blog/meilleur-logiciel-compta-tpe"
+ },
+ "/blog/logiciel-comptabilite-entreprise-individuelle-gratuit": {
+  "status": 301,
+  "to": "/blog/meilleur-logiciel-compta-tpe"
+ },
+ "/blog/logiciel-comptabilite-pme-2026": {
+  "status": 301,
+  "to": "/blog/meilleur-logiciel-compta-tpe"
+ },
+ "/blog/logiciel-comptabilite-pme-gratuit": {
+  "status": 301,
+  "to": "/blog/meilleur-logiciel-compta-tpe"
+ },
+ "/blog/logiciel-comptabilite-tpe-2026": {
+  "status": 301,
+  "to": "/blog/meilleur-logiciel-compta-tpe"
+ },
+ "/blog/logiciel-comptabilite-tpe-gratuit": {
+  "status": 301,
+  "to": "/blog/meilleur-logiciel-compta-tpe"
+ },
+ "/blog/logiciel-devis-facture-artisan-guide-2026": {
+  "status": 301,
+  "to": "/blog/logiciel-devis-facture-artisan-batiment-guide-2026"
+ },
+ "/blog/logiciel-facturation-entreprise-batiment": {
+  "status": 301,
+  "to": "/blog/logiciel-devis-facture-artisan-batiment-guide-2026"
+ },
+ "/blog/logiciel-facturation-entreprise-gratuit": {
+  "status": 301,
+  "to": "/blog/logiciel-facturation-pme-guide-2026"
+ },
+ "/blog/logiciel-facturation-entreprise-guide-2026": {
+  "status": 301,
+  "to": "/blog/logiciel-facturation-pme-guide-2026"
+ },
+ "/blog/logiciel-facturation-entreprise-individuelle": {
+  "status": 301,
+  "to": "/blog/meilleur-logiciel-facturation-micro-entreprise"
+ },
+ "/blog/logiciel-gestion-commerciale-tpe": {
+  "status": 301,
+  "to": "/blog/logiciel-gestion-tpe-pme-2026"
+ },
+ "/blog/logiciel-gestion-de-stock-tpe": {
+  "status": 410
+ },
+ "/blog/logiciel-gestion-projets-pme-comment-choisir": {
+  "status": 410
+ },
+ "/blog/logiciel-gestion-tpe-gratuit": {
+  "status": 301,
+  "to": "/blog/logiciel-gestion-tpe-pme-2026"
+ },
+ "/blog/logiciel-gestion-tpe-guide-2026": {
+  "status": 301,
+  "to": "/blog/logiciel-gestion-tpe-pme-2026"
+ },
+ "/blog/logiciel-planning-tpe": {
+  "status": 410
+ },
+ "/blog/meilleur-logiciel-comptabilite-micro-entreprise": {
+  "status": 301,
+  "to": "/blog/meilleur-logiciel-facturation-micro-entreprise"
+ },
+ "/blog/meilleur-logiciel-comptabilite-pme": {
+  "status": 301,
+  "to": "/blog/meilleur-logiciel-compta-tpe"
+ },
+ "/blog/meilleur-logiciel-comptable-pour-tpe-2026": {
+  "status": 301,
+  "to": "/blog/meilleur-logiciel-compta-tpe"
+ },
+ "/blog/meilleur-logiciel-comptable-tpe-2026": {
+  "status": 301,
+  "to": "/blog/meilleur-logiciel-compta-tpe"
+ },
+ "/blog/meilleur-logiciel-facturation-pme-2026": {
+  "status": 301,
+  "to": "/blog/logiciel-facturation-pme-guide-2026"
+ },
+ "/blog/n8n-vs-zapier-automatisation-pme-france": {
+  "status": 410
+ },
+ "/blog/note-de-frais-entreprise-digitale": {
+  "status": 410
+ },
+ "/blog/ocr-facture-electronique-automatiser-saisie": {
+  "status": 301,
+  "to": "/blog/logiciel-ocr-facture-automatiser-saisie"
+ },
+ "/blog/ocr-facture-fournisseur-automatiser-saisie": {
+  "status": 301,
+  "to": "/blog/logiciel-ocr-facture-automatiser-saisie"
+ },
+ "/blog/ocr-facture-gratuit": {
+  "status": 301,
+  "to": "/blog/logiciel-ocr-facture-automatiser-saisie"
+ },
+ "/blog/ocr-facturen-automatiser-saisie-factures": {
+  "status": 301,
+  "to": "/blog/logiciel-ocr-facture-automatiser-saisie"
+ },
+ "/blog/ocr-factures-gratuit-outils-hallucinent": {
+  "status": 301,
+  "to": "/blog/ocr-facture-open-source"
+ },
+ "/blog/odoc-vs-axonaut-logiciel-gestion-tpe-2026": {
+  "status": 301,
+  "to": "/comparatif/axonaut"
+ },
+ "/blog/odocpilot-api-webhooks-integrations-si": {
+  "status": 410
+ },
+ "/blog/odocpilot-btp-gestion-chantiers-factures-conges": {
+  "status": 301,
+  "to": "/artisans"
+ },
+ "/blog/odocpilot-expert-comptable-workflow-client-concret": {
+  "status": 301,
+  "to": "/cabinets-comptables"
+ },
+ "/blog/odocpilot-lancement-business-os-ia": {
+  "status": 410
+ },
+ "/blog/odocpilot-onboarding-inscription-premiere-facture-8-minutes": {
+  "status": 410
+ },
+ "/blog/odocpilot-plan-pro-79-euros-ce-que-vous-obtenez": {
+  "status": 301,
+  "to": "/pricing"
+ },
+ "/blog/odocpilot-saas-souverain-france": {
+  "status": 301,
+  "to": "/blog/souverainete-numerique-entreprise-heberger-donnees-france"
+ },
+ "/blog/odocpilot-vs-pennylane-2026": {
+  "status": 301,
+  "to": "/comparatif/pennylane"
+ },
+ "/blog/odocpilot-vs-pennylane-notion-chatgpt": {
+  "status": 301,
+  "to": "/comparatif/pennylane"
+ },
+ "/blog/onboarding-logiciel-comptable-temps-reel": {
+  "status": 410
+ },
+ "/blog/outil-de-gestion-tpe": {
+  "status": 301,
+  "to": "/blog/logiciel-gestion-tpe-pme-2026"
+ },
+ "/blog/pennylane-vs-odocpilot-comparatif-honnete-pme": {
+  "status": 301,
+  "to": "/comparatif/pennylane"
+ },
+ "/blog/plan-conformite-odocpilot-test-gratuit-sans-carte": {
+  "status": 301,
+  "to": "/pricing"
+ },
+ "/blog/plan-tresorerie-pme-definition-methodes-outils": {
+  "status": 301,
+  "to": "/blog/plan-tresorerie-13-semaines-outils-methodes-2026"
+ },
+ "/blog/prix-odocpilot-tarif-plan-choisir-tpe-pme": {
+  "status": 301,
+  "to": "/pricing"
+ },
+ "/blog/programme-comptabilite-pme-guide-2026": {
+  "status": 301,
+  "to": "/blog/meilleur-logiciel-compta-tpe"
+ },
+ "/blog/reformes-facturation-electronique-pme-2026": {
+  "status": 301,
+  "to": "/guide/obligations-2026-2027"
+ },
+ "/blog/repondre-appel-offres-pme": {
+  "status": 410
+ },
+ "/blog/rgpd-pme-2026-ce-qui-change": {
+  "status": 410
+ },
+ "/blog/roi-odocpilot-calcul-honnete-pme-10-personnes": {
+  "status": 301,
+  "to": "/pricing"
+ },
+ "/blog/saas-francais-rgpd-risques-cloud-americain-2026": {
+  "status": 301,
+  "to": "/blog/souverainete-numerique-entreprise-heberger-donnees-france"
+ },
+ "/blog/securite-odocpilot-audit-technique-rls-jwt-ovh": {
+  "status": 301,
+  "to": "/blog/odocpilot-rgpd-architecture-technique-securite"
+ },
+ "/blog/sellsy-vs-odocpilot-comparatif-fonctionnalites-prix": {
+  "status": 301,
+  "to": "/comparatif/sellsy"
+ },
+ "/blog/signes-entreprise-perd-argent-outils-gestion-2026": {
+  "status": 410
+ },
+ "/blog/supabase-vs-firebase-saas-france-2026": {
+  "status": 410
+ },
+ "/blog/tableau-bord-ia-vs-reporting-excel-comparaison-2026": {
+  "status": 410
+ },
+ "/blog/temoinage-odocpilot-cci-paris-est-demo-institutionnelle": {
+  "status": 410
+ },
+ "/blog/tresorerie-tpe-piloter-sans-stress": {
+  "status": 301,
+  "to": "/blog/tableau-bord-tresorerie-7-indicateurs-suivre-hebdomadaire"
+ },
+ "/blog/virement-sepa-b2b-prelevement-entreprise": {
+  "status": 410
+ }
+}

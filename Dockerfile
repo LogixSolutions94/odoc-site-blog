@@ -35,5 +35,10 @@ RUN bun run build
 FROM nginx:1.27-alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Table des articles retirés ($blog_retired, contexte http), régénérée par le build
+# depuis seo/blog-redirects.json. Préfixe « 00- » : chargée avant default.conf.
+COPY --from=builder /app/seo/blog-redirects.nginx.conf /etc/nginx/conf.d/00-blog-redirects.conf
+# Configuration invalide = image refusée dès le build, jamais un conteneur qui ne démarre pas.
+RUN nginx -t
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
