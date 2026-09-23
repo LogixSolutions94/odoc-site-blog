@@ -17,30 +17,38 @@ try {
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? "https://api.odocpilot.com";
 const SUPABASE_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? "";
 const BASE_URL = "https://odocpilot.com";
+// Image Docker (STRICT_SEO_BUILD=1) : sans les articles, on n'expédie pas un sitemap
+// amputé — le build échoue et le déploiement garde l'ancien conteneur.
+const STRICT = process.env.STRICT_SEO_BUILD === "1";
+
+function degrade(reason: string): void {
+  if (STRICT) throw new Error(`${reason} (STRICT_SEO_BUILD=1 : build arrêté)`);
+  console.warn(`[sitemap] ${reason} — sitemap = routes statiques uniquement.`);
+}
 
 async function run() {
-  // Résilience build (audit 2026-06-16) : sans clé Supabase (CI/Docker sans .env),
-  // on génère quand même le sitemap avec uniquement les routes statiques. Le build
-  // doit JAMAIS être bloqué par l'absence de clé — le sitemap dynamique sera
-  // rafraîchi par l'EF sitemap-refresh à chaque publication d'article.
+  // Résilience build (audit 2026-06-16) : sans clé Supabase (build local sans .env),
+  // on génère quand même le sitemap avec uniquement les routes statiques. Dans l'image
+  // Docker (STRICT_SEO_BUILD=1), ces cas arrêtent le build au lieu de dégrader.
   let posts: { slug: string; updated_at: string }[] = [];
 
   if (!SUPABASE_KEY) {
-    console.warn("[sitemap] VITE_SUPABASE_PUBLISHABLE_KEY absente — sitemap = routes statiques uniquement.");
+    degrade("VITE_SUPABASE_PUBLISHABLE_KEY absente");
   } else {
     console.log("[sitemap] Fetching published posts from Supabase…");
+    let res: Response | null = null;
     try {
-      const res = await fetch(
+      res = await fetch(
         `${SUPABASE_URL}/rest/v1/blog_posts?select=slug,updated_at&status=eq.published&order=published_at.desc`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, "Content-Type": "application/json" } }
       );
-      if (!res.ok) {
-        console.warn(`[sitemap] Supabase REST ${res.status} (${(await res.text()).slice(0, 120)}) — sitemap statique seulement.`);
-      } else {
-        posts = await res.json();
-      }
     } catch (e) {
-      console.warn("[sitemap] fetch KO — sitemap statique seulement :", e instanceof Error ? e.message : e);
+      degrade(`fetch KO : ${e instanceof Error ? e.message : String(e)}`);
+    }
+    if (res && !res.ok) {
+      degrade(`Supabase REST ${res.status} (${(await res.text()).slice(0, 120)})`);
+    } else if (res) {
+      posts = await res.json();
     }
   }
 

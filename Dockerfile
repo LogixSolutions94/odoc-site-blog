@@ -20,6 +20,11 @@ ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL \
     VITE_UMAMI_SRC=$VITE_UMAMI_SRC \
     VITE_UMAMI_WEBSITE_ID=$VITE_UMAMI_WEBSITE_ID
 
+# Étapes SEO du build (sitemap, prérendu du blog) en mode STRICT : si les articles
+# ne peuvent pas être lus en base, le build échoue au lieu de produire un site dont
+# tous les /blog/<slug> répondraient 404 (nginx ne retombe plus sur la SPA sous /blog/).
+ENV STRICT_SEO_BUILD=1
+
 # bun.lock est l'unique source de vérité (cf. CLAUDE.md, on bosse en bun en local).
 # package-lock.json est obsolète depuis le lot E (bun update). On l'ignore.
 COPY package.json bun.lock ./
