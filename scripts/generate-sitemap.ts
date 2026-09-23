@@ -1,5 +1,6 @@
 import { writeFileSync, readFileSync } from "fs";
 import { resolve } from "path";
+import { STATIC_ROUTES } from "./site-routes";
 
 // Load .env without dependencies
 try {
@@ -16,41 +17,6 @@ try {
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? "https://api.odocpilot.com";
 const SUPABASE_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? "";
 const BASE_URL = "https://odocpilot.com";
-
-const staticPages = [
-  { loc: "/",                  priority: "1.0", changefreq: "weekly"  },
-  { loc: "/pricing",           priority: "0.9", changefreq: "monthly" },
-  { loc: "/fonctionnalites",   priority: "0.9", changefreq: "monthly" },
-  { loc: "/e-facture",         priority: "0.9", changefreq: "weekly"  },
-  { loc: "/diagnostic",        priority: "0.8", changefreq: "monthly" },
-  { loc: "/generateur-factur-x", priority: "0.8", changefreq: "monthly" },
-  { loc: "/verificateur",      priority: "0.8", changefreq: "monthly" },
-  { loc: "/llm-info",          priority: "0.6", changefreq: "monthly" },
-  { loc: "/guide/facturation-electronique-2026", priority: "0.8", changefreq: "monthly" },
-  { loc: "/guide/obligations-2026-2027",         priority: "0.8", changefreq: "monthly" },
-  { loc: "/guide/plateforme-agreee",             priority: "0.8", changefreq: "monthly" },
-  { loc: "/guide/factur-x",                      priority: "0.8", changefreq: "monthly" },
-  { loc: "/guide/tpe-sans-comptable",            priority: "0.8", changefreq: "monthly" },
-  { loc: "/comparatif/pennylane", priority: "0.8", changefreq: "monthly" },
-  { loc: "/comparatif/qonto",     priority: "0.8", changefreq: "monthly" },
-  { loc: "/comparatif/indy",      priority: "0.8", changefreq: "monthly" },
-  { loc: "/comparatif/sellsy",    priority: "0.7", changefreq: "monthly" },
-  { loc: "/comparatif/axonaut",   priority: "0.7", changefreq: "monthly" },
-  { loc: "/comparatif/abby",      priority: "0.7", changefreq: "monthly" },
-  { loc: "/artisans",          priority: "0.7", changefreq: "monthly" },
-  { loc: "/commerce",          priority: "0.7", changefreq: "monthly" },
-  { loc: "/professions-liberales", priority: "0.7", changefreq: "monthly" },
-  { loc: "/cabinets-comptables", priority: "0.6", changefreq: "monthly" },
-  { loc: "/lexique",           priority: "0.7", changefreq: "monthly" },
-  { loc: "/livre-blanc",       priority: "0.8", changefreq: "monthly" },
-  { loc: "/roadmap",           priority: "0.5", changefreq: "monthly" },
-  { loc: "/changelog",         priority: "0.5", changefreq: "monthly" },
-  { loc: "/a-propos",          priority: "0.7", changefreq: "monthly" },
-  { loc: "/blog",              priority: "0.8", changefreq: "daily"   },
-  { loc: "/contact",           priority: "0.6", changefreq: "monthly" },
-  { loc: "/mentions-legales",  priority: "0.3", changefreq: "yearly"  },
-  { loc: "/cgu",               priority: "0.3", changefreq: "yearly"  },
-];
 
 async function run() {
   // Résilience build (audit 2026-06-16) : sans clé Supabase (CI/Docker sans .env),
@@ -78,7 +44,7 @@ async function run() {
     }
   }
 
-  const staticUrls = staticPages
+  const staticUrls = STATIC_ROUTES
     .map(
       (p) =>
         `  <url>\n    <loc>${BASE_URL}${p.loc}</loc>\n    <priority>${p.priority}</priority>\n    <changefreq>${p.changefreq}</changefreq>\n  </url>`
