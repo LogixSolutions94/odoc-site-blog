@@ -30,6 +30,11 @@ ENV STRICT_SEO_BUILD=1
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 COPY . .
+# Le build lit la BASE (articles publiés → sitemap, prérendu du blog). Quand le dépôt
+# n'a pas changé, Docker réutilisait le cache de `bun run build` : la reconstruction
+# quotidienne resservait l'ancien blog (articles dépubliés encore en ligne).
+# deploy.yml passe --build-arg CACHE_BUST=$(date +%s) : nouvelle valeur = étape rejouée.
+ARG CACHE_BUST
 RUN bun run build
 
 FROM nginx:1.27-alpine

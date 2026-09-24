@@ -60,18 +60,69 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script_stop: true
           command_timeout: "15m"
+          # Remplacement SÛR : l'ancien conteneur n'est supprimé qu'une fois le nouveau
+          # vérifié ; sinon il est relancé tel quel. Traefik vise http://odoc-landing:80 sur
+          # le réseau coolify : le nouveau conteneur reprend ce nom, ce réseau et le port 3000.
           script: |
-            set -e
+            set -eu
             cd "${{ secrets.VPS_REPO_DIR }}"
             echo "→ git pull"
-            git pull origin main
-            echo "→ docker build odoc-landing"
-            docker build -t odoc-landing .
-            echo "→ restart conteneur"
-            docker stop odoc-landing 2>/dev/null || true
-            docker rm odoc-landing 2>/dev/null || true
-            docker run -d --name odoc-landing --network coolify -p 3000:80 --restart unless-stopped odoc-landing
-            sleep 3
-            code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000 || echo "000")
-            echo "→ HTTP local: $code"
-            test "$code" = "200"
+            git pull --ff-only origin main
+
+            # CACHE_BUST : le build relit la base à chaque fois (sinon cache Docker = blog figé).
+            # Un build en échec (ex. base injoignable, STRICT_SEO_BUILD) s'arrête ICI :
+            # le conteneur en ligne n'a pas été touché.
+            echo "→ docker build odoc-landing:new"
+            docker build -t odoc-landing:new --build-arg CACHE_BUST="$(date +%s)" .
+
+            # Reprise d'un déploiement interrompu entre renommage et nettoyage.
+            if docker container inspect odoc-landing-old >/dev/null 2>&1; then
+              if docker container inspect odoc-landing >/dev/null 2>&1; then
+                docker rm -f odoc-landing-old >/dev/null
+              else
+                docker rename odoc-landing-old odoc-landing
+                docker start odoc-landing >/dev/null
+              fi
+            fi
+
+            old_image=""
+            if docker container inspect odoc-landing >/dev/null 2>&1; then
+              old_image=$(docker container inspect -f '{{.Image}}' odoc-landing)
+              echo "→ ancien conteneur mis de côté (odoc-landing-old)"
+              docker rename odoc-landing odoc-landing-old
+              docker stop odoc-landing-old >/dev/null
+            fi
+
+            check() {
+              for _ in $(seq 1 15); do
+                code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3000$1" || echo "000")
+                [ "$code" = "$2" ] && { echo "  $1 → $code"; return 0; }
+                sleep 1
+              done
+              echo "  $1 → $code (attendu $2)"
+              return 1
+            }
+
+            echo "→ lancement du nouveau conteneur"
+            if docker run -d --name odoc-landing --network coolify -p 3000:80 --restart unless-stopped odoc-landing:new >/dev/null \
+               && check / 200 && check /blog 200; then
+              docker tag odoc-landing:new odoc-landing
+              if [ -n "$old_image" ]; then
+                docker rm odoc-landing-old >/dev/null
+                # Image précédente devenue orpheline : on la retire (seulement elle).
+                if [ "$old_image" != "$(docker image inspect -f '{{.Id}}' odoc-landing:new)" ]; then
+                  docker rmi "$old_image" >/dev/null 2>&1 || true
+                fi
+              fi
+              echo "✓ nouveau conteneur en service"
+            else
+              echo "✗ nouveau conteneur KO : retour arrière"
+              docker logs --tail 30 odoc-landing 2>&1 || true
+              docker rm -f odoc-landing >/dev/null 2>&1 || true
+              if [ -n "$old_image" ]; then
+                docker rename odoc-landing-old odoc-landing
+                docker start odoc-landing >/dev/null
+                echo "→ ancien conteneur relancé"
+              fi
+              exit 1
+            fi
