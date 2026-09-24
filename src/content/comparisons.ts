@@ -251,4 +251,12 @@ export const COMPARISONS: Comparison[] = [
   },
 ];
 
+/**
+ * Mention de prudence affichée sous chaque tableau comparatif. Partagée avec le prérendu
+ * (scripts/lib/marketing-pages.ts) : le HTML brut porte la même réserve que la page.
+ */
+export function compareDisclaimer(competitor: string): string {
+  return `Comparatif établi à partir d'informations publiques (juin 2026) ; les offres de ${competitor} évoluent — vérifiez sur leur site. Côté OdocPilot, la transmission via une plateforme agréée partenaire est en cours de raccordement.`;
+}
+
 export const COMPARISON_BY_SLUG: Record<string, Comparison> = Object.fromEntries(COMPARISONS.map((c) => [c.slug, c]));
