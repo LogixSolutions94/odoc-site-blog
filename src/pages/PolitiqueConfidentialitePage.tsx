@@ -5,8 +5,8 @@ export default function PolitiqueConfidentialitePage() {
   return (
     <div className="mx-auto max-w-3xl py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
       <SEOHead
-        title="Politique de confidentialité — Odoc"
-        description="Politique de confidentialité d'Odoc. Découvrez comment nous collectons, utilisons et protégeons vos données personnelles conformément au RGPD."
+        title="Politique de confidentialité — OdocPilot"
+        description="Politique de confidentialité d'OdocPilot. Découvrez comment nous collectons, utilisons et protégeons vos données personnelles conformément au RGPD."
         canonical="/politique-confidentialite"
       />
 
@@ -19,8 +19,9 @@ export default function PolitiqueConfidentialitePage() {
         <section>
           <h2 className="text-xl font-semibold text-foreground mb-4">1. Responsable du traitement</h2>
           <p>
-            Logix Solutions SASU, éditrice de la plateforme Odoc<br />
-            Siège social : Le Plessis-Trévise, France<br />
+            Monsieur Riad Brahimi, entrepreneur individuel exerçant sous le nom commercial Logix Solutions, éditeur de la plateforme OdocPilot<br />
+            SIREN 842 920 084 · SIRET 842 920 084 00022<br />
+            Adresse : 89-91 Avenue de la République, 75011 Paris, France<br />
             Contact : <a href="mailto:privacy@odocpilot.com" className="text-primary hover:underline">privacy@odocpilot.com</a>
           </p>
         </section>
@@ -40,14 +41,14 @@ export default function PolitiqueConfidentialitePage() {
           <ul className="list-disc pl-6 space-y-2">
             <li><strong className="text-foreground">Fourniture du service :</strong> création et gestion de votre compte, traitement de vos documents, exécution des fonctionnalités de la plateforme.</li>
             <li><strong className="text-foreground">Amélioration du produit :</strong> analyse agrégée et anonymisée de l'utilisation pour améliorer nos algorithmes et l'expérience utilisateur.</li>
-            <li><strong className="text-foreground">Communications commerciales :</strong> envoi de newsletters et informations sur les nouveautés Odoc, uniquement avec votre consentement explicite.</li>
+            <li><strong className="text-foreground">Communications commerciales :</strong> envoi de newsletters et informations sur les nouveautés OdocPilot, uniquement avec votre consentement explicite.</li>
           </ul>
         </section>
 
         <section>
           <h2 className="text-xl font-semibold text-foreground mb-4">4. Base légale</h2>
           <ul className="list-disc pl-6 space-y-2">
-            <li><strong className="text-foreground">Exécution du contrat :</strong> traitement nécessaire à la fourniture du service Odoc.</li>
+            <li><strong className="text-foreground">Exécution du contrat :</strong> traitement nécessaire à la fourniture du service OdocPilot.</li>
             <li><strong className="text-foreground">Intérêt légitime :</strong> amélioration du produit, sécurité de la plateforme, prévention de la fraude.</li>
             <li><strong className="text-foreground">Consentement :</strong> communications commerciales, cookies analytiques.</li>
           </ul>
