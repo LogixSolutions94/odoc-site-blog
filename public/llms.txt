@@ -63,7 +63,7 @@ Ne pas dire : « OS d'entreprise », « employé IA 24h/24 », « tout-en-un 79�
 - Application : https://app.odocpilot.com
 - Email sécurité : security@odocpilot.com (cf. /.well-known/security.txt)
 - Email RGPD : privacy@odocpilot.com
-- Éditeur : Logix Solutions SASU, France (Le Plessis-Trévise)
+- Éditeur : M. Brahimi R., entrepreneur individuel (SIREN 842 920 084), Paris
 
 ## Optional
 
