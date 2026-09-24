@@ -18,6 +18,8 @@ Ce repo (`odoc-insights-hub`) = **uniquement** la landing page (odocpilot.com) *
 
 ## État actuel (résumé)
 
+- **Reprise : lire `docs/HANDOFF_NEXT_SESSION.md` (25/09/2026).** Refonte visuelle « Papeterie » en cours sur la branche `refonte/vitrine-2026-09` (non fusionnée) ; positionnement du plan de relance du 24/09 (`../odoc-pulse/docs/PLAN-ACQUISITION-ODOCPILOT.md`), qui prime sur la ligne « wedge conformité » ci-dessous.
+
 - Refonte conversion (design v2 clair/sombre, `/artisans`, `/e-facture`, `/guide/*`, `/comparatif/*`, pages métiers) **déployée en prod** (vérifié 2026-06-28 : `/artisans` ne 404 plus, sitemap live = toutes les nouvelles pages).
 - **Déploiement automatique** depuis le 2026-06-28 : chaque push sur `main` redéploie `odoc-landing` (`.github/workflows/deploy.yml`). Vérifier : `gh run list --workflow=deploy.yml`. Le rebuild manuel n'est qu'un fallback (détail : `docs/agents/architecture-et-deploiement.md`).
 - Positionnement/produit/thème à jour depuis le 14/06 (wedge conformité, 49/89/149 €, « l'IA prépare, vous validez »).
