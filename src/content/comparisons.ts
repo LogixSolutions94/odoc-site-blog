@@ -159,7 +159,7 @@ export const COMPARISONS: Comparison[] = [
       { dim: "Génération Factur-X (EN 16931)", odoc: ODOC.facturX, them: "Oui" },
       { dim: "L'IA prépare l'admin, vous validez en 1 clic", odoc: ODOC.iaPrepare, them: "Non (suite de gestion)" },
       { dim: "Palier / essai gratuit", odoc: ODOC.gratuit, them: "Essai 15 j sans CB (pas de palier gratuit)" },
-      { dim: "Engagement / utilisateurs", odoc: "Sans engagement, sans coût par utilisateur", them: "Souvent min. 2 utilisateurs + engagement annuel" },
+      { dim: "Engagement / utilisateurs", odoc: "Sans engagement, prix par entreprise : jusqu'à 5 (Pro) ou 10 (Manager) utilisateurs inclus", them: "Souvent min. 2 utilisateurs + engagement annuel" },
       { dim: "Prise en main", odoc: "Immédiate (l'IA fait le travail)", them: "Suite riche à paramétrer" },
     ],
     chooseThem: [

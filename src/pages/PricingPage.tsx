@@ -60,7 +60,7 @@ const plans = [
     badge: "Le plus choisi",
     highlight: true,
     features: [
-      "Tout Essential, multi-utilisateurs sans surcoût",
+      "Tout Essential, jusqu'à 5 utilisateurs inclus",
       "Copilote Brain : répond sur vos données, prépare les actions",
       "Relances clients préparées automatiquement",
       "Suivi de trésorerie",
@@ -82,7 +82,7 @@ const plans = [
       "Tout Pro",
       "Multi-équipes & délégation",
       "Rapports dirigeant personnalisés",
-      "Documents illimités",
+      "Jusqu'à 10 utilisateurs et 6 000 documents",
       "Accompagnement à la mise en conformité",
       "Support dédié",
     ],
@@ -97,14 +97,14 @@ const compare = [
   { label: "Lecture IA des factures reçues", gratuit: "Découverte", essential: true, pro: true, manager: true },
   { label: "Recherche en langage naturel", gratuit: false, essential: true, pro: true, manager: true },
   { label: "Export FEC pour l'expert-comptable", gratuit: false, essential: true, pro: true, manager: true },
-  { label: "Utilisateurs", gratuit: "1", essential: "1", pro: "Illimités", manager: "Illimités" },
+  { label: "Utilisateurs inclus", gratuit: "1", essential: "1", pro: "Jusqu'à 5", manager: "Jusqu'à 10" },
   { label: "Copilote Brain", gratuit: false, essential: false, pro: true, manager: true },
   { label: "Relances préparées automatiquement", gratuit: false, essential: false, pro: true, manager: true },
   { label: "Multi-équipes & délégation", gratuit: false, essential: false, pro: false, manager: true },
 ];
 
 const faqItems = [
-  { question: "Y a-t-il un coût par utilisateur ?", answer: "Non. Le prix de votre plan est tout compris : à partir du plan Pro, vous ajoutez vos collaborateurs sans aucun supplément. Vous savez exactement ce que vous payez, et votre facture ne gonfle pas quand votre équipe grandit." },
+  { question: "Y a-t-il un coût par utilisateur ?", answer: "Non. Le prix est par entreprise et les utilisateurs sont inclus : 1 avec Conformité et Essential, jusqu'à 5 avec Pro, jusqu'à 10 avec Manager. Au-delà, contactez-nous pour une offre Enterprise. Vous savez exactement ce que vous payez." },
   { question: "Suis-je prêt pour la facturation électronique 2026 ?", answer: "Dès le 1ᵉʳ septembre 2026, toute entreprise assujettie à la TVA devra recevoir ses factures au format électronique structuré ; l'émission suivra en 2027. OdocPilot génère vos factures au format légal Factur-X et prépare votre conformité étape par étape. La transmission via une plateforme agréée partenaire est en cours de raccordement et sera prête avant l'échéance." },
   { question: "L'essai engage-t-il quelque chose ?", answer: "Non : 14 jours gratuits sur tous les plans, sans carte bancaire. Vous testez en conditions réelles et vous n'êtes prélevé que si vous choisissez d'activer un abonnement à la fin de l'essai. Sinon, vous ne payez rien." },
   { question: "Puis-je changer de plan à tout moment ?", answer: "Oui, vous montez ou descendez de plan quand vous voulez. Le changement prend effet immédiatement, avec un prorata automatique. Aucun engagement de durée." },
