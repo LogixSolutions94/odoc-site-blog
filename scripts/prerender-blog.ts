@@ -12,8 +12,11 @@
  * robots voient le contenu.
  *
  * ZÉRO nouvelle dépendance (utilise tsx déjà présent + un mini-rendu markdown maison).
- * 100% RÉSILIENT : si pas de clé / pas de dist / fetch KO / 0 article → log + exit 0
- * (ne casse JAMAIS le build).
+ * RÉSILIENT EN LOCAL : si pas de clé / pas de dist / fetch KO / 0 article → log + exit 0.
+ * STRICT DANS L'IMAGE DOCKER (STRICT_SEO_BUILD=1, posé par le Dockerfile) : ces mêmes cas
+ * font ÉCHOUER le build. Raison : nginx répond 404 à tout /blog/<slug> sans fichier
+ * prérendu ; un prérendu vide mis en ligne ferait tomber TOUS les articles en 404. Un
+ * build en échec, lui, laisse l'ancien conteneur en service.
  */
 import { writeFileSync, readFileSync, mkdirSync, existsSync } from "fs";
 import { resolve } from "path";
@@ -38,6 +41,13 @@ const SUPABASE_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? "";
 const BASE_URL = "https://odocpilot.com";
 const DIST = resolve("dist");
 const SHELL = resolve(DIST, "index.html");
+const STRICT = process.env.STRICT_SEO_BUILD === "1";
+
+/** Hors image Docker : on prévient et on continue. Dans l'image : on arrête le build. */
+function skip(reason: string): void {
+  if (STRICT) throw new Error(`${reason} (STRICT_SEO_BUILD=1 : build arrêté)`);
+  console.warn(`[prerender-blog] ${reason} — skip (build non cassé).`);
+}
 
 type Post = {
   slug: string;
@@ -216,12 +226,10 @@ export function buildPage(shell: string, post: Post): string {
 
 async function run() {
   if (!existsSync(SHELL)) {
-    console.warn("[prerender-blog] dist/index.html absent — lancer `vite build` d'abord. Skip (build non cassé).");
-    return;
+    return skip("dist/index.html absent — lancer `vite build` d'abord");
   }
   if (!SUPABASE_KEY) {
-    console.warn("[prerender-blog] VITE_SUPABASE_PUBLISHABLE_KEY absente — skip (build non cassé).");
-    return;
+    return skip("VITE_SUPABASE_PUBLISHABLE_KEY absente");
   }
 
   console.log("[prerender-blog] Récupération des articles publiés…");
@@ -233,8 +241,9 @@ async function run() {
   // juste `undefined`, déjà gérés par les fallbacks de buildHead/buildPage).
   const headers = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
   const fetchPosts = (q: string) => fetch(`${SUPABASE_URL}/rest/v1/blog_posts?${q}`, { headers });
+  let res: Response;
   try {
-    let res = await fetchPosts("select=*&status=eq.published");
+    res = await fetchPosts("select=*&status=eq.published");
     if (!res.ok) {
       // Le filtre `status` peut échouer si la colonne n'existe pas / diffère :
       // on retombe sur un select=* non filtré (publication triée côté client).
@@ -242,14 +251,18 @@ async function run() {
       console.warn(`[prerender-blog] requête filtrée ${res.status} (${body.slice(0, 160)}) — fallback select=*`);
       res = await fetchPosts("select=*");
     }
-    if (!res.ok) { console.warn(`[prerender-blog] Supabase ${res.status} — skip.`); return; }
-    const all = (await res.json()) as Array<Post & { status?: string | null }>;
-    // Si le fallback a tout ramené, ne garder que le publié (status absent → gardé).
-    posts = all.filter((p) => !p.status || p.status === "published");
   } catch (e) {
-    console.warn("[prerender-blog] fetch KO — skip :", e instanceof Error ? e.message : e);
-    return;
+    return skip(`fetch KO : ${e instanceof Error ? e.message : String(e)}`);
   }
+  if (!res.ok) return skip(`Supabase ${res.status}`);
+  let all: Array<Post & { status?: string | null }>;
+  try {
+    all = (await res.json()) as Array<Post & { status?: string | null }>;
+  } catch (e) {
+    return skip(`réponse Supabase illisible : ${e instanceof Error ? e.message : String(e)}`);
+  }
+  // Si le fallback a tout ramené, ne garder que le publié (status absent → gardé).
+  posts = all.filter((p) => !p.status || p.status === "published");
 
   const shell = readFileSync(SHELL, "utf-8");
   let ok = 0;
@@ -272,6 +285,15 @@ async function run() {
     }
   }
   console.log(`[prerender-blog] ✓ ${ok}/${posts.length} article(s) pré-rendu(s) dans dist/blog/<slug>/index.html`);
+  if (ok === 0) skip("aucun article pré-rendu");
 }
 
-run().catch((e) => { console.warn("[prerender-blog] erreur non bloquante :", e); });
+run().catch((e) => {
+  if (STRICT) {
+    console.error("[prerender-blog] ✗", e instanceof Error ? e.message : e);
+    // exitCode plutôt que exit() : laisse se fermer proprement les sockets fetch en cours.
+    process.exitCode = 1;
+    return;
+  }
+  console.warn("[prerender-blog] erreur non bloquante :", e);
+});

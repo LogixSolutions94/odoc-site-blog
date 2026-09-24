@@ -4,7 +4,7 @@ import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
 import { TrustCredentials } from "@/components/TrustCredentials";
 import { Button } from "@/components/ui/button";
-import { COMPARISON_BY_SLUG, COMPARISONS } from "@/content/comparisons";
+import { COMPARISON_BY_SLUG, COMPARISONS, compareDisclaimer } from "@/content/comparisons";
 import { ChevronRight, Check, X, ArrowRight, Sparkles, ShieldCheck } from "lucide-react";
 
 const NotFound = lazy(() => import("./NotFound"));
@@ -107,7 +107,7 @@ export default function ComparePage() {
             </table>
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
-            Comparatif établi à partir d'informations publiques (juin 2026) ; les offres de {c.competitor} évoluent — vérifiez sur leur site. Côté OdocPilot, la transmission via une plateforme agréée partenaire est en cours de raccordement.
+            {compareDisclaimer(c.competitor)}
           </p>
         </section>
 

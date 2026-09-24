@@ -20,15 +20,30 @@ ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL \
     VITE_UMAMI_SRC=$VITE_UMAMI_SRC \
     VITE_UMAMI_WEBSITE_ID=$VITE_UMAMI_WEBSITE_ID
 
+# Étapes SEO du build (sitemap, prérendu du blog) en mode STRICT : si les articles
+# ne peuvent pas être lus en base, le build échoue au lieu de produire un site dont
+# tous les /blog/<slug> répondraient 404 (nginx ne retombe plus sur la SPA sous /blog/).
+ENV STRICT_SEO_BUILD=1
+
 # bun.lock est l'unique source de vérité (cf. CLAUDE.md, on bosse en bun en local).
 # package-lock.json est obsolète depuis le lot E (bun update). On l'ignore.
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 COPY . .
+# Le build lit la BASE (articles publiés → sitemap, prérendu du blog). Quand le dépôt
+# n'a pas changé, Docker réutilisait le cache de `bun run build` : la reconstruction
+# quotidienne resservait l'ancien blog (articles dépubliés encore en ligne).
+# deploy.yml passe --build-arg CACHE_BUST=$(date +%s) : nouvelle valeur = étape rejouée.
+ARG CACHE_BUST
 RUN bun run build
 
 FROM nginx:1.27-alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Table des articles retirés ($blog_retired, contexte http), régénérée par le build
+# depuis seo/blog-redirects.json. Préfixe « 00- » : chargée avant default.conf.
+COPY --from=builder /app/seo/blog-redirects.nginx.conf /etc/nginx/conf.d/00-blog-redirects.conf
+# Configuration invalide = image refusée dès le build, jamais un conteneur qui ne démarre pas.
+RUN nginx -t
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

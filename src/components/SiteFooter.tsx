@@ -32,6 +32,7 @@ const COLUMNS: Array<{ title: string; links: Array<{ to: string; label: string }
       { to: "/commerce", label: "Commerce & Services" },
       { to: "/professions-liberales", label: "Professions libérales" },
       { to: "/cabinets-comptables", label: "Cabinets comptables" },
+      { to: "/editeurs", label: "Éditeurs" },
     ],
   },
   {
