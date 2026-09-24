@@ -27,11 +27,10 @@
     <meta name="twitter:description" content="Conformité facture électronique 2026/2027 pour les dirigeants de TPE : l'IA prépare votre administratif, vous validez. Données et IA hébergées en France." />
     <meta name="twitter:image" content="https://odocpilot.com/og-image.png" />
 
-    <!-- Theme initialization (synchrone, avant React) pour éviter le flash — défaut CLAIR -->
-    <script>
-      const theme = localStorage.getItem('theme') || 'light';
-      document.documentElement.setAttribute('data-theme', theme);
-    </script>
+    <!-- Thème (synchrone, avant React) pour éviter le flash, défaut CLAIR.
+         Script externe et non inline : la CSP (nginx.conf) n'autorise que script-src 'self',
+         un script inline y est bloqué et le thème n'était jamais appliqué avant React. -->
+    <script src="/theme-init.js"></script>
 
     <!-- Preconnect aux ressources externes -->
     <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
