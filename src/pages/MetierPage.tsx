@@ -16,7 +16,6 @@ import {
   FolderInput,
   Users,
   FileCheck2,
-  Quote,
 } from "lucide-react";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
@@ -33,7 +32,6 @@ type Metier = {
   pains: string[];
   painsTitle: string;
   wins: Win[];
-  testimonial: { quote: string; name: string };
   ctaA: string;
   ctaB: string;
   seoTitle: string;
@@ -57,10 +55,9 @@ const METIERS: Record<string, Metier> = {
     ],
     wins: [
       { icon: ReceiptText, title: "Facturez en quelques secondes", desc: "Devis et factures pros en quelques clics, prêts à envoyer et à encaisser. Plus de modèle Word bricolé." },
-      { icon: BellRing, title: "Soyez payé plus vite", desc: "L'assistant relance vos clients en retard, au bon moment. Vous récupérez votre argent sans la corvée." },
-      { icon: Wallet, title: "Pilotez votre trésorerie", desc: "Ce qui rentre, ce qui sort, ce qui reste à encaisser : tout en un coup d'œil, en temps réel." },
+      { icon: BellRing, title: "Soyez payé plus vite", desc: "L'assistant prépare la relance de vos clients en retard ; vous l'envoyez en un clic. Vous récupérez votre argent sans la corvée." },
+      { icon: Wallet, title: "Pilotez votre trésorerie", desc: "Ce qui rentre, ce qui sort, ce qui reste à encaisser : tout en un coup d'œil, à partir de vos factures." },
     ],
-    testimonial: { quote: "« Je facture entre deux clients depuis mon téléphone, et les relances partent toutes seules. Je ne perds plus une soirée sur la compta. »", name: "Sophie L. · Commerçante, Nantes · bêta-testeuse" },
     ctaA: "Je teste gratuitement",
     ctaB: "Voir le tarif",
     seoTitle: "Logiciel de gestion pour commerçants & TPE de services | OdocPilot",
@@ -81,11 +78,10 @@ const METIERS: Record<string, Metier> = {
       "La conformité (RGPD, facture électronique) qui inquiète",
     ],
     wins: [
-      { icon: ReceiptText, title: "Notes d'honoraires & factures simples", desc: "Créez et envoyez des documents propres en quelques clics, prêts à signer et à régler en ligne." },
+      { icon: ReceiptText, title: "Notes d'honoraires & factures simples", desc: "Créez et envoyez des documents propres en quelques clics, au format Factur-X." },
       { icon: FolderInput, title: "Vos documents, classés tout seuls", desc: "Photographiez ou importez : tout est lu, rangé et retrouvable en une recherche. Fini les dossiers perdus." },
-      { icon: CalendarClock, title: "Rendez-vous & échéances maîtrisés", desc: "Agenda, rappels automatiques, alertes sur ce qui compte. Vous n'oubliez plus rien." },
+      { icon: CalendarClock, title: "Rendez-vous & échéances maîtrisés", desc: "Agenda et alertes sur ce qui compte. Vous n'oubliez plus rien." },
     ],
-    testimonial: { quote: "« Mes notes d'honoraires se font en deux clics et mes dossiers sont enfin rangés au même endroit. J'ai gagné un temps fou. »", name: "Maître D. · Profession libérale, Lyon · bêta-testeur" },
     ctaA: "Je teste gratuitement",
     ctaB: "Voir le tarif",
     seoTitle: "Logiciel de gestion pour professions libérales | OdocPilot",
@@ -110,7 +106,6 @@ const METIERS: Record<string, Metier> = {
       { icon: FolderInput, title: "Les pièces arrivent propres", desc: "Vos clients photographient, OdocPilot classe et extrait : vous récupérez des données à jour, sans relancer." },
       { icon: FileCheck2, title: "Export FEC & conformité", desc: "Données exportables proprement, et accompagnement vers la facture électronique 2026 pour vos clients." },
     ],
-    testimonial: { quote: "« Mes clients déposent leurs pièces au fil de l'eau, je récupère des données propres. Je passe moins de temps à relancer, plus à conseiller. »", name: "Karine M. · Experte-comptable, Bordeaux · partenaire bêta" },
     ctaA: "Devenir partenaire",
     ctaB: "Voir le tarif",
     seoTitle: "OdocPilot pour les cabinets comptables — données clients propres",
@@ -211,15 +206,6 @@ export default function MetierPage({ slug }: { slug: string }) {
           <div className="mt-8">
             <Link to="/diagnostic" data-umami-event="cta-diagnostic"><Button size="lg" variant="outline">Vérifier ma conformité (3 min) <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
           </div>
-        </div>
-      </section>
-
-      {/* TÉMOIGNAGE */}
-      <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-        <div className="rounded-3xl border border-border bg-card p-9 shadow-card">
-          <Quote className="h-7 w-7 text-primary/40 mx-auto" />
-          <p className="mt-3 text-xl text-foreground leading-relaxed">{m.testimonial.quote}</p>
-          <p className="mt-5 text-sm text-muted-foreground">{m.testimonial.name}</p>
         </div>
       </section>
 

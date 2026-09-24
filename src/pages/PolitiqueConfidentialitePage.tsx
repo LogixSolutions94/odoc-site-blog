@@ -29,7 +29,7 @@ export default function PolitiqueConfidentialitePage() {
         <section>
           <h2 className="text-xl font-semibold text-foreground mb-4">2. Données collectées</h2>
           <ul className="list-disc pl-6 space-y-2">
-            <li><strong className="text-foreground">Données d'inscription :</strong> nom, prénom, adresse email professionnelle, nom de l'entreprise, mot de passe (chiffré).</li>
+            <li><strong className="text-foreground">Données d'inscription :</strong> nom, prénom, adresse email professionnelle, nom de l'entreprise, mot de passe (stocké sous forme hachée, jamais en clair).</li>
             <li><strong className="text-foreground">Documents uploadés :</strong> fichiers déposés par l'utilisateur (factures, contrats, etc.) traités par nos algorithmes d'IA.</li>
             <li><strong className="text-foreground">Données de facturation :</strong> informations de paiement traitées par notre prestataire Stripe. Nous ne stockons aucun numéro de carte bancaire.</li>
             <li><strong className="text-foreground">Données de navigation :</strong> adresse IP, type de navigateur, pages visitées, durée de session (cookies analytiques avec consentement uniquement).</li>
@@ -80,11 +80,12 @@ export default function PolitiqueConfidentialitePage() {
           <h2 className="text-xl font-semibold text-foreground mb-4">7. Sous-traitants</h2>
           <p>Nous faisons appel aux sous-traitants suivants pour la fourniture de notre service :</p>
           <ul className="list-disc pl-6 space-y-2 mt-3">
-            <li><strong className="text-foreground">Supabase (backend) :</strong> hébergement des données et authentification, serveurs en Europe.</li>
-            <li><strong className="text-foreground">Resend :</strong> envoi d'emails transactionnels.</li>
-            <li><strong className="text-foreground">Stripe :</strong> traitement des paiements (certifié PCI-DSS).</li>
-            <li><strong className="text-foreground">Google / Dropbox :</strong> synchronisation de fichiers (uniquement si activée par l'utilisateur).</li>
+            <li><strong className="text-foreground">OVH Cloud (France) :</strong> hébergement de l'application, de la base de données et des documents ; envoi des emails.</li>
+            <li><strong className="text-foreground">Mistral AI (France) :</strong> analyse des documents par l'IA, par son point d'accès européen (infrastructure située dans l'Espace économique européen).</li>
+            <li><strong className="text-foreground">Lemon Squeezy (États-Unis, clauses contractuelles types) :</strong> paiement des abonnements, sans accès au contenu de vos documents.</li>
+            <li><strong className="text-foreground">Google / Dropbox :</strong> import de fichiers, uniquement si vous activez le connecteur.</li>
           </ul>
+          <p className="mt-3">La liste complète et à jour figure dans notre <a href="https://app.odocpilot.com/legal/dpa" className="underline">accord de traitement des données (DPA)</a>.</p>
         </section>
 
         <section>

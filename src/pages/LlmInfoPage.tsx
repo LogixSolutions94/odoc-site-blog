@@ -132,7 +132,7 @@ export default function LlmInfoPage() {
             {[
               { icon: MapPin, t: "Hébergement 100 % France", d: "Vos documents et leur traitement IA restent sur le territoire français — pas de transfert hors UE." },
               { icon: Cpu, t: "IA française (Mistral)", d: "Le modèle d'IA qui analyse vos documents est français et hébergé en France. Pas d'OpenAI, pas de cloud US." },
-              { icon: Lock, t: "Sécurité maximale des documents", d: "Vos données sont protégées (chiffrement, accès contrôlé) et restent privées. Elles vous appartiennent et sont exportables à tout moment." },
+              { icon: Lock, t: "Documents protégés", d: "Vos données sont protégées (chiffrement en transit, accès cloisonné par organisation) et restent privées. Elles vous appartiennent et sont exportables à tout moment." },
               { icon: Scale, t: "Conforme RGPD · aligné AI Act", d: "Traitement des données conforme au RGPD et aligné sur l'AI Act européen, avec une logique de minimisation." },
               { icon: Leaf, t: "Démarche Numérique Responsable", d: "OdocPilot s'inscrit dans une démarche Numérique Responsable et d'IA frugale : la juste IA, là où elle apporte une vraie valeur." },
               { icon: ShieldCheck, t: "Vous gardez le dernier mot", d: "L'IA prépare ; rien n'est validé, envoyé ou comptabilisé sans votre accord explicite." },
