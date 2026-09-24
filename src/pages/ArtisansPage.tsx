@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Check, HardHat, FileSignature, BellRing, Wallet, Quote } from "lucide-react";
+import { ArrowRight, Check, HardHat, FileSignature, BellRing, Wallet } from "lucide-react";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
 const SIGNUP = `${APP_URL}/auth?mode=signup`;
@@ -15,8 +15,8 @@ const pains = [
 ];
 
 const wins = [
-  { icon: FileSignature, title: "Vos devis de chantier, signés plus vite", desc: "Dictez l'essentiel, l'assistant rédige un devis propre et chiffré. Le client le signe en ligne — vous démarrez le chantier sans attendre." },
-  { icon: BellRing, title: "Vos impayés relancés tout seuls", desc: "L'assistant relance vos clients au bon moment, au bon ton. Vous êtes payé plus vite, sans la gêne de réclamer." },
+  { icon: FileSignature, title: "Vos devis de chantier, prêts plus vite", desc: "Décrivez les travaux, l'assistant rédige un devis propre et chiffré. Une fois accepté, il devient une facture en un clic." },
+  { icon: BellRing, title: "Vos relances d'impayés, prêtes à partir", desc: "L'assistant prépare la relance au bon moment, au bon ton ; vous l'envoyez en un clic. Vous êtes payé plus vite, sans la gêne de réclamer." },
   { icon: Wallet, title: "Votre trésorerie, claire en un regard", desc: "Ce qui reste à encaisser, ce qui est payé, ce qui arrive : vous savez où vous en êtes, sans tableur ni comptable." },
 ];
 
@@ -143,18 +143,6 @@ export default function ArtisansPage() {
           </ul>
           <div className="mt-8">
             <Link to="/diagnostic" data-umami-event="cta-diagnostic"><Button size="lg" variant="outline">Vérifier ma conformité (3 min) <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
-          </div>
-        </div>
-      </section>
-
-      {/* TÉMOIGNAGE */}
-      <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-        <div className="rounded-3xl border border-border bg-card p-9 shadow-card">
-          <Quote className="h-7 w-7 text-primary/40 mx-auto" />
-          <p className="mt-3 text-xl text-foreground leading-relaxed">« Avant, je faisais mes devis le dimanche soir. Maintenant, je les dicte entre deux chantiers et l'assistant s'occupe du reste. J'ai retrouvé mes week-ends. »</p>
-          <div className="mt-5 flex items-center justify-center gap-3 text-sm">
-            <span className="h-10 w-10 rounded-full bg-gradient-cta text-primary-foreground inline-flex items-center justify-center font-bold">K</span>
-            <span className="text-muted-foreground"><strong className="text-foreground">Karim B.</strong> · Artisan plombier, Seine-et-Marne · bêta-testeur</span>
           </div>
         </div>
       </section>

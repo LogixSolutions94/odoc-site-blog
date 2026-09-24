@@ -50,7 +50,7 @@ export default function CguPage() {
         <section>
           <h2 className="text-xl font-semibold text-foreground">Article 4. Données et confidentialité</h2>
           <p className="mt-3">
-            Les données des utilisateurs sont hébergées au sein de l'Union Européenne, conformément au Règlement Général sur la Protection des Données (RGPD). Les documents et données traitées par OdocPilot sont chiffrés au repos et en transit.
+            Les données des utilisateurs sont hébergées au sein de l'Union Européenne, conformément au Règlement Général sur la Protection des Données (RGPD). Les échanges avec OdocPilot sont chiffrés en transit (HTTPS) et l'accès aux données est cloisonné par organisation.
           </p>
           <p className="mt-2">
             L'éditeur s'engage à ne jamais revendre, céder ou partager les données de ses utilisateurs à des tiers à des fins commerciales. Les données ne sont utilisées que dans le strict cadre de la fourniture du service.
