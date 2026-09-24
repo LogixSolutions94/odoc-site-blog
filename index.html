@@ -3,18 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Facturation électronique 2026/2027 : préparez votre conformité — OdocPilot</title>
-    <meta name="description" content="Réception obligatoire au 1er septembre 2026, émission en 2027 : OdocPilot prépare votre conformité à la facturation électronique. Factur-X, lecture IA des factures, export FEC. L'IA prépare, vous validez. Données et IA hébergées en France." />
+    <title>Facture électronique obligatoire : soyez en règle | OdocPilot</title>
+    <meta name="description" content="Auto-entrepreneur, artisan, TPE ou PME : créez vos factures au format légal (Factur-X) et sachez ce qui change en 2026 et 2027. Gratuit pour commencer." />
     <!-- Favicon multi-formats OdocPilot -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
     <link rel="alternate icon" type="image/x-icon" href="/favicon.ico"/>
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
     <link rel="manifest" href="/site.webmanifest"/>
-    <meta name="theme-color" content="#F97316"/>
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)"/>
+    <meta name="theme-color" content="#0B1519" media="(prefers-color-scheme: dark)"/>
     <meta name="msapplication-TileColor" content="#F97316"/>
 
-    <meta property="og:title" content="Facturation électronique 2026/2027 : préparez votre conformité — OdocPilot" />
-    <meta property="og:description" content="Préparez votre conformité à la facturation électronique 2026/2027 : Factur-X, lecture IA des factures, export FEC. L'IA prépare, vous validez. Données et IA hébergées en France. Essai 14 jours sans carte bancaire." />
+    <meta property="og:title" content="Facture électronique obligatoire : soyez en règle | OdocPilot" />
+    <meta property="og:description" content="Créez vos factures au format légal (Factur-X), recevez et rangez celles de vos fournisseurs, et sachez ce qui change pour vous en 2026 et 2027. Gratuit pour commencer." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:image" content="https://odocpilot.com/og-image.png" />
@@ -23,8 +24,8 @@
     <meta property="og:image:type" content="image/png" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Facturation électronique 2026/2027 : préparez votre conformité — OdocPilot" />
-    <meta name="twitter:description" content="Conformité facture électronique 2026/2027 pour les dirigeants de TPE : l'IA prépare votre administratif, vous validez. Données et IA hébergées en France." />
+    <meta name="twitter:title" content="Facture électronique obligatoire : soyez en règle | OdocPilot" />
+    <meta name="twitter:description" content="Facture électronique obligatoire : créez vos factures au format légal et sachez ce qui change pour vous. Pour auto-entrepreneurs, TPE et PME." />
     <meta name="twitter:image" content="https://odocpilot.com/og-image.png" />
 
     <!-- Thème (synchrone, avant React) pour éviter le flash, défaut CLAIR.
@@ -32,12 +33,10 @@
          un script inline y est bloqué et le thème n'était jamais appliqué avant React. -->
     <script src="/theme-init.js"></script>
 
-    <!-- Preconnect aux ressources externes -->
+    <!-- Police : Switzer (Fontshare, autorisée par la CSP de nginx.conf). display=swap. -->
     <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
-    <link rel="dns-prefetch" href="https://api.fontshare.com">
-
-    <!-- Fonts: Cabinet Grotesk + Satoshi (display=swap pour CLS réduit) -->
-    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800,900&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800,401&display=swap" rel="stylesheet">
 
     <!-- Schema.org JSON-LD: SoftwareApplication -->
     <script type="application/ld+json">
@@ -47,13 +46,13 @@
       "name": "OdocPilot",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
-      "description": "OdocPilot prépare la conformité à la facturation électronique 2026/2027 des TPE, PME et indépendants : génération Factur-X, lecture IA des factures, recherche en langage naturel, export FEC. L'IA prépare, vous validez. Données et IA hébergées en France.",
+      "description": "OdocPilot aide les auto-entrepreneurs, TPE et PME à passer à la facture électronique : factures au format Factur-X (EN 16931), lecture automatique des factures reçues, recherche de documents, relances des impayés et export comptable FEC. Données hébergées en France.",
       "url": "https://odocpilot.com",
       "offers": [
-        {"@type": "Offer", "name": "Essential", "price": "49", "priceCurrency": "EUR", "availability": "https://schema.org/InStock"},
-        {"@type": "Offer", "name": "Pro", "price": "89", "priceCurrency": "EUR", "availability": "https://schema.org/InStock"},
-        {"@type": "Offer", "name": "Manager", "price": "149", "priceCurrency": "EUR", "availability": "https://schema.org/InStock"},
-        {"@type": "Offer", "name": "Entreprise", "price": "Sur mesure", "priceCurrency": "EUR"}
+        {"@type": "Offer", "name": "Conformité", "price": "0", "priceCurrency": "EUR"},
+        {"@type": "Offer", "name": "Essential", "price": "49.99", "priceCurrency": "EUR"},
+        {"@type": "Offer", "name": "Pro", "price": "89.99", "priceCurrency": "EUR"},
+        {"@type": "Offer", "name": "Manager", "price": "149.99", "priceCurrency": "EUR"}
       ]
     }
     </script>
@@ -74,7 +73,7 @@
         "width": 512,
         "height": 512
       },
-      "description": "OdocPilot — copilote IA français de facturation et de conformité (facturation électronique 2026/2027) pour les dirigeants de TPE, PME et indépendants. Données et IA hébergées en France.",
+      "description": "OdocPilot, logiciel français de facture électronique pour les auto-entrepreneurs, TPE et PME : factures au format légal, factures reçues lues automatiquement, relances et export comptable.",
       "contactPoint": {
         "@type": "ContactPoint",
         "email": "contact@odocpilot.com",

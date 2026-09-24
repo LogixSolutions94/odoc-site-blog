@@ -1,74 +1,38 @@
+/**
+ * Marque OdocPilot : carré orange + sphère orbitale (source : public/favicon.svg,
+ * identique au BrandLogo du SaaS) et nom en toutes lettres.
+ * Statique : une marque qui tourne sur elle-même fait gadget, pas éditeur.
+ */
 export function Logo({
-  size = 'md',
-  variant = 'full',
+  size = "md",
+  variant = "full",
 }: {
-  size?: 'sm' | 'md' | 'lg'
-  variant?: 'full' | 'symbol' | 'white'
+  size?: "sm" | "md" | "lg";
+  variant?: "full" | "symbol" | "white";
 }) {
-  const scales = { sm: 0.75, md: 1, lg: 1.4 }
-  const s = scales[size]
-
-  const symbolColor = variant === 'white' ? '#ffffff' : 'currentColor'
-  const textColor = variant === 'symbol' ? 'transparent' : variant === 'white' ? '#ffffff' : '#F97316'
+  const box = { sm: 22, md: 26, lg: 34 }[size];
+  const text = { sm: "text-[1.05rem]", md: "text-[1.2rem]", lg: "text-[1.55rem]" }[size];
+  const wordColor = variant === "white" ? "text-white" : "text-foreground";
 
   return (
-    <svg
-      width={200 * s}
-      height={48 * s}
-      viewBox="0 0 200 48"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="flex-shrink-0"
-      aria-label="OdocPilot"
-    >
-      {/* Sphère orbitale animée : anneaux et sphère en contre-rotation
-          (centre de rotation = centre du symbole via transform-box: fill-box) */}
-      <g transform={`translate(0, ${4 * s})`} opacity="0.9">
-        {/* Anneaux orbitaux — rotation sens inverse */}
-        <g className="motion-safe:animate-spin-slow-reverse [transform-box:fill-box] [transform-origin:center]">
-          {/* Orbite équatoriale */}
-          <ellipse cx="20" cy="20" rx="18" ry="8" stroke={symbolColor} strokeWidth="1.5" fill="none" />
-          {/* Orbite diagonale 1 */}
-          <ellipse cx="20" cy="20" rx="8" ry="18" stroke={symbolColor} strokeWidth="1.5" fill="none" transform="rotate(45 20 20)" />
-          {/* Orbite diagonale 2 */}
-          <ellipse cx="20" cy="20" rx="8" ry="18" stroke={symbolColor} strokeWidth="1.5" fill="none" transform="rotate(-45 20 20)" />
+    <span className="inline-flex items-center gap-2.5" aria-label="OdocPilot" role="img">
+      <svg width={box} height={box} viewBox="0 0 64 64" fill="none" aria-hidden="true" className="shrink-0">
+        <rect width="64" height="64" rx="15" fill="#F97316" />
+        <g transform="translate(32,32)">
+          <circle r="18" stroke="#fff" strokeWidth="3" />
+          <ellipse rx="18" ry="7" stroke="#fff" strokeOpacity="0.72" strokeWidth="3" />
+          <ellipse rx="7" ry="18" stroke="#fff" strokeOpacity="0.72" strokeWidth="3" transform="rotate(45)" />
+          <circle cy="-18" r="3" fill="#fff" />
+          <circle cx="18" r="3" fill="#fff" />
+          <circle cy="18" r="3" fill="#fff" />
+          <circle cx="-18" r="3" fill="#fff" />
         </g>
-        {/* Sphère principale + points de connexion — rotation sens direct */}
-        <g className="motion-safe:animate-spin-slow [transform-box:fill-box] [transform-origin:center]">
-          <circle cx="20" cy="20" r="18" stroke={symbolColor} strokeWidth="1.5" fill="none" />
-          <circle cx="20" cy="2" r="2.5" fill={symbolColor} />
-          <circle cx="38" cy="20" r="2.5" fill={symbolColor} />
-          <circle cx="20" cy="38" r="2.5" fill={symbolColor} />
-          <circle cx="2" cy="20" r="2.5" fill={symbolColor} />
-        </g>
-      </g>
-
-      {/* Texte "OdocPilot" */}
-      <text
-        x={48}
-        y={28}
-        fontFamily="'Cabinet Grotesk', 'Helvetica Neue', sans-serif"
-        fontSize={22}
-        fontWeight="900"
-        fill={textColor}
-        letterSpacing="-0.5"
-      >
-        OdocPilot
-      </text>
-
-      {/* Descripteur (clair, sans jargon) */}
-      <text
-        x={49}
-        y={40}
-        fontFamily="'Satoshi', 'Inter', 'Plus Jakarta Sans', sans-serif"
-        fontSize={8}
-        fontWeight="500"
-        fill={textColor === 'transparent' ? symbolColor : textColor}
-        opacity={textColor === 'transparent' ? 0 : 0.7}
-        letterSpacing="0.3"
-      >
-        Copilote IA de gestion
-      </text>
-    </svg>
-  )
+      </svg>
+      {variant !== "symbol" && (
+        <span className={`font-display ${text} font-bold leading-none tracking-[-0.03em] ${wordColor}`} aria-hidden="true">
+          OdocPilot
+        </span>
+      )}
+    </span>
+  );
 }
