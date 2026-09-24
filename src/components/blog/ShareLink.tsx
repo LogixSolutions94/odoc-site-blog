@@ -1,9 +1,10 @@
-import { Link2, Linkedin } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { fr } from "@/lib/typo";
 
 /**
  * Partage B2B sobre et souverain : « Copier le lien » + LinkedIn (lien simple).
- * Aucun SDK tiers, aucun tracker, aucun compteur de partages.
+ * Aucun SDK tiers, aucun traceur, aucun compteur de partages.
  */
 export function ShareLink({ url, title }: { url: string; title: string }) {
   const { toast } = useToast();
@@ -20,26 +21,21 @@ export function ShareLink({ url, title }: { url: string; title: string }) {
   const linkedin = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
 
   return (
-    <div className="mt-12 flex items-center gap-3 text-sm text-muted-foreground">
-      <span className="font-medium">Partager</span>
-      <button
-        type="button"
-        onClick={copy}
-        className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        <Link2 className="h-4 w-4" />
+    <p className="flex flex-wrap items-center gap-x-5 gap-y-1 text-[0.9375rem] text-muted-foreground">
+      <span>{fr("Partager cet article :")}</span>
+      <button type="button" onClick={copy} className="min-h-10 font-bold text-foreground link-underline">
         Copier le lien
       </button>
       <a
         href={linkedin}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Partager « ${title} » sur LinkedIn`}
-        className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        aria-label={fr(`Partager « ${title} » sur LinkedIn (nouvel onglet)`)}
+        className="inline-flex min-h-10 items-center gap-1 font-bold text-foreground link-underline"
       >
-        <Linkedin className="h-4 w-4" />
         LinkedIn
+        <ArrowUpRight size={15} strokeWidth={1.75} aria-hidden="true" />
       </a>
-    </div>
+    </p>
   );
 }

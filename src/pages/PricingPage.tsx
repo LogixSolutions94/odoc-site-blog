@@ -1,327 +1,456 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { MotionDiv } from "@/components/MotionDiv";
+import { ArrowDown, ArrowRight, Check, Minus } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { TrustCredentials } from "@/components/TrustCredentials";
-import { Check, MapPin, CreditCard, RotateCcw, Sparkles, Receipt, ArrowRight } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { PLANS, SIGNUP_URL, TRIAL, formatEur, type Plan } from "@/lib/marketing";
+import { fr } from "@/lib/typo";
 
-const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
-const SIGNUP = `${APP_URL}/auth?mode=signup`;
+type PlanId = Plan["id"];
+type CellValue = string | boolean;
 
-const plans = [
-  {
-    name: "Conformité",
-    monthlyPrice: 0,
-    annualPrice: 0,
-    target: "Se mettre en conformité, gratuitement",
-    badge: "Gratuit" as string | null,
-    highlight: false,
-    features: [
-      "Générateur de factures Factur-X illimité",
-      "Diagnostic + vérificateur de conformité",
-      "Recevez et lisez vos premières factures avec l'IA",
-      "1 utilisateur · hébergé en France",
-      "Sans carte bancaire, sans engagement",
-    ],
-    cta: "Commencer gratuitement",
-    ctaLink: SIGNUP,
-  },
-  {
-    name: "Essential",
-    monthlyPrice: 49.99,
-    annualPrice: 39.2,
-    target: "Indépendant, solo, TPE",
-    badge: null as string | null,
-    highlight: false,
-    features: [
-      "Devis & factures illimités",
-      "Factures au format Factur-X conforme",
-      "Lecture IA des factures reçues",
-      "Recherche de documents en langage naturel",
-      "Export FEC pour votre expert-comptable",
-      "Hébergé en France · conforme RGPD",
-      "Support par email",
-    ],
-    cta: "Commencer l'essai gratuit",
-    ctaLink: SIGNUP,
-  },
-  {
-    name: "Pro",
-    monthlyPrice: 89.99,
-    annualPrice: 71.2,
-    target: "Le copilote IA complet",
-    badge: "Le plus choisi",
-    highlight: true,
-    features: [
-      "Tout Essential, jusqu'à 5 utilisateurs inclus",
-      "Copilote Brain : répond sur vos données, prépare les actions",
-      "Relances clients préparées automatiquement",
-      "Suivi de trésorerie",
-      "Tableaux de bord & automatisations",
-      "Classement intelligent des documents",
-      "Support prioritaire",
-    ],
-    cta: "Commencer l'essai gratuit",
-    ctaLink: SIGNUP,
-  },
-  {
-    name: "Manager",
-    monthlyPrice: 149.99,
-    annualPrice: 119.2,
-    target: "Multi-équipes, dirigeants",
-    badge: null,
-    highlight: false,
-    features: [
-      "Tout Pro",
-      "Multi-équipes & délégation",
-      "Rapports dirigeant personnalisés",
-      "Jusqu'à 10 utilisateurs et 6 000 documents",
-      "Accompagnement à la mise en conformité",
-      "Support dédié",
-    ],
-    cta: "Commencer l'essai gratuit",
-    ctaLink: SIGNUP,
-  },
-];
+/*
+ * Textes lus au build par le prérendu (scripts/lib/page-source.ts) : props de <SEOHead>,
+ * <h1> et premier paragraphe. Littéraux uniquement (ni fr(), ni import), espaces
+ * insécables tapées : U+202F avant ? ! ; %, U+00A0 avant : et €.
+ * Les prix de la description doivent suivre PLANS (src/lib/marketing.ts).
+ */
+const SEO_TITLE = "Logiciel de facture électronique gratuit | Tarifs OdocPilot";
+const SEO_DESCRIPTION =
+  "Créez vos factures Factur-X gratuitement, sans limite de durée. Offres payantes à 49,99 €, 89,99 € ou 149,99 € par mois. Essai 14 jours sans carte bancaire.";
+const INTRO =
+  "Créez vos factures au format de la facture électronique sans rien payer. Quand OdocPilot vous fait gagner du temps, choisissez l'offre qui suit votre volume, sans engagement.";
 
-const compare = [
-  { label: "Générateur de factures Factur-X", gratuit: "Illimité", essential: "Illimité", pro: "Illimité", manager: "Illimité" },
-  { label: "Diagnostic + vérificateur de conformité", gratuit: true, essential: true, pro: true, manager: true },
-  { label: "Lecture IA des factures reçues", gratuit: "Découverte", essential: true, pro: true, manager: true },
-  { label: "Recherche en langage naturel", gratuit: false, essential: true, pro: true, manager: true },
-  { label: "Export FEC pour l'expert-comptable", gratuit: false, essential: true, pro: true, manager: true },
-  { label: "Utilisateurs inclus", gratuit: "1", essential: "1", pro: "Jusqu'à 5", manager: "Jusqu'à 10" },
-  { label: "Copilote Brain", gratuit: false, essential: false, pro: true, manager: true },
-  { label: "Relances préparées automatiquement", gratuit: false, essential: false, pro: true, manager: true },
-  { label: "Multi-équipes & délégation", gratuit: false, essential: false, pro: false, manager: true },
-];
-
-const faqItems = [
-  { question: "Y a-t-il un coût par utilisateur ?", answer: "Non. Le prix est par entreprise et les utilisateurs sont inclus : 1 avec Conformité et Essential, jusqu'à 5 avec Pro, jusqu'à 10 avec Manager. Au-delà, contactez-nous pour une offre Enterprise. Vous savez exactement ce que vous payez." },
-  { question: "Suis-je prêt pour la facturation électronique 2026 ?", answer: "Dès le 1ᵉʳ septembre 2026, toute entreprise assujettie à la TVA devra recevoir ses factures au format électronique structuré ; l'émission suivra en 2027. OdocPilot génère vos factures au format légal Factur-X et prépare votre conformité étape par étape. La transmission via une plateforme agréée partenaire est en cours de raccordement et sera prête avant l'échéance." },
-  { question: "L'essai engage-t-il quelque chose ?", answer: "Non : 14 jours gratuits sur tous les plans, sans carte bancaire. Vous testez en conditions réelles et vous n'êtes prélevé que si vous choisissez d'activer un abonnement à la fin de l'essai. Sinon, vous ne payez rien." },
-  { question: "Puis-je changer de plan à tout moment ?", answer: "Oui, vous montez ou descendez de plan quand vous voulez. Le changement prend effet immédiatement, avec un prorata automatique. Aucun engagement de durée." },
-  { question: "L'IA fait-elle ma comptabilité toute seule ?", answer: "Non, et c'est un choix assumé. L'IA prépare le travail — lecture des factures, classement, relances — mais rien n'est validé ni comptabilisé sans vous. Vous gardez toujours le dernier mot, et vous exportez votre FEC pour votre expert-comptable en un clic." },
-  { question: "Mes données sont-elles en sécurité ?", answer: "Vos documents comme l'intelligence artificielle qui les traite (Mistral, un modèle français) sont hébergés en France : aucun transfert vers l'étranger. OdocPilot est conforme au RGPD, aligné sur l'AI Act, et s'inscrit dans une démarche Numérique Responsable. Vous pouvez exporter vos données à tout moment." },
-];
-
-const trustBadges = [
-  { icon: MapPin, label: "Données et IA en France" },
-  { icon: CreditCard, label: "Essai sans carte bancaire" },
-  { icon: RotateCcw, label: "Sans engagement" },
-  { icon: Check, label: "Sans coût par utilisateur" },
-];
-
-/** « 49,99 € » / « 470,40 € » — prix alignés sur le store Lemon Squeezy live (23/08/2026). */
-function fmtEur(n: number): string {
-  return new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "EUR",
-    minimumFractionDigits: Number.isInteger(n) ? 0 : 2,
-    maximumFractionDigits: 2,
-  }).format(n);
+/** Même valeur pour les quatre offres : la fonction n'est réservée à aucune offre dans le logiciel. */
+function everyPlan(value: CellValue): Record<PlanId, CellValue> {
+  return { conformite: value, essential: value, pro: value, manager: value };
 }
 
-function Cell({ value }: { value: boolean | string }) {
-  if (typeof value === "string") return <span className="font-semibold text-foreground">{value}</span>;
-  return value ? <Check className="h-4 w-4 text-primary mx-auto" /> : <span className="text-muted-foreground/40">—</span>;
+/**
+ * Tableau comparatif. Quotas mensuels par entreprise et utilisateurs inclus : table
+ * plan_limits du logiciel (vérifiée le 24/09/2026). Les relances, la recherche,
+ * l'export FEC et la trésorerie ne sont réservés à aucune offre.
+ */
+const COMPARE: { label: string; hint?: string; values: Record<PlanId, CellValue> }[] = [
+  {
+    label: "Factures et devis au format Factur-X",
+    hint: "Profil EN 16931. L'envoi officiel par plateforme agréée n'est pas encore ouvert.",
+    values: everyPlan("Sans limite"),
+  },
+  {
+    label: "Documents lus automatiquement, par mois",
+    hint: "Factures reçues, justificatifs, contrats : chaque document déposé est lu et classé.",
+    values: { conformite: "20", essential: "200", pro: "2 000", manager: "6 000" },
+  },
+  {
+    label: "Conversations avec le copilote, par mois",
+    hint: "Vos questions sur vos documents et sur vos chiffres.",
+    values: { conformite: "20", essential: "200", pro: "2 000", manager: "6 000" },
+  },
+  {
+    label: "Relances automatiques des impayés",
+    hint: "Un e-mail au client 7 et 3 jours avant l'échéance, puis en cas de retard. Désactivables facture par facture.",
+    values: everyPlan(true),
+  },
+  {
+    label: "Recherche de documents en français courant",
+    hint: "« La facture d'électricité de mars »",
+    values: everyPlan(true),
+  },
+  {
+    label: "Export comptable (FEC)",
+    hint: "Pour votre expert-comptable, à tout moment.",
+    values: everyPlan(true),
+  },
+  {
+    label: "Suivi de trésorerie",
+    hint: "Avec les soldes que vous saisissez : la connexion bancaire n'est pas encore branchée.",
+    values: everyPlan(true),
+  },
+  {
+    label: "Statistiques d'activité détaillées",
+    hint: "Documents traités, usage du copilote.",
+    values: { conformite: false, essential: false, pro: true, manager: true },
+  },
+  {
+    label: "Utilisateurs inclus",
+    values: { conformite: "1", essential: "1", pro: "5", manager: "10" },
+  },
+];
+
+const TRIAL_STEPS = [
+  { title: "Vous créez votre compte.", text: "Aucune carte bancaire n'est demandée." },
+  {
+    title: `Pendant ${TRIAL.days} jours, vous avez l'offre ${TRIAL.plan}.`,
+    text: "Déposez vos factures reçues, créez les vôtres, posez vos questions au copilote.",
+  },
+  {
+    title: "Ensuite, vous choisissez.",
+    text: "Une offre payante si OdocPilot vous fait gagner du temps. Sinon, votre compte passe sur l'offre Conformité, gratuite. Rien n'est prélevé sans votre accord.",
+  },
+];
+
+const FREE_TOOLS = [
+  { to: "/diagnostic", title: "Diagnostic facture électronique", text: "Ce qui vous concerne, date par date. 3 minutes." },
+  { to: "/generateur-factur-x", title: "Générateur Factur-X", text: "Une facture au format Factur-X (EN 16931), sans inscription." },
+  { to: "/verificateur", title: "Vérificateur de facture", text: "Les mentions obligatoires et les totaux d'une facture Factur-X ou XML." },
+  { to: "/e-facture", title: "Guide de la facture électronique", text: "Le calendrier 2026-2027, les formats, les plateformes agréées." },
+];
+
+const COMPARE_LINKS = [
+  { slug: "pennylane", name: "Pennylane" },
+  { slug: "qonto", name: "Qonto" },
+  { slug: "indy", name: "Indy" },
+  { slug: "sellsy", name: "Sellsy" },
+  { slug: "axonaut", name: "Axonaut" },
+  { slug: "abby", name: "Abby" },
+];
+
+const FAQ = [
+  {
+    q: "Que comprend l'offre gratuite ?",
+    a: "L'offre Conformité est gratuite, sans limite de durée. Vous y créez vos factures et vos devis au format Factur-X, sans limite de nombre. Elle comprend aussi la lecture automatique de 20 documents par mois, les relances automatiques et l'export comptable, pour un utilisateur.",
+  },
+  {
+    q: `Comment se passe l'essai de ${TRIAL.days} jours ?`,
+    a: `Votre compte démarre avec ${TRIAL.days} jours de l'offre ${TRIAL.plan}, sans carte bancaire. Vous essayez tout sur vos vraies factures. À la fin de l'essai, votre compte passe sur l'offre Conformité, gratuite : rien n'est prélevé, et vous choisissez une offre payante seulement si vous le voulez.`,
+  },
+  {
+    q: "Combien d'utilisateurs sont inclus ?",
+    a: "Un utilisateur avec Conformité et Essential, jusqu'à 5 avec Pro et jusqu'à 10 avec Manager. Au-delà, écrivez-nous : nous étudions une offre adaptée.",
+  },
+  {
+    q: "Puis-je changer d'offre ou arrêter ?",
+    a: "Oui. Les offres sont mensuelles et sans engagement de durée : vous changez d'offre ou vous arrêtez votre abonnement depuis votre espace, quand vous le voulez.",
+  },
+  {
+    q: "OdocPilot est-il une plateforme agréée pour la facture électronique ?",
+    a: "Non. OdocPilot crée vos factures au format Factur-X (profil EN 16931) et lit celles que vous recevez. L'envoi officiel passera par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert. Le 18 septembre 2026, notre chaîne a été validée de bout en bout sur l'environnement de test d'une plateforme agréée.",
+  },
+  {
+    q: "Où sont stockées mes données, et quelle IA les lit ?",
+    a: "Vos documents sont stockés en France, sur des serveurs OVHcloud. La lecture automatique est faite par Mistral AI, entreprise française ; aucun autre fournisseur d'IA n'est appelé. Vos données ne sont jamais revendues.",
+  },
+];
+
+const h2Class = "font-display text-3xl font-bold leading-[1.08] tracking-[-0.03em] sm:text-[2.6rem]";
+
+function price(plan: Plan): string {
+  return plan.monthly === 0 ? fr("0 €") : formatEur(plan.monthly);
+}
+
+function FeatureList({ features, className = "" }: { features: string[]; className?: string }) {
+  return (
+    <ul className={`space-y-3 ${className}`}>
+      {features.map((feature) => (
+        <li key={feature} className="flex gap-3 leading-snug">
+          <Check size={18} strokeWidth={1.75} aria-hidden="true" className="mt-0.5 shrink-0 text-petrole" />
+          <span>{fr(feature)}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function Cell({ value }: { value: CellValue }) {
+  if (value === true) {
+    return (
+      <>
+        <Check size={18} strokeWidth={1.75} aria-hidden="true" className="mx-auto block text-petrole" />
+        <span className="sr-only">Inclus</span>
+      </>
+    );
+  }
+  if (value === false) {
+    return (
+      <>
+        <Minus size={16} strokeWidth={1.75} aria-hidden="true" className="mx-auto block text-muted-foreground" />
+        <span className="sr-only">Non inclus</span>
+      </>
+    );
+  }
+  return <span className="font-data text-[0.9375rem] font-bold">{fr(value)}</span>;
 }
 
 export default function PricingPage() {
-  const [annual, setAnnual] = useState(false);
+  const free = PLANS.find((p) => p.monthly === 0) ?? PLANS[0];
+  const paid = PLANS.filter((p) => p.monthly > 0);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="overflow-x-clip">
       <SEOHead
-        title="Tarifs OdocPilot — un seul prix, tout compris | Essai 14 jours gratuit"
-        description="Des tarifs simples et transparents, sans coût par utilisateur. Palier Conformité gratuit, puis Essential 49,99 €, Pro 89,99 €, Manager 149,99 €. Préparez votre conformité facture électronique 2026/2027. Essai 14 jours sans carte bancaire. Données et IA en France."
+        title={SEO_TITLE}
+        description={SEO_DESCRIPTION}
         canonical="/pricing"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "FAQPage",
-          mainEntity: faqItems.map((item) => ({
+          mainEntity: FAQ.map((item) => ({
             "@type": "Question",
-            name: item.question,
-            acceptedAnswer: { "@type": "Answer", text: item.answer },
+            name: item.q,
+            acceptedAnswer: { "@type": "Answer", text: item.a },
           })),
         }}
       />
 
-      {/* HERO */}
-      <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-12 text-center">
-        <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Tarifs clairs, par entreprise</p>
-          <h1 className="mt-2 text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">Un seul prix. Tout compris.</h1>
-          <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Sans coût par utilisateur, sans option qui s'empile. Un abonnement clair qui prépare votre conformité à la facturation électronique 2026/2027 et laisse l'IA préparer votre administratif — vous gardez le dernier mot.
-          </p>
-          <p className="mt-3 text-sm text-muted-foreground">14 jours gratuits · Sans carte bancaire · Résiliable en 1 clic</p>
-          <p className="mt-4 text-sm">
-            <Link to="/diagnostic" className="inline-flex items-center gap-1.5 font-semibold text-primary hover:gap-2 transition-all" data-umami-event="pricing-diagnostic">
-              <Sparkles className="h-4 w-4" /> Pas sûr d'être concerné ? Vérifiez votre conformité en 3 min
-            </Link>
-          </p>
-        </MotionDiv>
-
-        {/* Toggle */}
-        <div className="mt-9 flex items-center justify-center gap-3">
-          <span className={`text-sm font-semibold ${!annual ? "text-foreground" : "text-muted-foreground"}`}>Mensuel</span>
-          <button onClick={() => setAnnual(!annual)} aria-label="Basculer mensuel / annuel" className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${annual ? "bg-primary" : "bg-muted"}`}>
-            <span className={`inline-block h-5 w-5 transform rounded-full bg-card shadow-sm transition-transform ${annual ? "translate-x-6" : "translate-x-1"}`} />
-          </button>
-          <span className={`text-sm font-semibold ${annual ? "text-foreground" : "text-muted-foreground"}`}>Annuel</span>
-          {annual && <span className="ml-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary">−20%</span>}
-        </div>
-      </section>
-
-      {/* PLANS */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-          {plans.map((plan, i) => {
-            const isFree = plan.monthlyPrice === 0;
-            const price = annual ? plan.annualPrice : plan.monthlyPrice;
-            const isMail = plan.ctaLink.startsWith("mailto:");
-            return (
-              <MotionDiv key={plan.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.45 }}
-                className={`relative flex flex-col rounded-2xl p-6 sm:p-7 bg-card ${plan.highlight ? "border-2 border-primary shadow-elevated ring-1 ring-primary/15 md:scale-[1.02]" : "border border-border shadow-card"}`}>
-                {plan.badge && (
-                  <span className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ${plan.highlight ? "bg-gradient-cta text-primary-foreground" : "bg-secondary text-foreground border border-border"}`}>{plan.badge}</span>
-                )}
-                <h3 className="text-lg sm:text-xl font-bold text-foreground">{plan.name}</h3>
-                <p className="mt-1 text-xs sm:text-sm text-muted-foreground">{plan.target}</p>
-                <div className="mt-5 flex items-baseline gap-1">
-                  {isFree ? (
-                    <span className="text-3xl font-extrabold text-foreground">Gratuit</span>
-                  ) : (
-                    <><span className="text-3xl font-extrabold text-foreground tabular-nums">{fmtEur(price)}</span><span className="text-muted-foreground text-sm">/mois</span></>
-                  )}
-                </div>
-                {annual && !isFree && <p className="mt-1 text-xs text-muted-foreground tabular-nums">soit {fmtEur(Math.round(plan.annualPrice * 12 * 100) / 100)} /an</p>}
-                <ul className="mt-6 flex-1 space-y-2.5">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground"><Check className="h-4 w-4 text-primary shrink-0 mt-0.5" /><span>{f}</span></li>
-                  ))}
-                </ul>
-                <a href={plan.ctaLink} {...(!isMail ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="mt-7 block" data-umami-event="cta-essai-gratuit">
-                  <Button className={`w-full ${plan.highlight ? "bg-gradient-cta text-primary-foreground font-bold" : ""}`} variant={plan.highlight ? "default" : "outline"} size="lg">{plan.cta}</Button>
-                </a>
-              </MotionDiv>
-            );
-          })}
-        </div>
-        <p className="mt-8 text-center text-sm text-muted-foreground">
-          Plus de 50 personnes ou un groupe ?{" "}
-          <a href="mailto:contact@odocpilot.com" className="font-semibold text-primary underline hover:no-underline">Parlons d'une offre sur mesure</a>.
-        </p>
-      </section>
-
-      {/* ANCRAGE DOULEUR — coût de la non-conformité */}
-      <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <MotionDiv initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-          className="rounded-2xl border border-border bg-secondary/60 p-6 sm:p-8 flex flex-col sm:flex-row items-start gap-4">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 shrink-0">
-            <Receipt className="h-6 w-6 text-primary" />
-          </div>
+      {/* ─── Ouverture : l'offre gratuite ─────────────────────── */}
+      <section className="border-b border-border">
+        <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-20">
           <div>
-            <h3 className="font-bold text-foreground">La conformité coûte moins cher que l'amende</h3>
-            <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
-              La loi de finances 2026 prévoit <strong className="text-foreground tabular-nums">50 € par facture</strong> émise dans un format non conforme et <strong className="text-foreground tabular-nums">500 € par manquement</strong> à l'e-reporting. À partir de <strong className="text-foreground tabular-nums">49,99 €/mois</strong>, OdocPilot vous met en conformité <em>et</em> prépare votre administratif au quotidien.{" "}
-              <a href="https://www.impots.gouv.fr/professionnel/facturation-electronique" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Source : impots.gouv.fr</a>.
+            <p className="text-sm font-bold text-muted-foreground">Tarifs</p>
+            <h1 className="mt-4 font-display display-tight text-[clamp(2.4rem,5.2vw,4.25rem)] font-bold leading-[1.02]">
+              Gratuit pour être en règle. Simple ensuite.
+            </h1>
+            <p className="mt-6 max-w-[34rem] text-[1.1875rem] leading-relaxed text-muted-foreground">{INTRO}</p>
+            <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
+              <a href={SIGNUP_URL} className="btn-ink" data-umami-event="cta-essai-gratuit" data-umami-event-plan="hero">
+                Commencer gratuitement <ArrowRight size={18} strokeWidth={1.75} aria-hidden="true" />
+              </a>
+              <a href="#offres" className="inline-flex min-h-12 items-center gap-2 font-bold link-underline">
+                Voir les offres payantes <ArrowDown size={16} strokeWidth={1.75} aria-hidden="true" />
+              </a>
+            </div>
+            <p className="mt-5 text-[0.9375rem] text-muted-foreground">
+              {fr(`Votre compte démarre avec ${TRIAL.days} jours de l'offre ${TRIAL.plan}, sans carte bancaire.`)}
             </p>
           </div>
-        </MotionDiv>
-      </section>
 
-      {/* COMPARATIF */}
-      <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground text-center">Ce qui est inclus, plan par plan</h2>
-        <div className="mt-10 overflow-x-auto rounded-2xl border border-border shadow-card">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border bg-secondary/60">
-                <th className="px-4 sm:px-6 py-4 text-left font-semibold text-foreground">Inclus</th>
-                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Conformité</th>
-                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Essential</th>
-                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-primary">Pro</th>
-                <th className="px-3 sm:px-4 py-4 text-center font-semibold text-foreground">Manager</th>
-              </tr>
-            </thead>
-            <tbody>
-              {compare.map((row) => (
-                <tr key={row.label} className="border-b border-border last:border-0">
-                  <td className="px-4 sm:px-6 py-3.5 font-medium text-foreground">{row.label}</td>
-                  <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.gratuit} /></td>
-                  <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.essential} /></td>
-                  <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.pro} /></td>
-                  <td className="px-3 sm:px-4 py-3.5 text-center"><Cell value={row.manager} /></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Réassurance honnête */}
-        <div className="mt-10 rounded-2xl bg-card border border-border p-6 sm:p-8 flex items-start gap-4 shadow-card">
-          <CreditCard className="h-6 w-6 text-primary shrink-0 mt-0.5" />
-          <div>
-            <h3 className="font-bold text-foreground mb-1">Essayez sans risque, sans carte bancaire</h3>
-            <p className="text-sm text-muted-foreground">14 jours d'essai gratuit sur tous les plans, sans carte bancaire et sans engagement. À la fin de l'essai, vous n'êtes prélevé que si vous choisissez d'activer un abonnement. Sinon, vous ne payez rien et vous gardez l'accès à vos données.</p>
+          <div className="rounded-lg bg-desk p-6 sm:p-8">
+            <p className="text-sm font-bold text-muted-foreground">{fr("L'offre gratuite")}</p>
+            <div className="mt-2 flex items-baseline justify-between gap-4 border-b border-foreground/80 pb-4">
+              <h2 className="font-display text-[1.75rem] font-bold leading-tight">{free.name}</h2>
+              <p className="font-display text-[2.5rem] font-bold leading-none tracking-[-0.03em]">{price(free)}</p>
+            </div>
+            <p className="mt-4 leading-relaxed text-muted-foreground">{fr(`${free.forWho}. Sans limite de durée.`)}</p>
+            <FeatureList features={free.features} className="mt-5" />
           </div>
         </div>
       </section>
 
-      {/* COMPARATIFS (BOFU) */}
-      <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground text-center">OdocPilot face aux autres</h2>
-        <p className="mt-2 text-center text-sm text-muted-foreground">Des comparatifs honnêtes : qui fait quoi, et pour qui.</p>
-        <div className="mt-8 grid sm:grid-cols-2 gap-3">
-          {[
-            { to: "/comparatif/pennylane", label: "OdocPilot vs Pennylane" },
-            { to: "/comparatif/qonto", label: "OdocPilot vs Qonto" },
-            { to: "/comparatif/indy", label: "OdocPilot vs Indy" },
-            { to: "/comparatif/sellsy", label: "OdocPilot vs Sellsy" },
-            { to: "/comparatif/axonaut", label: "OdocPilot vs Axonaut" },
-            { to: "/comparatif/abby", label: "OdocPilot vs Abby" },
-          ].map((cmp) => (
-            <Link key={cmp.to} to={cmp.to} className="group flex items-center justify-between rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground hover:border-primary/40 hover:shadow-card-hover transition-all">
-              <span>{cmp.label}</span>
-              <ArrowRight className="h-4 w-4 text-primary group-hover:translate-x-0.5 transition-transform" />
+      {/* ─── Les offres payantes ──────────────────────────────── */}
+      <section id="offres" className="scroll-mt-20">
+        <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 sm:py-28">
+          <div className="max-w-[46rem]">
+            <h2 className={h2Class}>Trois offres, selon votre volume de factures</h2>
+            <p className="mt-5 leading-relaxed text-muted-foreground">
+              {fr(
+                "Chaque offre donne accès au même logiciel de facturation. Ce qui change : le nombre de documents lus chaque mois, les conversations avec le copilote et le nombre d'utilisateurs. Pro et Manager ajoutent des statistiques d'activité.",
+              )}
+            </p>
+          </div>
+
+          <div className="mt-12 grid border-t border-foreground/80 md:grid-cols-3">
+            {paid.map((plan) => (
+              <article
+                key={plan.id}
+                className="flex flex-col border-b border-border py-8 md:border-b-0 md:border-r md:px-7 md:first:pl-0 md:last:border-r-0 md:last:pr-0"
+              >
+                <h3 className="font-display text-xl font-bold">{plan.name}</h3>
+                <p className="mt-3">
+                  <span className="font-display text-[2.5rem] font-bold leading-none tracking-[-0.03em]">{price(plan)}</span>
+                  <span className="ml-1.5 text-muted-foreground">par mois</span>
+                </p>
+                <p className="mt-3 text-muted-foreground">{fr(plan.forWho)}</p>
+                <FeatureList features={plan.features} className="mt-6 flex-1" />
+                <a
+                  href={SIGNUP_URL}
+                  className="mt-8 inline-flex items-center gap-2 self-start font-bold link-underline"
+                  data-umami-event="cta-essai-gratuit"
+                  data-umami-event-plan={plan.id}
+                >
+                  {fr("Commencer par l'essai")} <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" />
+                </a>
+              </article>
+            ))}
+          </div>
+
+          <p className="mt-8 max-w-[46rem] leading-relaxed text-muted-foreground">
+            {fr("Plus de 50 personnes, ou plus de 10 utilisateurs ? ")}
+            <Link to="/contact" className="text-foreground link-underline">
+              Écrivez-nous
             </Link>
-          ))}
+            {fr(" : nous étudions une offre adaptée.")}
+          </p>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground text-center">Questions fréquentes</h2>
-        <Accordion type="single" collapsible className="mt-10">
-          {faqItems.map((item, i) => (
-            <AccordionItem key={i} value={`faq-${i}`} className="border-border">
-              <AccordionTrigger className="text-left text-foreground font-medium">{item.question}</AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">{item.answer}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+      {/* ─── L'essai ──────────────────────────────────────────── */}
+      <section className="border-y border-border bg-desk">
+        <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
+          <div>
+            <h2 className={h2Class}>{fr(`Essai de ${TRIAL.days} jours, sans carte bancaire`)}</h2>
+            <p className="mt-5 max-w-[28rem] leading-relaxed text-muted-foreground">
+              {fr("Essayez OdocPilot sur vos vraies factures avant de payer quoi que ce soit.")}
+            </p>
+          </div>
+          <ol className="self-start border-t border-foreground/80">
+            {TRIAL_STEPS.map((step, i) => (
+              <li key={step.title} className="grid grid-cols-[2.25rem_minmax(0,1fr)] gap-3 border-b border-border py-5 sm:gap-4">
+                <span aria-hidden="true" className="font-data text-[1.0625rem] font-bold leading-relaxed">
+                  {i + 1}
+                </span>
+                <p className="leading-relaxed">
+                  <span className="font-bold">{fr(step.title)}</span> <span className="text-muted-foreground">{fr(step.text)}</span>
+                </p>
+              </li>
+            ))}
+          </ol>
+        </div>
       </section>
 
-      {/* TRUST */}
-      <section className="w-full py-10 border-t border-border bg-secondary/40">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-center gap-6 sm:gap-10">
-          {trustBadges.map((b, i) => {
-            const Icon = b.icon;
-            return (
-              <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground font-medium"><Icon className="h-4 w-4 text-primary" /><span>{b.label}</span></div>
-            );
-          })}
+      {/* ─── Le détail, ligne par ligne ───────────────────────── */}
+      <section>
+        <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 sm:py-28">
+          <div className="max-w-[46rem]">
+            <h2 id="comparatif-offres" className={h2Class}>
+              Comparer les offres, ligne par ligne
+            </h2>
+            <p className="mt-5 leading-relaxed text-muted-foreground">
+              {fr("Prix mensuels. Les quantités sont données par mois et par entreprise.")}
+            </p>
+          </div>
+
+          {/* Défilement horizontal sur petit écran, première colonne fixe. « relative » retient
+              les libellés sr-only (positionnés en absolu) dans la zone qui défile : sans lui,
+              ils débordent de la page sur mobile. */}
+          <div role="region" aria-labelledby="comparatif-offres" tabIndex={0} className="relative mt-10 overflow-x-auto">
+            <table className="w-full min-w-[46rem] border-separate border-spacing-0 text-left">
+              <caption className="sr-only">{fr("Ce que comprend chaque offre d'OdocPilot")}</caption>
+              <thead>
+                <tr>
+                  <th scope="col" className="ledger-head sticky left-0 z-10 w-[38%] bg-background pb-3 pr-6 align-bottom font-display text-[1.0625rem] font-bold">
+                    Offre
+                  </th>
+                  {PLANS.map((plan) => (
+                    <th key={plan.id} scope="col" className="ledger-head px-3 pb-3 text-center align-bottom">
+                      <span className="block font-display text-[1.0625rem] font-bold">{plan.name}</span>
+                      <span className="mt-0.5 block font-data text-[0.875rem] font-normal text-muted-foreground">{price(plan)}</span>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {COMPARE.map((row) => (
+                  <tr key={row.label} className="align-top">
+                    <th scope="row" className="sticky left-0 z-10 border-b border-border bg-background py-4 pr-6 text-left font-normal">
+                      <span className="block font-bold">{fr(row.label)}</span>
+                      {row.hint && <span className="mt-1 block text-[0.875rem] leading-snug text-muted-foreground">{fr(row.hint)}</span>}
+                    </th>
+                    {PLANS.map((plan) => (
+                      <td key={plan.id} className="border-b border-border px-3 py-4 text-center">
+                        <Cell value={row.values[plan.id]} />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-        <TrustCredentials className="mt-8 max-w-5xl mx-auto px-4" />
+      </section>
+
+      {/* ─── Outils gratuits et comparatifs ───────────────────── */}
+      <section className="border-t border-border">
+        <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 sm:py-28">
+          <h2 className={`${h2Class} max-w-[46rem]`}>{fr("Facture électronique : outils gratuits et comparatifs")}</h2>
+          <div className="mt-12 grid gap-14 lg:grid-cols-2 lg:gap-20">
+            <div>
+              <h3 className="font-display text-xl font-bold">Sans créer de compte</h3>
+              <ul className="mt-4 border-t border-foreground/80">
+                {FREE_TOOLS.map((tool) => (
+                  <li key={tool.to} className="border-b border-border">
+                    <Link
+                      to={tool.to}
+                      className="group flex items-start justify-between gap-6 py-5"
+                      data-umami-event={tool.to === "/diagnostic" ? "pricing-diagnostic" : undefined}
+                    >
+                      <span>
+                        <span className="block font-bold">{fr(tool.title)}</span>
+                        <span className="mt-1 block leading-relaxed text-muted-foreground">{fr(tool.text)}</span>
+                      </span>
+                      <ArrowRight
+                        size={18}
+                        strokeWidth={1.75}
+                        aria-hidden="true"
+                        className="mt-1 shrink-0 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none"
+                      />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-display text-xl font-bold">OdocPilot face aux autres logiciels</h3>
+              <p className="mt-2 text-muted-foreground">Qui fait quoi, et pour qui.</p>
+              <ul className="mt-4 grid border-t border-foreground/80 sm:grid-cols-2 sm:gap-x-8">
+                {COMPARE_LINKS.map((c) => (
+                  <li key={c.slug} className="border-b border-border">
+                    <Link to={`/comparatif/${c.slug}`} className="group flex items-center justify-between gap-4 py-4 font-bold">
+                      OdocPilot vs {c.name}
+                      <ArrowRight
+                        size={16}
+                        strokeWidth={1.75}
+                        aria-hidden="true"
+                        className="shrink-0 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none"
+                      />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Questions ────────────────────────────────────────── */}
+      <section className="border-t border-border">
+        <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
+          <div>
+            <h2 className={h2Class}>Questions sur les tarifs et la facture électronique</h2>
+            <p className="mt-5 max-w-[24rem] leading-relaxed text-muted-foreground">
+              {fr("Une autre question ? ")}
+              <Link to="/contact" className="text-foreground link-underline">
+                Écrivez-nous
+              </Link>
+              {fr(" : c'est le fondateur qui vous répond.")}
+            </p>
+          </div>
+          <div className="border-t border-foreground/80">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group border-b border-border">
+                <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-5 text-[1.0625rem] font-bold leading-snug [&::-webkit-details-marker]:hidden">
+                  {fr(f.q)}
+                  <span
+                    aria-hidden="true"
+                    className="mt-0.5 font-display text-[1.5rem] font-normal leading-none transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none"
+                  >
+                    +
+                  </span>
+                </summary>
+                <p className="-mt-1 pb-6 pr-10 leading-relaxed text-muted-foreground">{fr(f.a)}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Invitation ───────────────────────────────────────── */}
+      <section className="border-t border-border bg-desk">
+        <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 sm:py-24">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-end">
+            <div>
+              <h2 className={h2Class}>Essayez sur une vraie facture.</h2>
+              <p className="mt-5 max-w-[32rem] text-[1.1875rem] leading-relaxed text-muted-foreground">
+                {fr(`Créez votre compte, déposez une facture et regardez la fiche se remplir. ${TRIAL.short}.`)}
+              </p>
+            </div>
+            <div className="lg:justify-self-end">
+              <a href={SIGNUP_URL} className="btn-ink" data-umami-event="cta-essai-gratuit" data-umami-event-plan="final">
+                Commencer gratuitement <ArrowRight size={18} strokeWidth={1.75} aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+          <TrustCredentials className="mt-14 justify-start border-t border-border pt-6 text-left" />
+        </div>
       </section>
     </div>
   );

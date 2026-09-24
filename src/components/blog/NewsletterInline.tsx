@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useId, useState } from "react";
+import { Check } from "lucide-react";
 import { subscribeNewsletter } from "@/lib/newsletter";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Check, Mail } from "lucide-react";
+import { fr } from "@/lib/typo";
 
 interface NewsletterInlineProps {
   source: string;
@@ -11,24 +11,31 @@ interface NewsletterInlineProps {
   description?: string;
   cta?: string;
   placeholder?: string;
+  /** Nom d'événement Umami posé sur le bouton d'envoi. */
+  umamiEvent?: string;
 }
 
 /**
- * Capture email INLINE (jamais en popup), avec une promesse précise et honnête liée
- * à l'échéance e-facture. Aucun chiffre d'abonnés fabriqué. Réutilisable.
+ * Capture email INLINE (jamais en popup), avec une promesse précise et tenable :
+ * l'inscription enregistre l'adresse, aucun e-mail automatique n'est envoyé.
+ * Aucun chiffre d'abonnés affiché. Réutilisable (blog, livre blanc, outils).
  */
 export function NewsletterInline({
   source,
-  title = "Veille e-facturation",
-  description = "On vous prévient quand quelque chose change vraiment dans la réforme 2026/2027 — pas de spam, juste l'essentiel.",
-  cta = "Me tenir au courant",
+  title = "Être prévenu quand la réforme change",
+  description = "Nous vous écrivons quand une date ou une règle de la facture électronique change. Pas de spam.",
+  cta = "Me prévenir",
   placeholder = "vous@entreprise.fr",
+  umamiEvent,
 }: NewsletterInlineProps) {
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState(""); // honeypot
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const { toast } = useToast();
+  const uid = useId();
+  const emailId = `${uid}-email`;
+  const honeypotId = `${uid}-website`;
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,53 +47,51 @@ export function NewsletterInline({
       return;
     }
     setDone(true);
-    toast({ title: "C'est noté", description: "On vous prévient quand quelque chose change vraiment." });
+    toast({ title: "C'est noté", description: "Nous vous écrirons quand quelque chose change vraiment." });
   };
 
   return (
-    <section className="mt-12 rounded-2xl border border-border bg-secondary/60 p-7 sm:p-9">
-      <div className="flex items-start gap-3">
-        <span className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary sm:flex">
-          <Mail className="h-5 w-5" />
-        </span>
-        <div className="flex-1">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">{title}</h2>
-          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{description}</p>
+    <section className="mt-12 border-t border-border pt-8">
+      <h2 className="font-display text-xl font-bold leading-snug">{fr(title)}</h2>
+      <p className="mt-2 max-w-[56ch] text-[0.9375rem] leading-relaxed text-muted-foreground">{fr(description)}</p>
 
-          {done ? (
-            <p className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-foreground">
-              <Check className="h-4 w-4 text-primary" /> C'est confirmé — vérifiez votre boîte mail.
-            </p>
-          ) : (
-            <form onSubmit={submit} className="mt-4 flex flex-col gap-2 sm:flex-row">
-              <div className="absolute opacity-0 pointer-events-none" aria-hidden="true">
-                <label htmlFor="nl-website">Website</label>
-                <input
-                  type="text"
-                  id="nl-website"
-                  name="website"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  value={website}
-                  onChange={(e) => setWebsite(e.target.value)}
-                />
-              </div>
-              <Input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={placeholder}
-                aria-label="Votre adresse email"
-                className="h-11 sm:max-w-xs"
-              />
-              <Button type="submit" disabled={loading} className="h-11 bg-gradient-cta text-primary-foreground">
-                {loading ? "…" : cta}
-              </Button>
-            </form>
-          )}
-        </div>
-      </div>
+      {done ? (
+        <p role="status" className="mt-5 inline-flex items-center gap-2 font-bold">
+          <Check size={18} strokeWidth={2.5} aria-hidden="true" />
+          {fr("C'est noté : vous serez prévenu par e-mail.")}
+        </p>
+      ) : (
+        <form onSubmit={submit} className="mt-5 flex max-w-[34rem] flex-col gap-2.5 sm:flex-row">
+          <div className="pointer-events-none absolute opacity-0" aria-hidden="true">
+            <label htmlFor={honeypotId}>Website</label>
+            <input
+              type="text"
+              id={honeypotId}
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+            />
+          </div>
+          <label htmlFor={emailId} className="sr-only">
+            Votre adresse e-mail
+          </label>
+          <Input
+            id={emailId}
+            type="email"
+            required
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder={placeholder}
+            className="h-12 rounded-lg px-4 text-base"
+          />
+          <button type="submit" disabled={loading} className="btn-ink shrink-0 disabled:opacity-60" data-umami-event={umamiEvent}>
+            {loading ? "Envoi…" : cta}
+          </button>
+        </form>
+      )}
     </section>
   );
 }

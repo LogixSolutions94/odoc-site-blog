@@ -1,7 +1,11 @@
 /**
- * Contenu des pages piliers SEO (silos conformité e-facture).
- * Pages éducatives (AEO/GEO) qui maillent vers /e-facture, les outils gratuits et /pricing.
- * Honnêteté : faits réglementaires sourcés, « l'IA prépare, vous validez », transmission « bientôt ».
+ * Contenu des pages guides SEO (silos conformité e-facture), rendu par GuidePillarPage.
+ * Faits : état au 24/09/2026, sourcés sur impots.gouv.fr (page officielle, FAQ et guide
+ * pratique de démarrage de la DGFiP). Aucun montant d'amende : les pages officielles n'en
+ * citent pas, elles renvoient au code général des impôts.
+ * Lu aussi par le prérendu (scripts/lib/marketing-pages.ts) : ne changer ni les clés, ni les
+ * slugs, ni la forme des objets. seoTitle, seoDesc, h1 et intro sont affichés sans retouche
+ * typographique : leurs espaces insécables sont écrites ici (  avant « : »,   avant « ? »).
  */
 export type GuideSection = { h2: string; atomic?: string; body: string[]; bullets?: string[] };
 export type GuideFaq = { q: string; a: string };
@@ -19,321 +23,370 @@ export type Guide = {
 };
 
 const TOOLS: GuideRelated[] = [
-  { to: "/diagnostic", label: "Diagnostic conformité (3 min)" },
+  { to: "/diagnostic", label: "Diagnostic en 3 minutes" },
   { to: "/generateur-factur-x", label: "Générateur Factur-X gratuit" },
-  { to: "/verificateur", label: "Vérifier une facture" },
+  { to: "/verificateur", label: "Vérificateur de facture" },
 ];
 
 export const GUIDES: Guide[] = [
   {
     slug: "facturation-electronique-2026",
-    seoTitle: "Facturation électronique 2026 : le guide pour les dirigeants de TPE/PME",
+    seoTitle: "Facturation électronique 2026 : le guide pour TPE et PME",
     seoDesc:
-      "Tout comprendre à la facturation électronique obligatoire en France : calendrier 2026/2027, format Factur-X, plateforme agréée, sanctions. Le guide clair pour un dirigeant de TPE/PME, sans jargon.",
-    eyebrow: "Guide pilier · facturation électronique",
-    h1: "Facturation électronique 2026 : le guide complet pour les dirigeants de TPE/PME",
+      "Facturation électronique obligatoire : réception depuis le 1er septembre 2026, émission en 2027, formats, plateforme agréée. Le guide clair des TPE et PME.",
+    eyebrow: "Guide · facturation électronique",
+    h1: "Facturation électronique 2026 : le guide complet pour les TPE et PME",
     intro:
-      "La facturation électronique devient obligatoire en France : dès le 1er septembre 2026, toute entreprise assujettie à la TVA devra recevoir ses factures au format électronique structuré ; l'émission et l'e-reporting suivront en 2027. Ce guide explique, sans jargon, ce qui change et comment s'y préparer.",
+      "Depuis le 1er septembre 2026, toute entreprise assujettie à la TVA doit pouvoir recevoir des factures électroniques. L'émission et l'e-reporting suivent le 1er septembre 2027 pour les PME, TPE et micro-entreprises. Ce guide explique ce qui change, sans jargon.",
     sections: [
       {
         h2: "Qu'est-ce que la facturation électronique obligatoire ?",
         atomic:
-          "La facturation électronique est une facture émise, transmise et reçue dans un format structuré, lisible automatiquement par les logiciels et l'administration fiscale — et non un simple PDF envoyé par email. En France, elle devient progressivement obligatoire entre 2026 et 2027 pour toutes les entreprises assujetties à la TVA.",
+          "Une facture électronique est émise, transmise et reçue dans un format structuré que les logiciels et l'administration lisent automatiquement. Ce n'est pas un PDF envoyé par e-mail. En France, la réception est obligatoire depuis le 1er septembre 2026 ; l'émission le sera le 1er septembre 2027 pour les PME, TPE et micro-entreprises.",
         body: [
-          "Une facture électronique n'est pas une image ou un PDF classique. C'est un fichier au format structuré (Factur-X, UBL ou CII) qui contient les données de la facture de manière exploitable par une machine. Le format compte autant que le canal : une facture circulera désormais via une plateforme agréée, pas de boîte mail à boîte mail.",
-          "L'objectif de la réforme est double : simplifier la vie des entreprises (moins de ressaisie, paiements plus rapides) et lutter contre la fraude à la TVA grâce à la transmission des données à l'administration (e-reporting).",
+          "Le format compte autant que le canal. La facture devient un fichier structuré (Factur-X, UBL ou CII), et elle circule par une plateforme agréée, plus de boîte mail à boîte mail.",
+          "Selon l'administration, la réforme doit simplifier la gestion des factures (moins de ressaisie, des statuts de suivi, à terme des déclarations de TVA préremplies) et lutter contre la fraude à la TVA. Elle ne change pas les règles de TVA.",
         ],
       },
       {
         h2: "Le calendrier : qui est concerné, et quand ?",
         atomic:
-          "Le 1er septembre 2026, la réception de factures électroniques devient obligatoire pour toutes les entreprises assujetties à la TVA. Le 1er septembre 2027, l'émission et l'e-reporting deviennent obligatoires pour les TPE, PME et micro-entreprises.",
+          "Depuis le 1er septembre 2026, toutes les entreprises assujetties à la TVA doivent pouvoir recevoir des factures électroniques, et les grandes entreprises et les ETI les émettent. Le 1er septembre 2027, les PME, TPE et micro-entreprises devront émettre leurs factures en électronique et transmettre certaines données (e-reporting).",
         body: [
-          "La réforme s'applique en deux temps. La première échéance, au 1er septembre 2026, concerne la réception : toute entreprise doit être en mesure de recevoir une facture au format électronique. La seconde, au 1er septembre 2027, concerne l'émission et l'e-reporting pour les petites structures.",
-          "Un point change tout : le Portail Public de Facturation (PPF) gratuit de l'État a été abandonné le 15 octobre 2024. Passer par une plateforme agréée privée est devenu le chemin obligatoire.",
+          "La réception est l'obligation la plus large : elle vaut pour toutes les entreprises, quelle que soit leur taille ou leur chiffre d'affaires, micro-entrepreneurs compris.",
+          "Il n'existe pas de plateforme publique gratuite pour échanger les factures. L'État tient l'annuaire des destinataires ; les factures passent par des plateformes agréées.",
         ],
         bullets: [
-          "01/09/2026 — réception obligatoire (toutes les entreprises assujetties à la TVA)",
-          "01/09/2027 — émission + e-reporting (TPE, PME, micro-entreprises)",
-          "15/10/2024 — abandon du Portail Public de Facturation gratuit",
+          "1er septembre 2026 : réception pour toutes les entreprises ; émission et e-reporting pour les grandes entreprises et les ETI",
+          "1er septembre 2027 : émission et e-reporting pour les PME, TPE et micro-entreprises",
         ],
       },
       {
         h2: "Le format : Factur-X, UBL, CII",
         atomic:
-          "Les formats légaux sont structurés : Factur-X (un PDF lisible doublé de données XML intégrées), UBL et CII. OdocPilot génère vos factures directement au format Factur-X conforme au profil EN 16931, sans paramétrage technique de votre part.",
+          "Trois formats structurés sont admis : Factur-X (un PDF lisible qui contient les données en XML), UBL et CII (des fichiers XML seuls). Pour une TPE, Factur-X est le plus simple : la facture se lit comme un PDF. OdocPilot crée vos factures au format Factur-X, profil EN 16931.",
         body: [
-          "Factur-X est le format le plus pratique pour les TPE : il combine un PDF lisible par un humain et un volet XML structuré lisible par les machines. C'est un format « hybride » conforme à la norme européenne EN 16931.",
-          "Vous pouvez tester gratuitement, sans compte : générez une facture au format Factur-X, ou vérifiez qu'une facture existante est bien conforme.",
+          "Factur-X associe un PDF lisible par un humain et un fichier XML lisible par les logiciels. Il suit la norme européenne EN 16931.",
+          "Vous pouvez essayer sans compte : le générateur gratuit crée le fichier XML de votre facture et un PDF imprimable, et le vérificateur contrôle les principales mentions d'une facture Factur-X existante.",
         ],
       },
       {
         h2: "La transmission : la plateforme agréée (PA)",
         atomic:
-          "À partir de 2026, les factures transitent par une plateforme agréée (PA, anciennement PDP) immatriculée par la DGFiP, qui achemine la facture et transmet les données fiscales à l'administration. On compte plus de 130 plateformes agréées mi-2026.",
+          "Une plateforme agréée (PA, anciennement PDP) est un opérateur immatriculé par l'administration fiscale. Elle émet, transmet et reçoit les factures électroniques, et transmet à l'administration les données prévues par la loi. La DGFiP en comptait 150 au 1er août 2026.",
         body: [
-          "La plateforme agréée est l'intermédiaire obligatoire entre vous, vos clients/fournisseurs et l'administration. Elle remplace l'ancien canal public.",
-          "Chez OdocPilot, la transmission via une plateforme agréée partenaire est en cours de raccordement et sera prête avant l'échéance. Aujourd'hui, l'outil génère vos factures au format conforme et prépare votre dossier.",
+          "Vous pouvez la choisir directement, ou passer par votre logiciel, votre banque ou votre expert-comptable s'ils en proposent une. La liste officielle est publiée sur impots.gouv.fr.",
+          "OdocPilot n'est pas une plateforme agréée. L'envoi officiel de vos factures passera par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert.",
         ],
       },
       {
-        h2: "Comment OdocPilot vous prépare",
+        h2: "Ce qu'OdocPilot fait pour vous",
         atomic:
-          "OdocPilot est un copilote IA français : il génère vos factures au format Factur-X, lit et classe vos factures reçues, et prépare votre administratif. L'IA prépare le travail ; vous validez en un clic. Données et IA hébergées en France.",
+          "OdocPilot crée vos factures au format Factur-X, lit les factures que vous recevez et range vos documents. Vous vérifiez, vous validez. Vos documents sont stockés en France, chez OVHcloud ; l'IA est celle de Mistral AI, entreprise française.",
         body: [
-          "Le principe d'OdocPilot est simple : l'intelligence artificielle prépare (lecture des factures, extraction du montant/TVA/échéance, classement, relances), mais rien n'est validé ni comptabilisé sans vous. Vous gardez le dernier mot.",
-          "C'est conçu pour le dirigeant de TPE qui gère son administratif sans expert-comptable au quotidien : pas un logiciel de plus à apprendre, mais une assistance qui fait le travail pénible à votre place.",
+          "Les factures reçues sont lues pour vous (fournisseur, numéro, dates, montants, TVA) : vous relisez la fiche, vous corrigez si besoin, vous validez. Vos relances de paiement partent automatiquement aux dates prévues, et vous pouvez les couper facture par facture.",
+          "OdocPilot est pensé pour le dirigeant qui fait son administratif lui-même. Si vous avez un expert-comptable, vous lui transmettez un export comptable au format FEC.",
         ],
       },
     ],
     faqs: [
-      { q: "Une facture électronique, c'est juste un PDF par email ?", a: "Non. La loi impose un format structuré, lisible automatiquement par les logiciels et l'administration : Factur-X (PDF + données XML), UBL ou CII. Un simple PDF envoyé par email ne sera plus suffisant à partir de 2026." },
-      { q: "Suis-je concerné même si je suis micro-entreprise ?", a: "Oui. La réforme s'applique à toutes les entreprises assujetties à la TVA, y compris les micro-entreprises. La réception devient obligatoire au 1er septembre 2026, l'émission et l'e-reporting au 1er septembre 2027." },
-      { q: "Faut-il un expert-comptable pour se mettre en conformité ?", a: "Non. OdocPilot est justement conçu pour les dirigeants qui pilotent leur administratif eux-mêmes : génération Factur-X sans paramétrage, lecture IA des factures, export FEC pour transmettre à un comptable si besoin." },
-      { q: "Combien ça coûte de se mettre en conformité ?", a: "Vous pouvez commencer gratuitement : générateur Factur-X, diagnostic et vérificateur sont sans compte. Les offres OdocPilot démarrent à 49,99 €/mois, par entreprise et sans coût par utilisateur, avec un essai de 14 jours sans carte bancaire." },
+      {
+        q: "Une facture électronique, c'est un PDF envoyé par e-mail ?",
+        a: "Non. Une facture électronique est émise, transmise et reçue dans un format structuré (Factur-X, UBL ou CII), par une plateforme agréée. L'administration le précise : un PDF envoyé par e-mail n'en est pas une.",
+      },
+      {
+        q: "Suis-je concerné en micro-entreprise ?",
+        a: "Oui. Toutes les entreprises assujetties à la TVA sont concernées, micro-entrepreneurs compris, même en franchise en base. La réception est obligatoire depuis le 1er septembre 2026 ; l'émission et l'e-reporting le seront le 1er septembre 2027.",
+      },
+      {
+        q: "Faut-il un expert-comptable pour se mettre en règle ?",
+        a: "Non. Il vous faut une plateforme agréée pour recevoir vos factures, et un outil qui produit le bon format pour les émettre. Si vous travaillez avec un expert-comptable, demandez-lui quelle plateforme il utilise : c'est souvent le plus simple.",
+      },
+      {
+        q: "Combien coûte la mise en conformité ?",
+        a: "Selon la DGFiP, plus d'une dizaine des 150 plateformes agréées proposaient au 1er août 2026 une offre gratuite ou sans surcoût pour les besoins essentiels. Chez OdocPilot, le palier Conformité est gratuit ; les offres complètes vont de 49,99 € à 149,99 € par mois, avec 14 jours d'essai sans carte bancaire.",
+      },
     ],
     related: [
-      { to: "/e-facture", label: "La réforme e-facture (page pilier)" },
-      { to: "/guide/obligations-2026-2027", label: "Obligations & calendrier détaillés" },
-      { to: "/guide/plateforme-agreee", label: "Comprendre la plateforme agréée" },
+      { to: "/e-facture", label: "La facture électronique obligatoire : le guide" },
+      { to: "/guide/obligations-2026-2027", label: "Calendrier 2026-2027 et sanctions" },
+      { to: "/guide/plateforme-agreee", label: "Plateforme agréée : rôle et comment choisir" },
       ...TOOLS,
     ],
   },
   {
     slug: "obligations-2026-2027",
-    seoTitle: "Obligations facturation électronique 2026/2027 : calendrier et sanctions",
+    seoTitle: "Facturation électronique : calendrier 2026-2027 et sanctions",
     seoDesc:
-      "Calendrier officiel de la facturation électronique : réception au 1er septembre 2026, émission et e-reporting au 1er septembre 2027. Qui est concerné, quelles sanctions. Guide clair pour TPE/PME.",
-    eyebrow: "Guide · obligations & calendrier",
-    h1: "Obligations de facturation électronique 2026/2027 : calendrier, périmètre et sanctions",
+      "Réception obligatoire depuis le 1er septembre 2026, émission et e-reporting au 1er septembre 2027 : qui doit faire quoi, et ce que prévoient les sanctions.",
+    eyebrow: "Guide · calendrier et sanctions",
+    h1: "Obligations de facturation électronique 2026-2027 : calendrier et sanctions",
     intro:
-      "Deux échéances structurent la réforme : la réception obligatoire au 1er septembre 2026 pour toutes les entreprises assujetties à la TVA, puis l'émission et l'e-reporting au 1er septembre 2027 pour les TPE, PME et micro-entreprises. Voici précisément qui doit faire quoi, et quand.",
+      "Deux dates structurent la réforme. Depuis le 1er septembre 2026, toute entreprise assujettie à la TVA doit pouvoir recevoir des factures électroniques. Le 1er septembre 2027, les PME, TPE et micro-entreprises devront aussi les émettre et transmettre certaines données. Voici qui doit faire quoi, et ce que prévoient les sanctions.",
     sections: [
       {
         h2: "Le calendrier officiel en deux étapes",
         atomic:
-          "Au 1er septembre 2026, toute entreprise assujettie à la TVA doit pouvoir recevoir ses factures au format électronique. Au 1er septembre 2027, les TPE, PME et micro-entreprises doivent émettre leurs factures au format électronique et transmettre leur e-reporting.",
+          "Depuis le 1er septembre 2026, toutes les entreprises doivent pouvoir recevoir des factures électroniques, et les grandes entreprises et les ETI les émettent. Au plus tard le 1er septembre 2027, les PME, TPE et micro-entreprises émettront à leur tour et transmettront leurs données de transaction et de paiement (e-reporting).",
         body: [
-          "La première obligation est la plus universelle : dès le 1er septembre 2026, vous devez être capable de recevoir une facture électronique. Concrètement, il faut être raccordé à une plateforme agréée.",
-          "La seconde étape, au 1er septembre 2027, ajoute l'émission (envoyer vos propres factures au format structuré) et l'e-reporting (transmettre certaines données de transactions à l'administration).",
+          "Recevoir, concrètement, c'est avoir choisi une plateforme agréée, directement ou par votre logiciel, votre banque ou votre expert-comptable. L'administration demande aux entreprises qui ne l'ont pas encore fait d'engager la démarche sans attendre.",
+          "Jusqu'au 1er septembre 2027, une PME, une TPE ou une micro-entreprise peut continuer à émettre ses factures comme aujourd'hui. Elle peut aussi passer à l'émission électronique plus tôt, de façon volontaire.",
         ],
         bullets: [
-          "01/09/2026 — réception obligatoire : toutes les entreprises assujetties à la TVA",
-          "01/09/2027 — émission + e-reporting : TPE, PME, micro-entreprises",
+          "1er septembre 2026 : réception pour toutes les entreprises ; émission et e-reporting pour les grandes entreprises et les ETI",
+          "1er septembre 2027 : émission et e-reporting pour les PME, TPE et micro-entreprises",
         ],
       },
       {
         h2: "Qui est concerné ?",
         atomic:
-          "Toutes les entreprises établies en France et assujetties à la TVA sont concernées, y compris les micro-entreprises et les indépendants. Le calendrier d'émission distingue les grandes entreprises (plus tôt) des TPE/PME (1er septembre 2027).",
+          "Toutes les entreprises établies en France et assujetties à la TVA, quelle que soit leur taille, micro-entrepreneurs et indépendants compris. La facture électronique vise les échanges entre entreprises ; les ventes à des particuliers relèvent de l'e-reporting.",
         body: [
-          "Le périmètre est très large : il couvre les opérations entre entreprises (B2B) établies en France. Même si vous êtes une petite structure, vous êtes concerné — au minimum par l'obligation de réception dès 2026.",
-          "Vérifiez votre situation exacte en 3 minutes avec le diagnostic de conformité : il vous indique votre date butoir et les étapes qui s'appliquent à votre activité.",
+          "La taille de l'entreprise ne fixe que la date d'émission. La réception, elle, vaut pour toutes depuis le 1er septembre 2026.",
+          "Pour connaître votre situation, faites le diagnostic en 3 minutes : il vous donne vos dates et les étapes qui s'appliquent à vous.",
         ],
       },
       {
-        h2: "Le PPF abandonné : pourquoi c'est décisif",
+        h2: "Pas de plateforme publique gratuite",
         atomic:
-          "Le Portail Public de Facturation (PPF) gratuit de l'État a été abandonné le 15 octobre 2024. Il n'existe donc plus de canal public gratuit : passer par une plateforme agréée privée est devenu obligatoire pour émettre et recevoir.",
+          "En octobre 2024, l'État a renoncé à faire de son portail public une plateforme gratuite d'échange de factures. Il tient l'annuaire des destinataires et reçoit les données fiscales ; les factures, elles, passent par des plateformes agréées privées.",
         body: [
-          "Au départ, l'État prévoyait un portail public gratuit. Son abandon change la donne : il n'y a plus d'option « gratuite par défaut » de l'État, et chaque entreprise doit choisir une plateforme agréée.",
+          "Selon la DGFiP, plus d'une dizaine des 150 plateformes agréées au 1er août 2026 proposaient une offre gratuite ou sans surcoût pour les besoins essentiels des petites structures.",
         ],
       },
       {
         h2: "Les sanctions",
         atomic:
-          "La loi de finances prévoit une amende de 50 € par facture émise dans un format non conforme et de 500 € par manquement à l'e-reporting, avec des mécanismes de clémence. La conformité coûte donc nettement moins cher que l'amende.",
+          "Les textes prévoient des amendes : par facture non émise en électronique (article 1737 du code général des impôts) et pour les données non transmises (article 1788 D). Pour la réception, une mise en demeure de trois mois précède toute amende. Pendant la phase de démarrage, pas de sanction automatique pour les entreprises engagées dans une démarche de mise en conformité.",
         body: [
-          "Les montants unitaires (50 € par facture non conforme, 500 € par manquement à l'e-reporting) peuvent s'accumuler vite pour une entreprise qui facture régulièrement. Se mettre en conformité en amont est la stratégie la plus économique.",
-          "Source officielle à jour : impots.gouv.fr. Nous indiquons des montants unitaires confirmés ; les plafonds et modalités peuvent évoluer, vérifiez toujours la source officielle.",
+          "L'administration distingue les difficultés réelles, documentées et suivies d'actions de correction, d'une inertie ou d'un refus d'entrer dans le dispositif. Gardez la trace de vos démarches : choix d'une plateforme, échanges avec votre logiciel ou votre expert-comptable.",
+          "Les montants et plafonds sont fixés par le code général des impôts. Vérifiez-les sur impots.gouv.fr avant toute décision.",
         ],
       },
     ],
     faqs: [
-      { q: "Quelle est la première échéance à retenir ?", a: "Le 1er septembre 2026 : à cette date, toute entreprise assujettie à la TVA doit pouvoir recevoir ses factures au format électronique via une plateforme agréée. C'est l'obligation la plus universelle." },
-      { q: "Les micro-entreprises sont-elles concernées par l'e-reporting ?", a: "Oui, au 1er septembre 2027 pour l'émission et l'e-reporting. La réception, elle, s'applique dès le 1er septembre 2026, y compris pour les micro-entreprises." },
-      { q: "Quelles sont les sanctions en cas de non-conformité ?", a: "La loi de finances prévoit 50 € par facture non conforme et 500 € par manquement à l'e-reporting, avec une période de clémence. Référez-vous à impots.gouv.fr pour les modalités exactes." },
+      {
+        q: "Quelle est la première échéance à retenir ?",
+        a: "Le 1er septembre 2026, déjà passé : depuis cette date, toute entreprise assujettie à la TVA doit pouvoir recevoir des factures électroniques par une plateforme agréée. Si ce n'est pas encore fait, choisissez-en une sans attendre.",
+      },
+      {
+        q: "Les micro-entreprises sont-elles concernées par l'e-reporting ?",
+        a: "Oui, au 1er septembre 2027, en même temps que l'émission. La réception, elle, s'applique depuis le 1er septembre 2026, micro-entreprises comprises.",
+      },
+      {
+        q: "Y aura-t-il des sanctions dès 2026 ?",
+        a: "Pas de manière automatique. Selon la DGFiP, les entreprises qui rencontrent des difficultés mais sont engagées dans une démarche de mise en conformité ne seront pas sanctionnées pendant la phase de démarrage. Les amendes prévues par le code général des impôts visent l'inertie et le refus.",
+      },
     ],
     related: [
-      { to: "/e-facture", label: "La réforme e-facture (page pilier)" },
-      { to: "/guide/facturation-electronique-2026", label: "Le guide complet 2026" },
+      { to: "/e-facture", label: "La facture électronique obligatoire : le guide" },
+      { to: "/guide/facturation-electronique-2026", label: "Facturation électronique 2026 : le guide complet" },
       { to: "/guide/plateforme-agreee", label: "Choisir sa plateforme agréée" },
       ...TOOLS,
     ],
   },
   {
     slug: "plateforme-agreee",
-    seoTitle: "Plateforme agréée (PA, ex-PDP) : définition et comment se raccorder",
+    seoTitle: "Plateforme agréée (PA, ex-PDP) : rôle et comment choisir",
     seoDesc:
-      "Qu'est-ce qu'une plateforme agréée (PA, anciennement PDP) pour la facturation électronique ? Rôle, choix, raccordement, abandon du PPF. Le guide clair pour un dirigeant de TPE/PME.",
-    eyebrow: "Guide · plateforme agréée (PA)",
-    h1: "Plateforme agréée (PA, ex-PDP) : ce qu'un dirigeant de TPE doit savoir",
+      "Plateforme agréée (PA, ex-PDP) : son rôle dans la facture électronique, pourquoi elle est obligatoire depuis 2026, comment la choisir. Guide pour TPE et PME.",
+    eyebrow: "Guide · plateforme agréée",
+    h1: "Plateforme agréée (PA, ex-PDP) : ce qu'un dirigeant de TPE doit savoir",
     intro:
-      "À partir de 2026, vos factures électroniques transiteront par une plateforme agréée (PA, anciennement « PDP »), un intermédiaire immatriculé par la DGFiP. Voici son rôle, comment la choisir, et ce que prépare OdocPilot.",
+      "Depuis le 1er septembre 2026, vos factures électroniques passent par une plateforme agréée (PA, anciennement « PDP »), un opérateur immatriculé par l'administration fiscale. Voici son rôle, comment la choisir, et où en est OdocPilot.",
     sections: [
       {
         h2: "Qu'est-ce qu'une plateforme agréée (PA) ?",
         atomic:
-          "Une plateforme agréée (PA, ex-PDP) est un opérateur immatriculé par l'administration fiscale, chargé d'émettre, transmettre et recevoir les factures électroniques, et de transmettre les données fiscales à l'administration. C'est l'intermédiaire obligatoire entre les entreprises et la DGFiP.",
+          "Une plateforme agréée est un opérateur immatriculé par l'administration fiscale. Elle émet, transmet et reçoit les factures électroniques, contrôle leurs données, et transmet à l'administration les données prévues par la loi. C'est le passage obligé de la réforme.",
         body: [
-          "Le terme officiel est « plateforme agréée (PA) » depuis 2025 ; on parlait auparavant de « PDP » (plateforme de dématérialisation partenaire). C'est le même rôle.",
-          "Sans plateforme agréée, vous ne pouvez ni recevoir ni émettre vos factures dans le circuit légal. C'est le point de passage obligé de la réforme.",
+          "« Plateforme agréée » est le terme employé par l'administration depuis 2025 ; on parlait auparavant de « PDP », plateforme de dématérialisation partenaire. Le rôle est le même.",
+          "Les plateformes agréées doivent notamment être certifiées ISO 27001 pour leur activité de facturation électronique, héberger leurs données dans l'Union européenne et se soumettre à des audits réguliers.",
         ],
       },
       {
         h2: "Pourquoi est-elle obligatoire ?",
         atomic:
-          "Parce que le Portail Public de Facturation gratuit a été abandonné le 15 octobre 2024. Il n'existe plus de canal public : chaque entreprise doit passer par une plateforme agréée privée pour être conforme.",
+          "Parce que la loi prévoit que l'émission, la transmission et la réception des factures électroniques passent par une plateforme agréée (article 289 bis du code général des impôts). L'État n'a pas créé de plateforme publique gratuite pour échanger les factures.",
         body: [
-          "L'abandon du PPF a rendu la plateforme agréée incontournable. C'est aujourd'hui le meilleur argument d'incontournabilité de la réforme.",
+          "L'État tient l'annuaire qui indique la plateforme de réception de chaque entreprise. Une entreprise sans plateforme n'y figure pas : ses fournisseurs ne peuvent pas lui adresser de facture électronique.",
         ],
       },
       {
         h2: "Comment choisir sa plateforme agréée ?",
         atomic:
-          "On compte plus de 130 plateformes agréées immatriculées par la DGFiP mi-2026. Pour une TPE, l'essentiel est de choisir une solution simple, qui génère le bon format (Factur-X / EN 16931), gère la transmission, et reste lisible sans expertise comptable.",
+          "La DGFiP comptait 150 plateformes agréées au 1er août 2026, dont plus d'une dizaine avec une offre gratuite ou sans surcoût pour les besoins essentiels. Choisissez selon votre volume de factures, les outils que vous utilisez déjà et ce que proposent votre banque ou votre expert-comptable.",
         body: [
-          "Le nombre de plateformes agréées est élevé, ce qui peut être déroutant. Pour un dirigeant de TPE, mieux vaut une solution intégrée qui prépare la facture conforme ET gère la transmission, plutôt que d'empiler des outils.",
-          "Critères utiles : format conforme (Factur-X EN 16931), souveraineté (données hébergées en France), simplicité, et un accompagnement humain de la conformité.",
+          "Commencez par ce que vous avez déjà : votre logiciel de facturation, votre banque ou votre expert-comptable proposent peut-être une plateforme agréée. Vous pourrez en changer plus tard si vos besoins évoluent.",
+          "Vérifiez qu'elle figure sur la liste officielle publiée sur impots.gouv.fr, qu'elle gère la réception comme l'émission, et que son tarif correspond à votre volume.",
         ],
       },
       {
         h2: "Où en est OdocPilot ?",
         atomic:
-          "OdocPilot génère dès aujourd'hui vos factures au format Factur-X conforme et prépare votre conformité. La transmission via une plateforme agréée partenaire est en cours de raccordement et sera prête avant l'échéance.",
+          "OdocPilot n'est pas une plateforme agréée. Il crée vos factures au format Factur-X, profil EN 16931. L'envoi officiel passera par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert.",
         body: [
-          "Nous préférons être transparents : la transmission via plateforme agréée n'est pas encore branchée. En attendant, OdocPilot vous met en conformité de format (Factur-X) et prépare votre administratif — vous serez prêt le jour J.",
+          "Le 18 septembre 2026, notre chaîne complète a été validée sur l'environnement de test d'une plateforme agréée : le dépôt a été accepté après correction de 9 règles. Le passage en production n'est pas encore ouvert.",
+          "En attendant, pour la réception obligatoire depuis le 1er septembre 2026, choisissez une plateforme agréée dans la liste officielle.",
         ],
       },
     ],
     faqs: [
-      { q: "PA ou PDP : quelle différence ?", a: "Aucune sur le fond : « plateforme agréée (PA) » est le terme officiel depuis 2025, qui remplace « PDP » (plateforme de dématérialisation partenaire). C'est le même rôle d'opérateur immatriculé par la DGFiP." },
-      { q: "Combien y a-t-il de plateformes agréées ?", a: "Plus de 130 plateformes agréées étaient immatriculées par la DGFiP mi-2026. Le chiffre évolue ; pour une TPE, le critère décisif n'est pas le nombre mais la simplicité et le bon format de facture." },
-      { q: "OdocPilot transmet-il déjà mes factures via une PA ?", a: "Pas encore : la transmission via une plateforme agréée partenaire est en cours de raccordement et sera prête avant l'échéance. Aujourd'hui, OdocPilot génère vos factures au format Factur-X conforme et prépare votre dossier." },
+      {
+        q: "PA ou PDP : quelle différence ?",
+        a: "Aucune sur le fond. « Plateforme agréée (PA) » est le terme employé par l'administration depuis 2025 ; il remplace « plateforme de dématérialisation partenaire (PDP) ». Le rôle est le même.",
+      },
+      {
+        q: "Combien y a-t-il de plateformes agréées ?",
+        a: "150 au 1er août 2026, selon la DGFiP. La liste officielle, tenue à jour, est publiée sur impots.gouv.fr : c'est elle qui fait foi.",
+      },
+      {
+        q: "OdocPilot transmet-il déjà mes factures par une plateforme agréée ?",
+        a: "Pas encore. OdocPilot n'est pas une plateforme agréée : l'envoi officiel passera par une plateforme agréée partenaire, et ce raccordement n'est pas encore ouvert. Aujourd'hui, OdocPilot crée vos factures au format Factur-X et lit celles que vous recevez.",
+      },
     ],
     related: [
-      { to: "/e-facture", label: "La réforme e-facture (page pilier)" },
-      { to: "/guide/obligations-2026-2027", label: "Obligations & calendrier" },
-      { to: "/guide/factur-x", label: "Le format Factur-X expliqué" },
+      { to: "/e-facture", label: "La facture électronique obligatoire : le guide" },
+      { to: "/guide/obligations-2026-2027", label: "Calendrier 2026-2027 et sanctions" },
+      { to: "/guide/factur-x", label: "Factur-X expliqué simplement" },
       ...TOOLS,
     ],
   },
   {
     slug: "factur-x",
-    seoTitle: "Factur-X : le format de facture électronique expliqué (EN 16931, CII, PDF/A-3)",
+    seoTitle: "Factur-X : le format de facture électronique expliqué",
     seoDesc:
-      "Factur-X expliqué simplement : un PDF lisible doublé de données XML structurées, conforme à la norme EN 16931. Comment générer et vérifier une facture Factur-X gratuitement.",
-    eyebrow: "Guide · Factur-X & formats",
-    h1: "Factur-X : le format de facture électronique expliqué simplement",
+      "Factur-X expliqué simplement : un PDF lisible qui contient les données de la facture en XML, selon la norme EN 16931. Créez et vérifiez le vôtre gratuitement.",
+    eyebrow: "Guide · Factur-X et formats",
+    h1: "Factur-X : le format de facture électronique expliqué simplement",
     intro:
-      "Factur-X est le format de facture électronique le plus pratique pour les TPE : un PDF lisible par un humain, doublé d'un volet XML structuré lisible par les machines, conforme à la norme européenne EN 16931. Voici comment ça marche — et comment en générer une gratuitement.",
+      "Factur-X est le format de facture électronique le plus simple pour une TPE : un PDF lisible par un humain, qui contient les mêmes données en XML pour les logiciels, selon la norme européenne EN 16931. Voici comment il fonctionne, et comment l'essayer gratuitement.",
     sections: [
       {
         h2: "Qu'est-ce que Factur-X ?",
         atomic:
-          "Factur-X est un format de facture « hybride » : un fichier PDF/A-3 qui contient à la fois la facture lisible (le PDF) et ses données structurées (un volet XML au format CII). Il est conforme à la norme européenne EN 16931, exigée par la réforme française.",
+          "Factur-X est un format de facture hybride : un fichier PDF/A-3 qui contient à la fois la facture lisible et ses données structurées, dans un fichier XML au format CII. Il suit la norme européenne EN 16931 et fait partie des trois formats admis par la réforme, avec UBL et CII.",
         body: [
-          "L'intérêt de Factur-X est qu'il satisfait à la fois l'humain (qui lit le PDF) et la machine (qui exploite le XML), sans ressaisie. C'est pour cela qu'il est privilégié par les petites entreprises.",
-          "Les autres formats légaux sont l'UBL et le CII « pur » (XML seul). Factur-X reste le plus simple à adopter car il ressemble à une facture PDF classique.",
+          "L'intérêt de Factur-X : l'humain lit le PDF, le logiciel lit le XML, et personne ne ressaisit rien. C'est pourquoi il convient bien aux petites entreprises.",
+          "UBL et CII sont des fichiers XML seuls, sans PDF lisible. Ils sont courants entre grandes entreprises et à l'international.",
         ],
       },
       {
-        h2: "Les profils EN 16931",
+        h2: "Les profils Factur-X et la norme EN 16931",
         atomic:
-          "La norme EN 16931 définit les mentions obligatoires d'une facture électronique. Factur-X décline plusieurs profils (de MINIMUM à EXTENDED) ; le profil EN 16931 (aussi appelé COMFORT) couvre l'ensemble des mentions exigées pour une facture B2B conforme.",
+          "La norme EN 16931 définit les données d'une facture électronique et leur signification. Factur-X se décline en profils, du plus léger (MINIMUM) au plus complet (EXTENDED). Le profil EN 16931, aussi appelé COMFORT, reprend l'ensemble des données de la norme.",
         body: [
-          "Un profil détermine le niveau de détail des données structurées. Pour une facture B2B standard, le profil EN 16931 est la cible : identité et identifiants du vendeur (SIRET, TVA) et du client, dates, lignes, ventilation de TVA, totaux cohérents.",
-          "OdocPilot génère le volet XML au profil EN 16931, et notre vérificateur contrôle ces mentions sur n'importe quelle facture que vous déposez.",
+          "Le profil fixe le niveau de détail des données structurées. Pour une facture entre entreprises, le profil EN 16931 est le choix courant : vendeur et client avec leurs identifiants, dates, lignes, TVA et totaux cohérents.",
+          "OdocPilot produit ses factures au profil EN 16931.",
         ],
       },
       {
-        h2: "Générer et vérifier une Factur-X, gratuitement",
+        h2: "Créer et vérifier une facture Factur-X gratuitement",
         atomic:
-          "Vous pouvez générer une facture Factur-X conforme sans inscription, ou déposer une facture existante (PDF Factur-X ou XML) pour vérifier ses mentions obligatoires selon EN 16931. Les deux outils sont gratuits et l'analyse se fait dans votre navigateur.",
+          "Sans inscription, le générateur crée le fichier XML de votre facture (CII, profil EN 16931) et un PDF imprimable. Le vérificateur contrôle les principales mentions d'une facture Factur-X existante, PDF ou XML. Les deux fonctionnent dans votre navigateur.",
         body: [
-          "Notre générateur produit le volet XML structuré (CII, profil EN 16931) + un PDF. Notre vérificateur extrait le volet structuré d'un PDF Factur-X et contrôle les mentions obligatoires.",
+          "Le fichier Factur-X complet, un PDF/A-3 qui contient le XML, se crée dans OdocPilot, y compris avec le palier Conformité gratuit.",
+          "Le vérificateur contrôle notamment le numéro, la date, les parties, la ventilation de TVA et la cohérence des totaux. Il ne remplace pas la validation d'une plateforme agréée.",
         ],
       },
       {
         h2: "Le piège du « simple PDF »",
         atomic:
-          "Un simple PDF (même envoyé par email) n'est pas une facture électronique conforme : il n'a pas de volet structuré. À partir de 2026, le format structuré devient obligatoire. C'est la confusion la plus fréquente — et la plus risquée.",
+          "Un PDF classique, même envoyé par e-mail, n'est pas une facture électronique : il ne contient pas de données structurées et ne passe pas par une plateforme agréée. C'est la confusion la plus fréquente.",
         body: [
-          "Beaucoup d'entreprises pensent être conformes parce qu'elles envoient des PDF. Ce n'est pas le cas : sans volet XML structuré, la facture n'est pas conforme. Vérifiez la vôtre en quelques secondes.",
+          "Pendant la phase de démarrage, une facture reçue en PDF ou sur papier peut toujours être traitée et payée, et la TVA déduite, si elle correspond à une opération réelle. Mais pour une entreprise tenue d'émettre en électronique, le PDF n'est pas le circuit prévu par la réforme.",
         ],
       },
     ],
     faqs: [
-      { q: "Factur-X et EN 16931, c'est pareil ?", a: "Pas exactement : EN 16931 est la norme européenne qui définit les mentions obligatoires d'une facture électronique ; Factur-X est un format (PDF + XML CII) qui peut être conforme au profil EN 16931. OdocPilot génère du Factur-X au profil EN 16931." },
-      { q: "Un PDF classique est-il une facture électronique ?", a: "Non. Un PDF sans volet de données structurées (XML) n'est pas conforme à la réforme. Une facture électronique légale doit être au format structuré (Factur-X, UBL ou CII). Vous pouvez vérifier une facture gratuitement avec notre vérificateur." },
-      { q: "Comment générer une facture Factur-X gratuitement ?", a: "Avec le générateur Factur-X d'OdocPilot, sans inscription : vous remplissez la facture, vous obtenez le volet XML structuré (CII, profil EN 16931) + un PDF, et nous vérifions vos mentions obligatoires." },
+      {
+        q: "Factur-X et EN 16931, c'est pareil ?",
+        a: "Non. EN 16931 est la norme européenne qui définit les données d'une facture électronique. Factur-X est un format, un PDF qui contient un XML au format CII, qui peut respecter cette norme avec le profil EN 16931. OdocPilot produit du Factur-X à ce profil.",
+      },
+      {
+        q: "Un PDF classique est-il une facture électronique ?",
+        a: "Non. Un PDF sans données structurées n'est pas une facture électronique au sens de la réforme. Les formats admis sont Factur-X, UBL et CII. Vous pouvez contrôler une facture Factur-X avec le vérificateur gratuit.",
+      },
+      {
+        q: "Comment créer une facture Factur-X gratuitement ?",
+        a: "Le générateur gratuit d'OdocPilot, sans inscription, crée le fichier XML de votre facture (CII, profil EN 16931) et un PDF imprimable. Pour obtenir le fichier Factur-X complet, créez votre compte : le palier Conformité est gratuit.",
+      },
     ],
     related: [
       { to: "/generateur-factur-x", label: "Générateur Factur-X gratuit" },
       { to: "/verificateur", label: "Vérifier une facture Factur-X" },
-      { to: "/guide/facturation-electronique-2026", label: "Le guide complet 2026" },
-      { to: "/e-facture", label: "La réforme e-facture" },
+      { to: "/guide/facturation-electronique-2026", label: "Facturation électronique 2026 : le guide complet" },
+      { to: "/e-facture", label: "La facture électronique obligatoire : le guide" },
     ],
   },
   {
     slug: "tpe-sans-comptable",
-    seoTitle: "Facturation électronique pour une TPE sans expert-comptable : par où commencer",
+    seoTitle: "Facture électronique sans comptable : par où commencer",
     seoDesc:
-      "Vous dirigez une TPE et gérez votre administratif sans expert-comptable au quotidien ? Voici comment vous mettre en conformité avec la facturation électronique 2026, simplement, étape par étape.",
+      "Vous gérez votre TPE sans expert-comptable au quotidien ? Les étapes pour être en règle avec la facture électronique, simplement, date par date.",
     eyebrow: "Guide · TPE sans expert-comptable",
-    h1: "Facturation électronique pour une TPE sans expert-comptable : par où commencer",
+    h1: "Facture électronique pour une TPE sans expert-comptable : par où commencer",
     intro:
-      "Si vous dirigez une TPE et gérez votre administratif vous-même, la réforme de la facturation électronique peut sembler intimidante. Bonne nouvelle : c'est gérable, et vous n'avez besoin ni d'un expert-comptable au quotidien, ni de compétences techniques. Voici la marche à suivre.",
+      "Vous dirigez une TPE et faites votre administratif vous-même ? La facture électronique peut sembler intimidante. Elle reste gérable, sans expert-comptable au quotidien et sans compétence technique. Voici la marche à suivre.",
     sections: [
       {
-        h2: "Le bon état d'esprit : c'est gérable",
+        h2: "C'est gérable, étape par étape",
         atomic:
-          "La conformité à la facturation électronique 2026 ne demande pas d'expertise comptable : il faut un outil qui génère le bon format (Factur-X), qui lit vos factures reçues, et qui prépare le travail à votre place. Vous validez ; vous gardez le dernier mot.",
+          "Être en règle avec la facture électronique ne demande pas d'expertise comptable. Il vous faut une plateforme agréée pour recevoir vos factures, un outil qui produit le bon format pour les émettre, et un peu d'ordre dans vos documents.",
         body: [
-          "Le dirigeant de TPE est exactement la cible d'OdocPilot : débordé, non-technicien, sans cabinet qui gère tout au quotidien. L'approche « l'IA prépare, vous validez » est conçue pour ce profil.",
-          "Vous n'avez pas à devenir expert de Factur-X ou des plateformes agréées : l'outil s'en charge, et reste honnête sur ce qui est actif aujourd'hui (génération, lecture, classement) et ce qui arrive (transmission).",
+          "OdocPilot est pensé pour ce profil : le dirigeant qui n'a pas de cabinet pour tout gérer. Il crée vos factures au format Factur-X, lit celles que vous recevez et range vos documents ; vous vérifiez, vous validez.",
+          "Vous n'avez pas à devenir expert des formats ou des plateformes. Ce qui compte : savoir ce qui vous concerne, et à quelle date.",
         ],
       },
       {
-        h2: "Les 3 étapes pour être prêt",
+        h2: "Les 3 étapes pour être en règle",
         atomic:
-          "Trois étapes suffisent : (1) vérifier votre situation avec un diagnostic, (2) émettre vos factures au format Factur-X conforme, (3) centraliser vos factures reçues pour les lire et les classer automatiquement.",
+          "Trois étapes : choisir une plateforme agréée pour recevoir vos factures, obligatoire depuis le 1er septembre 2026 ; émettre vos factures au bon format, avec les nouvelles mentions ; préparer l'émission électronique et l'e-reporting avant le 1er septembre 2027.",
         body: [
-          "Commencez par le diagnostic : il vous donne votre date butoir et un plan daté. Ensuite, générez vos factures au format Factur-X. Enfin, laissez l'IA lire et classer vos factures reçues.",
+          "Le diagnostic en 3 minutes vous donne vos dates et une feuille de route. Commencez par là.",
         ],
         bullets: [
-          "1. Vérifiez votre conformité (diagnostic 3 min)",
-          "2. Émettez au format Factur-X conforme",
-          "3. Centralisez et faites lire vos factures reçues par l'IA",
+          "1. Choisissez une plateforme agréée pour la réception (liste officielle sur impots.gouv.fr)",
+          "2. Créez vos factures au format Factur-X, avec le SIREN du client et la catégorie de l'opération",
+          "3. Préparez l'émission et l'e-reporting du 1er septembre 2027",
         ],
       },
       {
         h2: "Et mon expert-comptable, dans tout ça ?",
         atomic:
-          "OdocPilot ne remplace pas votre expert-comptable : il prépare des données propres et classées, et exporte votre FEC (Fichier des Écritures Comptables) en un clic. Si vous avez un comptable, vous lui facilitez le travail ; sinon, vous gardez la main.",
+          "OdocPilot ne remplace pas un expert-comptable. Il range vos pièces et produit un export comptable au format FEC, que votre expert-comptable importe dans son logiciel. Sans expert-comptable, vous gardez vos documents classés et retrouvables.",
         body: [
-          "Que vous ayez un comptable ou non, l'export FEC conforme à la DGFiP permet de transmettre des données propres en un clic. L'outil s'intègre à votre organisation au lieu de la bousculer.",
+          "Si vous travaillez avec un cabinet, demandez-lui quelle plateforme agréée il utilise : le plus simple est souvent de passer par la même.",
         ],
       },
       {
         h2: "Commencer gratuitement",
         atomic:
-          "Vous pouvez commencer sans rien payer : le diagnostic, le générateur Factur-X et le vérificateur sont gratuits et sans inscription. Le palier Conformité d'OdocPilot est gratuit ; les offres complètes démarrent à 49,99 €/mois, sans coût par utilisateur.",
+          "Le diagnostic, le générateur Factur-X et le vérificateur sont gratuits et sans inscription. Dans OdocPilot, le palier Conformité est gratuit ; les offres complètes vont de 49,99 € à 149,99 € par mois, avec 14 jours d'essai de l'offre Pro sans carte bancaire.",
         body: [
-          "Pas besoin de carte bancaire pour tester. Faites le diagnostic, générez une facture conforme, et voyez l'IA préparer votre administratif sur vos propres documents.",
+          "Faites le diagnostic, créez une facture au bon format, puis déposez une facture reçue pour voir la fiche se remplir.",
         ],
       },
     ],
     faqs: [
-      { q: "Faut-il un expert-comptable pour être conforme ?", a: "Non. OdocPilot est conçu pour les dirigeants de TPE qui gèrent leur administratif sans expert-comptable au quotidien : génération Factur-X sans paramétrage, lecture IA des factures, export FEC si vous travaillez avec un comptable." },
-      { q: "Je ne suis pas à l'aise avec la technique, est-ce un problème ?", a: "Non. Il n'y a aucun paramétrage technique : vous générez une facture conforme comme vous rempliriez un formulaire, et l'IA prépare le reste. Vous validez en un clic." },
-      { q: "Par quoi commencer concrètement ?", a: "Par le diagnostic de conformité (3 minutes, gratuit, sans compte) : il vous indique votre date butoir et un plan daté en 3 étapes adapté à votre activité." },
+      {
+        q: "Faut-il un expert-comptable pour être en règle ?",
+        a: "Non. La loi demande de recevoir vos factures par une plateforme agréée et, au 1er septembre 2027, de les émettre au format électronique. Un outil adapté suffit ; un expert-comptable reste utile pour votre comptabilité.",
+      },
+      {
+        q: "Je ne suis pas à l'aise avec l'informatique, est-ce un problème ?",
+        a: "Non. Créer une facture au bon format se fait comme on remplit un formulaire. Pour les factures reçues, OdocPilot remplit la fiche à partir du document ; vous relisez, vous validez.",
+      },
+      {
+        q: "Par quoi commencer concrètement ?",
+        a: "Par le diagnostic (3 minutes, gratuit, sans inscription) : il vous indique vos dates et une feuille de route en 3 étapes. Si vous n'avez pas encore de plateforme agréée pour recevoir vos factures, c'est la première chose à faire.",
+      },
     ],
     related: [
-      { to: "/diagnostic", label: "Diagnostic conformité (3 min)" },
-      { to: "/e-facture", label: "La réforme e-facture" },
-      { to: "/guide/facturation-electronique-2026", label: "Le guide complet 2026" },
-      { to: "/pricing", label: "Voir les tarifs (palier gratuit)" },
+      { to: "/diagnostic", label: "Diagnostic en 3 minutes" },
+      { to: "/e-facture", label: "La facture électronique obligatoire : le guide" },
+      { to: "/guide/facturation-electronique-2026", label: "Facturation électronique 2026 : le guide complet" },
+      { to: "/pricing", label: "Les tarifs, palier gratuit compris" },
     ],
   },
 ];

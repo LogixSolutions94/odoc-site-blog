@@ -1,45 +1,77 @@
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { MotionDiv } from "@/components/MotionDiv";
+import { Link, useLocation } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
+import { fr } from "@/lib/typo";
+
+const SUGGESTIONS = [
+  {
+    to: "/e-facture",
+    title: "La facture électronique, expliquée",
+    text: "Le calendrier 2026-2027, les formats et ce qui change pour vous.",
+  },
+  {
+    to: "/diagnostic",
+    title: "Suis-je concerné ?",
+    text: "Un diagnostic en 3 minutes, sans créer de compte.",
+  },
+  {
+    to: "/blog",
+    title: "Le blog",
+    text: "Nos articles sur la facturation des petites entreprises.",
+  },
+];
 
 const NotFound = () => {
+  const { pathname } = useLocation();
+
   return (
-    <div className="flex min-h-[70svh] items-center justify-center px-4">
+    <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 sm:py-28">
+      {/* Page d'erreur : pas de canonical ni de données structurées, et noindex. */}
       <SEOHead
-        title="Page introuvable — Odoc"
-        description="La page que vous recherchez n'existe pas ou a été déplacée."
+        title="Page introuvable | OdocPilot"
+        description="Cette page n'existe pas ou a été déplacée. Retrouvez le guide de la facture électronique, le diagnostic gratuit et le blog d'OdocPilot."
         noindex
       />
-      <div className="text-center max-w-lg">
-        <MotionDiv
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="text-[8rem] sm:text-[10rem] font-bold leading-none bg-gradient-to-br from-primary to-primary-glow bg-clip-text text-transparent select-none">
-            404
-          </span>
-        </MotionDiv>
-        <MotionDiv
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        >
-          <h1 className="mt-4 text-2xl sm:text-3xl font-bold text-foreground">Cette page a pris congé.</h1>
-          <p className="mt-3 text-muted-foreground">
-            Elle est peut-être en train de traiter des factures avec Odoc.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link to="/">
-              <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">Retour à l'accueil</Button>
-            </Link>
-            <Link to="/fonctionnalites">
-              <Button size="lg" variant="outline">Voir nos fonctionnalités</Button>
-            </Link>
-          </div>
-        </MotionDiv>
+
+      <div className="max-w-3xl">
+        <p className="font-data text-[0.875rem] text-muted-foreground">Erreur 404</p>
+        <h1 className="mt-4 font-display display-tight text-[clamp(2.4rem,5.2vw,4.25rem)] font-bold leading-[1.02]">
+          Cette page n'existe pas.
+        </h1>
+        <p className="mt-6 max-w-[36rem] text-[1.1875rem] leading-relaxed text-muted-foreground">
+          L'adresse <span className="break-all font-data text-foreground">{pathname}</span> ne mène à aucune page. Le lien est
+          peut-être ancien, ou l'adresse contient une faute de frappe.
+        </p>
+        <div className="mt-9">
+          <Link to="/" className="btn-ink">
+            Retour à l'accueil <ArrowRight size={18} strokeWidth={1.75} aria-hidden="true" />
+          </Link>
+        </div>
       </div>
+
+      <nav aria-labelledby="suggestions-titre" className="mt-16 max-w-3xl sm:mt-20">
+        <h2 id="suggestions-titre" className="font-display text-xl font-bold">
+          Vous cherchiez peut-être
+        </h2>
+        <ul className="mt-5 border-t border-foreground/80">
+          {SUGGESTIONS.map((s) => (
+            <li key={s.to} className="border-b border-border">
+              <Link to={s.to} className="group flex items-start justify-between gap-6 py-5">
+                <span>
+                  <span className="block font-bold">{fr(s.title)}</span>
+                  <span className="mt-1 block leading-relaxed text-muted-foreground">{fr(s.text)}</span>
+                </span>
+                <ArrowRight
+                  size={18}
+                  strokeWidth={1.75}
+                  aria-hidden="true"
+                  className="mt-1 shrink-0 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none"
+                />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 };
