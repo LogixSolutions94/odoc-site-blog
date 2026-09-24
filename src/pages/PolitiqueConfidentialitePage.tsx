@@ -5,22 +5,23 @@ export default function PolitiqueConfidentialitePage() {
   return (
     <div className="mx-auto max-w-3xl py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
       <SEOHead
-        title="Politique de confidentialité — Odoc"
-        description="Politique de confidentialité d'Odoc. Découvrez comment nous collectons, utilisons et protégeons vos données personnelles conformément au RGPD."
+        title="Politique de confidentialité | OdocPilot"
+        description="Politique de confidentialité d'OdocPilot. Découvrez comment nous collectons, utilisons et protégeons vos données personnelles conformément au RGPD."
         canonical="/politique-confidentialite"
       />
 
       <MotionDiv>
         <h1 className="text-4xl font-bold tracking-tight">Politique de confidentialité</h1>
-        <p className="mt-4 text-sm text-muted-foreground">Dernière mise à jour : 29 mars 2026</p>
+        <p className="mt-4 text-sm text-muted-foreground">Dernière mise à jour : 24 septembre 2026</p>
       </MotionDiv>
 
       <div className="mt-12 space-y-10 text-muted-foreground leading-relaxed">
         <section>
           <h2 className="text-xl font-semibold text-foreground mb-4">1. Responsable du traitement</h2>
           <p>
-            Logix Solutions SASU, éditrice de la plateforme Odoc<br />
-            Siège social : Le Plessis-Trévise, France<br />
+            Monsieur Riad Brahimi, entrepreneur individuel exerçant sous le nom commercial Logix Solutions, éditeur de la plateforme OdocPilot<br />
+            SIREN 842 920 084 · SIRET 842 920 084 00022<br />
+            Adresse : 89-91 Avenue de la République, 75011 Paris, France<br />
             Contact : <a href="mailto:privacy@odocpilot.com" className="text-primary hover:underline">privacy@odocpilot.com</a>
           </p>
         </section>
@@ -40,14 +41,14 @@ export default function PolitiqueConfidentialitePage() {
           <ul className="list-disc pl-6 space-y-2">
             <li><strong className="text-foreground">Fourniture du service :</strong> création et gestion de votre compte, traitement de vos documents, exécution des fonctionnalités de la plateforme.</li>
             <li><strong className="text-foreground">Amélioration du produit :</strong> analyse agrégée et anonymisée de l'utilisation pour améliorer nos algorithmes et l'expérience utilisateur.</li>
-            <li><strong className="text-foreground">Communications commerciales :</strong> envoi de newsletters et informations sur les nouveautés Odoc, uniquement avec votre consentement explicite.</li>
+            <li><strong className="text-foreground">Communications commerciales :</strong> envoi de newsletters et informations sur les nouveautés OdocPilot, uniquement avec votre consentement explicite.</li>
           </ul>
         </section>
 
         <section>
           <h2 className="text-xl font-semibold text-foreground mb-4">4. Base légale</h2>
           <ul className="list-disc pl-6 space-y-2">
-            <li><strong className="text-foreground">Exécution du contrat :</strong> traitement nécessaire à la fourniture du service Odoc.</li>
+            <li><strong className="text-foreground">Exécution du contrat :</strong> traitement nécessaire à la fourniture du service OdocPilot.</li>
             <li><strong className="text-foreground">Intérêt légitime :</strong> amélioration du produit, sécurité de la plateforme, prévention de la fraude.</li>
             <li><strong className="text-foreground">Consentement :</strong> communications commerciales, cookies analytiques.</li>
           </ul>
@@ -79,7 +80,7 @@ export default function PolitiqueConfidentialitePage() {
           <h2 className="text-xl font-semibold text-foreground mb-4">7. Sous-traitants</h2>
           <p>Nous faisons appel aux sous-traitants suivants pour la fourniture de notre service :</p>
           <ul className="list-disc pl-6 space-y-2 mt-3">
-            <li><strong className="text-foreground">Supabase (backend) :</strong> hébergement des données et authentification — serveurs en Europe.</li>
+            <li><strong className="text-foreground">Supabase (backend) :</strong> hébergement des données et authentification, serveurs en Europe.</li>
             <li><strong className="text-foreground">Resend :</strong> envoi d'emails transactionnels.</li>
             <li><strong className="text-foreground">Stripe :</strong> traitement des paiements (certifié PCI-DSS).</li>
             <li><strong className="text-foreground">Google / Dropbox :</strong> synchronisation de fichiers (uniquement si activée par l'utilisateur).</li>

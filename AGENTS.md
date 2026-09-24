@@ -24,7 +24,7 @@ Ce repo (`odoc-insights-hub`) = **uniquement** la landing page (odocpilot.com) *
 - ⚠️ **Sections datées** dans la doc détaillée, à ne pas prendre pour la vérité actuelle : ancien déploiement `scp` manuel, « Pages clés » (anciens 11 modules / 79 €), palette « Navy Premium ». Vérifier `refonte/PLAN-REFONTE-CONVERSION-2026.md` en cas de doute.
 - Design system : tokens dans `src/index.css` (défaut **CLAIR**) ; couleurs/CTA via `bg-gradient-cta` / `text-primary` / `text-primary-foreground` (adaptatifs clair↔sombre) — **jamais de couleur hardcodée**.
 
-## ⚖️ Identité légale de l'éditeur — NE JAMAIS INVENTER (maj 2026-09-08)
+## ⚖️ Identité légale de l'éditeur — NE JAMAIS INVENTER (maj 2026-09-24)
 
 ⚠️ Le site a longtemps publié « **Logix Solutions SASU** ». **Cette société n'existe pas.** Toute réécriture qui réintroduit une SASU, un capital social ou un siège social est une **régression**.
 
@@ -38,7 +38,8 @@ Ce repo (`odoc-insights-hub`) = **uniquement** la landing page (odocpilot.com) *
 | Immatriculation | **RNE** (INPI). **Pas de RCS** : activité libérale non réglementée, hors du champ de l'obligation |
 | Adresse publiée | 89-91 Avenue de la République, 75011 Paris (domiciliation) |
 | Téléphone | +33 6 10 02 04 76 (**obligatoire** : art. 6, III, 1°, a) LCEN pour un éditeur personne physique) |
-| Directeur de la publication | Lucas Belloc (**choix assumé de Riad**, malgré la réserve art. 93-2 loi du 29/07/1982 — ne pas « corriger » sans lui demander) |
+| Directeur de la publication | **M. Brahimi R.** (décision de Riad du 24/09/2026 ; remplace « Lucas Belloc », prénom fictif de l'agent mailing) |
+| Nom affiché hors textes légaux | **« M. Brahimi R. »** (demande de Riad, 24/09/2026) : pied de page, accueil, llms.txt, signatures. Le nom complet ne figure que là où la loi l'exige (bloc éditeur des mentions légales, CGU, responsable du traitement) |
 
 **Source unique de vérité** : `../freelance-profils/entreprise-identite.md` (synthèse guichet unique, formalité J00267689834 validée le 31/07/2026). Contexte et réserves ouvertes : `../plan-attaque-2026-09/MENTIONS-LEGALES-ETAT-2026-09-08.md`.
 
