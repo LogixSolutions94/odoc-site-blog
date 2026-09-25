@@ -35,6 +35,7 @@ export const STATIC_ROUTES: StaticRoute[] = [
   { loc: "/comparatif/sellsy",    priority: "0.7", changefreq: "monthly" },
   { loc: "/comparatif/axonaut",   priority: "0.7", changefreq: "monthly" },
   { loc: "/comparatif/abby",      priority: "0.7", changefreq: "monthly" },
+  { loc: "/auto-entrepreneurs", priority: "0.8", changefreq: "monthly" },
   { loc: "/artisans",          priority: "0.7", changefreq: "monthly" },
   { loc: "/commerce",          priority: "0.7", changefreq: "monthly" },
   { loc: "/professions-liberales", priority: "0.7", changefreq: "monthly" },

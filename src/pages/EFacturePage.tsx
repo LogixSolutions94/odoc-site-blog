@@ -382,6 +382,11 @@ export default function EFacturePage() {
                   "Un micro-entrepreneur est concerné, même en franchise en base de TVA (la mention « TVA non applicable, art. 293 B du CGI »). Il doit pouvoir recevoir des factures électroniques depuis le 1er septembre 2026, et devra les émettre à partir du 1er septembre 2027.",
                 )}
               </p>
+              <p className="mt-3">
+                <Link to="/auto-entrepreneurs" className="inline-flex items-center gap-1.5 font-bold link-underline" data-umami-event="efacture-to-auto-entrepreneurs">
+                  Le guide complet pour les auto-entrepreneurs <ArrowRight size={15} aria-hidden="true" />
+                </Link>
+              </p>
 
               <h3 className={`mt-8 ${H3}`}>Vos clients particuliers ne sont pas concernés</h3>
               <p className="mt-3 leading-relaxed">

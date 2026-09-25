@@ -102,7 +102,7 @@ const LEDGER = [
 ];
 
 const WHO = [
-  { to: "/e-facture#auto-entrepreneurs", name: "Auto-entrepreneurs et indépendants", text: "Concernés, même en franchise de TVA. Le palier gratuit suffit pour facturer au bon format." },
+  { to: "/auto-entrepreneurs", name: "Auto-entrepreneurs et indépendants", text: "Concernés, même en franchise de TVA. Le palier gratuit suffit pour facturer au bon format." },
   { to: "/artisans", name: "Artisans et BTP", text: "Factures de négoce, bons de livraison, acomptes et soldes, rangés par chantier." },
   { to: "/commerce", name: "Commerces et services", text: "Fournisseurs, abonnements, frais du quotidien : tout est lu, rien ne se perd." },
   { to: "/professions-liberales", name: "Professions libérales", text: "Honoraires, justificatifs et dépenses, prêts pour votre expert-comptable." },

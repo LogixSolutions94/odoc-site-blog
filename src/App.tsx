@@ -33,6 +33,7 @@ const ComparePage = lazy(() => import("./pages/ComparePage"));
 const ArtisansPage = lazy(() => import("./pages/ArtisansPage"));
 const MetierPage = lazy(() => import("./pages/MetierPage"));
 const EditeursPage = lazy(() => import("./pages/EditeursPage"));
+const AutoEntrepreneursPage = lazy(() => import("./pages/AutoEntrepreneursPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const UnsubscribePage = lazy(() => import("./pages/UnsubscribePage"));
 
@@ -77,6 +78,7 @@ const App = () => (
                 <Route path="/lexique" element={<LexiquePage />} />
                 <Route path="/livre-blanc" element={<LivreBlancPage />} />
                 <Route path="/comparatif/:slug" element={<ComparePage />} />
+                <Route path="/auto-entrepreneurs" element={<AutoEntrepreneursPage />} />
                 <Route path="/artisans" element={<ArtisansPage />} />
                 <Route path="/commerce" element={<MetierPage slug="commerce" />} />
                 <Route path="/professions-liberales" element={<MetierPage slug="professions-liberales" />} />

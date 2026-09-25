@@ -24,6 +24,7 @@ import { COMPARISONS, COMPARISON_BY_SLUG, compareDisclaimer, type Comparison } f
 import { WHITE_PAPER } from "../../src/content/livreBlanc";
 import { GLOSSARY } from "../../src/content/glossaire";
 import { EDITEURS, editeursJsonLd } from "../../src/content/editeurs";
+import { AUTO_ENTREPRENEURS, autoEntrepreneursJsonLd } from "../../src/content/autoEntrepreneurs";
 
 export const BASE_URL = "https://odocpilot.com";
 
@@ -124,6 +125,24 @@ function editeursContent(): string {
   );
 }
 
+function autoEntrepreneursContent(): string {
+  const a = AUTO_ENTREPRENEURS;
+  const extLinks = (items: Array<{ href: string; label: string }>) =>
+    `<ul class="mt-4 space-y-2">${items.map((s) => `<li><a href="${attr(safeHref(s.href))}" rel="noopener noreferrer" class="font-semibold text-primary">${esc(s.label)}</a></li>`).join("")}</ul>`;
+  return (
+    `<p class="mt-6">${link("/diagnostic", a.cta.secondary)}</p>` +
+    strongP("L'essentiel") + ul(a.essentials.map((e) => `${e.label} : ${e.text}`)) +
+    h2(a.concerned.h2) + p(a.concerned.atomic) + a.concerned.cases.map((c) => h3(c.title) + p(c.text)).join("") +
+    h2(a.calendar.h2) + ul(a.calendar.rows.map((r) => `${r.date} : ${r.text}`)) +
+    h2(a.changes.h2) + p(a.changes.atomic) + ul(a.changes.points) +
+    h2(a.steps.h2) + a.steps.items.map((s, i) => h3(`${i + 1}. ${s.title}`) + p(s.text)).join("") +
+    h2(a.lessons.h2) + p(a.lessons.body) + ul(a.lessons.items) + p(a.lessons.outro) +
+    h2(a.pricing.h2) + p(a.pricing.atomic) + ul(a.pricing.items) + p(a.pricing.note) +
+    faq(a.faqTitle, a.faqs) +
+    h2("Pour aller plus loin") + links(a.related.map((r) => ({ to: r.to, label: r.label }))) +
+    h2("Sources officielles") + extLinks(a.sources)
+  );
+}
 // ── Route → composant, données, contenu ─────────────────────────────────────────
 let metierData: Record<string, unknown> | null = null;
 function metiers(): Record<string, unknown> {
@@ -157,7 +176,15 @@ export function planFor(loc: string): Plan {
   if (loc === "/editeurs") {
     return { file: "src/pages/EditeursPage.tsx", scope: { EDITEURS }, eyebrow: EDITEURS.eyebrow, content: editeursContent(), jsonLd: editeursJsonLd() };
   }
-  throw new Error(`${loc} : aucune page associée — l'ajouter dans scripts/lib/marketing-pages.ts`);
+  if (loc === "/auto-entrepreneurs") {
+    return {
+      file: "src/pages/AutoEntrepreneursPage.tsx",
+      scope: { AUTO_ENTREPRENEURS },
+      eyebrow: AUTO_ENTREPRENEURS.eyebrow,
+      content: autoEntrepreneursContent(),
+      jsonLd: autoEntrepreneursJsonLd(),
+    };
+  }  throw new Error(`${loc} : aucune page associée — l'ajouter dans scripts/lib/marketing-pages.ts`);
 }
 
 /** Routes prérendues : toutes les routes statiques du sitemap, sauf l'accueil. */
