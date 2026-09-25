@@ -31,15 +31,14 @@ des liens, prix, essai et éditeur : `src/lib/marketing.ts`. Typographie frança
 ## 📈 Suivi Google (Search Console)
 
 - **Dépôt privé [`LogixSolutions94/odoc-seo-data`](https://github.com/LogixSolutions94/odoc-seo-data)** : chaque jour à 05:30 UTC, une tâche GitHub interroge Search Console et enregistre l'historique jour par jour (`data/daily.csv`, 16 mois), les requêtes et pages sur 28 jours comparées aux 28 précédents, le trafic hors marque, les pages clés, et le rapport **`RAPPORT.md`**. Privé car le dépôt du site est public.
-- **Il lui faut sa clé** : secret `GSC_SERVICE_ACCOUNT_JSON`, qui contient la clé du compte de service `odocpilot1@odoc-copilot.iam.gserviceaccount.com` (déjà autorisé sur la propriété). Sans elle, la tâche avertit et n'écrit rien. Commande dans le README du dépôt.
+- **En service depuis le 25/09** : secret `GSC_SERVICE_ACCOUNT_JSON` posé (clé du compte de service `odocpilot1@odoc-copilot`, copiée du serveur avec l'accord de Riad). Premier relevé : 170 jours d'historique, 114 requêtes, 125 pages. Sur 28 jours : 31 clics (contre 11), 2 054 impressions (-15 % après le retrait de 94 articles le 24/09), position moyenne 11,2 (contre 25,2). Hors marque : 4 clics, 477 impressions.
 - Indexation demandée le 25/09 dans Search Console pour `/auto-entrepreneurs`, `/`, `/e-facture` et `/pricing`.
 - Côté SaaS, `seo-insights` (`gsc_sync`, lundi 07:00 UTC) continue de suivre les articles du blog dans `seo_page_metrics`.
 
 ## 🔴 Ta liste (actions fondateur)
 
-1. **Clé Search Console** pour `odoc-seo-data` (voir ci-dessus), si ce n'est pas déjà fait.
-2. **Tâche cloud en attente** : *Aligner le SaaS : relances opt-in et page d'inscription* (odoc-pulse : `reminders_enabled` vaut DEFAULT true, et la page d'inscription vend « 52 actions exécutables »). Celle des sous-traitants est close : décision du 25/09, tout afficher (#34).
-3. **Légal encore ouvert** : pied d'email de prospection B2B et licéité des envois (voir la mémoire « dossier-conformite-legale-ouvert »). Le reste de ta liste vit dans `../odoc-pulse/docs/HANDOFF_NEXT_SESSION.md` (SuperPDP production, Lemon Squeezy, etc.).
+1. **Tâche cloud en attente** : *Aligner le SaaS : relances opt-in et page d'inscription* (odoc-pulse : `reminders_enabled` vaut DEFAULT true, et la page d'inscription vend « 52 actions exécutables »). Celle des sous-traitants est close : décision du 25/09, tout afficher (#34).
+2. **Légal encore ouvert** : pied d'email de prospection B2B et licéité des envois (voir la mémoire « dossier-conformite-legale-ouvert »). Le reste de ta liste vit dans `../odoc-pulse/docs/HANDOFF_NEXT_SESSION.md` (SuperPDP production, Lemon Squeezy, etc.).
 
 ## 🧭 Pistes ouvertes pour la suite
 
