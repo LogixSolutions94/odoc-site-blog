@@ -18,13 +18,13 @@ Ce repo (`odoc-insights-hub`) = **uniquement** la landing page (odocpilot.com) *
 
 ## État actuel (résumé)
 
-- **Reprise : lire `docs/HANDOFF_NEXT_SESSION.md` (25/09/2026).** Refonte visuelle « Papeterie » en cours sur la branche `refonte/vitrine-2026-09` (non fusionnée) ; positionnement du plan de relance du 24/09 (`../odoc-pulse/docs/PLAN-ACQUISITION-ODOCPILOT.md`), qui prime sur la ligne « wedge conformité » ci-dessous.
+- **Reprise : lire `docs/HANDOFF_NEXT_SESSION.md` (25/09/2026).** Refonte visuelle « Papeterie » **en ligne** depuis le 25/09/2026 ; guide à lire avant de toucher une page : `docs/design/REFONTE-2026-09.md`. Message principal : « Facture électronique : soyez en règle, simplement. » (consigne de Riad du 24/09, qui prime sur les lignes de positionnement plus anciennes ci-dessous).
 
 - Refonte conversion (design v2 clair/sombre, `/artisans`, `/e-facture`, `/guide/*`, `/comparatif/*`, pages métiers) **déployée en prod** (vérifié 2026-06-28 : `/artisans` ne 404 plus, sitemap live = toutes les nouvelles pages).
 - **Déploiement automatique** depuis le 2026-06-28 : chaque push sur `main` redéploie `odoc-landing` (`.github/workflows/deploy.yml`). Vérifier : `gh run list --workflow=deploy.yml`. Le rebuild manuel n'est qu'un fallback (détail : `docs/agents/architecture-et-deploiement.md`).
 - Positionnement/produit/thème à jour depuis le 14/06 (wedge conformité, 49/89/149 €, « l'IA prépare, vous validez »).
 - ⚠️ **Sections datées** dans la doc détaillée, à ne pas prendre pour la vérité actuelle : ancien déploiement `scp` manuel, « Pages clés » (anciens 11 modules / 79 €), palette « Navy Premium ». Vérifier `refonte/PLAN-REFONTE-CONVERSION-2026.md` en cas de doute.
-- Design system : tokens dans `src/index.css` (défaut **CLAIR**) ; couleurs/CTA via `bg-gradient-cta` / `text-primary` / `text-primary-foreground` (adaptatifs clair↔sombre) — **jamais de couleur hardcodée**.
+- Design system « Papeterie » : tokens et classes dans `src/index.css` (défaut **CLAIR**), mode d'emploi dans `docs/design/REFONTE-2026-09.md`. Boutons d'action `btn-ink` (encre), orange réservé au surligneur `marker` (ce que l'IA prépare) et au logo ; **jamais de couleur hardcodée** hors des documents dessinés (feuilles, tampon).
 
 ## ⚖️ Identité légale de l'éditeur — NE JAMAIS INVENTER (maj 2026-09-24)
 
