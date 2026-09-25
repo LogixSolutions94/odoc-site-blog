@@ -14,7 +14,11 @@ const defaultTransition = {
 export const MotionDiv = ({ children, forceAnimate, ...props }: MotionDivProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
-  const [reduce, setReduce] = useState(false);
+  // Lu dès le premier rendu : lu plus tard, l'animation démarrait puis était coupée en plein vol,
+  // et un décalage (x, y, scale) pouvait rester figé pour les visiteurs en mouvement réduit.
+  const [reduce, setReduce] = useState(
+    () => typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches,
+  );
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -55,7 +59,7 @@ export const MotionDiv = ({ children, forceAnimate, ...props }: MotionDivProps) 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { initial, animate, transition, whileInView, exit, ...rest } = props;
     return (
-      <motion.div ref={ref} initial={false} animate={{ opacity: 1, y: 0 }} {...rest}>
+      <motion.div ref={ref} initial={false} animate={{ opacity: 1, x: 0, y: 0, scale: 1 }} transition={{ duration: 0 }} {...rest}>
         {children}
       </motion.div>
     );
