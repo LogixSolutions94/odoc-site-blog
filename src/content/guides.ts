@@ -5,7 +5,7 @@
  * citent pas, elles renvoient au code général des impôts.
  * Lu aussi par le prérendu (scripts/lib/marketing-pages.ts) : ne changer ni les clés, ni les
  * slugs, ni la forme des objets. seoTitle, seoDesc, h1 et intro sont affichés sans retouche
- * typographique : leurs espaces insécables sont écrites ici (  avant « : »,   avant « ? »).
+ * typographique : leurs espaces insécables sont écrites ici (U+00A0 avant « : », U+202F avant « ? »).
  */
 export type GuideSection = { h2: string; atomic?: string; body: string[]; bullets?: string[] };
 export type GuideFaq = { q: string; a: string };

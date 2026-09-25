@@ -30,7 +30,7 @@ const H2 = "font-display text-3xl font-bold leading-[1.08] tracking-[-0.03em] sm
 const H3 = "font-display text-xl font-bold";
 
 // Lus tels quels par le prérendu (scripts/lib/page-source.ts) : pas d'appel de fonction,
-// espaces insécables écrites en toutes lettres (  avant « : »,   avant « ? »).
+// espaces insécables écrites en toutes lettres (U+00A0 avant « : », U+202F avant « ? »).
 const SEO_TITLE = "Facture électronique obligatoire 2026-2027 : le guide";
 const SEO_DESC =
   "Réception obligatoire depuis le 1er septembre 2026, émission et e-reporting en 2027 : qui est concerné, formats, plateformes agréées, mentions.";
@@ -376,7 +376,7 @@ export default function EFacturePage() {
                 )}
               </p>
 
-              <h3 className={`mt-10 ${H3}`}>Les auto-entrepreneurs aussi</h3>
+              <h3 id="auto-entrepreneurs" className={`mt-10 scroll-mt-24 ${H3}`}>Les auto-entrepreneurs aussi</h3>
               <p className="mt-3 leading-relaxed">
                 {fr(
                   "Un micro-entrepreneur est concerné, même en franchise en base de TVA (la mention « TVA non applicable, art. 293 B du CGI »). Il doit pouvoir recevoir des factures électroniques depuis le 1er septembre 2026, et devra les émettre à partir du 1er septembre 2027.",
