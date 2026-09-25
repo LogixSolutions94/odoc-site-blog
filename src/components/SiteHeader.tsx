@@ -1,130 +1,92 @@
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
 import { Logo } from "./Logo";
-import { ThemeToggle } from "./ThemeToggle";
+import { LOGIN_URL, SIGNUP_URL } from "@/lib/marketing";
 
-const LOGIN_URL = "https://app.odocpilot.com/auth";
-const SIGNUP_URL = "https://app.odocpilot.com/auth";
-
-const navLinks = [
-  { href: "/fonctionnalites", label: "Fonctionnalités" },
+const NAV = [
+  { href: "/#produit", label: "Produit" },
   { href: "/pricing", label: "Tarifs" },
+  { href: "/e-facture", label: "Facture électronique" },
+  { href: "/editeurs", label: "Éditeurs" },
   { href: "/blog", label: "Blog" },
-  { href: "/e-facture", label: "E-Facture" },
-  { href: "/a-propos", label: "À propos" },
-  { href: "/contact", label: "Contact" },
 ];
 
+function NavItem({ href, label, className, onClick }: { href: string; label: string; className: string; onClick?: () => void }) {
+  // Les ancres de l'accueil passent par <a> (le routeur ne gère pas le défilement vers #id).
+  if (href.includes("#")) {
+    return <a href={href} className={className} onClick={onClick}>{label}</a>;
+  }
+  return <Link to={href} className={className} onClick={onClick}>{label}</Link>;
+}
+
 export function SiteHeader() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  useEffect(() => setOpen(false), [pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-lg supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
-        <Link to="/" className="mr-auto flex items-center shrink-0 sm:mr-8">
-          <Logo size="sm" variant="full" />
+    <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-4 focus:py-2 focus:text-background">
+        Aller au contenu
+      </a>
+      <div className="mx-auto flex h-16 max-w-[1240px] items-center gap-10 px-5 sm:px-8">
+        <Link to="/" aria-label="OdocPilot, retour à l'accueil" className="shrink-0">
+          <Logo size="md" />
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8 text-sm flex-1">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              to={link.href}
-              className="font-medium text-text-muted transition-colors hover:text-text"
-            >
-              {link.label}
-            </Link>
+        <nav aria-label="Navigation principale" className="hidden items-center gap-7 lg:flex">
+          {NAV.map((item) => (
+            <NavItem
+              key={item.href}
+              {...item}
+              className="text-[0.9375rem] text-muted-foreground transition-colors duration-200 hover:text-foreground"
+            />
           ))}
         </nav>
 
-        {/* Right Section */}
-        <div className="flex items-center justify-end gap-2 sm:gap-3">
-          {/* Theme Toggle */}
-          <ThemeToggle />
-
-          {/* Login (Desktop) */}
-          <a
-            href={LOGIN_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:inline-flex text-sm font-medium text-text-muted hover:text-text transition-colors"
-            data-umami-event="cta-connexion"
-          >
+        <div className="ml-auto flex items-center gap-5">
+          <a href={LOGIN_URL} className="hidden text-[0.9375rem] text-muted-foreground transition-colors duration-200 hover:text-foreground sm:inline" data-umami-event="header-login">
             Connexion
           </a>
-
-          {/* CTA Button (Desktop) */}
-          <a
-            href={SIGNUP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:inline-flex"
-            data-umami-event="cta-essai-gratuit"
-          >
-            <Button
-              size="sm"
-              className="bg-gradient-to-r from-[hsl(30_100%_50%)] to-[hsl(30_90%_55%)] text-white font-semibold shadow-[0_0_20px_rgba(249,115,22,0.35)] hover:shadow-[0_0_28px_rgba(249,115,22,0.5)] hover:scale-[1.03] transition-all duration-200"
-            >
-              Essai gratuit →
-            </Button>
+          <a href={SIGNUP_URL} className="btn-ink btn-ink-sm hidden sm:inline-flex" data-umami-event="header-trial">
+            Commencer gratuitement
           </a>
-
-          {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-text-muted hover:text-text transition-colors"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            type="button"
+            aria-expanded={open}
+            aria-controls="menu-mobile"
+            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+            onClick={() => setOpen(!open)}
+            className="-mr-2 grid h-11 w-11 place-items-center rounded-md text-foreground lg:hidden"
           >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {open ? <X size={22} strokeWidth={1.75} /> : <Menu size={22} strokeWidth={1.75} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {mobileOpen && (
-        <div className="md:hidden border-t border-border bg-surface px-4 py-4 space-y-3">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              to={link.href}
-              className="block text-sm font-medium text-text-muted hover:text-text transition-colors"
-              onClick={() => setMobileOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-
-          <div className="border-t border-divider pt-3 mt-3 space-y-2">
-            <a
-              href={LOGIN_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-sm font-medium text-text-muted hover:text-text transition-colors"
-              onClick={() => setMobileOpen(false)}
-              data-umami-event="cta-connexion"
-            >
-              Connexion
-            </a>
-            <a
-              href={SIGNUP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setMobileOpen(false)}
-              data-umami-event="cta-essai-gratuit"
-            >
-              <Button
-                size="sm"
-                className="w-full bg-gradient-to-r from-[hsl(30_100%_50%)] to-[hsl(30_90%_55%)] text-white font-semibold hover:scale-[1.02] transition-all duration-200"
-              >
-                Essai gratuit →
-              </Button>
-            </a>
+      {open && (
+        <nav id="menu-mobile" aria-label="Navigation mobile" className="border-t border-border bg-background px-5 pb-6 pt-2 lg:hidden">
+          <ul>
+            {NAV.map((item) => (
+              <li key={item.href} className="border-b border-border">
+                <NavItem {...item} onClick={() => setOpen(false)} className="block py-3.5 font-display text-xl font-semibold" />
+              </li>
+            ))}
+          </ul>
+          <div className="mt-5 flex flex-col gap-3">
+            <a href={SIGNUP_URL} className="btn-ink w-full" data-umami-event="mobile-trial">Commencer gratuitement</a>
+            <a href={LOGIN_URL} className="py-2 text-center text-muted-foreground" data-umami-event="mobile-login">Connexion</a>
           </div>
-        </div>
+        </nav>
       )}
     </header>
   );

@@ -31,19 +31,23 @@ export function ThemeToggle() {
 
   if (!mounted) return null;
 
+  // Présentation « Papeterie » : un lien texte parmi les autres (pied de page),
+  // l'icône ne fait que signaler l'action. Le libellé visible est contenu dans
+  // l'aria-label (« Passer en mode sombre » contient « mode sombre »).
   return (
     <button
       onClick={toggle}
       type="button"
       aria-label={`Passer en mode ${theme === 'dark' ? 'clair' : 'sombre'}`}
-      className="flex items-center justify-center w-9 h-9 rounded-lg border border-border bg-background hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-200 cursor-pointer"
+      className="inline-flex min-h-10 items-center gap-1.5 rounded-md text-muted-foreground transition-colors duration-200 hover:text-foreground"
       title={`Mode ${theme === 'dark' ? 'clair' : 'sombre'}`}
     >
       {theme === 'dark' ? (
-        <Sun size={18} className="stroke-current" />
+        <Sun size={16} strokeWidth={1.75} aria-hidden="true" />
       ) : (
-        <Moon size={18} className="stroke-current" />
+        <Moon size={16} strokeWidth={1.75} aria-hidden="true" />
       )}
+      <span>{theme === 'dark' ? 'Mode clair' : 'Mode sombre'}</span>
     </button>
   );
 }

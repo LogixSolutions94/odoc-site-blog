@@ -3,9 +3,9 @@ import { cn } from "@/lib/utils";
 import type { Heading } from "@/lib/blogContent";
 
 /**
- * Sommaire ancré : suit le scroll et surligne la section active.
+ * Sommaire ancré : suit le défilement et marque la section en cours.
  * Le parent ne le rend que pour les articles longs (≥ 4 H2) et le masque en mobile.
- * Navigation 100% liens d'ancre standards (accessible clavier + lisible sans JS).
+ * Navigation 100 % liens d'ancre standards (accessible au clavier, lisible sans JS).
  */
 export function ArticleTOC({ headings }: { headings: Heading[] }) {
   const [activeId, setActiveId] = useState<string>("");
@@ -30,19 +30,18 @@ export function ArticleTOC({ headings }: { headings: Heading[] }) {
   }, [headings]);
 
   return (
-    <nav aria-label="Sommaire" className="text-sm">
-      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-        Sur cette page
-      </p>
-      <ul className="space-y-1 border-l border-border">
+    <nav aria-label="Sommaire" className="text-[0.9375rem]">
+      <p className="mb-3 font-display text-base font-bold">Sommaire</p>
+      <ul className="space-y-0.5 border-l border-border">
         {headings.map((h) => (
-          <li key={h.id} className={cn(h.depth === 3 && "ml-3")}>
+          <li key={h.id} className={cn(h.depth === 3 && "ml-3 text-[0.875rem]")}>
             <a
               href={`#${h.id}`}
+              aria-current={activeId === h.id ? "location" : undefined}
               className={cn(
-                "-ml-px block border-l-2 py-1 pl-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                "-ml-px block border-l-2 py-1.5 pl-3 leading-snug transition-colors duration-200 focus-visible:outline-offset-[-2px]",
                 activeId === h.id
-                  ? "border-primary font-medium text-primary"
+                  ? "border-foreground font-bold text-foreground"
                   : "border-transparent text-muted-foreground hover:text-foreground",
               )}
             >

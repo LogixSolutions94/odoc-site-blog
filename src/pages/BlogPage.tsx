@@ -1,15 +1,14 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { ArrowRight, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { MotionDiv } from "@/components/MotionDiv";
 import { BlogSEOHead } from "@/components/blog/BlogSEOHead";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { BLOG_CATEGORY_FILTERS } from "@/lib/blogTaxonomy";
 import { BASE_URL, PUBLISHER_NAME, PUBLISHER_LOGO } from "@/lib/blogContent";
-import { Search, Sparkles, ClipboardCheck, FileCheck2, BookOpen, ArrowRight } from "lucide-react";
+import { fr } from "@/lib/typo";
 
 const PAGE_SIZE = 12;
 
@@ -46,23 +45,26 @@ const LIST_JSON_LD = {
 const TOOLS = [
   {
     to: "/diagnostic",
-    icon: ClipboardCheck,
-    title: "Diagnostic de conformité",
-    desc: "3 minutes pour savoir ce que la réforme 2026/2027 change concrètement pour vous.",
+    title: "Diagnostic en 3 minutes",
+    desc: "Ce que la réforme 2026-2027 change pour votre entreprise, date par date.",
     umami: "blog-tool-diagnostic",
   },
   {
     to: "/generateur-factur-x",
-    icon: FileCheck2,
-    title: "Générateur Factur-X",
-    desc: "Créez une facture au format Factur-X conforme (EN 16931), gratuitement et sans compte.",
+    title: "Générateur de facture Factur-X",
+    desc: "Le fichier XML de votre facture et un PDF à imprimer, sans compte.",
     umami: "blog-tool-generateur",
   },
   {
-    to: "/guide/facturation-electronique-2026",
-    icon: BookOpen,
-    title: "Le guide e-facture 2026",
-    desc: "La page de référence : calendrier, formats, plateformes agréées, sanctions.",
+    to: "/verificateur",
+    title: "Vérificateur de facture",
+    desc: "Les mentions obligatoires d'une facture Factur-X, contrôlées une à une.",
+    umami: "blog-tool-verificateur",
+  },
+  {
+    to: "/e-facture",
+    title: "Le guide de la réforme",
+    desc: "Calendrier, formats, plateformes agréées : l'essentiel sur une page.",
     umami: "blog-tool-guide",
   },
 ];
@@ -72,7 +74,7 @@ export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [page, setPage] = useState(1);
 
-  const { data: posts = [], isLoading } = useQuery({
+  const { data: posts = [], isLoading, isError, refetch } = useQuery({
     queryKey: ["blog-posts"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -105,6 +107,14 @@ export default function BlogPage() {
     return list;
   }, [posts, activeCategory, search]);
 
+  // Un filtre qui ne mène à aucun article est masqué (pas de cul-de-sac « aucun résultat »).
+  // Les slugs restent ceux de blogTaxonomy (synchronisés avec SEOBlog.md) : un silo
+  // réapparaît dès qu'un article publié porte sa catégorie.
+  const visibleFilters = useMemo(() => {
+    const present = new Set(posts.map((p) => p.category));
+    return BLOG_CATEGORY_FILTERS.filter((c) => c.value === "all" || present.has(c.value));
+  }, [posts]);
+
   const gridSource = featuredPost ? filtered.filter((p) => p.slug !== featuredPost.slug) : filtered;
   const paginated = gridSource.slice(0, page * PAGE_SIZE);
   const hasMore = paginated.length < gridSource.length;
@@ -115,167 +125,212 @@ export default function BlogPage() {
     setPage(1);
   };
 
+  const query = search.trim();
+  const countLabel =
+    filtered.length === 0 ? "Aucun article" : `${filtered.length} article${filtered.length > 1 ? "s" : ""}`;
+
   return (
-    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-      <BlogSEOHead jsonLd={LIST_JSON_LD} />
+    <div>
+      <BlogSEOHead
+        title="Blog facture électronique : guides 2026-2027 | OdocPilot"
+        description="Guides pratiques sur la facture électronique obligatoire : calendrier 2026-2027, format Factur-X, plateformes agréées, cas des TPE et des auto-entrepreneurs."
+        canonical="/blog"
+        jsonLd={LIST_JSON_LD}
+      />
 
-      {/* Hero */}
-      <MotionDiv className="mx-auto max-w-3xl text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Le blog OdocPilot</p>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-          Comprendre la facturation électronique, sans jargon
-        </h1>
-        <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          Des guides clairs et à jour sur la réforme 2026/2027, la Factur-X et les plateformes agréées —
-          écrits pour les dirigeants de TPE qui veulent se mettre en règle l'esprit tranquille.
-        </p>
-        <div className="relative mx-auto mt-8 max-w-md">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Rechercher un article…"
-            aria-label="Rechercher un article"
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-            className="h-11 rounded-full pl-10"
-          />
-        </div>
-      </MotionDiv>
-
-      {/* Filtres par silo */}
-      <div
-        role="group"
-        aria-label="Filtrer par thème"
-        className="scrollbar-hide mt-10 flex gap-2 overflow-x-auto pb-2"
-      >
-        {BLOG_CATEGORY_FILTERS.map((cat) => {
-          const active = activeCategory === cat.value;
-          return (
-            <button
-              key={cat.value}
-              type="button"
-              aria-pressed={active}
-              onClick={() => {
-                setActiveCategory(cat.value);
+      {/* ─── En-tête ─────────────────────────────────────────── */}
+      <header className="border-b border-border">
+        <div className="mx-auto max-w-[1240px] px-5 pb-12 pt-12 sm:px-8 sm:pb-16 sm:pt-20">
+          <p className="text-sm font-bold text-muted-foreground">Blog OdocPilot</p>
+          <h1 className="mt-4 max-w-[52rem] font-display display-tight text-[clamp(2.4rem,5.2vw,4.25rem)] font-bold leading-[1.02]">
+            Le blog de la facture électronique
+          </h1>
+          <p className="mt-6 max-w-[42rem] text-[1.1875rem] leading-relaxed text-muted-foreground">
+            Des guides pratiques pour les TPE, les PME, les indépendants et les auto-entrepreneurs&nbsp;: le calendrier
+            2026-2027, le format Factur-X, les plateformes agréées et vos obligations, expliqués simplement.
+          </p>
+          <div className="relative mt-8 max-w-md">
+            <Search
+              size={18}
+              strokeWidth={1.75}
+              aria-hidden="true"
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
+            />
+            <Input
+              type="search"
+              placeholder="Rechercher un article…"
+              aria-label="Rechercher un article"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
                 setPage(1);
               }}
-              className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-                active
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-secondary-foreground hover:bg-muted"
-              }`}
-            >
-              {cat.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {isLoading ? (
-        <div className="mt-12 grid gap-10 md:grid-cols-2">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-80 animate-pulse rounded-xl bg-card" />
-          ))}
+              className="h-12 rounded-lg pl-11 text-base"
+            />
+          </div>
         </div>
-      ) : posts.length === 0 ? (
-        <EmptyState />
-      ) : (
-        <>
-          {/* Article vedette */}
-          {featuredPost && (
-            <MotionDiv className="mt-12">
-              <BlogCard post={featuredPost} variant="featured" />
-            </MotionDiv>
+      </header>
+
+      <div className="mx-auto grid max-w-[1240px] gap-16 px-5 py-12 sm:px-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-20 lg:py-16">
+        {/* ─── Articles ──────────────────────────────────────── */}
+        <div className="min-w-0">
+          {visibleFilters.length > 1 && (
+            <div
+              role="group"
+              aria-label="Filtrer par thème"
+              className="scrollbar-hide -mx-1 mb-6 flex gap-x-6 overflow-x-auto px-1 pb-1 pt-1"
+            >
+              {visibleFilters.map((cat) => {
+                const active = activeCategory === cat.value;
+                return (
+                  <button
+                    key={cat.value}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => {
+                      setActiveCategory(cat.value);
+                      setPage(1);
+                    }}
+                    className={`min-h-10 whitespace-nowrap border-b-2 text-[0.9375rem] transition-colors duration-200 focus-visible:outline-offset-2 ${
+                      active
+                        ? "border-foreground font-bold text-foreground"
+                        : "border-transparent text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                );
+              })}
+            </div>
           )}
 
-          {/* Grille */}
-          {paginated.length > 0 ? (
-            <div className="mt-10 grid gap-10 md:grid-cols-2">
-              {paginated.map((post, i) => (
-                <MotionDiv
-                  key={post.slug}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: Math.min(i, 6) * 0.05, duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-                >
-                  <BlogCard post={post} />
-                </MotionDiv>
+          {isLoading ? (
+            <div aria-busy="true" aria-label="Chargement des articles" className="border-t border-foreground/80">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="grid gap-3 border-b border-border py-7 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-8">
+                  <div className="h-4 w-24 animate-pulse rounded-[3px] bg-muted motion-reduce:animate-none" />
+                  <div className="space-y-3">
+                    <div className="h-6 w-4/5 animate-pulse rounded-[3px] bg-muted motion-reduce:animate-none" />
+                    <div className="h-4 w-full animate-pulse rounded-[3px] bg-muted motion-reduce:animate-none" />
+                    <div className="h-4 w-2/3 animate-pulse rounded-[3px] bg-muted motion-reduce:animate-none" />
+                  </div>
+                </div>
               ))}
             </div>
+          ) : isError ? (
+            <div className="border-t border-foreground/80 pt-8">
+              <p className="font-display text-xl font-bold">{fr("Les articles n'ont pas pu être chargés.")}</p>
+              <p className="mt-2 text-muted-foreground">{fr("Le problème vient de notre côté. Réessayez dans un instant.")}</p>
+              <button type="button" onClick={() => refetch()} className="btn-ink btn-ink-sm mt-5">
+                Réessayer
+              </button>
+            </div>
+          ) : posts.length === 0 ? (
+            <EmptyState />
           ) : (
-            <div className="mt-16 text-center">
-              <p className="text-muted-foreground">Aucun article ne correspond à votre recherche.</p>
-              <Button variant="ghost" className="mt-4" onClick={resetFilters}>
-                Voir tous les articles
-              </Button>
-            </div>
-          )}
+            <>
+              <p aria-live="polite" className="pb-3 text-sm text-muted-foreground">
+                {fr(query ? `${countLabel} pour « ${query} »` : `${countLabel}, du plus récent au plus ancien`)}
+              </p>
 
-          {hasMore && (
-            <div className="mt-12 text-center">
-              <Button variant="secondary" onClick={() => setPage((p) => p + 1)}>
-                Charger plus d'articles
-              </Button>
-            </div>
-          )}
-        </>
-      )}
+              {featuredPost && (
+                <div className="border-t border-foreground/80 pt-8">
+                  <BlogCard post={featuredPost} variant="featured" headingLevel={2} />
+                </div>
+              )}
 
-      {/* Outils & guides gratuits (maillage produit, sans gating) */}
-      <ToolsModule />
+              {paginated.length > 0 ? (
+                <div className={featuredPost ? "" : "border-t border-foreground/80"}>
+                  {paginated.map((post) => (
+                    <BlogCard key={post.slug} post={post} headingLevel={2} />
+                  ))}
+                </div>
+              ) : (
+                <div className="border-t border-foreground/80 pt-8">
+                  <p className="text-muted-foreground">Aucun article ne correspond à votre recherche.</p>
+                  <button
+                    type="button"
+                    onClick={resetFilters}
+                    className="mt-4 inline-flex min-h-10 items-center font-bold link-underline"
+                  >
+                    Voir tous les articles
+                  </button>
+                </div>
+              )}
+
+              {hasMore && (
+                <div className="mt-10">
+                  <button
+                    type="button"
+                    onClick={() => setPage((p) => p + 1)}
+                    className="inline-flex min-h-12 items-center rounded-lg border border-foreground/30 px-5 font-bold transition-colors duration-200 hover:border-foreground active:scale-[0.97]"
+                  >
+                    {"Charger plus d'articles"}
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+
+        {/* ─── Outils gratuits (maillage produit, sans compte) ─── */}
+        <ToolsModule />
+      </div>
     </div>
   );
 }
 
 function ToolsModule() {
   return (
-    <MotionDiv className="mt-20 rounded-2xl border border-border bg-secondary/50 p-8 sm:p-10">
-      <div className="mx-auto max-w-2xl text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-foreground">Outils &amp; guides gratuits</h2>
-        <p className="mt-2 text-muted-foreground">
-          Pour passer de la théorie à l'action — sans compte, sans carte bancaire.
-        </p>
-      </div>
-      <div className="mt-8 grid gap-5 sm:grid-cols-3">
-        {TOOLS.map(({ to, icon: Icon, title, desc, umami }) => (
-          <Link
-            key={to}
-            to={to}
-            data-umami-event={umami}
-            className="group flex flex-col rounded-xl border border-border bg-card p-6 shadow-card transition-shadow hover:shadow-card-hover"
-          >
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <Icon className="h-5 w-5" />
-            </span>
-            <h3 className="mt-4 font-bold tracking-tight text-foreground">{title}</h3>
-            <p className="mt-1.5 flex-1 text-sm text-muted-foreground">{desc}</p>
-            <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary">
-              Ouvrir <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-            </span>
-          </Link>
+    <aside aria-labelledby="outils-gratuits" className="lg:sticky lg:top-24 lg:self-start">
+      <h2 id="outils-gratuits" className="font-display text-xl font-bold">
+        Outils gratuits
+      </h2>
+      <p className="mt-1.5 text-[0.9375rem] text-muted-foreground">
+        {fr("Pour passer de la lecture à l'action. Sans compte.")}
+      </p>
+      <ul className="mt-5 border-t border-foreground/80">
+        {TOOLS.map(({ to, title, desc, umami }) => (
+          <li key={to} className="border-b border-border">
+            <Link to={to} data-umami-event={umami} className="group block py-4">
+              <span className="flex items-center justify-between gap-3 font-bold">
+                {title}
+                <ArrowRight
+                  size={16}
+                  strokeWidth={1.75}
+                  aria-hidden="true"
+                  className="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none"
+                />
+              </span>
+              <span className="mt-1 block text-[0.9375rem] leading-snug text-muted-foreground">{fr(desc)}</span>
+            </Link>
+          </li>
         ))}
-      </div>
-    </MotionDiv>
+      </ul>
+      <p className="mt-6 text-[0.9375rem] leading-relaxed text-muted-foreground">
+        {fr("OdocPilot crée vos factures au format Factur-X. Le palier Conformité est gratuit.")}{" "}
+        <Link to="/pricing" className="text-foreground link-underline" data-umami-event="blog-tool-pricing">
+          Voir les tarifs
+        </Link>
+      </p>
+    </aside>
   );
 }
 
 function EmptyState() {
   return (
-    <MotionDiv className="mx-auto mt-20 max-w-md text-center">
-      <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-        <Sparkles className="h-7 w-7" />
-      </span>
-      <h2 className="mt-5 text-2xl font-bold tracking-tight text-foreground">
-        Les premiers guides arrivent bientôt
-      </h2>
-      <p className="mt-2 text-muted-foreground">
-        Nous préparons des guides clairs sur la réforme de la facturation électronique 2026/2027.
+    <div className="border-t border-foreground/80 pt-8">
+      <p className="font-display text-xl font-bold">Les premiers guides arrivent bientôt.</p>
+      <p className="mt-2 max-w-[40rem] text-muted-foreground">
+        {fr("Nous préparons des guides clairs sur la facture électronique 2026-2027.")}
       </p>
-      <Link to="/diagnostic" className="mt-6 inline-block" data-umami-event="blog-empty-diagnostic">
-        <Button>En attendant, vérifiez votre conformité en 3 min</Button>
+      <Link
+        to="/diagnostic"
+        className="mt-5 inline-flex items-center gap-2 font-bold link-underline"
+        data-umami-event="blog-empty-diagnostic"
+      >
+        En attendant, faites le diagnostic en 3 minutes <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" />
       </Link>
-    </MotionDiv>
+    </div>
   );
 }

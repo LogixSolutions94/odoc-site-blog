@@ -1,20 +1,28 @@
 import { Link } from "react-router-dom";
-import { TrustCredentials } from "@/components/TrustCredentials";
 import { Logo } from "@/components/Logo";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { CONTACT_EMAIL, PUBLISHER } from "@/lib/marketing";
+import { fr } from "@/lib/typo";
 
-// Footer allégé (07/2026) : ~30 liens → l'essentiel uniquement.
-// Sortis du footer : liens morts (docs/status.odocpilot.com), pages secondaires
-// (roadmap, changelog, recrutement, comparatifs, guides…) — elles restent
-// accessibles depuis les contenus et le sitemap. Légal = ligne inline en bas.
-
+// L'essentiel seulement (cf. mémoire « design minimalisme ») : pas de lien mort,
+// pas de page secondaire. Les autres pages restent accessibles par les contenus et le sitemap.
 const COLUMNS: Array<{ title: string; links: Array<{ to: string; label: string }> }> = [
   {
     title: "Produit",
     links: [
       { to: "/fonctionnalites", label: "Fonctionnalités" },
       { to: "/pricing", label: "Tarifs" },
-      { to: "/e-facture", label: "E-facture 2026" },
-      { to: "/diagnostic", label: "Diagnostic conformité" },
+      { to: "/e-facture", label: "Facture électronique" },
+      { to: "/diagnostic", label: "Diagnostic en 3 minutes" },
+    ],
+  },
+  {
+    title: "Métiers",
+    links: [
+      { to: "/artisans", label: "Artisans et BTP" },
+      { to: "/commerce", label: "Commerces et services" },
+      { to: "/professions-liberales", label: "Professions libérales" },
+      { to: "/cabinets-comptables", label: "Cabinets comptables" },
     ],
   },
   {
@@ -22,23 +30,14 @@ const COLUMNS: Array<{ title: string; links: Array<{ to: string; label: string }
     links: [
       { to: "/generateur-factur-x", label: "Générateur Factur-X" },
       { to: "/verificateur", label: "Vérificateur de facture" },
-      { to: "/lexique", label: "Lexique e-facture" },
+      { to: "/lexique", label: "Lexique de la facture électronique" },
     ],
   },
   {
-    title: "Métiers",
-    links: [
-      { to: "/artisans", label: "Artisans & BTP" },
-      { to: "/commerce", label: "Commerce & Services" },
-      { to: "/professions-liberales", label: "Professions libérales" },
-      { to: "/cabinets-comptables", label: "Cabinets comptables" },
-      { to: "/editeurs", label: "Éditeurs" },
-    ],
-  },
-  {
-    title: "Entreprise",
+    title: "OdocPilot",
     links: [
       { to: "/a-propos", label: "À propos" },
+      { to: "/editeurs", label: "Offre éditeurs" },
       { to: "/blog", label: "Blog" },
       { to: "/contact", label: "Contact" },
     ],
@@ -53,26 +52,24 @@ const LEGAL_LINKS = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border py-14 bg-card">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,320px)_1fr] lg:gap-16">
+    <footer className="mt-20 border-t border-border">
+      <div className="mx-auto max-w-[1240px] px-5 pb-10 pt-14 sm:px-8">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,19rem)_1fr] lg:gap-20">
           <div>
-            <Logo size="md" variant="full" />
-            <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
-              L'IA prépare votre administratif, vous validez en un clic. Copilote IA français de facturation et de conformité, hébergé en France.
-            </p>
+            <Logo size="md" />
+            <p className="mt-5 max-w-[17rem] leading-relaxed text-muted-foreground">{fr("L'IA prépare vos factures et vos documents. Vous décidez.")}</p>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="mt-4 inline-block font-data text-[0.9375rem] link-underline">
+              {CONTACT_EMAIL}
+            </a>
           </div>
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+          <nav aria-label="Plan du site" className="grid grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-4">
             {COLUMNS.map((col) => (
               <div key={col.title}>
-                <h3 className="text-sm font-bold text-foreground mb-4">{col.title}</h3>
-                <ul className="space-y-2.5">
+                <h2 className="font-display text-[1rem] font-bold">{col.title}</h2>
+                <ul className="mt-4 space-y-2.5">
                   {col.links.map((link) => (
                     <li key={link.to}>
-                      <Link
-                        to={link.to}
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                      >
+                      <Link to={link.to} className="text-[0.9375rem] text-muted-foreground transition-colors duration-200 hover:text-foreground">
                         {link.label}
                       </Link>
                     </li>
@@ -80,31 +77,34 @@ export function SiteFooter() {
                 </ul>
               </div>
             ))}
-          </div>
+          </nav>
         </div>
-        <div className="mt-12 border-t border-border pt-8">
-          <TrustCredentials />
-          <div className="mt-6 flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground sm:flex-row">
-            <p>© {new Date().getFullYear()} OdocPilot. 🇫🇷 Fait et hébergé en France.</p>
-            <nav aria-label="Liens légaux" className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-              {LEGAL_LINKS.map((link) => (
-                <Link key={link.to} to={link.to} className="hover:text-foreground transition-colors">
-                  {link.label}
-                </Link>
-              ))}
-              <button
-                type="button"
-                onClick={() => {
-                  try {
-                    localStorage.removeItem("odoc_cookie_consent");
-                    window.dispatchEvent(new CustomEvent("odoc:cookie-consent-reset"));
-                  } catch { /* ignore */ }
-                }}
-                className="hover:text-foreground transition-colors"
-              >
-                Gérer mes cookies
-              </button>
-            </nav>
+
+        <div className="mt-14 flex flex-col gap-5 border-t border-border pt-6 text-[0.875rem] text-muted-foreground lg:flex-row lg:items-center lg:justify-between">
+          <p className="max-w-[40rem] leading-relaxed">
+            {fr(`OdocPilot est conçu et développé à ${PUBLISHER.city} par ${PUBLISHER.name}`)}
+          </p>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            {LEGAL_LINKS.map((link) => (
+              <Link key={link.to} to={link.to} className="transition-colors duration-200 hover:text-foreground">
+                {link.label}
+              </Link>
+            ))}
+            <button
+              type="button"
+              onClick={() => {
+                try {
+                  localStorage.removeItem("odoc_cookie_consent");
+                } catch {
+                  /* stockage indisponible : le bandeau se rouvre quand même */
+                }
+                window.dispatchEvent(new CustomEvent("odoc:cookie-consent-reset"));
+              }}
+              className="transition-colors duration-200 hover:text-foreground"
+            >
+              Gérer mes cookies
+            </button>
+            <ThemeToggle />
           </div>
         </div>
       </div>

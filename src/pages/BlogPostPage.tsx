@@ -6,17 +6,14 @@ import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { supabase } from "@/integrations/supabase/client";
-import { MotionDiv } from "@/components/MotionDiv";
 import { BlogSEOHead } from "@/components/blog/BlogSEOHead";
-import { BlogCategoryBadge } from "@/components/blog/BlogCategoryBadge";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { ArticleTOC } from "@/components/blog/ArticleTOC";
 import { ArticleFAQ } from "@/components/blog/ArticleFAQ";
 import { AuthorBio } from "@/components/blog/AuthorBio";
 import { ShareLink } from "@/components/blog/ShareLink";
 import { NewsletterInline } from "@/components/blog/NewsletterInline";
-import { Button } from "@/components/ui/button";
-import { ChevronRight, ArrowLeft, ArrowRight, FileText } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronRight } from "lucide-react";
 import {
   splitFaq,
   extractHeadings,
@@ -25,14 +22,43 @@ import {
   DEFAULT_AUTHOR,
 } from "@/lib/blogContent";
 import { categoryLongLabel, categoryGuideSlug } from "@/lib/blogTaxonomy";
+import { SIGNUP_URL, TRIAL } from "@/lib/marketing";
+import { fr } from "@/lib/typo";
 
-const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
-const SIGNUP = `${APP_URL}/auth?mode=signup`;
+const WORDS_PER_MINUTE = 200;
 
 function formatDate(dateStr: string | null | undefined): string {
   if (!dateStr) return "";
   return new Date(dateStr).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 }
+
+/** Temps de lecture : valeur stockée, sinon nombre de mots stocké, sinon calcul sur le texte. */
+function readingMinutes(post: { content?: string | null; read_time_minutes?: number | null; word_count?: number | null }) {
+  if (post.read_time_minutes && post.read_time_minutes > 0) return Math.round(post.read_time_minutes);
+  const words =
+    post.word_count && post.word_count > 0
+      ? post.word_count
+      : post.content
+        ? post.content.split(/\s+/).filter(Boolean).length
+        : 0;
+  return words > 0 ? Math.max(1, Math.round(words / WORDS_PER_MINUTE)) : null;
+}
+
+/**
+ * Typographie de lecture : mesure de 68 caractères (posée par le conteneur), interlignage
+ * généreux, titres en Bricolage. Les liens gardent le pétrole du thème, les puces l'encre
+ * diluée (l'orange est réservé à ce que l'IA prépare). scroll-mt : les ancres du sommaire
+ * ne passent pas sous l'en-tête collant.
+ */
+const PROSE_CLASS = [
+  "prose prose-lg max-w-none",
+  "prose-headings:font-display prose-headings:font-bold prose-headings:tracking-[-0.02em]",
+  "prose-h2:mb-5 prose-h2:mt-14 prose-h2:scroll-mt-24 prose-h2:text-[1.75rem] prose-h2:leading-[1.15] sm:prose-h2:text-[2rem]",
+  "prose-h3:mt-10 prose-h3:scroll-mt-24 prose-h3:text-[1.3rem] prose-h3:leading-snug",
+  "prose-p:leading-[1.78] prose-li:leading-[1.7] prose-li:marker:text-muted-foreground",
+  "prose-strong:text-foreground prose-img:rounded-[3px] prose-hr:my-12",
+  "prose-blockquote:border-l-2 prose-blockquote:border-foreground/30 prose-blockquote:font-normal",
+].join(" ");
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -53,8 +79,10 @@ export default function BlogPostPage() {
   });
 
   // Compteur de vues : conservé en logique interne (analytics admin), JAMAIS affiché.
+  // Une seule fois par article (dépendance sur l'id, pas sur l'objet re-créé à chaque requête).
   useEffect(() => {
     if (slug && post) supabase.rpc("increment_view_count", { post_slug: slug });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, post?.id]);
 
   const { data: relatedPosts = [] } = useQuery({
@@ -85,18 +113,31 @@ export default function BlogPostPage() {
     enabled: !!post,
   });
 
-  // Sépare la FAQ du corps, extrait les titres pour le sommaire, scinde pour le CTA.
+  // Sépare la FAQ du corps, extrait les titres pour le sommaire, scinde pour le rappel.
   const { body, faq } = useMemo(() => splitFaq(post?.content || ""), [post?.content]);
   const headings = useMemo(() => extractHeadings(body), [body]);
   const showTOC = headings.filter((h) => h.depth === 2).length >= 4;
+  // Affichage seulement : la plupart des articles répètent leur titre en « # » sur la
+  // première ligne. La page a déjà son <h1> (post.title), on ne l'affiche pas deux fois.
+  const displayBody = useMemo(() => body.replace(/^\s*#[ \t][^\n]*\n*/, ""), [body]);
   const { before, after } = useMemo(() => {
-    const paragraphs = body.split(/\n\n+/);
-    const mid = Math.max(1, Math.floor(paragraphs.length / 2));
+    const blocks = displayBody.split(/\n\n+/);
+    const mid = Math.max(1, Math.floor(blocks.length / 2));
+    // Le rappel du milieu tombe entre deux sections : coupure juste avant le H2 le plus
+    // proche du milieu (sinon au milieu, comme avant).
+    let cut = mid;
+    let best = Number.POSITIVE_INFINITY;
+    blocks.forEach((block, i) => {
+      if (i > 0 && /^##[ \t]/.test(block) && Math.abs(i - mid) < best) {
+        best = Math.abs(i - mid);
+        cut = i;
+      }
+    });
     return {
-      before: paragraphs.slice(0, mid).join("\n\n"),
-      after: paragraphs.slice(mid).join("\n\n"),
+      before: blocks.slice(0, cut).join("\n\n"),
+      after: blocks.slice(cut).join("\n\n"),
     };
-  }, [body]);
+  }, [displayBody]);
 
   const graph = useMemo(() => {
     if (!post) return undefined;
@@ -116,17 +157,18 @@ export default function BlogPostPage() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-16 sm:py-24">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 w-1/3 rounded bg-card" />
-          <div className="h-12 w-2/3 rounded bg-card" />
-          <div className="h-64 rounded-xl bg-card" />
+      <div aria-busy="true" aria-label="Chargement de l'article" className="mx-auto max-w-[68ch] px-5 py-14 sm:py-20">
+        <div className="space-y-5">
+          <div className="h-4 w-40 animate-pulse rounded-[3px] bg-muted motion-reduce:animate-none" />
+          <div className="h-10 w-full animate-pulse rounded-[3px] bg-muted motion-reduce:animate-none" />
+          <div className="h-10 w-3/4 animate-pulse rounded-[3px] bg-muted motion-reduce:animate-none" />
+          <div className="h-4 w-1/2 animate-pulse rounded-[3px] bg-muted motion-reduce:animate-none" />
         </div>
       </div>
     );
   }
   // Slug supprimé/inexistant : on rend une vraie 404 noindex (cf. NotFound) plutôt
-  // qu'un redirect JS vers /blog — sinon Google reste sur un 200 « soft-404 »
+  // qu'un redirect JS vers /blog, sinon Google reste sur un 200 « soft-404 »
   // (statuts GSC « doublon sans canonique » / « explorée, non indexée »).
   if (error || !post) return <NotFound />;
 
@@ -135,6 +177,7 @@ export default function BlogPostPage() {
   const showUpdated =
     post.updated_at && post.published_at && post.updated_at.slice(0, 10) !== post.published_at.slice(0, 10);
   const guideSlug = categoryGuideSlug(post.category);
+  const minutes = readingMinutes(post);
 
   // Ids des titres consommés EN ORDRE par les renderers → ancres identiques au sommaire.
   const headingIds = headings.map((h) => h.id);
@@ -142,6 +185,9 @@ export default function BlogPostPage() {
   const nextHeadingId = () => headingIds[idCursor++];
 
   const mdComponents: Components = {
+    // Un « # » restant dans le corps devient un intertitre : un seul <h1> par page.
+    // Il ne consomme pas d'ancre (extractHeadings ne lit que ## et ###).
+    h1: ({ children }) => <h2>{children}</h2>,
     h2: ({ children }) => <h2 id={nextHeadingId()}>{children}</h2>,
     h3: ({ children }) => <h3 id={nextHeadingId()}>{children}</h3>,
     a: ({ href, children }) => {
@@ -160,13 +206,17 @@ export default function BlogPostPage() {
         </a>
       );
     },
+    img: ({ node: _node, alt, ...props }) => <img {...props} alt={alt ?? ""} loading="lazy" decoding="async" />,
+    // Tableaux larges : défilement horizontal dans la colonne plutôt que débordement de page.
+    table: ({ children }) => (
+      <div className="overflow-x-auto">
+        <table>{children}</table>
+      </div>
+    ),
   };
 
-  const proseClass =
-    "prose prose-lg max-w-none prose-headings:tracking-tight prose-a:text-primary prose-strong:text-foreground prose-li:marker:text-primary";
-
   return (
-    <article className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+    <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
       <BlogSEOHead
         title={`${post.seo_title || post.title} — Blog OdocPilot`}
         description={post.seo_description || post.excerpt}
@@ -176,60 +226,108 @@ export default function BlogPostPage() {
         jsonLd={graph}
       />
 
-      {/* En-tête (animé) — le corps reste hors MotionDiv pour rester lisible même sans JS. */}
-      <MotionDiv className="mx-auto max-w-[68ch]">
-        <nav className="mb-8 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-muted-foreground">
-          <Link to="/" className="transition-colors hover:text-foreground">Accueil</Link>
-          <ChevronRight className="h-3 w-3" />
-          <Link to="/blog" className="transition-colors hover:text-foreground">Blog</Link>
-          <ChevronRight className="h-3 w-3" />
-          <BlogCategoryBadge category={post.category} accent />
-        </nav>
-
-        <header>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-            {post.title}
-          </h1>
-          {post.excerpt && <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{post.excerpt}</p>}
-          <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
-            {post.author_avatar_url && (
-              <img
-                src={post.author_avatar_url}
-                alt={authorName}
-                className="h-8 w-8 rounded-full object-cover"
-                loading="lazy"
-              />
-            )}
-            <span className="font-medium text-foreground">{authorName}</span>
-            <span aria-hidden>·</span>
-            <span>{formatDate(post.published_at)}</span>
-            {showUpdated && (
-              <>
-                <span aria-hidden>·</span>
-                <span>Mis à jour le {formatDate(post.updated_at)}</span>
-              </>
-            )}
-          </div>
-        </header>
-
-        {post.cover_image_url && (
-          <div className="mt-8 aspect-[16/9] overflow-hidden rounded-xl bg-muted">
-            <img src={post.cover_image_url} alt={post.title} className="h-full w-full object-cover" loading="lazy" />
-          </div>
-        )}
-      </MotionDiv>
-
-      {/* Corps + sommaire */}
-      <div className={showTOC ? "mt-12 lg:grid lg:grid-cols-[minmax(0,1fr)_15rem] lg:gap-12" : "mt-12"}>
-        <div className="min-w-0">
+      <div className={showTOC ? "lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-16" : undefined}>
+        <article className="min-w-0 py-10 sm:py-14">
           <div className="mx-auto max-w-[68ch]">
+            <nav aria-label="Fil d'Ariane" className="text-sm text-muted-foreground">
+              <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <li>
+                  <Link to="/" className="transition-colors duration-200 hover:text-foreground">
+                    Accueil
+                  </Link>
+                </li>
+                <li aria-hidden="true">
+                  <ChevronRight size={14} strokeWidth={1.75} />
+                </li>
+                <li>
+                  <Link to="/blog" className="transition-colors duration-200 hover:text-foreground">
+                    Blog
+                  </Link>
+                </li>
+                {guideSlug && (
+                  <>
+                    <li aria-hidden="true">
+                      <ChevronRight size={14} strokeWidth={1.75} />
+                    </li>
+                    <li>
+                      <Link to={`/guide/${guideSlug}`} className="transition-colors duration-200 hover:text-foreground">
+                        {categoryLongLabel(post.category)}
+                      </Link>
+                    </li>
+                  </>
+                )}
+              </ol>
+            </nav>
+
+            <header className="mt-8">
+              <h1 className="font-display display-tight text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.08]">
+                {post.title}
+              </h1>
+              {post.excerpt && (
+                <p className="mt-5 text-[1.1875rem] leading-relaxed text-muted-foreground">{post.excerpt}</p>
+              )}
+              <p className="mt-6 flex flex-wrap items-center gap-x-2.5 gap-y-1 border-t border-border pt-4 text-[0.9375rem] text-muted-foreground">
+                {post.author_avatar_url && (
+                  <img
+                    src={post.author_avatar_url}
+                    alt=""
+                    className="h-8 w-8 rounded-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <span className="font-bold text-foreground">{authorName}</span>
+                {post.published_at && (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <time dateTime={post.published_at}>{formatDate(post.published_at)}</time>
+                  </>
+                )}
+                {showUpdated && (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <span>
+                      Mis à jour le <time dateTime={post.updated_at ?? undefined}>{formatDate(post.updated_at)}</time>
+                    </span>
+                  </>
+                )}
+                {minutes && (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <span>{minutes} min de lecture</span>
+                  </>
+                )}
+              </p>
+            </header>
+
+            {post.cover_image_url && (
+              <div className="mt-8 aspect-[16/9] overflow-hidden rounded-[3px] bg-muted">
+                <img
+                  src={post.cover_image_url}
+                  alt={post.title}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            )}
+
+            {/* Sommaire replié (mobile et tablette) */}
             {showTOC && (
-              <details className="mb-8 rounded-lg border border-border bg-secondary/50 p-4 lg:hidden">
-                <summary className="cursor-pointer text-sm font-semibold text-foreground">Sommaire</summary>
-                <ul className="mt-3 space-y-1.5 text-sm">
+              <details className="group mt-10 border-y border-border lg:hidden">
+                <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 font-display font-bold [&::-webkit-details-marker]:hidden">
+                  Sommaire
+                  <span
+                    aria-hidden="true"
+                    className="font-display text-[1.5rem] font-normal leading-none transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none"
+                  >
+                    +
+                  </span>
+                </summary>
+                <ul className="space-y-1 pb-5 text-[0.9375rem]">
                   {headings.map((h) => (
-                    <li key={h.id} className={h.depth === 3 ? "ml-3" : ""}>
-                      <a href={`#${h.id}`} className="text-muted-foreground hover:text-foreground">
+                    <li key={h.id} className={h.depth === 3 ? "ml-4" : ""}>
+                      <a href={`#${h.id}`} className="block py-1 text-muted-foreground transition-colors duration-200 hover:text-foreground">
                         {h.text}
                       </a>
                     </li>
@@ -238,99 +336,138 @@ export default function BlogPostPage() {
               </details>
             )}
 
-            <div className={proseClass}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
-                {before}
-              </ReactMarkdown>
-            </div>
-
-            {/* CTA inline désaturé — accent porté par le seul bouton */}
-            <div className="my-10 rounded-xl border border-border bg-secondary/60 p-6 text-center sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Conformité 2026/2027</p>
-              <p className="mt-2 text-lg font-bold tracking-tight text-foreground">
-                L'IA prépare vos factures électroniques, vous validez en un clic.
-              </p>
-              <a href={SIGNUP} data-umami-event="blog-cta-article" className="mt-4 inline-block">
-                <Button className="bg-gradient-cta text-primary-foreground">
-                  Essayer OdocPilot — 14 jours gratuits
-                </Button>
-              </a>
-              <Link
-                to="/diagnostic"
-                className="mt-3 block text-sm text-muted-foreground transition-colors hover:text-foreground"
-              >
-                Ou vérifiez votre conformité en 3 min
-              </Link>
-            </div>
-
-            {after.trim() && (
-              <div className={proseClass}>
+            <div className="mt-10">
+              <div className={PROSE_CLASS}>
                 <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
-                  {after}
+                  {before}
                 </ReactMarkdown>
               </div>
-            )}
+
+              {/* Rappel discret au milieu de l'article : un outil gratuit, pas une publicité. */}
+              <aside aria-label="Diagnostic gratuit" className="my-12 border-y border-border py-6">
+                <p className="font-display text-[1.25rem] font-bold leading-snug">
+                  {fr("Où en est votre entreprise avec la facture électronique ?")}
+                </p>
+                <p className="mt-2 leading-relaxed text-muted-foreground">
+                  {fr("Le diagnostic gratuit vous dit en 3 minutes ce que la réforme change pour vous, date par date.")}
+                </p>
+                <Link
+                  to="/diagnostic"
+                  className="mt-4 inline-flex min-h-10 items-center gap-2 font-bold link-underline"
+                  data-umami-event="blog-cta-mid-diagnostic"
+                >
+                  Faire le diagnostic <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" />
+                </Link>
+              </aside>
+
+              {after.trim() && (
+                <div className={PROSE_CLASS}>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
+                    {after}
+                  </ReactMarkdown>
+                </div>
+              )}
+            </div>
 
             <ArticleFAQ items={faq} />
 
-            <ShareLink url={articleUrl} title={post.title} />
+            {/* Encadré de fin : passer à l'action */}
+            <aside aria-label="Passer à l'action" className="mt-16 rounded-lg border border-border bg-desk p-6 sm:p-8">
+              <p className="font-display text-[1.5rem] font-bold leading-tight sm:text-[1.75rem]">
+                {fr("Facture électronique : votre entreprise est-elle prête ?")}
+              </p>
+              <p className="mt-3 leading-relaxed text-muted-foreground">
+                {fr("Le diagnostic gratuit vous dit en 3 minutes ce qui vous concerne, date par date. Et OdocPilot crée vos factures au format Factur-X, gratuitement.")}
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-4">
+                <a href={SIGNUP_URL} className="btn-ink" data-umami-event="blog-cta-article">
+                  Commencer gratuitement <ArrowRight size={18} strokeWidth={1.75} aria-hidden="true" />
+                </a>
+                <Link
+                  to="/diagnostic"
+                  className="inline-flex min-h-12 items-center gap-2 font-bold link-underline"
+                  data-umami-event="blog-cta-end-diagnostic"
+                >
+                  Faire le diagnostic <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" />
+                </Link>
+              </div>
+              <p className="mt-5 text-[0.9375rem] text-muted-foreground">
+                {fr(`Palier Conformité gratuit. Essai de l'offre ${TRIAL.plan} pendant ${TRIAL.days} jours, sans carte bancaire.`)}
+              </p>
+              <p className="mt-4 border-t border-border pt-4 text-[0.9375rem] text-muted-foreground">
+                {fr("Aussi gratuits, sans compte : ")}
+                <Link to="/generateur-factur-x" className="text-foreground link-underline" data-umami-event="blog-cta-end-generateur">
+                  le générateur Factur-X
+                </Link>
+                {" et "}
+                <Link to="/verificateur" className="text-foreground link-underline" data-umami-event="blog-cta-end-verificateur">
+                  le vérificateur de facture
+                </Link>
+                .
+              </p>
+            </aside>
 
-            <AuthorBio name={authorName} avatarUrl={post.author_avatar_url} />
+            <div className="mt-14 space-y-6 border-t border-border pt-8">
+              <AuthorBio name={authorName} avatarUrl={post.author_avatar_url} />
+              <ShareLink url={articleUrl} title={post.title} />
+            </div>
 
             <NewsletterInline source="blog-article" />
 
-            {/* Lien vers la page pilier du silo (maillage interne) */}
-            {guideSlug && (
-              <Link
-                to={`/guide/${guideSlug}`}
-                className="group mt-12 flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-5 shadow-card transition-shadow hover:shadow-card-hover"
-              >
-                <span className="text-sm">
-                  <span className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    Guide complet
-                  </span>
-                  <span className="mt-0.5 block font-bold tracking-tight text-foreground">
-                    {categoryLongLabel(post.category)}
-                  </span>
+            {/* Page pilier du silo (maillage interne) ; à défaut, le guide de la réforme. */}
+            <Link
+              to={guideSlug ? `/guide/${guideSlug}` : "/e-facture"}
+              className="group mt-12 flex items-center justify-between gap-4 border-y border-border py-5"
+            >
+              <span>
+                <span className="block text-sm font-bold text-muted-foreground">Le guide complet</span>
+                <span className="mt-1 block font-display text-xl font-bold leading-snug">
+                  {guideSlug ? categoryLongLabel(post.category) : "La facture électronique 2026-2027"}
                 </span>
-                <ArrowRight className="h-5 w-5 shrink-0 text-primary transition-transform group-hover:translate-x-0.5" />
-              </Link>
-            )}
+              </span>
+              <ArrowRight
+                size={20}
+                strokeWidth={1.75}
+                aria-hidden="true"
+                className="shrink-0 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none"
+              />
+            </Link>
 
-            <div className="mt-12">
-              <Link
-                to="/blog"
-                className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Retour au blog
-              </Link>
-            </div>
+            <Link
+              to="/blog"
+              className="mt-10 inline-flex min-h-10 items-center gap-2 text-muted-foreground link-underline"
+            >
+              <ArrowLeft size={16} strokeWidth={1.75} aria-hidden="true" />
+              Tous les articles
+            </Link>
           </div>
-        </div>
+        </article>
 
         {showTOC && (
-          <aside className="hidden lg:block">
-            <div className="sticky top-24">
+          <aside className="hidden py-14 lg:block">
+            <div className="sticky top-24 max-h-[calc(100dvh-8rem)] overflow-y-auto pb-4">
               <ArticleTOC headings={headings} />
             </div>
           </aside>
         )}
       </div>
 
-      {/* À lire dans le même silo */}
+      {/* À lire ensuite */}
       {relatedPosts.length > 0 && (
-        <section className="mt-20 border-t border-border pt-12">
-          <h2 className="mb-8 text-2xl font-bold tracking-tight text-foreground">
-            À lire dans « {categoryLongLabel(post.category)} »
+        <section aria-labelledby="a-lire-aussi" className="border-t border-border pb-6 pt-12">
+          <h2
+            id="a-lire-aussi"
+            className="font-display text-3xl font-bold leading-[1.08] tracking-[-0.03em] sm:text-[2.2rem]"
+          >
+            {guideSlug ? fr(`À lire aussi sur « ${categoryLongLabel(post.category)} »`) : "À lire aussi"}
           </h2>
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="mt-8 grid border-t border-foreground/80 md:grid-cols-3">
             {relatedPosts.map((rp) => (
-              <BlogCard key={rp.slug} post={rp} />
+              <BlogCard key={rp.slug} post={rp} variant="compact" headingLevel={3} />
             ))}
           </div>
         </section>
       )}
-    </article>
+    </div>
   );
 }

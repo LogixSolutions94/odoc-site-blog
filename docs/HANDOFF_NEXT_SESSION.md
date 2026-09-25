@@ -1,14 +1,14 @@
-# Handoff : vitrine odocpilot.com, refonte en cours, légal en ligne
+# Handoff : vitrine odocpilot.com, refonte « Papeterie » en ligne
 
-**Mis à jour :** 25/09/2026 · **`main`** tout déployé (déploiements verts depuis #24) · **Branche de travail :**
-`refonte/vitrine-2026-09` (poussée, **ne pas fusionner en l'état**)
+**Mis à jour :** 25/09/2026 · **`main`** tout déployé (déploiements verts depuis #24) · Pas de branche
+de travail ouverte.
 
-> Lire d'abord `AGENTS.md` (identité légale, conventions), puis ce fichier. Le guide visuel et
-> éditorial de la refonte est dans la branche : `docs/design/REFONTE-2026-09.md`.
+> Lire d'abord `AGENTS.md` (identité légale, conventions), puis ce fichier. Avant de toucher une page :
+> `docs/design/REFONTE-2026-09.md` (système visuel, classes, affirmations autorisées et interdites).
 
 ---
 
-## ✅ En ligne depuis le 24/09
+## ✅ En ligne
 
 | PR | Contenu |
 |---|---|
@@ -17,6 +17,13 @@
 | #24 | Déploiement fiable : `scripts/deploy-vps.sh` exécuté d'un bloc, avec retour arrière si le nouveau conteneur est KO |
 | #25 à #27 | Article retiré (410), témoignages non vérifiés et promesses fausses retirés, plafonds réels sur les tarifs |
 | #28 | Thème : script externe `public/theme-init.js` (le script inline était bloqué par la CSP de prod) |
+| #30 | **Refonte « Papeterie »** (25/09) : accueil « Facture électronique : soyez en règle, simplement. », tarifs, À propos (limites écrites), contact, facture électronique, guides, lexique, blog, 404, en-tête, pied de page, cookies |
+
+**Système « Papeterie »** : papier blanc, encre pétrole. L'orange est le *surligneur* (ce que l'IA
+prépare), l'encre et le *tampon* sont ce que VOUS décidez. Police Switzer (Fontshare, autorisée par
+la CSP). Scène de l'accueil : `src/components/home/InvoiceScene.tsx` et `Stamp.tsx`. Sources uniques
+des liens, prix, essai et éditeur : `src/lib/marketing.ts`. Typographie française : `fr()` dans
+`src/lib/typo.ts`.
 
 ## 🔴 Ta liste (actions fondateur)
 
@@ -25,33 +32,21 @@
    vend « 52 actions exécutables ») et *Corriger la liste des sous-traitants* (la politique de
    confidentialité cite Stripe et Resend, oublie Mistral et Lemon Squeezy). Les deux s'arrêtent pour
    ta validation.
-2. **Valider la refonte visuelle** avant publication (captures à regénérer après le rebase, cf. plus bas).
-3. **Légal encore ouvert** : pied d'email de prospection B2B et licéité des envois (voir la mémoire
+2. **Légal encore ouvert** : pied d'email de prospection B2B et licéité des envois (voir la mémoire
    « dossier-conformite-legale-ouvert »). Le reste de ta liste vit dans
    `../odoc-pulse/docs/HANDOFF_NEXT_SESSION.md` (SuperPDP production, Lemon Squeezy, etc.).
 
-## 🧭 Reprendre la refonte (`refonte/vitrine-2026-09`)
+## 🧭 Pistes ouvertes pour la suite
 
-**Direction « Papeterie »** : papier blanc, encre pétrole. L'orange est le *surligneur* (ce que
-l'IA prépare), l'encre et le *tampon* sont ce que VOUS décidez. Accueil : « Facture électronique :
-soyez en règle, simplement. » (consigne de Riad du 24/09), scène animée d'une facture contrôlée avant
-envoi puis tamponnée. Police Switzer (Fontshare, autorisée par la CSP).
-
-**État** : 2 commits. `5ccfdf3` pose le système et le nouvel accueil. `eda5250` est un WIP
-sauvegardé tel quel, non relu : blog, tarifs, À propos, contact, facture électronique, guides, 404,
-outils. `tsc -p tsconfig.app.json` : OK. Il n'y a pas de PR.
-
-| Étape | À faire |
+| Piste | Détail |
 |---|---|
-| 1. Rebase | `git rebase origin/main`. Conflits attendus sur **2 fichiers** seulement : `SiteFooter.tsx` (garder le lien « Offre éditeurs » de #21) et `PricingPage.tsx` (garder les plafonds réels de #27). `index.html` : garder `theme-init.js` (#28) |
-| 2. Lien mort | Le pied de page pointe vers `/auto-entrepreneurs`, **aucune route** : créer la page ou retirer le lien |
-| 3. Relecture | Relire le WIP `eda5250` page par page contre la mémoire « vitrine-claims-guardrails » : jamais « rien ne part sans votre clic » (relances automatiques par défaut dans le SaaS), pas de témoignage, pas « plateforme agréée », nom public « M. Brahimi R. » uniquement |
-| 4. Revue visuelle | 1440 / 768 / 375, clair et sombre, `prefers-reduced-motion`. Vérifier l'état final de la scène : tampon sans masquer les montants, bouton de succès non grisé |
-| 5. Contrôles | `tsc -p tsconfig.app.json --noEmit`, `vite build`, un seul H1 par page, titres et descriptions lisibles par `scripts/prerender-pages.ts` |
-| 6. Publication | PR → Lighthouse CI → merge → déploiement auto → vérifier la prod (pages clés en 200, pas d'erreur console) |
+| Page `/auto-entrepreneurs` | Requête à fort volume (« facture électronique auto-entrepreneur »). Aujourd'hui, la carte de l'accueil mène à `/e-facture#auto-entrepreneurs`. Une page dédiée (MetierPage + route + `scripts/site-routes.ts`) serait un bon levier SEO |
+| Prérendu de l'accueil | `prerender-pages` garde `dist/index.html` pour « / » : titre et description OK, mais pas de H1 ni de texte dans le HTML brut (déjà le cas avant la refonte) |
+| Longueur de l'accueil | ≈ 11 900 px en 1440, ≈ 19 200 px en 375. À resserrer selon les premières mesures (clics d'essai par section via `data-umami-event`) |
+| Mesure | Relever Search Console vers le 10/10 : impressions hors marque, position de `/guide/plateforme-agreee` (objectifs du plan de relance) |
 
-**Ne pas toucher dans la refonte** : `MentionsLegalesPage`, `CguPage`, `PolitiqueConfidentialitePage`
-(versions validées par Riad, en ligne).
+**Ne pas toucher sans Riad** : `MentionsLegalesPage`, `CguPage`, `PolitiqueConfidentialitePage`
+(versions validées, en ligne).
 
 ## ⚙️ Pièges connus (poste Windows)
 
@@ -66,6 +61,7 @@ outils. `tsc -p tsconfig.app.json` : OK. Il n'y a pas de PR.
 - **Supprimer un worktree dont `node_modules` est une jonction** : d'abord
   `[System.IO.Directory]::Delete("<wt>\node_modules", $false)` (retire le lien seul), puis
   `git worktree remove`.
+- **Rejouer le build de prod sans bun** : Node 24 exécute les scripts avec un petit résolveur d'imports sans extension (`node --import <resolveur.mjs> scripts/…`) et `--experimental-transform-types` pour `prerender-pages`. Sans clé Supabase locale, `generate-sitemap` réécrit `public/sitemap.xml` avec 0 article : **ne pas le commiter** (`git checkout -- public/sitemap.xml`).
 - **Deux sessions dans le même worktree** (cas du fork du 24/09) : elles s'écrasent. Une seule écrit,
   l'autre passe la main par message.
 

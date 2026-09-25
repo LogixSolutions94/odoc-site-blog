@@ -1,38 +1,174 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { MotionDiv } from "@/components/MotionDiv";
+import { ArrowRight, Check, ChevronRight, Circle, Download, Plus, Trash2 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
-import { BackButton } from "@/components/BackButton";
-import { TrustCredentials } from "@/components/TrustCredentials";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { NewsletterInline } from "@/components/blog/NewsletterInline";
 import { useToast } from "@/hooks/use-toast";
-import { subscribeNewsletter } from "@/lib/newsletter";
-import {
-  ArrowRight, Plus, Trash2, FileCode2, Printer, CheckCircle, AlertTriangle,
-  MapPin, CreditCard, ShieldCheck,
-} from "lucide-react";
-
-const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
-const SIGNUP = `${APP_URL}/auth?mode=signup`;
+import { PLANS, SIGNUP_URL, TRIAL, formatEur } from "@/lib/marketing";
+import { fr } from "@/lib/typo";
 
 type Line = { designation: string; qte: number; puHt: number; tva: number };
 
 const esc = (s: string) =>
   String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const fmt = (n: number) => (Math.round(n * 100) / 100).toFixed(2);
-const ymd = (iso: string) => (iso ? iso.replaceAll("-", "") : "");
+const ymd = (iso: string) => (iso ? iso.replace(/-/g, "") : "");
 const todayIso = () => new Date().toISOString().slice(0, 10);
+
+/** Affichage à l'écran seulement (« 1 234,50 € ») ; le XML garde fmt(). */
+const money = (n: number) => formatEur(Number(fmt(n)));
+
+const PAGE_URL = "https://odocpilot.com/generateur-factur-x";
+const FREE_PLAN = PLANS.find((p) => p.id === "conformite") ?? PLANS[0];
+
+const STEPS = [
+  "Remplissez la facture : vous, votre client, les lignes.",
+  "Suivez la liste des mentions obligatoires : elle se coche au fur et à mesure.",
+  "Téléchargez le XML Factur-X et imprimez la facture en PDF.",
+];
+
+const FAQ = [
+  {
+    q: "Qu'est-ce qu'une facture Factur-X ?",
+    a: "Factur-X est un format de facture électronique franco-allemand. C'est un PDF lisible par une personne, qui contient aussi un fichier XML lisible par les logiciels. C'est l'un des trois formats de la réforme française, avec UBL et CII.",
+  },
+  {
+    q: "Qu'est-ce que je télécharge avec ce générateur ?",
+    a: "Deux versions de la même facture : le fichier XML au format Factur-X (syntaxe CII, profil EN 16931) et un PDF à imprimer ou à enregistrer. Le générateur ne réunit pas les deux dans un seul fichier : c'est ce que fait OdocPilot.",
+  },
+  {
+    q: "Mes informations sont-elles envoyées quelque part ?",
+    a: "Non. La facture est calculée et produite dans votre navigateur : les informations saisies ne sont envoyées à aucun serveur. Vous n'avez pas besoin de compte.",
+  },
+  {
+    q: "Ce fichier suffit-il pour être en règle en 2027 ?",
+    a: "Pas à lui seul. À partir du 1er septembre 2027, les PME, les TPE et les micro-entreprises devront émettre leurs factures dans un format électronique et les transmettre par une plateforme agréée. Ce générateur sert à préparer et à tester le format.",
+  },
+  {
+    q: "Je suis auto-entrepreneur, sans TVA. Puis-je l'utiliser ?",
+    a: "Pas encore. Le générateur demande un numéro de TVA et applique une TVA à chaque ligne. La franchise en base de TVA (mention « TVA non applicable, art. 293 B du CGI ») n'y est pas encore prise en charge.",
+  },
+];
+
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": `${PAGE_URL}#outil`,
+      name: "Générateur de facture Factur-X",
+      url: PAGE_URL,
+      description:
+        "Outil gratuit qui produit le fichier XML Factur-X (syntaxe CII, profil EN 16931) d'une facture et un PDF à imprimer, dans le navigateur, sans inscription.",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      inLanguage: "fr-FR",
+      isAccessibleForFree: true,
+      offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+      publisher: { "@id": "https://odocpilot.com/#organization" },
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://odocpilot.com/#organization",
+      name: "OdocPilot",
+      url: "https://odocpilot.com",
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://odocpilot.com" },
+        { "@type": "ListItem", position: 2, name: "Facture électronique", item: "https://odocpilot.com/e-facture" },
+        { "@type": "ListItem", position: 3, name: "Générateur Factur-X", item: PAGE_URL },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    },
+  ],
+};
+
+/* ── Feuille (objet) : reste une feuille claire en mode sombre ─────────────── */
+const SHEET =
+  "rounded-lg border border-sheet-rule bg-sheet text-sheet-ink shadow-sheet [color-scheme:light] [&_:focus-visible]:outline-[hsl(var(--sheet-ink))]";
+const FIELD =
+  "block h-11 w-full rounded-md border border-[hsl(var(--sheet-soft)/0.7)] bg-sheet px-3 text-[0.9375rem] text-sheet-ink placeholder:text-[hsl(var(--sheet-soft)/0.8)] focus-visible:border-[hsl(var(--sheet-ink))] focus-visible:outline-offset-0";
+const NUMBER_FIELD = `${FIELD} px-2.5 text-right font-data`;
+
+function Field({
+  id,
+  label,
+  hint,
+  className,
+  children,
+}: {
+  id: string;
+  label: string;
+  hint?: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={className}>
+      <label htmlFor={id} className="block text-[0.875rem] font-bold">
+        {label}
+      </label>
+      <div className="mt-1.5">{children}</div>
+      {hint && (
+        <p id={`${id}-hint`} className="mt-1.5 text-[0.8125rem] leading-snug text-sheet-soft">
+          {hint}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function StepLegend({ n, children }: { n: number; children: React.ReactNode }) {
+  return (
+    <legend className="mb-4 flex items-baseline gap-2.5 font-display text-[1.0625rem] font-bold">
+      <span className="font-data text-[0.875rem] font-normal text-sheet-soft">{n}</span>
+      {children}
+    </legend>
+  );
+}
+
+function CheckRow({ ok, label }: { ok: boolean; label: string }) {
+  return (
+    <li className="flex items-start gap-2.5 py-1.5 text-[0.875rem] leading-snug">
+      <span
+        aria-hidden="true"
+        className={`mt-px grid h-4 w-4 shrink-0 place-items-center rounded-[3px] border ${
+          ok
+            ? "border-[hsl(var(--sheet-ink))] bg-[hsl(var(--sheet-ink))] text-[hsl(var(--sheet))]"
+            : "border-[hsl(var(--sheet-soft)/0.7)] text-transparent"
+        }`}
+      >
+        <Check size={11} strokeWidth={3} />
+      </span>
+      <span className={ok ? "text-sheet-soft" : "font-bold"}>
+        <span className="sr-only">{ok ? "Renseigné : " : "À compléter : "}</span>
+        {label}
+      </span>
+      {!ok && (
+        <span aria-hidden="true" className="ml-auto shrink-0 pl-2 text-[0.8125rem] text-sheet-soft">
+          à compléter
+        </span>
+      )}
+    </li>
+  );
+}
 
 export default function GenerateurFacturXPage() {
   const { toast } = useToast();
+  const uid = useId();
+  const fid = (name: string) => `${uid}-${name}`;
 
   const [emetteur, setEmetteur] = useState({ nom: "", siret: "", adresse: "", tva: "" });
   const [client, setClient] = useState({ nom: "", siret: "", adresse: "" });
   const [meta, setMeta] = useState({ numero: "", date: todayIso(), echeance: "" });
   const [lines, setLines] = useState<Line[]>([{ designation: "", qte: 1, puHt: 0, tva: 20 }]);
-  const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
+  /** Ce que le visiteur vient d'obtenir (affiche la suite logique : OdocPilot). */
+  const [produced, setProduced] = useState<"xml" | "pdf" | null>(null);
 
   const totals = useMemo(() => {
     let ht = 0;
@@ -60,6 +196,7 @@ export default function GenerateurFacturXPage() {
     { label: "Taux et montant de TVA renseignés", ok: lines.every((l) => Number(l.tva) >= 0) && totals.ht > 0 },
   ];
   const allOk = checks.every((c) => c.ok);
+  const okCount = checks.filter((c) => c.ok).length;
 
   function setLine(i: number, patch: Partial<Line>) {
     setLines((ls) => ls.map((l, idx) => (idx === i ? { ...l, ...patch } : l)));
@@ -149,11 +286,19 @@ ${taxXml}${due}
 
   function downloadXml() {
     if (!allOk) {
-      toast({ title: "Champs manquants", description: "Complétez les mentions obligatoires (en rouge) avant de générer.", variant: "destructive" });
+      toast({
+        title: "Des mentions manquent",
+        description: fr("Complétez les mentions marquées « à compléter », puis téléchargez."),
+        variant: "destructive",
+      });
       return;
     }
     download(`facture-${meta.numero || "facturx"}.xml`, buildCII(), "application/xml");
-    toast({ title: "✓ XML Factur-X généré", description: "Le volet structuré (CII, profil EN 16931) est téléchargé." });
+    setProduced("xml");
+    toast({
+      title: "XML Factur-X téléchargé",
+      description: "Le fichier XML de votre facture (syntaxe CII, profil EN 16931) est téléchargé.",
+    });
   }
 
   function printPdf() {
@@ -162,8 +307,19 @@ ${taxXml}${due}
         (l) => `<tr><td>${esc(l.designation)}</td><td style="text-align:right">${fmt(Number(l.qte) || 0)}</td><td style="text-align:right">${fmt(Number(l.puHt) || 0)} €</td><td style="text-align:right">${fmt(Number(l.tva) || 0)} %</td><td style="text-align:right">${fmt((Number(l.qte) || 0) * (Number(l.puHt) || 0))} €</td></tr>`
       )
       .join("");
-    const w = window.open("", "_blank", "noopener,noreferrer,width=800,height=900");
-    if (!w) { toast({ title: "Pop-up bloquée", description: "Autorisez les pop-ups pour générer le PDF.", variant: "destructive" }); return; }
+    // Pas de « noopener » dans les options : avec lui, window.open renvoie toujours null
+    // (spécification HTML), la fenêtre restait vide et l'on annonçait « pop-up bloquée ».
+    // Le lien vers cette page est coupé juste après l'ouverture (w.opener = null).
+    const w = window.open("", "_blank", "width=800,height=900");
+    if (!w) {
+      toast({
+        title: "Fenêtre bloquée",
+        description: "Autorisez les fenêtres pop-up pour ce site, puis réessayez.",
+        variant: "destructive",
+      });
+      return;
+    }
+    w.opener = null;
     w.document.write(`<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Facture ${esc(meta.numero)}</title>
 <style>body{font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#1a1d2e;padding:40px;max-width:720px;margin:auto}
 h1{font-size:22px;margin:0 0 4px}table{width:100%;border-collapse:collapse;margin-top:24px;font-size:13px}
@@ -178,164 +334,511 @@ th,td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left}th{background:
 <div class="tot"><div><span class="muted">Total HT</span><span>${fmt(totals.ht)} €</span></div>
 <div><span class="muted">TVA</span><span>${fmt(totals.tva)} €</span></div>
 <div class="ttc"><span>Total TTC</span><span>${fmt(totals.ttc)} €</span></div></div>
-<p class="muted" style="margin-top:32px;font-size:11px">Document généré avec le générateur gratuit OdocPilot — odocpilot.com</p>
-<script>window.onload=function(){window.print()}</script></body></html>`);
+<p class="muted" style="margin-top:32px;font-size:11px">Document généré avec le générateur gratuit OdocPilot (odocpilot.com)</p>
+</body></html>`);
     w.document.close();
+    // Impression lancée depuis cette page : la CSP du site (script-src 'self') bloquerait
+    // un <script> écrit dans la fenêtre.
+    w.focus();
+    w.print();
+    setProduced((p) => p ?? "pdf");
   }
-
-  const [website, setWebsite] = useState(""); // honeypot
-
-  async function captureEmail(e: React.FormEvent) {
-    e.preventDefault();
-    const result = await subscribeNewsletter(email, "generateur", website);
-    if (!result.ok) {
-      toast({ title: "Erreur", description: result.error, variant: "destructive" });
-      return;
-    }
-    setSent(true);
-    toast({ title: "✓ Merci !", description: "Vous recevrez la checklist conformité + nos modèles." });
-  }
-
-  const field = "h-10 w-full rounded-lg border border-border bg-card px-3 text-sm";
 
   return (
-    <div className="flex flex-col items-center">
+    <div>
       <SEOHead
-        title="Générateur Factur-X gratuit (XML EN 16931) — sans inscription | OdocPilot"
-        description="Créez gratuitement le volet XML structuré (Factur-X CII, profil EN 16931) de votre facture + un PDF, et vérifiez vos mentions obligatoires. Sans inscription. Données et IA en France."
+        title="Générateur de facture Factur-X gratuit | OdocPilot"
+        description="Créez gratuitement le fichier XML Factur-X (profil EN 16931) de votre facture et un PDF à imprimer. Sans inscription, tout reste dans votre navigateur."
         canonical="/generateur-factur-x"
+        jsonLd={JSON_LD}
       />
-      <BackButton to="/e-facture" label="← La réforme e-facture" />
 
-      <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24">
-        <div className="text-center">
-          <span className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Outil gratuit · sans inscription</span>
-          <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-            Générateur de facture au format Factur-X
-          </h1>
-          <p className="mt-3 max-w-2xl mx-auto text-muted-foreground">
-            Remplissez votre facture : vous obtenez le <strong className="text-foreground">volet XML structuré</strong> (Factur-X CII, profil EN 16931)
-            et un PDF, et nous vérifions vos <strong className="text-foreground">mentions obligatoires</strong>. Aucun compte requis.
-          </p>
-        </div>
+      {/* ─── En-tête ─────────────────────────────────────────── */}
+      <section className="border-b border-border">
+        <div className="mx-auto max-w-[1240px] px-5 pb-12 pt-8 sm:px-8 sm:pb-16 sm:pt-10">
+          <nav aria-label="Fil d'Ariane" className="text-sm text-muted-foreground">
+            <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <li>
+                <Link to="/" className="transition-colors duration-200 hover:text-foreground">
+                  Accueil
+                </Link>
+              </li>
+              <li aria-hidden="true">
+                <ChevronRight size={14} strokeWidth={1.75} />
+              </li>
+              <li>
+                <Link to="/e-facture" className="transition-colors duration-200 hover:text-foreground">
+                  Facture électronique
+                </Link>
+              </li>
+              <li aria-hidden="true">
+                <ChevronRight size={14} strokeWidth={1.75} />
+              </li>
+              <li aria-current="page" className="text-foreground">
+                Générateur Factur-X
+              </li>
+            </ol>
+          </nav>
 
-        <div className="mt-10 grid lg:grid-cols-[1.3fr,1fr] gap-6 items-start">
-          {/* Formulaire */}
-          <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card space-y-5">
+          <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-end lg:gap-20">
             <div>
-              <p className="text-sm font-bold text-foreground mb-2">Émetteur (vous)</p>
-              <div className="grid sm:grid-cols-2 gap-2">
-                <input className={field} placeholder="Raison sociale" value={emetteur.nom} onChange={(e) => setEmetteur({ ...emetteur, nom: e.target.value })} />
-                <input className={field} placeholder="SIRET (14 chiffres)" value={emetteur.siret} onChange={(e) => setEmetteur({ ...emetteur, siret: e.target.value })} />
-                <input className={field} placeholder="Adresse" value={emetteur.adresse} onChange={(e) => setEmetteur({ ...emetteur, adresse: e.target.value })} />
-                <input className={field} placeholder="N° TVA intracom. (FR…)" value={emetteur.tva} onChange={(e) => setEmetteur({ ...emetteur, tva: e.target.value })} />
-              </div>
+              <p className="text-sm font-bold text-muted-foreground">Outil gratuit, sans inscription</p>
+              <h1 className="mt-4 font-display display-tight text-[clamp(2.4rem,5.2vw,4.25rem)] font-bold leading-[1.02]">
+                Générateur de facture Factur-X gratuit
+              </h1>
+              <p className="mt-6 max-w-[38rem] text-[1.1875rem] leading-relaxed text-muted-foreground">
+                Remplissez votre facture&nbsp;: vous obtenez le fichier XML au format Factur-X (profil EN 16931) et un PDF
+                à imprimer, avec la vérification des mentions obligatoires. Gratuit et sans inscription&nbsp;: tout se
+                passe dans votre navigateur.
+              </p>
             </div>
             <div>
-              <p className="text-sm font-bold text-foreground mb-2">Client</p>
-              <div className="grid sm:grid-cols-2 gap-2">
-                <input className={field} placeholder="Nom du client" value={client.nom} onChange={(e) => setClient({ ...client, nom: e.target.value })} />
-                <input className={field} placeholder="SIRET client (optionnel)" value={client.siret} onChange={(e) => setClient({ ...client, siret: e.target.value })} />
-                <input className={`${field} sm:col-span-2`} placeholder="Adresse client" value={client.adresse} onChange={(e) => setClient({ ...client, adresse: e.target.value })} />
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-bold text-foreground mb-2">Facture</p>
-              <div className="grid sm:grid-cols-3 gap-2">
-                <input className={field} placeholder="N° facture" value={meta.numero} onChange={(e) => setMeta({ ...meta, numero: e.target.value })} />
-                <input className={field} type="date" value={meta.date} onChange={(e) => setMeta({ ...meta, date: e.target.value })} />
-                <input className={field} type="date" value={meta.echeance} onChange={(e) => setMeta({ ...meta, echeance: e.target.value })} />
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-sm font-bold text-foreground">Lignes</p>
-                <button type="button" onClick={() => setLines([...lines, { designation: "", qte: 1, puHt: 0, tva: 20 }])} className="inline-flex items-center gap-1 text-xs font-semibold text-primary">
-                  <Plus className="h-3.5 w-3.5" /> Ajouter une ligne
-                </button>
-              </div>
-              <div className="space-y-2">
-                {lines.map((l, i) => (
-                  <div key={i} className="grid grid-cols-[1fr,56px,72px,56px,28px] gap-1.5 items-center">
-                    <input className={field} placeholder="Désignation" value={l.designation} onChange={(e) => setLine(i, { designation: e.target.value })} />
-                    <input className={`${field} px-2 text-right`} type="number" min={0} value={l.qte} onChange={(e) => setLine(i, { qte: Number(e.target.value) })} title="Quantité" />
-                    <input className={`${field} px-2 text-right`} type="number" min={0} step="0.01" value={l.puHt} onChange={(e) => setLine(i, { puHt: Number(e.target.value) })} title="PU HT" />
-                    <input className={`${field} px-2 text-right`} type="number" min={0} value={l.tva} onChange={(e) => setLine(i, { tva: Number(e.target.value) })} title="TVA %" />
-                    <button type="button" onClick={() => setLines(lines.filter((_, idx) => idx !== i))} disabled={lines.length === 1} className="text-muted-foreground hover:text-foreground disabled:opacity-30" title="Supprimer">
-                      <Trash2 className="h-4 w-4 mx-auto" />
-                    </button>
-                  </div>
+              <h2 className="font-display text-lg font-bold">En 3 étapes</h2>
+              <ol className="mt-4 border-t border-foreground/80">
+                {STEPS.map((step, i) => (
+                  <li key={step} className="grid grid-cols-[1.75rem_minmax(0,1fr)] gap-2 border-b border-border py-3 leading-snug">
+                    <span className="font-data text-muted-foreground">{i + 1}</span>
+                    <span>{fr(step)}</span>
+                  </li>
                 ))}
-              </div>
-              <div className="mt-3 ml-auto w-full sm:w-56 text-sm">
-                <div className="flex justify-between py-0.5"><span className="text-muted-foreground">Total HT</span><span className="tabular-nums">{fmt(totals.ht)} €</span></div>
-                <div className="flex justify-between py-0.5"><span className="text-muted-foreground">TVA</span><span className="tabular-nums">{fmt(totals.tva)} €</span></div>
-                <div className="flex justify-between py-1 mt-1 border-t border-border font-bold"><span>Total TTC</span><span className="tabular-nums">{fmt(totals.ttc)} €</span></div>
-              </div>
+              </ol>
             </div>
-          </MotionDiv>
+          </div>
+        </div>
+      </section>
 
-          {/* Colonne droite : mentions + actions */}
-          <div className="space-y-5">
-            <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
-              <p className="text-sm font-bold text-foreground flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Mentions obligatoires</p>
-              <ul className="mt-3 space-y-1.5">
-                {checks.map((c) => (
-                  <li key={c.label} className="flex items-center gap-2 text-xs">
-                    {c.ok ? <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" /> : <AlertTriangle className="h-4 w-4 text-red-500 flex-shrink-0" />}
-                    <span className={c.ok ? "text-muted-foreground" : "text-red-600 font-medium"}>{c.label}</span>
+      {/* ─── L'outil : la facture (feuille) et le contrôle ─────── */}
+      <section aria-label="Créer votre facture" className="border-b border-border bg-desk">
+        <div className="mx-auto grid max-w-[1240px] items-start gap-8 px-5 py-10 sm:px-8 sm:py-14 lg:grid-cols-[minmax(0,1fr)_21rem] lg:gap-10">
+          <form aria-label="Votre facture" onSubmit={(e) => e.preventDefault()} className={SHEET}>
+            <div className="flex items-center justify-between gap-3 border-b border-sheet-rule px-5 py-3.5 sm:px-7">
+              <p className="font-display text-[1.05rem] font-bold">Votre facture</p>
+              <p className="text-[0.8125rem] text-sheet-soft">Montants en euros</p>
+            </div>
+
+            <fieldset className="border-b border-sheet-rule px-5 py-6 sm:px-7">
+              <StepLegend n={1}>Vous, l'émetteur</StepLegend>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field id={fid("em-nom")} label="Nom ou raison sociale">
+                  <input
+                    id={fid("em-nom")}
+                    className={FIELD}
+                    autoComplete="organization"
+                    value={emetteur.nom}
+                    onChange={(e) => setEmetteur({ ...emetteur, nom: e.target.value })}
+                  />
+                </Field>
+                <Field id={fid("em-siret")} label="SIRET" hint="14 chiffres">
+                  <input
+                    id={fid("em-siret")}
+                    className={`${FIELD} font-data`}
+                    inputMode="numeric"
+                    autoComplete="off"
+                    aria-describedby={`${fid("em-siret")}-hint`}
+                    value={emetteur.siret}
+                    onChange={(e) => setEmetteur({ ...emetteur, siret: e.target.value })}
+                  />
+                </Field>
+                <Field id={fid("em-adresse")} label="Adresse">
+                  <input
+                    id={fid("em-adresse")}
+                    className={FIELD}
+                    autoComplete="street-address"
+                    value={emetteur.adresse}
+                    onChange={(e) => setEmetteur({ ...emetteur, adresse: e.target.value })}
+                  />
+                </Field>
+                <Field id={fid("em-tva")} label="N° de TVA intracommunautaire" hint="Commence par FR">
+                  <input
+                    id={fid("em-tva")}
+                    className={`${FIELD} font-data`}
+                    autoComplete="off"
+                    aria-describedby={`${fid("em-tva")}-hint`}
+                    value={emetteur.tva}
+                    onChange={(e) => setEmetteur({ ...emetteur, tva: e.target.value })}
+                  />
+                </Field>
+              </div>
+            </fieldset>
+
+            <fieldset className="border-b border-sheet-rule px-5 py-6 sm:px-7">
+              <StepLegend n={2}>Votre client</StepLegend>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field id={fid("cl-nom")} label="Nom du client">
+                  <input
+                    id={fid("cl-nom")}
+                    className={FIELD}
+                    autoComplete="off"
+                    value={client.nom}
+                    onChange={(e) => setClient({ ...client, nom: e.target.value })}
+                  />
+                </Field>
+                <Field
+                  id={fid("cl-siret")}
+                  label="SIREN ou SIRET du client (facultatif)"
+                  hint="Facultatif ici, mais c'est une des nouvelles mentions de la facture électronique."
+                >
+                  <input
+                    id={fid("cl-siret")}
+                    className={`${FIELD} font-data`}
+                    inputMode="numeric"
+                    autoComplete="off"
+                    aria-describedby={`${fid("cl-siret")}-hint`}
+                    value={client.siret}
+                    onChange={(e) => setClient({ ...client, siret: e.target.value })}
+                  />
+                </Field>
+                <Field id={fid("cl-adresse")} label="Adresse du client" className="sm:col-span-2">
+                  <input
+                    id={fid("cl-adresse")}
+                    className={FIELD}
+                    autoComplete="off"
+                    value={client.adresse}
+                    onChange={(e) => setClient({ ...client, adresse: e.target.value })}
+                  />
+                </Field>
+              </div>
+            </fieldset>
+
+            <fieldset className="border-b border-sheet-rule px-5 py-6 sm:px-7">
+              <StepLegend n={3}>La facture</StepLegend>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <Field id={fid("numero")} label="Numéro de facture">
+                  <input
+                    id={fid("numero")}
+                    className={`${FIELD} font-data`}
+                    placeholder="F-2026-001"
+                    autoComplete="off"
+                    value={meta.numero}
+                    onChange={(e) => setMeta({ ...meta, numero: e.target.value })}
+                  />
+                </Field>
+                <Field id={fid("date")} label="Date d'émission">
+                  <input
+                    id={fid("date")}
+                    className={`${FIELD} font-data`}
+                    type="date"
+                    value={meta.date}
+                    onChange={(e) => setMeta({ ...meta, date: e.target.value })}
+                  />
+                </Field>
+                <Field id={fid("echeance")} label="Échéance (facultatif)">
+                  <input
+                    id={fid("echeance")}
+                    className={`${FIELD} font-data`}
+                    type="date"
+                    value={meta.echeance}
+                    onChange={(e) => setMeta({ ...meta, echeance: e.target.value })}
+                  />
+                </Field>
+              </div>
+            </fieldset>
+
+            <fieldset className="px-5 py-6 sm:px-7">
+              <StepLegend n={4}>Les lignes</StepLegend>
+              <div
+                aria-hidden="true"
+                className="hidden grid-cols-[minmax(0,1fr)_4.75rem_6.5rem_4.75rem_2.75rem] gap-2 pb-2 text-[0.8125rem] font-bold text-sheet-soft sm:grid"
+              >
+                <span>Désignation</span>
+                <span className="text-right">Qté</span>
+                <span className="text-right">PU HT (€)</span>
+                <span className="text-right">TVA (%)</span>
+                <span />
+              </div>
+              <ul className="space-y-3 sm:space-y-2">
+                {lines.map((l, i) => (
+                  <li
+                    key={i}
+                    className="grid grid-cols-3 gap-2 border-t border-sheet-rule pt-3 first:border-t-0 first:pt-0 sm:grid-cols-[minmax(0,1fr)_4.75rem_6.5rem_4.75rem_2.75rem] sm:items-center sm:border-t-0 sm:pt-0"
+                  >
+                    <div className="col-span-3 sm:col-span-1">
+                      <label htmlFor={fid(`l${i}-designation`)} className="mb-1 block text-[0.8125rem] font-bold sm:sr-only">
+                        Désignation<span className="sr-only">, ligne {i + 1}</span>
+                      </label>
+                      <input
+                        id={fid(`l${i}-designation`)}
+                        className={FIELD}
+                        placeholder="Prestation, produit…"
+                        autoComplete="off"
+                        value={l.designation}
+                        onChange={(e) => setLine(i, { designation: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor={fid(`l${i}-qte`)} className="mb-1 block text-[0.8125rem] font-bold sm:sr-only">
+                        Quantité<span className="sr-only">, ligne {i + 1}</span>
+                      </label>
+                      <input
+                        id={fid(`l${i}-qte`)}
+                        className={NUMBER_FIELD}
+                        type="number"
+                        inputMode="decimal"
+                        min={0}
+                        value={l.qte}
+                        onChange={(e) => setLine(i, { qte: Number(e.target.value) })}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor={fid(`l${i}-pu`)} className="mb-1 block text-[0.8125rem] font-bold sm:sr-only">
+                        PU HT (€)<span className="sr-only">, ligne {i + 1}</span>
+                      </label>
+                      <input
+                        id={fid(`l${i}-pu`)}
+                        className={NUMBER_FIELD}
+                        type="number"
+                        inputMode="decimal"
+                        min={0}
+                        step="0.01"
+                        value={l.puHt}
+                        onChange={(e) => setLine(i, { puHt: Number(e.target.value) })}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor={fid(`l${i}-tva`)} className="mb-1 block text-[0.8125rem] font-bold sm:sr-only">
+                        TVA (%)<span className="sr-only">, ligne {i + 1}</span>
+                      </label>
+                      <input
+                        id={fid(`l${i}-tva`)}
+                        className={NUMBER_FIELD}
+                        type="number"
+                        inputMode="decimal"
+                        min={0}
+                        value={l.tva}
+                        onChange={(e) => setLine(i, { tva: Number(e.target.value) })}
+                      />
+                    </div>
+                    <div className="col-span-3 flex justify-end sm:col-span-1">
+                      <button
+                        type="button"
+                        onClick={() => setLines(lines.filter((_, idx) => idx !== i))}
+                        disabled={lines.length === 1}
+                        aria-label={`Retirer la ligne ${i + 1}`}
+                        className="inline-flex h-11 min-w-11 items-center justify-center gap-1.5 rounded-md px-2 text-[0.8125rem] text-sheet-soft transition-colors duration-200 hover:text-sheet-ink disabled:opacity-30"
+                      >
+                        <Trash2 size={16} strokeWidth={1.75} aria-hidden="true" />
+                        <span className="sm:sr-only">Retirer</span>
+                      </button>
+                    </div>
                   </li>
                 ))}
               </ul>
-            </div>
 
-            <div className="rounded-2xl border border-border bg-card p-5 shadow-card space-y-2.5">
-              <Button onClick={downloadXml} className="w-full bg-gradient-cta text-primary-foreground font-bold" data-umami-event="generateur-xml">
-                <FileCode2 className="mr-2 h-4 w-4" /> Télécharger le XML Factur-X
-              </Button>
-              <Button onClick={printPdf} variant="outline" className="w-full" data-umami-event="generateur-pdf">
-                <Printer className="mr-2 h-4 w-4" /> Aperçu / PDF imprimable
-              </Button>
-              <p className="text-[11px] text-muted-foreground leading-relaxed pt-1">
-                Vous obtenez le <strong className="text-foreground">volet XML structuré</strong> (CII, profil EN 16931) + un PDF.
-                La fusion XML + PDF/A-3 et la <strong className="text-foreground">transmission via plateforme agréée</strong> se font dans OdocPilot.
+              <button
+                type="button"
+                onClick={() => setLines([...lines, { designation: "", qte: 1, puHt: 0, tva: 20 }])}
+                className="mt-4 inline-flex min-h-10 items-center gap-1.5 rounded-md text-[0.9375rem] font-bold underline-offset-4 hover:underline"
+              >
+                <Plus size={16} strokeWidth={2} aria-hidden="true" /> Ajouter une ligne
+              </button>
+
+              <dl className="ml-auto mt-6 w-full max-w-[17rem] text-[0.9375rem]">
+                <div className="flex justify-between py-1">
+                  <dt className="text-sheet-soft">Total HT</dt>
+                  <dd className="font-data">{money(totals.ht)}</dd>
+                </div>
+                <div className="flex justify-between py-1">
+                  <dt className="text-sheet-soft">TVA</dt>
+                  <dd className="font-data">{money(totals.tva)}</dd>
+                </div>
+                <div className="mt-1 flex justify-between border-t border-[hsl(var(--sheet-ink)/0.7)] pt-2 font-bold">
+                  <dt>Total TTC</dt>
+                  <dd className="font-data">{money(totals.ttc)}</dd>
+                </div>
+              </dl>
+            </fieldset>
+          </form>
+
+          <div className="space-y-6 lg:sticky lg:top-24">
+            <section aria-labelledby={fid("mentions")} className={SHEET}>
+              <div className="flex items-center justify-between gap-3 border-b border-sheet-rule px-5 py-3.5">
+                <h2 id={fid("mentions")} className="font-display text-[1.05rem] font-bold">
+                  Mentions obligatoires
+                </h2>
+                <p className="font-data text-[0.8125rem] text-sheet-soft">
+                  {okCount}/{checks.length}
+                </p>
+              </div>
+              <ul className="px-5 py-3">
+                {checks.map((c) => (
+                  <CheckRow key={c.label} ok={c.ok} label={c.label} />
+                ))}
+              </ul>
+              <p className="border-t border-sheet-rule px-5 py-3 text-[0.8125rem] leading-snug text-sheet-soft">
+                {fr(allOk ? "Tout y est : vous pouvez télécharger." : "Complétez les mentions « à compléter » pour télécharger le XML.")}
               </p>
-              <Link to="/verificateur" className="block text-center text-xs font-semibold text-primary hover:underline" data-umami-event="generateur-to-verificateur">
-                Déjà une facture ? Vérifiez sa conformité →
-              </Link>
+            </section>
+
+            <div className="space-y-3">
+              <button type="button" onClick={downloadXml} className="btn-ink w-full" data-umami-event="generateur-xml">
+                <Download size={18} strokeWidth={1.75} aria-hidden="true" /> Télécharger le XML Factur-X
+              </button>
+              <button
+                type="button"
+                onClick={printPdf}
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-foreground/30 px-5 font-bold transition-colors duration-200 hover:border-foreground active:scale-[0.97]"
+                data-umami-event="generateur-pdf"
+              >
+                Imprimer ou enregistrer en PDF
+              </button>
+              <p className="text-[0.8125rem] leading-relaxed text-muted-foreground">
+                {fr("Pour le PDF, choisissez « Enregistrer au format PDF » dans la fenêtre d'impression.")}
+              </p>
             </div>
 
-            {/* Capture email après valeur */}
-            {!sent ? (
-              <form onSubmit={captureEmail} className="rounded-2xl border border-primary/30 bg-primary/5 p-5">
-                <p className="text-sm font-semibold text-foreground">Recevez la checklist conformité + nos modèles de factures</p>
-                <div className="absolute opacity-0 pointer-events-none" aria-hidden="true">
-                  <label htmlFor="gen-website">Website</label>
-                  <input type="text" id="gen-website" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
-                </div>
-                <div className="mt-3 flex flex-col gap-2">
-                  <Input type="email" required placeholder="votre@email.com" value={email} onChange={(e) => setEmail(e.target.value)} />
-                  <Button type="submit" className="bg-gradient-cta text-primary-foreground font-semibold" data-umami-event="generateur-email">Recevoir</Button>
-                </div>
-              </form>
-            ) : (
-              <div className="rounded-2xl border border-primary/30 bg-card p-5 flex items-center gap-2 text-sm"><CheckCircle className="h-5 w-5 text-primary" /> C'est envoyé !</div>
+            {produced && (
+              <div className="border-t border-foreground/80 pt-5">
+                <p className="font-display text-lg font-bold leading-snug">
+                  {produced === "xml" ? "Votre XML Factur-X est téléchargé." : "Votre facture est prête à imprimer."}
+                </p>
+                <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-muted-foreground">
+                  {fr("Dans OdocPilot, le PDF et le XML sont réunis dans un seul fichier Factur-X, et vos factures restent rangées au même endroit.")}
+                </p>
+                <a href={SIGNUP_URL} className="btn-ink mt-4 w-full text-center" data-umami-event="generateur-cta-resultat">
+                  {fr("Créer vos factures conformes dans OdocPilot, gratuitement")}
+                </a>
+              </div>
             )}
+
+            <Link
+              to="/verificateur"
+              className="inline-flex min-h-10 items-center gap-2 text-[0.9375rem] font-bold link-underline"
+              data-umami-event="generateur-to-verificateur"
+            >
+              {fr("Déjà une facture ? Vérifiez-la")} <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" />
+            </Link>
           </div>
         </div>
+      </section>
 
-        {/* CTA essai */}
-        <div className="mt-12 text-center">
-          <h2 className="text-2xl font-bold text-foreground">Et si l'IA préparait toutes vos factures&nbsp;?</h2>
-          <p className="mt-2 text-muted-foreground max-w-xl mx-auto">Dans OdocPilot, vos factures reçues sont lues et classées automatiquement, et vos factures sortent au format conforme — vous validez en un clic.</p>
-          <a href={SIGNUP} data-umami-event="generateur-cta-essai">
-            <Button size="lg" className="mt-4 bg-gradient-cta text-primary-foreground font-bold px-8">Démarrer l'essai 14 jours <ArrowRight className="ml-2 h-5 w-5" /></Button>
-          </a>
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1"><CreditCard className="h-3.5 w-3.5 text-primary" /> Sans carte bancaire</span>
-            <span className="inline-flex items-center gap-1"><MapPin className="h-3.5 w-3.5 text-primary" /> Données en France</span>
+      {/* ─── La suite : OdocPilot ─────────────────────────────── */}
+      <section aria-labelledby="cta-odocpilot" className="border-b border-border">
+        <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-20">
+          <div>
+            <h2
+              id="cta-odocpilot"
+              className="font-display text-3xl font-bold leading-[1.08] tracking-[-0.03em] sm:text-[2.6rem]"
+            >
+              {fr("Créer vos factures conformes dans OdocPilot, gratuitement")}
+            </h2>
+            <p className="mt-5 max-w-[36rem] text-[1.0625rem] leading-relaxed text-muted-foreground">
+              {fr("Dans OdocPilot, chaque facture sort au format Factur-X, profil EN 16931 : le PDF et le XML réunis dans un seul fichier. Vous la relisez, puis vous l'envoyez.")}
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+              <a href={SIGNUP_URL} className="btn-ink" data-umami-event="generateur-cta-essai">
+                Commencer gratuitement <ArrowRight size={18} strokeWidth={1.75} aria-hidden="true" />
+              </a>
+              <Link to="/pricing" className="inline-flex min-h-12 items-center font-bold link-underline" data-umami-event="generateur-cta-tarifs">
+                Voir les tarifs
+              </Link>
+            </div>
+            <p className="mt-4 text-[0.9375rem] text-muted-foreground">
+              {fr(`Palier ${FREE_PLAN.name} gratuit. Essai de l'offre ${TRIAL.plan} pendant ${TRIAL.days} jours, sans carte bancaire.`)}
+            </p>
           </div>
-          <TrustCredentials className="mt-8" />
+          <div>
+            <p className="font-display text-lg font-bold">{fr(`Compris dans le palier ${FREE_PLAN.name}, gratuit`)}</p>
+            <ul className="mt-4 border-t border-foreground/80">
+              {FREE_PLAN.features.map((feature) => (
+                <li key={feature} className="flex gap-3 border-b border-border py-3 leading-snug">
+                  <Check size={18} strokeWidth={2} aria-hidden="true" className="mt-0.5 shrink-0 text-petrole" />
+                  {fr(feature)}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-5 text-[0.9375rem] leading-relaxed text-muted-foreground">
+              {fr("OdocPilot n'est pas une plateforme agréée. L'envoi officiel de vos factures passera par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert.")}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Factur-X, en bref ────────────────────────────────── */}
+      <section aria-labelledby="factur-x" className="border-b border-border bg-desk">
+        <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
+          <h2 id="factur-x" className="font-display text-3xl font-bold leading-[1.08] tracking-[-0.03em] sm:text-[2.6rem]">
+            {fr("Factur-X : qu'est-ce que c'est ?")}
+          </h2>
+          <div className="max-w-[40rem] text-[1.0625rem] leading-relaxed">
+            <p className="font-bold">
+              {fr("Factur-X est un format de facture électronique : un PDF lisible par une personne, qui contient aussi un fichier XML lisible par les logiciels. C'est l'un des trois formats de la réforme, avec UBL et CII.")}
+            </p>
+            <p className="mt-5 text-muted-foreground">
+              {fr("Une facture électronique n'est pas un PDF envoyé par e-mail. Depuis le 1er septembre 2026, toutes les entreprises assujetties à la TVA doivent pouvoir en recevoir. Le 1er septembre 2027, les PME, les TPE et les micro-entreprises devront aussi les émettre, et les transmettre par une plateforme agréée.")}
+            </p>
+
+            <h3 className="mt-10 font-display text-xl font-bold">Ce que fait ce générateur</h3>
+            <ul className="mt-3 border-t border-foreground/80">
+              {[
+                "Il produit le fichier XML de votre facture (syntaxe CII, profil EN 16931) et une version PDF à imprimer.",
+                "Il vérifie huit mentions : émetteur, SIRET, numéro de TVA, client, numéro et date de facture, lignes, TVA.",
+              ].map((item) => (
+                <li key={item} className="flex gap-3 border-b border-border py-3 text-base leading-snug">
+                  <Check size={18} strokeWidth={2} aria-hidden="true" className="mt-0.5 shrink-0 text-petrole" />
+                  {fr(item)}
+                </li>
+              ))}
+            </ul>
+
+            <h3 className="mt-8 font-display text-xl font-bold">Ce qu'il ne fait pas (encore)</h3>
+            <ul className="mt-3 border-t border-foreground/80">
+              {[
+                "Il ne réunit pas le PDF et le XML dans un seul fichier Factur-X, et il n'envoie pas votre facture.",
+                "Il ne gère pas la franchise en base de TVA (auto-entrepreneurs), ni les nouvelles mentions de la réforme comme le SIREN du client dans le XML ou la nature de l'opération.",
+              ].map((item) => (
+                <li key={item} className="flex gap-3 border-b border-border py-3 text-base leading-snug text-muted-foreground">
+                  <Circle size={18} strokeWidth={1.75} aria-hidden="true" className="mt-0.5 shrink-0" />
+                  {fr(item)}
+                </li>
+              ))}
+            </ul>
+
+            <ul className="mt-8 space-y-3 text-base">
+              <li>
+                <Link to="/verificateur" className="inline-flex items-center gap-2 font-bold link-underline">
+                  Vérifier une facture Factur-X <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" />
+                </Link>
+              </li>
+              <li>
+                <Link to="/diagnostic" className="inline-flex items-center gap-2 font-bold link-underline">
+                  Savoir ce qui vous concerne, en 3 minutes <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" />
+                </Link>
+              </li>
+              <li>
+                <Link to="/e-facture" className="inline-flex items-center gap-2 text-muted-foreground link-underline">
+                  Le guide de la facture électronique <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" />
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Questions ────────────────────────────────────────── */}
+      <section aria-labelledby="faq-generateur">
+        <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
+          <div>
+            <h2 id="faq-generateur" className="font-display text-3xl font-bold leading-[1.08] tracking-[-0.03em] sm:text-[2.6rem]">
+              Questions fréquentes
+            </h2>
+            <NewsletterInline source="generateur" umamiEvent="generateur-email" />
+          </div>
+          <div className="border-t border-foreground/80">
+            {FAQ.map((f) => (
+              <details key={f.q} className="group border-b border-border">
+                <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-5 text-[1.0625rem] font-bold leading-snug [&::-webkit-details-marker]:hidden">
+                  {fr(f.q)}
+                  <span
+                    aria-hidden="true"
+                    className="mt-0.5 font-display text-[1.5rem] font-normal leading-none transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none"
+                  >
+                    +
+                  </span>
+                </summary>
+                <p className="-mt-1 pb-6 pr-10 leading-relaxed text-muted-foreground">{fr(f.a)}</p>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
     </div>
