@@ -16,13 +16,13 @@ type CellValue = string | boolean;
  */
 const SEO_TITLE = "Logiciel de facture électronique gratuit | Tarifs OdocPilot";
 const SEO_DESCRIPTION =
-  "Créez vos factures Factur-X gratuitement, sans limite de durée. Offres payantes à 49,99 €, 89,99 € ou 149,99 € par mois. Essai 14 jours sans carte bancaire.";
+  "Créez vos factures Factur-X gratuitement, sans limite de durée. Offres payantes à 29 €, 49 €, 89 € ou 149 € par mois. Essai 14 jours sans carte bancaire.";
 const INTRO =
   "Créez vos factures au format de la facture électronique sans rien payer. Quand OdocPilot vous fait gagner du temps, choisissez l'offre qui suit votre volume, sans engagement.";
 
-/** Même valeur pour les quatre offres : la fonction n'est réservée à aucune offre dans le logiciel. */
+/** Même valeur pour les cinq offres : la fonction n'est réservée à aucune offre dans le logiciel. */
 function everyPlan(value: CellValue): Record<PlanId, CellValue> {
-  return { conformite: value, essential: value, pro: value, manager: value };
+  return { conformite: value, essentiel: value, pro: value, equipe: value, manager: value };
 }
 
 /**
@@ -39,12 +39,12 @@ const COMPARE: { label: string; hint?: string; values: Record<PlanId, CellValue>
   {
     label: "Documents lus automatiquement, par mois",
     hint: "Factures reçues, justificatifs, contrats : chaque document déposé est lu et classé.",
-    values: { conformite: "20", essential: "200", pro: "2 000", manager: "6 000" },
+    values: { conformite: "50", essentiel: "200", pro: "2 000", equipe: "4 000", manager: "6 000" },
   },
   {
     label: "Conversations avec le copilote, par mois",
     hint: "Vos questions sur vos documents et sur vos chiffres.",
-    values: { conformite: "20", essential: "200", pro: "2 000", manager: "6 000" },
+    values: { conformite: false, essentiel: "200", pro: "2 000", equipe: "4 000", manager: "6 000" },
   },
   {
     label: "Relances automatiques des impayés",
@@ -69,11 +69,11 @@ const COMPARE: { label: string; hint?: string; values: Record<PlanId, CellValue>
   {
     label: "Statistiques d'activité détaillées",
     hint: "Documents traités, usage du copilote.",
-    values: { conformite: false, essential: false, pro: true, manager: true },
+    values: { conformite: false, essentiel: false, pro: true, equipe: true, manager: true },
   },
   {
     label: "Utilisateurs inclus",
-    values: { conformite: "1", essential: "1", pro: "5", manager: "10" },
+    values: { conformite: "1", essentiel: "1", pro: "1", equipe: "5", manager: "10" },
   },
 ];
 
@@ -116,7 +116,7 @@ const FAQ = [
   },
   {
     q: "Combien d'utilisateurs sont inclus ?",
-    a: "Un utilisateur avec Conformité et Essential, jusqu'à 5 avec Pro et jusqu'à 10 avec Manager. Au-delà, écrivez-nous : nous étudions une offre adaptée.",
+    a: "Un utilisateur avec Conformité, Essentiel et Pro, jusqu'à 5 avec Équipe et jusqu'à 10 avec Manager. Au-delà, écrivez-nous : nous étudions une offre adaptée.",
   },
   {
     q: "Puis-je changer d'offre ou arrêter ?",
