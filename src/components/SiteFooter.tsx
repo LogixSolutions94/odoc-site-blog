@@ -19,6 +19,7 @@ const COLUMNS: Array<{ title: string; links: Array<{ to: string; label: string }
   {
     title: "Métiers",
     links: [
+      { to: "/auto-entrepreneurs", label: "Auto-entrepreneurs" },
       { to: "/artisans", label: "Artisans et BTP" },
       { to: "/commerce", label: "Commerces et services" },
       { to: "/professions-liberales", label: "Professions libérales" },

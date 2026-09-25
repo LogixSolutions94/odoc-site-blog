@@ -326,6 +326,14 @@
   clip-path: inset(0 0 0 0);
   transition: none;
 }
+/* Surlignage d'un texte long qui passe à la ligne : trait posé ligne par ligne. */
+.marker-inline {
+  background: linear-gradient(transparent 14%, hsl(var(--marker) / 0.55) 14%, hsl(var(--marker) / 0.55) 90%, transparent 90%);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 0 0.15em;
+  border-radius: 0.15em;
+}
 /* Variante titre : une bande basse et fine, comme un trait appuyé sous l'œil
    des lettres, jamais un pavé. Se pose une fois au chargement. */
 .marker-title {

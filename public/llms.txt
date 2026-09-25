@@ -39,6 +39,7 @@ Dirigeants TPE/PME et indépendants français sans expert-comptable au quotidien
 
 ## Verticales métier
 
+- [Auto-entrepreneurs et micro-entreprises](https://odocpilot.com/auto-entrepreneurs) : facture électronique en franchise de TVA : calendrier, mentions, étapes
 - [Artisans & BTP](https://odocpilot.com/artisans)
 - [Commerce & Services](https://odocpilot.com/commerce)
 - [Professions libérales](https://odocpilot.com/professions-liberales)
