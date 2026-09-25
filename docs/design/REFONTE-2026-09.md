@@ -16,6 +16,7 @@ Papier blanc, encre pétrole. **Une couleur = un acteur** :
 - **Encre** (`.btn-ink`, texte) = ce que VOUS décidez. Tous les boutons d'action sont à l'encre.
 - **Tampon** (`<Stamp />`, `src/components/home/Stamp.tsx`) = la validation.
 - L'orange de la marque (#F97316) n'apparaît que dans le logo.
+- **Logo** (`<Logo />`, `src/components/Logo.tsx`) = le BrandLogo animé du SaaS (halo toutes les 6 s, sphère qui tourne en 24 s, coupé en mouvement réduit ; classes `.odoc-mark`, `.odoc-orb`). Demande de Riad du 25/09/2026. Pas de « ® » : la marque n'est pas déposée.
 
 ### Classes disponibles (src/index.css)
 

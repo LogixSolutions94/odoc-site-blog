@@ -299,6 +299,30 @@
   .link-underline:hover { text-decoration-color: currentColor; }
 }
 
+/* ── Marque OdocPilot (Logo.tsx) ───────────────────────────
+   Même animation que le BrandLogo du SaaS : le carré s'illumine
+   toutes les 6 s, la sphère fait un tour en 24 s. */
+.odoc-mark {
+  background: hsl(var(--brand-orange));
+}
+.odoc-mark--animated {
+  box-shadow: 0 0 12px 0 hsl(var(--brand-orange) / 0.3);
+}
+.odoc-orb {
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .odoc-mark--animated { animation: odoc-glow 6s ease-in-out infinite; }
+  .odoc-orb--spin { animation: odoc-orb-spin 24s linear infinite; }
+}
+@keyframes odoc-glow {
+  0%, 66%, 100% { box-shadow: 0 0 12px 0 hsl(var(--brand-orange) / 0.3); filter: brightness(1); }
+  84% { box-shadow: 0 0 30px 7px hsl(var(--brand-orange) / 0.7); filter: brightness(1.18); }
+}
+@keyframes odoc-orb-spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ── Surligneur ────────────────────────────────────────────
    Un trait de Stabilo derrière le texte. Il se pose de gauche à droite,
    comme à la main. data-on="true" : trait posé. */
