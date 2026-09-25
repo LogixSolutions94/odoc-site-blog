@@ -18,6 +18,7 @@ de travail ouverte.
 | #25 à #27 | Article retiré (410), témoignages non vérifiés et promesses fausses retirés, plafonds réels sur les tarifs |
 | #28 | Thème : script externe `public/theme-init.js` (le script inline était bloqué par la CSP de prod) |
 | #30 | **Refonte « Papeterie »** (25/09) : accueil « Facture électronique : soyez en règle, simplement. », tarifs, À propos (limites écrites), contact, facture électronique, guides, lexique, blog, 404, en-tête, pied de page, cookies |
+| #31 | Accessibilité : `MotionDiv` lit `prefers-reduced-motion` dès le premier rendu (animations coupées en plein vol, 4 px de débordement sur `/diagnostic` en mobile) |
 
 **Système « Papeterie »** : papier blanc, encre pétrole. L'orange est le *surligneur* (ce que l'IA
 prépare), l'encre et le *tampon* sont ce que VOUS décidez. Police Switzer (Fontshare, autorisée par
