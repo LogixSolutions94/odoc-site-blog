@@ -12,7 +12,7 @@ export default function PolitiqueConfidentialitePage() {
 
       <MotionDiv>
         <h1 className="text-4xl font-bold tracking-tight">Politique de confidentialité</h1>
-        <p className="mt-4 text-sm text-muted-foreground">Dernière mise à jour : 24 septembre 2026</p>
+        <p className="mt-4 text-sm text-muted-foreground">Dernière mise à jour : 25 septembre 2026</p>
       </MotionDiv>
 
       <div className="mt-12 space-y-10 text-muted-foreground leading-relaxed">
@@ -83,6 +83,9 @@ export default function PolitiqueConfidentialitePage() {
             <li><strong className="text-foreground">OVH Cloud (France) :</strong> hébergement de l'application, de la base de données et des documents ; envoi des emails.</li>
             <li><strong className="text-foreground">Mistral AI (France) :</strong> analyse des documents par l'IA, par son point d'accès européen (infrastructure située dans l'Espace économique européen).</li>
             <li><strong className="text-foreground">Lemon Squeezy (États-Unis, clauses contractuelles types) :</strong> paiement des abonnements, sans accès au contenu de vos documents.</li>
+            <li><strong className="text-foreground">Supabase (backend) :</strong> hébergement des données et authentification, serveurs en Europe.</li>
+            <li><strong className="text-foreground">Resend :</strong> envoi d'emails transactionnels.</li>
+            <li><strong className="text-foreground">Stripe :</strong> traitement des paiements (certifié PCI-DSS).</li>
             <li><strong className="text-foreground">Google / Dropbox :</strong> import de fichiers, uniquement si vous activez le connecteur.</li>
           </ul>
           <p className="mt-3">La liste complète et à jour figure dans notre <a href="https://app.odocpilot.com/legal/dpa" className="underline">accord de traitement des données (DPA)</a>.</p>
