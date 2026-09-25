@@ -104,7 +104,7 @@ export const GUIDES: Guide[] = [
       },
       {
         q: "Combien coûte la mise en conformité ?",
-        a: "Selon la DGFiP, plus d'une dizaine des 150 plateformes agréées proposaient au 1er août 2026 une offre gratuite ou sans surcoût pour les besoins essentiels. Chez OdocPilot, le palier Conformité est gratuit ; les offres complètes vont de 49,99 € à 149,99 € par mois, avec 14 jours d'essai sans carte bancaire.",
+        a: "Selon la DGFiP, plus d'une dizaine des 150 plateformes agréées proposaient au 1er août 2026 une offre gratuite ou sans surcoût pour les besoins essentiels. Chez OdocPilot, le palier Conformité est gratuit ; les offres complètes vont de 29 € à 149 € par mois, avec 14 jours d'essai sans carte bancaire.",
       },
     ],
     related: [
@@ -362,7 +362,7 @@ export const GUIDES: Guide[] = [
       {
         h2: "Commencer gratuitement",
         atomic:
-          "Le diagnostic, le générateur Factur-X et le vérificateur sont gratuits et sans inscription. Dans OdocPilot, le palier Conformité est gratuit ; les offres complètes vont de 49,99 € à 149,99 € par mois, avec 14 jours d'essai de l'offre Pro sans carte bancaire.",
+          "Le diagnostic, le générateur Factur-X et le vérificateur sont gratuits et sans inscription. Dans OdocPilot, le palier Conformité est gratuit ; les offres complètes vont de 29 € à 149 € par mois, avec 14 jours d'essai de l'offre Pro sans carte bancaire.",
         body: [
           "Faites le diagnostic, créez une facture au bon format, puis déposez une facture reçue pour voir la fiche se remplir.",
         ],

@@ -30,9 +30,13 @@ export const PUBLISHER = {
 } as const;
 
 export type Plan = {
-  id: "conformite" | "essential" | "pro" | "manager";
+  id: "conformite" | "essentiel" | "pro" | "equipe" | "manager";
   name: string;
-  /** Prix mensuel en euros, aligné sur le store Lemon Squeezy (commit 9700aad). */
+  /**
+   * Prix mensuel en euros. Grille 2026 (décision fondateur du 18/09/2026, appliquée le
+   * jour où les variantes Lemon Squeezy portent les mêmes montants) : miroir de
+   * `plan_limits` du logiciel.
+   */
   monthly: number;
   forWho: string;
   features: string[];
@@ -46,17 +50,16 @@ export const PLANS: Plan[] = [
     forWho: "Créer des factures au bon format, gratuitement",
     features: [
       "Factures et devis au format Factur-X, sans limite",
-      "Lecture automatique de 20 documents par mois",
+      "Lecture automatique de 50 documents par mois",
       "Relances automatiques des impayés, désactivables facture par facture",
       "Recherche de documents et export comptable (FEC)",
-      "Copilote : jusqu'à 20 conversations par mois",
       "1 utilisateur",
     ],
   },
   {
-    id: "essential",
-    name: "Essential",
-    monthly: 49.99,
+    id: "essentiel",
+    name: "Essentiel",
+    monthly: 29,
     forWho: "Pour l'indépendant qui travaille seul",
     features: [
       "Tout Conformité, avec plus de volume",
@@ -68,23 +71,35 @@ export const PLANS: Plan[] = [
   {
     id: "pro",
     name: "Pro",
-    monthly: 89.99,
-    forWho: "Pour la petite équipe qui veut tout préparer",
+    monthly: 49,
+    forWho: "Pour celui qui veut tout préparer",
     features: [
-      "Tout Essential",
+      "Tout Essentiel",
       "Lecture automatique de 2 000 documents par mois",
       "Copilote : jusqu'à 2 000 conversations par mois",
       "Statistiques d'activité détaillées",
+      "1 utilisateur",
+    ],
+  },
+  {
+    id: "equipe",
+    name: "Équipe",
+    monthly: 89,
+    forWho: "Pour la petite équipe",
+    features: [
+      "Tout Pro",
+      "Lecture automatique de 4 000 documents par mois",
+      "Copilote : jusqu'à 4 000 conversations par mois",
       "Jusqu'à 5 utilisateurs",
     ],
   },
   {
     id: "manager",
     name: "Manager",
-    monthly: 149.99,
+    monthly: 149,
     forWho: "Pour plusieurs équipes ou activités",
     features: [
-      "Tout Pro",
+      "Tout Équipe",
       "Lecture automatique de 6 000 documents par mois",
       "Copilote : jusqu'à 6 000 conversations par mois",
       "Jusqu'à 10 utilisateurs",
@@ -93,14 +108,12 @@ export const PLANS: Plan[] = [
   },
 ];
 
-const eur = new Intl.NumberFormat("fr-FR", {
-  style: "currency",
-  currency: "EUR",
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
-
-/** « 49,99 € » (espace fine insécable avant €, comme le veut l'usage français). */
+/** « 29 € » ou « 23,20 € » (espace fine insécable avant €, comme le veut l'usage français). */
 export function formatEur(amount: number): string {
-  return eur.format(amount);
+  return new Intl.NumberFormat("fr-FR", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: Number.isInteger(amount) ? 0 : 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
 }

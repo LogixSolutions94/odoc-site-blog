@@ -128,7 +128,7 @@ export const AUTO_ENTREPRENEURS = {
     atomic: f("Se préparer ne doit pas vous coûter cher. Avec OdocPilot, l'offre Conformité est gratuite, sans limite de durée et sans carte bancaire."),
     items: [
       f("Factures et devis au format Factur-X, sans limite"),
-      f("Lecture automatique de 20 documents par mois"),
+      f("Lecture automatique de 50 documents par mois"),
       f("Relances automatiques des impayés, désactivables facture par facture"),
       f("Recherche de documents et export comptable (FEC)"),
       f("1 utilisateur"),
