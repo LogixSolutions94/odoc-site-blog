@@ -1,7 +1,7 @@
 # Handoff : vitrine odocpilot.com, refonte en ligne, suivi Google quotidien
 
-**Mis à jour :** 29/09/2026 · **`main`** déployé jusqu'à `d3f19a2` (workflow
-`36561058178` vert) · Pas de branche de travail ouverte.
+**Mis à jour :** 29/09/2026 (après-midi) · **`main`** : PR #39 fusionnée (logo noir et blanc, mots clés
+surlignés, SuperPDP, images du blog, mode sombre des articles) · Pas de branche de travail ouverte.
 
 > Lire d'abord `AGENTS.md` (identité légale, conventions), puis ce fichier. Avant de toucher une page :
 > `docs/design/REFONTE-2026-09.md` (système visuel, classes, affirmations autorisées et interdites).
@@ -22,6 +22,7 @@
 | #33 | **Page `/auto-entrepreneurs`** : facture électronique en franchise de TVA, exemple de facture annotée, 4 étapes, 7 questions (FAQPage), prérendu complet (1 244 mots), liens depuis l'accueil, le pied de page et /e-facture |
 | #34 | Confidentialité : tous les sous-traitants affichés (Supabase, Resend, Stripe remis à côté d'OVH, Mistral, Lemon Squeezy, Google/Dropbox), décision de Riad |
 | `d3f19a2` | **SEO technique + blog** : accueil inclus dans `prerender-pages`, H1/intro/liens internes en HTML brut, header/footer renforcés vers outils/guides/comparatifs/`llm-info`, nettoyage de 9 articles blog hors positionnement via 301/410 |
+| #39 | **Demandes du 29/09** : logo noir et blanc qui tourne (`Logo.tsx`, icônes, `og-image.png`), mot-symbole « OdocPilot® », un mot clé surligné par titre (`<KeyMark>`), pied de page « … par Redsun Studio® Paris. », **SuperPDP nommé** comme plateforme agréée partenaire (raccordement de production toujours « pas encore ouvert »), images des articles dans le blog, articles lisibles en mode sombre (`html .prose`), 9 articles retirés masqués de /blog (`src/lib/retiredPosts.ts`) |
 
 **Système « Papeterie »** : papier blanc, encre pétrole. L'orange est le *surligneur* (ce que l'IA
 prépare), l'encre et le *tampon* sont ce que VOUS décidez. Police Switzer (Fontshare, autorisée par
@@ -34,6 +35,7 @@ des liens, prix, essai et éditeur : `src/lib/marketing.ts`. Typographie frança
 - **Dépôt privé [`LogixSolutions94/odoc-seo-data`](https://github.com/LogixSolutions94/odoc-seo-data)** : chaque jour à 05:30 UTC, une tâche GitHub interroge Search Console et enregistre l'historique jour par jour (`data/daily.csv`, 16 mois), les requêtes et pages sur 28 jours comparées aux 28 précédents, le trafic hors marque, les pages clés, et le rapport **`RAPPORT.md`**. Privé car le dépôt du site est public.
 - **En service depuis le 25/09** : secret `GSC_SERVICE_ACCOUNT_JSON` posé (clé du compte de service `odocpilot1@odoc-copilot`, copiée du serveur avec l'accord de Riad). Premier relevé : 170 jours d'historique, 114 requêtes, 125 pages. Sur 28 jours : 31 clics (contre 11), 2 054 impressions (-15 % après le retrait de 94 articles le 24/09), position moyenne 11,2 (contre 25,2). Hors marque : 4 clics, 477 impressions.
 - Indexation demandée le 25/09 dans Search Console pour `/auto-entrepreneurs`, `/`, `/e-facture` et `/pricing`.
+- **Indexation suivie chaque jour depuis le 29/09** : le relevé inspecte chaque URL du sitemap (API d'inspection d'URL) ; `RAPPORT.md` affiche « X pages indexées sur Y », la colonne « Indexée » des pages clés et les pages non indexées par motif (`data/index.csv`). Le 29/09 : **67 sur 68**, seule `/guide/facturation-electronique-2026` est « explorée, actuellement non indexée ».
 - Côté SaaS, `seo-insights` (`gsc_sync`, lundi 07:00 UTC) continue de suivre les articles du blog dans `seo_page_metrics`.
 
 ## 🧾 État SEO/blog vérifié le 29/09
