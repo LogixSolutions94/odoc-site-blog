@@ -24,7 +24,7 @@ Ce repo (`odoc-insights-hub`) = **uniquement** la landing page (odocpilot.com) *
 - **Déploiement automatique** depuis le 2026-06-28 : chaque push sur `main` redéploie `odoc-landing` (`.github/workflows/deploy.yml`). Vérifier : `gh run list --workflow=deploy.yml`. Le rebuild manuel n'est qu'un fallback (détail : `docs/agents/architecture-et-deploiement.md`).
 - Positionnement/produit/thème à jour depuis le 14/06 (wedge conformité, 49/89/149 €, « l'IA prépare, vous validez »).
 - ⚠️ **Sections datées** dans la doc détaillée, à ne pas prendre pour la vérité actuelle : ancien déploiement `scp` manuel, « Pages clés » (anciens 11 modules / 79 €), palette « Navy Premium ». Vérifier `refonte/PLAN-REFONTE-CONVERSION-2026.md` en cas de doute.
-- Design system « Papeterie » : tokens et classes dans `src/index.css` (défaut **CLAIR**), mode d'emploi dans `docs/design/REFONTE-2026-09.md`. Boutons d'action `btn-ink` (encre), orange réservé au surligneur `marker` (ce que l'IA prépare) et au logo ; **jamais de couleur hardcodée** hors des documents dessinés (feuilles, tampon).
+- Design system « Papeterie » : tokens et classes dans `src/index.css` (défaut **CLAIR**), mode d'emploi dans `docs/design/REFONTE-2026-09.md`. Boutons d'action `btn-ink` (encre), orange réservé au surligneur `marker` (ce que l'IA prépare, et un mot clé par titre via `<KeyMark>`) ; logo en **noir et blanc** (sphère orbitale qui tourne, `src/components/Logo.tsx`, choix de Riad du 29/09) ; **jamais de couleur hardcodée** hors des documents dessinés (feuilles, tampon).
 
 ## ⚖️ Identité légale de l'éditeur — NE JAMAIS INVENTER (maj 2026-09-24)
 
@@ -41,7 +41,7 @@ Ce repo (`odoc-insights-hub`) = **uniquement** la landing page (odocpilot.com) *
 | Adresse publiée | 89-91 Avenue de la République, 75011 Paris (domiciliation) |
 | Téléphone | +33 6 10 02 04 76 (**obligatoire** : art. 6, III, 1°, a) LCEN pour un éditeur personne physique) |
 | Directeur de la publication | **M. Brahimi R.** (décision de Riad du 24/09/2026 ; remplace « Lucas Belloc », prénom fictif de l'agent mailing) |
-| Nom affiché hors textes légaux | **« M. Brahimi R. »** (demande de Riad, 24/09/2026) : pied de page, accueil, llms.txt, signatures. Le nom complet ne figure que là où la loi l'exige (bloc éditeur des mentions légales, CGU, responsable du traitement) |
+| Nom affiché hors textes légaux | **« M. Brahimi R. »** (demande de Riad, 24/09/2026) : accueil, llms.txt, signatures. Pied de page : « OdocPilot® est conçu et développé à Paris par Redsun Studio® Paris. » (demande du 29/09 ; « ® » voulu par Riad sur ses marques, dépôt INPI à confirmer). Le nom complet ne figure que là où la loi l'exige (bloc éditeur des mentions légales, CGU, responsable du traitement) |
 
 **Source unique de vérité** : `../freelance-profils/entreprise-identite.md` (synthèse guichet unique, formalité J00267689834 validée le 31/07/2026). Contexte et réserves ouvertes : `../plan-attaque-2026-09/MENTIONS-LEGALES-ETAT-2026-09-08.md`.
 

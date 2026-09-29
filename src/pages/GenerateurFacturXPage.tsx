@@ -6,6 +6,7 @@ import { NewsletterInline } from "@/components/blog/NewsletterInline";
 import { useToast } from "@/hooks/use-toast";
 import { PLANS, SIGNUP_URL, TRIAL, formatEur } from "@/lib/marketing";
 import { fr } from "@/lib/typo";
+import { KeyMark } from "@/components/KeyMark";
 
 type Line = { designation: string; qte: number; puHt: number; tva: number };
 
@@ -384,7 +385,7 @@ th,td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left}th{background:
             <div>
               <p className="text-sm font-bold text-muted-foreground">Outil gratuit, sans inscription</p>
               <h1 className="mt-4 font-display display-tight text-[clamp(2.4rem,5.2vw,4.25rem)] font-bold leading-[1.02]">
-                Générateur de facture Factur-X gratuit
+                Générateur de facture <KeyMark>Factur-X</KeyMark> gratuit
               </h1>
               <p className="mt-6 max-w-[38rem] text-[1.1875rem] leading-relaxed text-muted-foreground">
                 Remplissez votre facture&nbsp;: vous obtenez le fichier XML au format Factur-X (profil EN 16931) et un PDF
@@ -747,7 +748,7 @@ th,td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left}th{background:
               ))}
             </ul>
             <p className="mt-5 text-[0.9375rem] leading-relaxed text-muted-foreground">
-              {fr("OdocPilot n'est pas une plateforme agréée. L'envoi officiel de vos factures passera par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert.")}
+              {fr("OdocPilot n'est pas une plateforme agréée. L'envoi officiel de vos factures passera par SuperPDP, plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert.")}
             </p>
           </div>
         </div>

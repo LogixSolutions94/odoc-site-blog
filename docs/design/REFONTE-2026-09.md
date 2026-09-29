@@ -12,11 +12,10 @@ Guide de référence pour toute page de odocpilot.com. À lire avant de toucher 
 ## Le système visuel
 
 Papier blanc, encre pétrole. **Une couleur = un acteur** :
-- **Orange surligneur** (`.marker`) = ce que l'IA a préparé. Jamais décoratif.
+- **Orange surligneur** (`.marker`) = ce que l'IA a préparé, et **un mot clé par titre de page** avec `<KeyMark>` (`src/components/KeyMark.tsx` : texte entier, passage `mark="…"` ou mot clé du site `auto`). Demande de Riad du 29/09.
 - **Encre** (`.btn-ink`, texte) = ce que VOUS décidez. Tous les boutons d'action sont à l'encre.
 - **Tampon** (`<Stamp />`, `src/components/home/Stamp.tsx`) = la validation.
-- L'orange de la marque (#F97316) n'apparaît que dans le logo.
-- **Logo** (`<Logo />`, `src/components/Logo.tsx`) = le BrandLogo animé du SaaS (halo toutes les 6 s, sphère qui tourne en 24 s, coupé en mouvement réduit ; classes `.odoc-mark`, `.odoc-orb`). Demande de Riad du 25/09/2026. Pas de « ® » : la marque n'est pas déposée.
+- **Logo** (`<Logo />`, `src/components/Logo.tsx`) = sphère orbitale en **noir et blanc** (couleur du texte), anneaux et sphère en contre-rotation (28 s / 20 s, coupée en mouvement réduit), mot-symbole « OdocPilot® ». Choix de Riad du 29/09/2026 (logo du site d'avant la refonte). Icônes et visuel de partage : sphère blanche sur carré d'encre `#0F2229` (`public/favicon.svg`, `logo.svg`, PNG, `og.html` → `og-image.png`).
 
 ### Classes disponibles (src/index.css)
 

@@ -113,7 +113,7 @@ export const WHITE_PAPER = {
         "Un copilote IA français comme OdocPilot génère vos factures au format Factur-X, lit et classe vos factures reçues, et prépare votre administratif. L'IA prépare le travail ; vous validez en un clic. Rien n'est comptabilisé sans vous.",
       body: [
         "Le bon usage de l'IA pour une TPE n'est pas « l'IA exécute seule », mais « l'IA fait le travail pénible et vous gardez le dernier mot ». Lecture des factures, extraction du montant, de la TVA et de l'échéance, classement, relances : l'IA prépare, vous validez.",
-        "Par honnêteté : chez OdocPilot, la génération au format conforme et la lecture des factures fonctionnent aujourd'hui ; la transmission via une plateforme agréée partenaire est en cours de raccordement et sera prête avant l'échéance. Données et IA sont hébergées en France.",
+        "Par honnêteté : chez OdocPilot, la génération au format conforme et la lecture des factures fonctionnent aujourd'hui ; la transmission via SuperPDP, plateforme agréée partenaire est en cours de raccordement et sera prête avant l'échéance. Données et IA sont hébergées en France.",
       ],
     },
   ] as WpSection[],

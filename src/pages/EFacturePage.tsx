@@ -4,6 +4,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { ReceivedInvoices } from "@/components/home/ProductVisuals";
 import { PLANS, SIGNUP_URL, TRIAL, formatEur } from "@/lib/marketing";
 import { fr } from "@/lib/typo";
+import { KeyMark } from "@/components/KeyMark";
 
 /**
  * Page pilier « facture électronique » (/e-facture).
@@ -87,7 +88,7 @@ const MENTIONS = [
 ];
 
 const DONE = [
-  "Vos factures sortent au format Factur-X, profil EN 16931. Le 18 septembre 2026, notre chaîne complète a été validée sur l'environnement de test d'une plateforme agréée.",
+  "Vos factures sortent au format Factur-X, profil EN 16931. Le 18 septembre 2026, notre chaîne complète a été validée sur l'environnement de test de SuperPDP, plateforme agréée.",
   "Les factures que vous recevez sont lues pour vous : fournisseur, numéro, dates, montants, TVA. Vous vérifiez la fiche, vous validez.",
   "Vos documents sont classés, et vous les retrouvez en écrivant une phrase en français courant.",
   "Vos relances de paiement partent automatiquement : 7 jours et 3 jours avant l'échéance, puis en cas de retard. Vous pouvez les couper facture par facture.",
@@ -95,7 +96,7 @@ const DONE = [
 ];
 
 const NOT_YET = [
-  "OdocPilot n'est pas une plateforme agréée. L'envoi et la réception officiels de vos factures passeront par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert.",
+  "OdocPilot n'est pas une plateforme agréée. L'envoi et la réception officiels de vos factures passeront par SuperPDP, plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert.",
   "OdocPilot ne transmet pas encore vos données d'e-reporting à l'administration.",
 ];
 
@@ -122,7 +123,7 @@ const FAQ = [
   },
   {
     q: "OdocPilot est-il une plateforme agréée ?",
-    a: "Non. OdocPilot crée vos factures au format Factur-X et lit celles que vous recevez. L'envoi officiel passera par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert. Pour la réception obligatoire, choisissez dès maintenant une plateforme agréée.",
+    a: "Non. OdocPilot crée vos factures au format Factur-X et lit celles que vous recevez. L'envoi officiel passera par SuperPDP, plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert. Pour la réception obligatoire, choisissez dès maintenant une plateforme agréée.",
   },
 ];
 
@@ -326,7 +327,7 @@ export default function EFacturePage() {
           <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-end lg:gap-16">
             <div>
               <p className="font-data text-[0.8125rem] text-muted-foreground">Mis à jour le {UPDATED}</p>
-              <h1 className={`mt-4 ${H1}`}>{H1_TEXT}</h1>
+              <h1 className={`mt-4 ${H1}`}><KeyMark auto>{H1_TEXT}</KeyMark></h1>
               <p className="mt-6 max-w-[40rem] text-[1.1875rem] leading-relaxed text-muted-foreground">{LEDE}</p>
               <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
                 <Link to="/diagnostic" className="btn-ink" data-umami-event="cta-efacture-diagnostic-hero">

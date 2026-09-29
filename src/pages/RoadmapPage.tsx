@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
 import { CheckCircle2, Settings, Clock, ArrowRight } from "lucide-react";
+import { KeyMark } from "@/components/KeyMark";
 
 const phases = [
   {
@@ -25,7 +26,7 @@ const phases = [
     icon: Settings,
     title: "Ce que nous raccordons d'ici 2026/2027",
     items: [
-      "Transmission et réception des factures via une plateforme agréée partenaire",
+      "Transmission et réception des factures via SuperPDP, plateforme agréée partenaire",
       "Rapprochement bancaire (agrégation des comptes)",
       "e-reporting (transmission des données à l'administration)",
       "Tableaux de bord dirigeant enrichis",
@@ -58,7 +59,7 @@ export default function RoadmapPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-center max-w-2xl mx-auto mb-14">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">En toute transparence</p>
-            <h1 className="mt-2 text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">Notre feuille de route</h1>
+            <h1 className="mt-2 text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">Notre <KeyMark>feuille de route</KeyMark></h1>
             <p className="mt-5 text-lg text-muted-foreground leading-relaxed">
               Nous distinguons toujours ce qui est actif de ce qui arrive. Voici où nous en sommes, honnêtement — et ce que nous raccordons avant les échéances de la réforme.
             </p>

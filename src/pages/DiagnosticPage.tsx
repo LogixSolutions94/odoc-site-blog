@@ -11,6 +11,7 @@ import {
   ArrowRight, ArrowLeft, CheckCircle, Calendar, FileText, ScanLine,
   Send, ShieldCheck, MapPin, CreditCard, RotateCcw, Sparkles,
 } from "lucide-react";
+import { KeyMark } from "@/components/KeyMark";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
 const SIGNUP = `${APP_URL}/auth?mode=signup`;
@@ -100,7 +101,7 @@ export default function DiagnosticPage() {
             Diagnostic conformité · 3 minutes · gratuit
           </span>
           <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
-            Êtes-vous prêt pour la facture électronique&nbsp;?
+            Êtes-vous prêt pour la <KeyMark>facture électronique</KeyMark>&nbsp;?
           </h1>
           <p className="mt-3 text-muted-foreground">
             Trois questions, et vous repartez avec votre feuille de route datée. Sans jargon, sans inscription.
@@ -192,7 +193,7 @@ export default function DiagnosticPage() {
                 {[
                   { icon: FileText, t: "Générez vos factures au format Factur-X", s: "Disponible aujourd'hui dans OdocPilot, sans paramétrage.", soon: false },
                   { icon: ScanLine, t: "Centralisez vos factures reçues", s: "L'IA les lit, extrait montant/TVA/échéance et les classe. Vous validez.", soon: false },
-                  { icon: Send, t: "Transmettez via plateforme agréée", s: "Raccordement en cours — vous serez prêt le jour J.", soon: true },
+                  { icon: Send, t: "Transmettez via SuperPDP (plateforme agréée)", s: "Raccordement en cours — vous serez prêt le jour J.", soon: true },
                 ].map((x, i) => {
                   const Icon = x.icon;
                   return (

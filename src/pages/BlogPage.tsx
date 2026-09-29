@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { BLOG_CATEGORY_FILTERS } from "@/lib/blogTaxonomy";
 import { BASE_URL, PUBLISHER_NAME, PUBLISHER_LOGO } from "@/lib/blogContent";
 import { fr } from "@/lib/typo";
+import { KeyMark } from "@/components/KeyMark";
+import { isRetiredPost } from "@/lib/retiredPosts";
 
 const PAGE_SIZE = 12;
 
@@ -86,7 +88,7 @@ export default function BlogPage() {
         console.error("[Blog] Error fetching posts:", error.message);
         throw error;
       }
-      return data;
+      return data.filter((p) => !isRetiredPost(p.slug));
     },
   });
 
@@ -143,7 +145,7 @@ export default function BlogPage() {
         <div className="mx-auto max-w-[1240px] px-5 pb-12 pt-12 sm:px-8 sm:pb-16 sm:pt-20">
           <p className="text-sm font-bold text-muted-foreground">Blog OdocPilot</p>
           <h1 className="mt-4 max-w-[52rem] font-display display-tight text-[clamp(2.4rem,5.2vw,4.25rem)] font-bold leading-[1.02]">
-            Le blog de la facture électronique
+            Le blog de la <KeyMark>facture électronique</KeyMark>
           </h1>
           <p className="mt-6 max-w-[42rem] text-[1.1875rem] leading-relaxed text-muted-foreground">
             Des guides pratiques pour les TPE, les PME, les indépendants et les auto-entrepreneurs&nbsp;: le calendrier

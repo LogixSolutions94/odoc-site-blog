@@ -4,6 +4,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { TrustCredentials } from "@/components/TrustCredentials";
 import { PLANS, SIGNUP_URL, TRIAL, formatEur, type Plan } from "@/lib/marketing";
 import { fr } from "@/lib/typo";
+import { KeyMark } from "@/components/KeyMark";
 
 type PlanId = Plan["id"];
 type CellValue = string | boolean;
@@ -124,7 +125,7 @@ const FAQ = [
   },
   {
     q: "OdocPilot est-il une plateforme agréée pour la facture électronique ?",
-    a: "Non. OdocPilot crée vos factures au format Factur-X (profil EN 16931) et lit celles que vous recevez. L'envoi officiel passera par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert. Le 18 septembre 2026, notre chaîne a été validée de bout en bout sur l'environnement de test d'une plateforme agréée.",
+    a: "Non. OdocPilot crée vos factures au format Factur-X (profil EN 16931) et lit celles que vous recevez. L'envoi officiel passera par SuperPDP, plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert. Le 18 septembre 2026, notre chaîne a été validée de bout en bout sur l'environnement de test de SuperPDP, plateforme agréée.",
   },
   {
     q: "Où sont stockées mes données, et quelle IA les lit ?",
@@ -198,7 +199,7 @@ export default function PricingPage() {
           <div>
             <p className="text-sm font-bold text-muted-foreground">Tarifs</p>
             <h1 className="mt-4 font-display display-tight text-[clamp(2.4rem,5.2vw,4.25rem)] font-bold leading-[1.02]">
-              Gratuit pour être en règle. Simple ensuite.
+              <KeyMark>Gratuit</KeyMark> pour être en règle. Simple ensuite.
             </h1>
             <p className="mt-6 max-w-[34rem] text-[1.1875rem] leading-relaxed text-muted-foreground">{INTRO}</p>
             <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">

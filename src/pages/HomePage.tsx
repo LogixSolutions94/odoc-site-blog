@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, Circle } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
@@ -7,6 +6,7 @@ import { AppWindow } from "@/components/home/AppWindow";
 import { AccountingExport, DocumentSearch, ReceivedInvoices, ReminderDraft } from "@/components/home/ProductVisuals";
 import { CONTACT_EMAIL, PLANS, PUBLISHER, SIGNUP_URL, TRIAL, formatEur } from "@/lib/marketing";
 import { fr } from "@/lib/typo";
+import { KeyMark } from "@/components/KeyMark";
 
 /* ─── Contenus ──────────────────────────────────────────────── */
 
@@ -138,7 +138,7 @@ const FAQ = [
   },
   {
     q: "OdocPilot est-il une plateforme agréée ?",
-    a: "Non. OdocPilot produit vos factures au format Factur-X et lit celles que vous recevez. L'envoi officiel passera par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert. Le 18 septembre 2026, notre chaîne complète a été validée sur l'environnement de test d'une plateforme agréée.",
+    a: "Non. OdocPilot produit vos factures au format Factur-X et lit celles que vous recevez. L'envoi officiel passera par SuperPDP, plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert. Le 18 septembre 2026, notre chaîne complète a été validée sur l'environnement de test de SuperPDP, plateforme agréée.",
   },
   {
     q: "Je ne suis pas à l'aise avec l'informatique. C'est pour moi ?",
@@ -187,13 +187,6 @@ function SectionTitle({ children, className = "" }: { children: React.ReactNode;
 }
 
 export default function HomePage() {
-  // Le trait de surligneur du titre se pose une fois, juste après l'affichage.
-  const [marked, setMarked] = useState(false);
-  useEffect(() => {
-    const t = window.setTimeout(() => setMarked(true), 350);
-    return () => window.clearTimeout(t);
-  }, []);
-
   return (
     <div className="overflow-x-clip">
       <SEOHead
@@ -216,9 +209,10 @@ export default function HomePage() {
               Obligatoire depuis le 1<sup>er</sup> septembre 2026 pour recevoir vos factures
             </p>
             <h1 className="display-tight mt-5 text-[clamp(2.6rem,4.6vw,4.3rem)] leading-[1]">
-              {fr("Facture électronique :")}
+              <KeyMark>Facture</KeyMark>
+              {fr(" électronique :")}
               <br />
-              {" "}soyez <span className="marker marker-title" data-on={marked}>en règle</span>,
+              {" "}soyez <KeyMark delay={900}>en règle</KeyMark>,
               <br /> simplement.
             </h1>
             <p className="mt-7 max-w-[32rem] text-[1.1875rem] leading-relaxed text-muted-foreground">
@@ -348,7 +342,7 @@ export default function HomePage() {
             <div className="flex gap-4">
               <Circle size={20} strokeWidth={2} className="mt-1 shrink-0 text-muted-foreground" aria-label="Pas encore disponible" />
               <p className="leading-relaxed text-muted-foreground">
-                {fr("Envoi et réception officiels par plateforme agréée : pas encore ouverts. OdocPilot n'est pas lui-même une plateforme agréée ; ce raccordement passera par un partenaire, et nous l'annoncerons ici.")}
+                {fr("Envoi et réception officiels par plateforme agréée : pas encore ouverts. OdocPilot n'est pas lui-même une plateforme agréée ; ce raccordement passera par SuperPDP, plateforme agréée, et nous l'annoncerons ici.")}
               </p>
             </div>
           </div>
@@ -511,7 +505,7 @@ export default function HomePage() {
               ["Vos documents", "Stockés en France, sur des serveurs OVHcloud."],
               ["L'IA", "Mistral AI, entreprise française. Aucun autre fournisseur n'est appelé."],
               ["Vos données", "Jamais revendues. Vos factures restent téléchargeables et l'export comptable se fait en un clic : vous n'êtes jamais prisonnier."],
-              ["Vos factures", "Au format Factur-X, validé sur l'environnement de test d'une plateforme agréée."],
+              ["Vos factures", "Au format Factur-X, validé sur l'environnement de test de SuperPDP, plateforme agréée."],
               ["Les avis clients", "Pas encore ici : OdocPilot est jeune. Plutôt que des avis inventés, nous vous laissons l'essayer gratuitement."],
             ].map(([k, v]) => (
               <div key={k} className="grid gap-1 py-5 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-6">

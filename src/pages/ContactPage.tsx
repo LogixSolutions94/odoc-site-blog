@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { CONTACT_EMAIL, PUBLISHER } from "@/lib/marketing";
 import { fr } from "@/lib/typo";
+import { KeyMark } from "@/components/KeyMark";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Indiquez votre nom.").max(100, "100 caractères au maximum."),
@@ -119,7 +120,7 @@ export default function ContactPage() {
 
       <div>
         <p className="text-sm font-bold text-muted-foreground">Contact</p>
-        <h1 className="mt-4 font-display display-tight text-[clamp(2.4rem,5.2vw,4.25rem)] font-bold leading-[1.02]">{H1}</h1>
+        <h1 className="mt-4 font-display display-tight text-[clamp(2.4rem,5.2vw,4.25rem)] font-bold leading-[1.02]"><KeyMark mark="Écrivez-nous">{H1}</KeyMark></h1>
         <p className="mt-6 max-w-[32rem] text-[1.1875rem] leading-relaxed text-muted-foreground">{INTRO}</p>
         <p className="mt-6 text-[1.0625rem]">
           {fr("Par e-mail : ")}

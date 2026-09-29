@@ -4,6 +4,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { EDITEURS, editeursJsonLd } from "@/content/editeurs";
 import { ArrowRight, Check, ShieldAlert } from "lucide-react";
+import { KeyMark } from "@/components/KeyMark";
 
 const reveal = {
   initial: { opacity: 0, y: 16 },
@@ -40,7 +41,7 @@ export default function EditeursPage() {
         {/* Hero */}
         <header>
           <span className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">{EDITEURS.eyebrow}</span>
-          <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground leading-tight">{EDITEURS.h1}</h1>
+          <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground leading-tight"><KeyMark auto>{EDITEURS.h1}</KeyMark></h1>
           <p className="mt-5 text-lg text-muted-foreground leading-relaxed">{EDITEURS.intro}</p>
           <ContactCta umami="cta-editeurs-demander-test" className="mt-7" />
         </header>

@@ -121,7 +121,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     slug: "od",
     short:
       "Un prestataire qui prépare et met en forme les factures électroniques, mais qui s'appuie sur une plateforme agréée pour les transmettre dans le circuit officiel.",
-    body: "Un OD n'est pas immatriculé par l'administration comme une plateforme agréée. OdocPilot travaille de cette façon : il prépare vos factures, et l'envoi officiel passera par une plateforme agréée partenaire, raccordement pas encore ouvert.",
+    body: "Un OD n'est pas immatriculé par l'administration comme une plateforme agréée. OdocPilot travaille de cette façon : il prépare vos factures, et l'envoi officiel passera par SuperPDP, plateforme agréée partenaire, raccordement pas encore ouvert.",
   },
   {
     term: "PA",
@@ -305,7 +305,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     slug: "api-depot",
     short:
       "L'interface technique par laquelle un logiciel de facturation dépose une facture sur une plateforme agréée, qui l'achemine ensuite vers le destinataire.",
-    body: "C'est par ce type d'interface qu'OdocPilot enverra vos factures à une plateforme agréée partenaire. Ce raccordement n'est pas encore ouvert.",
+    body: "C'est par ce type d'interface qu'OdocPilot enverra vos factures à SuperPDP, plateforme agréée partenaire. Ce raccordement n'est pas encore ouvert.",
     related: { to: "/guide/plateforme-agreee", label: "Choisir sa plateforme agréée" },
   },
   {

@@ -13,6 +13,8 @@ export type Comparison = {
   seoTitle: string;
   seoDesc: string;
   h1: string;
+  /** Passage du titre surligné (<KeyMark>). */
+  h1Mark: string;
   intro: string;
   themStrength: string;   // ce que le concurrent fait très bien (honnête)
   odocAngle: string;      // le créneau OdocPilot
@@ -40,6 +42,7 @@ export const COMPARISONS: Comparison[] = [
     seoDesc:
       "Comparatif honnête OdocPilot vs Pennylane : positionnement, facturation électronique, IA, souveraineté, prix. Pennylane est pensé pour le cabinet comptable ; OdocPilot pour le dirigeant qui prépare son admin sans comptable au quotidien.",
     h1: "OdocPilot vs Pennylane : lequel choisir en 2026 ?",
+    h1Mark: "lequel choisir",
     intro:
       "Pennylane et OdocPilot préparent tous deux à la facturation électronique 2026/2027, mais ne s'adressent pas à la même personne. Pennylane est une plateforme de comptabilité pensée autour de l'expert-comptable ; OdocPilot est un copilote IA pour le dirigeant de TPE qui gère son administratif lui-même.",
     themStrength:
@@ -76,6 +79,7 @@ export const COMPARISONS: Comparison[] = [
     seoDesc:
       "Comparatif honnête OdocPilot vs Qonto : Qonto est un compte pro qui fait aussi de la facturation ; OdocPilot est un copilote IA qui prépare tout votre administratif. Facturation électronique, IA, souveraineté, prix.",
     h1: "OdocPilot vs Qonto : copilote d'admin ou compte pro ?",
+    h1Mark: "copilote d'admin",
     intro:
       "Qonto est avant tout un compte professionnel, qui ajoute la facturation électronique. OdocPilot n'est pas une banque : c'est un copilote IA qui prépare votre administratif (lecture de factures, classement, relances), quel que soit votre établissement bancaire.",
     themStrength:
@@ -101,7 +105,7 @@ export const COMPARISONS: Comparison[] = [
     ],
     faqs: [
       { q: "Faut-il un compte Qonto pour utiliser OdocPilot ?", a: "Non. OdocPilot est indépendant de votre banque : il prépare votre administratif (factures, classement, relances) quel que soit votre établissement. Qonto, lui, donne sa pleine valeur avec son compte pro." },
-      { q: "Qonto transmet-il déjà les factures électroniques ?", a: "Qonto est une plateforme agréée. OdocPilot, lui, génère le format conforme aujourd'hui et raccorde la transmission via une plateforme agréée partenaire (en cours, prêt avant l'échéance)." },
+      { q: "Qonto transmet-il déjà les factures électroniques ?", a: "Qonto est une plateforme agréée. OdocPilot, lui, génère le format conforme aujourd'hui et raccorde la transmission via SuperPDP, plateforme agréée partenaire (en cours, prêt avant l'échéance)." },
       { q: "Lequel pour préparer mon admin avec l'IA ?", a: "OdocPilot est centré sur ce point : l'IA lit vos factures, les classe, prépare vos relances, et vous validez en un clic. Qonto automatise surtout des tâches bancaires." },
     ],
   },
@@ -112,6 +116,7 @@ export const COMPARISONS: Comparison[] = [
     seoDesc:
       "Comparatif honnête OdocPilot vs Indy : Indy excelle pour la compta et la déclaration des indépendants/TNS ; OdocPilot prépare l'admin du dirigeant de TPE avec l'IA (factures, classement, relances). Facturation électronique, souveraineté, prix.",
     h1: "OdocPilot vs Indy : lequel pour votre administratif ?",
+    h1Mark: "votre administratif",
     intro:
       "Indy est une référence pour la comptabilité et la déclaration des indépendants (TNS), avec un plan gratuit à vie. OdocPilot répond à une autre attente : préparer l'administratif courant du dirigeant avec l'IA — factures reçues lues et classées, relances préparées — et vous validez.",
     themStrength:
@@ -148,6 +153,7 @@ export const COMPARISONS: Comparison[] = [
     seoDesc:
       "Comparatif honnête OdocPilot vs Sellsy : Sellsy est une suite CRM + facturation pour équipes ; OdocPilot est un copilote IA simple et sans engagement pour le dirigeant de TPE. Facturation électronique, IA, prix, engagement.",
     h1: "OdocPilot vs Sellsy : copilote IA simple ou suite CRM ?",
+    h1Mark: "copilote IA simple",
     intro:
       "Sellsy est une suite complète CRM + facturation pour les équipes commerciales. OdocPilot vise la simplicité pour le dirigeant de TPE : l'IA prépare l'admin, vous validez, sans engagement et sans coût par utilisateur.",
     themStrength:
@@ -184,6 +190,7 @@ export const COMPARISONS: Comparison[] = [
     seoDesc:
       "Comparatif honnête OdocPilot vs Axonaut : Axonaut est un ERP tout-en-un à gérer manuellement ; OdocPilot laisse l'IA préparer l'administratif, vous validez. Facturation électronique, IA, souveraineté, prix.",
     h1: "OdocPilot vs Axonaut : l'IA prépare, ou vous gérez l'ERP ?",
+    h1Mark: "l'IA prépare",
     intro:
       "Axonaut est un ERP tout-en-un français (CRM, facturation, dépenses, projets) que vous pilotez manuellement. OdocPilot prend le parti inverse : l'IA prépare l'administratif à votre place — lecture des factures, classement, relances — et vous validez en un clic.",
     themStrength:
@@ -220,6 +227,7 @@ export const COMPARISONS: Comparison[] = [
     seoDesc:
       "Comparatif honnête OdocPilot vs Abby : Abby est excellent pour le micro-entrepreneur ; OdocPilot vise les TPE/PME qui veulent que l'IA prépare leur admin. Facturation électronique, IA, souveraineté, prix.",
     h1: "OdocPilot vs Abby : micro-entrepreneur ou TPE/PME ?",
+    h1Mark: "TPE/PME",
     intro:
       "Abby est une référence pour les micro-entrepreneurs : facturation, compta et déclarations URSSAF dans une appli simple, avec un plan gratuit. OdocPilot vise un cran au-dessus : les dirigeants de TPE/PME qui veulent que l'IA prépare leur administratif — vous validez.",
     themStrength:
@@ -256,7 +264,7 @@ export const COMPARISONS: Comparison[] = [
  * (scripts/lib/marketing-pages.ts) : le HTML brut porte la même réserve que la page.
  */
 export function compareDisclaimer(competitor: string): string {
-  return `Comparatif établi à partir d'informations publiques (juin 2026) ; les offres de ${competitor} évoluent — vérifiez sur leur site. Côté OdocPilot, la transmission via une plateforme agréée partenaire est en cours de raccordement.`;
+  return `Comparatif établi à partir d'informations publiques (juin 2026) ; les offres de ${competitor} évoluent — vérifiez sur leur site. Côté OdocPilot, la transmission via SuperPDP, plateforme agréée partenaire est en cours de raccordement.`;
 }
 
 export const COMPARISON_BY_SLUG: Record<string, Comparison> = Object.fromEntries(COMPARISONS.map((c) => [c.slug, c]));

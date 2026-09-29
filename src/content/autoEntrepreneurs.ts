@@ -112,7 +112,7 @@ export const AUTO_ENTREPRENEURS = {
   lessons: {
     h2: f("Ce qui fait rejeter une facture"),
     body: f(
-      "Le 18 septembre 2026, nous avons déposé nos propres factures sur l'environnement de test d'une plateforme agréée. Il a fallu quatre dépôts pour qu'elles soient acceptées. Ce qui bloquait :",
+      "Le 18 septembre 2026, nous avons déposé nos propres factures sur l'environnement de test de SuperPDP, plateforme agréée. Il a fallu quatre dépôts pour qu'elles soient acceptées. Ce qui bloquait :",
     ),
     items: [
       f("l'adresse électronique de facturation du vendeur et celle de l'acheteur ;"),
@@ -134,7 +134,7 @@ export const AUTO_ENTREPRENEURS = {
       f("1 utilisateur"),
     ],
     note: f(
-      "OdocPilot n'est pas une plateforme agréée. L'envoi officiel de vos factures passera par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert. Nous l'indiquerons sur cette page dès qu'il le sera.",
+      "OdocPilot n'est pas une plateforme agréée. L'envoi officiel de vos factures passera par SuperPDP, plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert. Nous l'indiquerons sur cette page dès qu'il le sera.",
     ),
   },
 
@@ -166,7 +166,7 @@ export const AUTO_ENTREPRENEURS = {
     },
     {
       q: f("OdocPilot est-il une plateforme agréée ?"),
-      a: f("Non. OdocPilot crée vos factures au format Factur-X et lit celles que vous recevez. L'envoi officiel passera par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert."),
+      a: f("Non. OdocPilot crée vos factures au format Factur-X et lit celles que vous recevez. L'envoi officiel passera par SuperPDP, plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert."),
     },
   ] as AeFaq[],
 

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { CONTACT_EMAIL, PUBLISHER } from "@/lib/marketing";
+import { CONTACT_EMAIL } from "@/lib/marketing";
 import { fr } from "@/lib/typo";
 
 // L'essentiel seulement (cf. mémoire « design minimalisme ») : pas de lien mort,
@@ -96,7 +96,7 @@ export function SiteFooter() {
 
         <div className="mt-14 flex flex-col gap-5 border-t border-border pt-6 text-[0.875rem] text-muted-foreground lg:flex-row lg:items-center lg:justify-between">
           <p className="max-w-[40rem] leading-relaxed">
-            {fr(`OdocPilot est conçu et développé à ${PUBLISHER.city} par ${PUBLISHER.name}`)}
+            OdocPilot<sup className="text-[0.6em]">®</sup> est conçu et développé à Paris par Redsun Studio<sup className="text-[0.6em]">®</sup> Paris.
           </p>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             {LEGAL_LINKS.map((link) => (

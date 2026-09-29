@@ -6,6 +6,7 @@ import { TrustCredentials } from "@/components/TrustCredentials";
 import { Button } from "@/components/ui/button";
 import { COMPARISON_BY_SLUG, COMPARISONS, compareDisclaimer } from "@/content/comparisons";
 import { ChevronRight, Check, X, ArrowRight, Sparkles, ShieldCheck } from "lucide-react";
+import { KeyMark } from "@/components/KeyMark";
 
 const NotFound = lazy(() => import("./NotFound"));
 const BASE = "https://odocpilot.com";
@@ -67,7 +68,7 @@ export default function ComparePage() {
 
         <header className="mt-6">
           <span className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Comparatif honnête · juin 2026</span>
-          <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground leading-tight">{c.h1}</h1>
+          <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground leading-tight"><KeyMark mark={c.h1Mark}>{c.h1}</KeyMark></h1>
           <p className="mt-5 text-lg text-muted-foreground leading-relaxed">{c.intro}</p>
         </header>
 

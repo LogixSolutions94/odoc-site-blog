@@ -5,6 +5,7 @@ import { MicroInvoiceSpecimen } from "@/components/content/MicroInvoiceSpecimen"
 import { AUTO_ENTREPRENEURS, autoEntrepreneursJsonLd } from "@/content/autoEntrepreneurs";
 import { SIGNUP_URL } from "@/lib/marketing";
 import { fr } from "@/lib/typo";
+import { KeyMark } from "@/components/KeyMark";
 
 /**
  * /auto-entrepreneurs : la facture électronique pour les micro-entrepreneurs.
@@ -81,7 +82,7 @@ export default function AutoEntrepreneursPage() {
           <div className="mt-10 grid gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-16">
             <div>
               <p className="text-[0.9375rem] text-muted-foreground">{AE.eyebrow}</p>
-              <h1 className={`mt-4 ${H1}`}>{AUTO_ENTREPRENEURS.h1Lead}<span className="whitespace-nowrap max-[359px]:whitespace-normal">{AUTO_ENTREPRENEURS.h1Word}</span></h1>
+              <h1 className={`mt-4 ${H1}`}><KeyMark auto>{AUTO_ENTREPRENEURS.h1Lead}</KeyMark><span className="whitespace-nowrap max-[359px]:whitespace-normal">{AUTO_ENTREPRENEURS.h1Word}</span></h1>
               <p className="mt-6 max-w-[40rem] text-[1.1875rem] leading-relaxed text-muted-foreground">{AUTO_ENTREPRENEURS.intro}</p>
               <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
                 <a href={SIGNUP_URL} className="btn-ink" data-umami-event="cta-ae-hero-signup">

@@ -17,6 +17,7 @@ import {
   Users,
   FileCheck2,
 } from "lucide-react";
+import { KeyMark } from "@/components/KeyMark";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
 const SIGNUP = `${APP_URL}/auth?mode=signup`;
@@ -142,7 +143,7 @@ export default function MetierPage({ slug }: { slug: string }) {
           </MotionDiv>
           <MotionDiv initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08, duration: 0.6 }}>
             <h1 className="mt-6 text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.05] text-foreground">
-              {m.h1a} <span className="bg-gradient-cta bg-clip-text text-transparent">{m.h1b}</span>
+              {m.h1a} <KeyMark>{m.h1b}</KeyMark>
             </h1>
           </MotionDiv>
           <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16, duration: 0.6 }}>

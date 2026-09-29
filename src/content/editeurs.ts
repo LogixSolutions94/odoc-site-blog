@@ -22,7 +22,7 @@ export const EDITEURS = {
   eyebrow: "Éditeurs de logiciels et intégrateurs",
   h1: `Vos factures passeront-elles la plateforme agréée${NBSP}?`,
   intro:
-    "Nous déposons vos factures sur l'environnement de test d'une plateforme agréée et vous rendons, règle par règle, ce qui bloque et comment le corriger.",
+    "Nous déposons vos factures sur l'environnement de test de SuperPDP, plateforme agréée, et vous rendons, règle par règle, ce qui bloque et comment le corriger.",
   cta: "Demander un test",
   ctaEmailLead: "ou écrivez à",
   email: "hello@odocpilot.com",
@@ -55,7 +55,7 @@ export const EDITEURS = {
         price: `490${NBSP}€`,
         items: [
           "1 modèle de facture (Factur-X, UBL ou CII)",
-          "dépôt sur l'environnement de test d'une plateforme agréée",
+          "dépôt sur l'environnement de test de SuperPDP, plateforme agréée",
           "rapport : règle, champ, valeur trouvée, valeur attendue, correction",
           "sous 5 jours ouvrés",
         ],
@@ -78,7 +78,7 @@ export const EDITEURS = {
     h2: "Comment ça se passe",
     items: [
       "Vous nous envoyez des factures d'exemple, avec des données de test ou anonymisées.",
-      "Nous les déposons sur l'environnement de test d'une plateforme agréée et les passons dans notre moteur de contrôle.",
+      "Nous les déposons sur l'environnement de test de SuperPDP, plateforme agréée, et les passons dans notre moteur de contrôle.",
       "Vous recevez le rapport, règle par règle, avec la correction attendue.",
       "Formule complète : nous testons à nouveau après vos corrections.",
     ],
