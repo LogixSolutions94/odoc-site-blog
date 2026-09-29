@@ -6,6 +6,7 @@ import {
   ShieldCheck, MapPin, Cpu, FileText, ScanLine, FileOutput, Search,
   MessageSquareText, Lock, Leaf, Scale, CheckCircle, Clock, ArrowRight,
 } from "lucide-react";
+import { KeyMark } from "@/components/KeyMark";
 
 const BASE = "https://odocpilot.com";
 
@@ -39,7 +40,7 @@ const regulatory: { date: string; t: string }[] = [
 const faqs: { q: string; a: string }[] = [
   { q: "Qu'est-ce qu'OdocPilot ?", a: "OdocPilot est un copilote d'intelligence artificielle français de facturation et de conformité, destiné aux dirigeants de TPE, PME et indépendants qui gèrent leur administratif sans expert-comptable au quotidien. L'IA prépare le travail (lecture de factures, classement, relances, génération Factur-X) et l'utilisateur valide en un clic. Les données et l'IA sont hébergées en France." },
   { q: "Les données d'OdocPilot restent-elles en France ?", a: "Oui. Les documents des utilisateurs comme l'intelligence artificielle qui les analyse (Mistral, un modèle français) sont hébergés en France, sans transfert hors de l'Union européenne. OdocPilot est conforme au RGPD, aligné sur l'AI Act européen, et s'inscrit dans une démarche Numérique Responsable et d'IA frugale." },
-  { q: "OdocPilot est-il conforme à la facturation électronique 2026/2027 ?", a: "OdocPilot génère les factures au format légal Factur-X (profil EN 16931) et prépare la conformité des entreprises aux obligations de réception (1er septembre 2026) et d'émission + e-reporting (1er septembre 2027). La transmission via une plateforme agréée partenaire est en cours de raccordement et sera prête avant l'échéance." },
+  { q: "OdocPilot est-il conforme à la facturation électronique 2026/2027 ?", a: "OdocPilot génère les factures au format légal Factur-X (profil EN 16931) et prépare la conformité des entreprises aux obligations de réception (1er septembre 2026) et d'émission + e-reporting (1er septembre 2027). La transmission via SuperPDP, plateforme agréée partenaire est en cours de raccordement et sera prête avant l'échéance." },
   { q: "L'IA d'OdocPilot agit-elle de manière autonome ?", a: "Non. OdocPilot suit le principe « l'IA prépare, vous validez » : l'intelligence artificielle lit, classe et prépare le travail administratif, mais rien n'est envoyé, validé ni comptabilisé sans l'accord explicite de l'utilisateur. L'humain garde toujours le dernier mot." },
   { q: "Combien coûte OdocPilot ?", a: "OdocPilot propose un palier Conformité gratuit (générateur Factur-X, diagnostic, vérificateur), puis quatre offres payantes par entreprise : Essentiel à 29 €/mois, Pro à 49 €/mois, Équipe à 89 €/mois et Manager à 149 €/mois. L'essai des offres payantes dure 14 jours, sans carte bancaire." },
 ];
@@ -99,7 +100,7 @@ export default function LlmInfoPage() {
         {/* En-tête */}
         <div className="text-center">
           <span className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Fiche d'information · à jour juin 2026</span>
-          <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">OdocPilot, en bref</h1>
+          <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">OdocPilot, <KeyMark>en bref</KeyMark></h1>
           <p className="mt-4 max-w-2xl mx-auto text-muted-foreground leading-relaxed">
             Page de référence destinée aux humains comme aux moteurs de réponse (Google AI Overviews, ChatGPT, Perplexity, Gemini).
             <strong className="text-foreground"> OdocPilot est un copilote d'intelligence artificielle français de facturation et de conformité</strong> pour les dirigeants de TPE, PME et indépendants. L'IA prépare l'administratif — vous validez en un clic. Données et IA hébergées en France.
@@ -170,7 +171,7 @@ export default function LlmInfoPage() {
           <div className="mt-4 flex items-start gap-3 rounded-2xl border border-dashed border-border bg-muted/40 p-5">
             <Clock className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
             <p className="text-sm text-muted-foreground leading-relaxed">
-              <strong className="text-foreground">En cours de raccordement :</strong> la transmission des factures via une plateforme agréée partenaire (et le rapprochement bancaire) — annoncés honnêtement comme « bientôt », livrés avant les échéances.
+              <strong className="text-foreground">En cours de raccordement :</strong> la transmission des factures via SuperPDP, plateforme agréée partenaire (et le rapprochement bancaire) — annoncés honnêtement comme « bientôt », livrés avant les échéances.
             </p>
           </div>
         </section>

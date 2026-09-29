@@ -76,7 +76,7 @@ export const GUIDES: Guide[] = [
           "Une plateforme agréée (PA, anciennement PDP) est un opérateur immatriculé par l'administration fiscale. Elle émet, transmet et reçoit les factures électroniques, et transmet à l'administration les données prévues par la loi. La DGFiP en comptait 150 au 1er août 2026.",
         body: [
           "Vous pouvez la choisir directement, ou passer par votre logiciel, votre banque ou votre expert-comptable s'ils en proposent une. La liste officielle est publiée sur impots.gouv.fr.",
-          "OdocPilot n'est pas une plateforme agréée. L'envoi officiel de vos factures passera par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert.",
+          "OdocPilot n'est pas une plateforme agréée. L'envoi officiel de vos factures passera par SuperPDP, plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert.",
         ],
       },
       {
@@ -224,9 +224,9 @@ export const GUIDES: Guide[] = [
       {
         h2: "Où en est OdocPilot ?",
         atomic:
-          "OdocPilot n'est pas une plateforme agréée. Il crée vos factures au format Factur-X, profil EN 16931. L'envoi officiel passera par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert.",
+          "OdocPilot n'est pas une plateforme agréée. Il crée vos factures au format Factur-X, profil EN 16931. L'envoi officiel passera par SuperPDP, plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert.",
         body: [
-          "Le 18 septembre 2026, notre chaîne complète a été validée sur l'environnement de test d'une plateforme agréée : le dépôt a été accepté après correction de 9 règles. Le passage en production n'est pas encore ouvert.",
+          "Le 18 septembre 2026, notre chaîne complète a été validée sur l'environnement de test de SuperPDP, plateforme agréée : le dépôt a été accepté après correction de 9 règles. Le passage en production n'est pas encore ouvert.",
           "En attendant, pour la réception obligatoire depuis le 1er septembre 2026, choisissez une plateforme agréée dans la liste officielle.",
         ],
       },
@@ -242,7 +242,7 @@ export const GUIDES: Guide[] = [
       },
       {
         q: "OdocPilot transmet-il déjà mes factures par une plateforme agréée ?",
-        a: "Pas encore. OdocPilot n'est pas une plateforme agréée : l'envoi officiel passera par une plateforme agréée partenaire, et ce raccordement n'est pas encore ouvert. Aujourd'hui, OdocPilot crée vos factures au format Factur-X et lit celles que vous recevez.",
+        a: "Pas encore. OdocPilot n'est pas une plateforme agréée : l'envoi officiel passera par SuperPDP, plateforme agréée partenaire, et ce raccordement n'est pas encore ouvert. Aujourd'hui, OdocPilot crée vos factures au format Factur-X et lit celles que vous recevez.",
       },
     ],
     related: [

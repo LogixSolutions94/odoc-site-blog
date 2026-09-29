@@ -5,6 +5,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { SIGNUP_URL, TRIAL } from "@/lib/marketing";
 import { fr } from "@/lib/typo";
 import { GUIDE_BY_SLUG } from "@/content/guides";
+import { KeyMark } from "@/components/KeyMark";
 
 const NotFound = lazy(() => import("./NotFound"));
 const BASE = "https://odocpilot.com";
@@ -119,7 +120,7 @@ export default function GuidePillarPage() {
 
           <div className="mt-10 max-w-4xl">
             <p className="text-sm font-bold text-muted-foreground">{guide.eyebrow}</p>
-            <h1 className={`mt-4 ${H1}`}>{guide.h1}</h1>
+            <h1 className={`mt-4 ${H1}`}><KeyMark auto>{guide.h1}</KeyMark></h1>
             <p className="mt-6 max-w-[42rem] text-[1.1875rem] leading-relaxed text-muted-foreground">{guide.intro}</p>
             <p className="mt-5 font-data text-[0.8125rem] text-muted-foreground">
               Mis à jour le {UPDATED} · Source{fr(" : ")}

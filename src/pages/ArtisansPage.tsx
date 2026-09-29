@@ -3,6 +3,7 @@ import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Check, HardHat, FileSignature, BellRing, Wallet } from "lucide-react";
+import { KeyMark } from "@/components/KeyMark";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
 const SIGNUP = `${APP_URL}/auth?mode=signup`;
@@ -57,7 +58,7 @@ export default function ArtisansPage() {
             <MotionDiv initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08, duration: 0.6 }}>
               <h1 className="mt-6 text-4xl sm:text-5xl lg:text-[3.3rem] font-extrabold tracking-tight leading-[1.05] text-foreground">
                 Votre métier, c'est le chantier.{" "}
-                <span className="bg-gradient-cta bg-clip-text text-transparent">Pas la paperasse.</span>
+                <KeyMark mark="paperasse">Pas la paperasse.</KeyMark>
               </h1>
             </MotionDiv>
             <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16, duration: 0.6 }}>

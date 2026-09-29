@@ -24,6 +24,8 @@ import {
 import { categoryLongLabel, categoryGuideSlug } from "@/lib/blogTaxonomy";
 import { SIGNUP_URL, TRIAL } from "@/lib/marketing";
 import { fr } from "@/lib/typo";
+import { KeyMark } from "@/components/KeyMark";
+import { RETIRED_SLUGS } from "@/lib/retiredPosts";
 
 const WORDS_PER_MINUTE = 200;
 
@@ -93,12 +95,12 @@ export default function BlogPostPage() {
         .select("*")
         .eq("status", "published")
         .eq("category", post!.category)
-        .neq("slug", slug!)
+        .not("slug", "in", `(${[slug!, ...RETIRED_SLUGS].join(",")})`)
         .order("published_at", { ascending: false })
         .limit(3);
       const results = sameCat || [];
       if (results.length < 3) {
-        const existingSlugs = [slug!, ...results.map((r) => r.slug)];
+        const existingSlugs = [slug!, ...RETIRED_SLUGS, ...results.map((r) => r.slug)];
         const { data: others } = await supabase
           .from("blog_posts")
           .select("*")
@@ -261,7 +263,7 @@ export default function BlogPostPage() {
 
             <header className="mt-8">
               <h1 className="font-display display-tight text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.08]">
-                {post.title}
+                <KeyMark auto>{post.title}</KeyMark>
               </h1>
               {post.excerpt && (
                 <p className="mt-5 text-[1.1875rem] leading-relaxed text-muted-foreground">{post.excerpt}</p>
@@ -306,7 +308,7 @@ export default function BlogPostPage() {
                   src={post.cover_image_url}
                   alt={post.title}
                   className="h-full w-full object-cover"
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
                 />
               </div>

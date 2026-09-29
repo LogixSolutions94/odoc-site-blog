@@ -202,8 +202,10 @@
     outline-offset: 3px;
   }
 
-  /* Prose (articles de blog) : couleurs pilotées par le thème. */
-  .prose {
+  /* Prose (articles de blog) : couleurs pilotées par le thème. Sélecteur « html .prose » :
+     le .prose du plugin typography arrive plus tard dans la cascade (couche components)
+     et imposait ses gris de mode clair, illisibles sur fond sombre. */
+  html .prose {
     --tw-prose-body: hsl(var(--foreground));
     --tw-prose-headings: hsl(var(--foreground));
     --tw-prose-lead: hsl(var(--muted-foreground));
@@ -299,30 +301,6 @@
   .link-underline:hover { text-decoration-color: currentColor; }
 }
 
-/* ── Marque OdocPilot (Logo.tsx) ───────────────────────────
-   Même animation que le BrandLogo du SaaS : le carré s'illumine
-   toutes les 6 s, la sphère fait un tour en 24 s. */
-.odoc-mark {
-  background: hsl(var(--brand-orange));
-}
-.odoc-mark--animated {
-  box-shadow: 0 0 12px 0 hsl(var(--brand-orange) / 0.3);
-}
-.odoc-orb {
-  transform-origin: center;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .odoc-mark--animated { animation: odoc-glow 6s ease-in-out infinite; }
-  .odoc-orb--spin { animation: odoc-orb-spin 24s linear infinite; }
-}
-@keyframes odoc-glow {
-  0%, 66%, 100% { box-shadow: 0 0 12px 0 hsl(var(--brand-orange) / 0.3); filter: brightness(1); }
-  84% { box-shadow: 0 0 30px 7px hsl(var(--brand-orange) / 0.7); filter: brightness(1.18); }
-}
-@keyframes odoc-orb-spin {
-  to { transform: rotate(360deg); }
-}
-
 /* ── Surligneur ────────────────────────────────────────────
    Un trait de Stabilo derrière le texte. Il se pose de gauche à droite,
    comme à la main. data-on="true" : trait posé. */
@@ -374,6 +352,12 @@
   inset: 0.82em -0.04em -0.02em -0.03em;
   background: hsl(var(--marker) / 0.95);
 }
+/* Mot clé de plusieurs mots (<KeyMark>) : un trait par mot, posés l'un après l'autre ;
+   chaque trait couvre l'espace qui le suit pour que l'ensemble paraisse d'un seul geste. */
+.marker-title:has(+ .marker-title)::before { right: -0.3em; }
+.marker-title + .marker-title::before { transition-delay: 420ms; }
+.marker-title + .marker-title + .marker-title::before { transition-delay: 590ms; }
+.marker-title + .marker-title + .marker-title + .marker-title::before { transition-delay: 760ms; }
 
 /* ── Tampon ────────────────────────────────────────────────
    Descend, s'écrase légèrement (dépassement), puis reste. */

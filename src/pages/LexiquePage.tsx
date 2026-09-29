@@ -5,6 +5,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { GLOSSARY } from "@/content/glossaire";
 import { ChevronRight, ArrowRight, Sparkles } from "lucide-react";
+import { KeyMark } from "@/components/KeyMark";
 
 const BASE = "https://odocpilot.com";
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
@@ -69,7 +70,7 @@ export default function LexiquePage() {
             Lexique · facturation électronique
           </span>
           <h1 className="mt-3 text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
-            Le lexique de la facturation électronique
+            Le lexique de la <KeyMark>facturation électronique</KeyMark>
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
             PA, PDP, PPF, Factur-X, EN 16931, e-reporting… La réforme 2026/2027 a son jargon. Voici les

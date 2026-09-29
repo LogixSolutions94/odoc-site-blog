@@ -9,6 +9,7 @@ import {
   Upload, CheckCircle, AlertTriangle, XCircle, FileX2, ArrowRight,
   ShieldCheck, FileCheck2, MapPin, CreditCard,
 } from "lucide-react";
+import { KeyMark } from "@/components/KeyMark";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
 const SIGNUP = `${APP_URL}/auth?mode=signup`;
@@ -193,7 +194,7 @@ export default function VerificateurPage() {
       <section className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24">
         <div className="text-center">
           <span className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">Outil gratuit · sans inscription</span>
-          <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">Votre facture est-elle vraiment conforme&nbsp;?</h1>
+          <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">Votre facture est-elle vraiment <KeyMark>conforme</KeyMark>&nbsp;?</h1>
           <p className="mt-3 max-w-2xl mx-auto text-muted-foreground leading-relaxed">
             Déposez une facture (<strong className="text-foreground">PDF Factur-X</strong> ou fichier <strong className="text-foreground">XML</strong>) : on contrôle le <strong className="text-foreground">volet structuré</strong> et les <strong className="text-foreground">mentions obligatoires</strong> selon la norme <strong className="text-foreground">EN 16931</strong>. Le fichier est analysé <strong className="text-foreground">dans votre navigateur</strong> — rien n'est envoyé.
           </p>

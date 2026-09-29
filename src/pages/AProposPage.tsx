@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { CONTACT_EMAIL, PUBLISHER, SIGNUP_URL, TRIAL } from "@/lib/marketing";
 import { fr } from "@/lib/typo";
+import { KeyMark } from "@/components/KeyMark";
 
 // Identité : nom, rôle et ville seulement. Pas de SIREN, de forme juridique ni de
 // lien vers l'annuaire tant que les mentions légales en ligne ne sont pas validées.
@@ -42,7 +43,7 @@ const PRINCIPLES = [
 const LIMITS = [
   {
     title: "OdocPilot n'est pas une plateforme agréée.",
-    text: "Il crée vos factures au format Factur-X et lit celles que vous recevez. L'envoi officiel passera par une plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert. Le 18 septembre 2026, notre chaîne a été validée de bout en bout sur l'environnement de test d'une plateforme agréée.",
+    text: "Il crée vos factures au format Factur-X et lit celles que vous recevez. L'envoi officiel passera par SuperPDP, plateforme agréée partenaire ; ce raccordement n'est pas encore ouvert. Le 18 septembre 2026, notre chaîne a été validée de bout en bout sur l'environnement de test de SuperPDP, plateforme agréée.",
   },
   {
     title: "Pas d'archivage à valeur probante.",
@@ -103,7 +104,7 @@ export default function AProposPage() {
           <div>
             <p className="text-sm font-bold text-muted-foreground">À propos</p>
             <h1 className="mt-4 font-display display-tight text-[clamp(2.4rem,5.2vw,4.25rem)] font-bold leading-[1.02]">
-              Être en règle, sans y laisser vos soirées.
+              Être <KeyMark>en règle</KeyMark>, sans y laisser vos soirées.
             </h1>
             <p className="mt-6 max-w-[36rem] text-[1.1875rem] leading-relaxed text-muted-foreground">{INTRO}</p>
           </div>

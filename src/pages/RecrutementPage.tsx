@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { MotionDiv } from "@/components/MotionDiv";
 import { SEOHead } from "@/components/SEOHead";
 import { Rocket, Brain, Flag, ArrowRight } from "lucide-react";
+import { KeyMark } from "@/components/KeyMark";
 
 const values = [
   {
@@ -39,9 +40,7 @@ export default function RecrutementPage() {
           <MotionDiv className="text-center mb-16">
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
               On construit OdocPilot.{" "}
-              <span className="bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
-                Rejoins-nous.
-              </span>
+              <KeyMark>Rejoins-nous.</KeyMark>
             </h1>
             <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed">
               Nous sommes une startup française ambitieuse qui construit le futur OS

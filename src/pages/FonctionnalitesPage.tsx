@@ -4,6 +4,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { FeaturePreview } from "@/components/FeaturePreview";
 import { ArrowRight, Check, Banknote, Brain, FolderKanban, Users } from "lucide-react";
+import { KeyMark } from "@/components/KeyMark";
 
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
 const SIGNUP = `${APP_URL}/auth?mode=signup`;
@@ -103,7 +104,7 @@ export default function FonctionnalitesPage() {
       <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-14 text-center">
         <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold px-3 py-1.5">Conformité 2026 + gestion par l'IA</span>
-          <h1 className="mt-5 text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">Tout ce qu'OdocPilot prépare pour vous</h1>
+          <h1 className="mt-5 text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">Tout ce qu'OdocPilot <KeyMark>prépare</KeyMark> pour vous</h1>
           <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground">
             Pas une liste de fonctions techniques — une liste de soucis en moins. L'IA prépare votre administratif et votre conformité à la facturation électronique ; vous validez d'un clic. Voici concrètement ce que vous gagnez.
           </p>

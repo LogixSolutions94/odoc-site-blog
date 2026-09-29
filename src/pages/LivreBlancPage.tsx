@@ -7,6 +7,7 @@ import { TrustCredentials } from "@/components/TrustCredentials";
 import { Button } from "@/components/ui/button";
 import { WHITE_PAPER } from "@/content/livreBlanc";
 import { ChevronRight, CheckCircle, ArrowRight, Printer, Sparkles } from "lucide-react";
+import { KeyMark } from "@/components/KeyMark";
 
 const BASE = "https://odocpilot.com";
 const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
@@ -79,7 +80,7 @@ export default function LivreBlancPage() {
             Livre blanc · facturation électronique
           </span>
           <h1 className="mt-3 text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
-            {wp.title}
+            <KeyMark auto>{wp.title}</KeyMark>
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{wp.subtitle}</p>
           <p className="mt-3 text-xs text-muted-foreground">
