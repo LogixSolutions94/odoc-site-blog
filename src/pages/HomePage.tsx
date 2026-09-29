@@ -218,7 +218,7 @@ export default function HomePage() {
             <h1 className="display-tight mt-5 text-[clamp(2.6rem,4.6vw,4.3rem)] leading-[1]">
               {fr("Facture électronique :")}
               <br />
-              soyez <span className="marker marker-title" data-on={marked}>en règle</span>,
+              {" "}soyez <span className="marker marker-title" data-on={marked}>en règle</span>,
               <br /> simplement.
             </h1>
             <p className="mt-7 max-w-[32rem] text-[1.1875rem] leading-relaxed text-muted-foreground">

@@ -1,7 +1,7 @@
 /**
  * marketing-pages.ts — Ce que le prérendu écrit pour chaque page marketing.
  *
- * Pour chaque route statique du sitemap (scripts/site-routes.ts), sauf « / » :
+ * Pour chaque route statique du sitemap (scripts/site-routes.ts), accueil compris :
  *   - <head> : <title>, meta description, canonical, og:title/description/url et
  *     twitter:title/description — lus dans le <SEOHead> DU COMPOSANT (page-source.ts),
  *     jamais recopiés à la main ;
@@ -30,6 +30,7 @@ export const BASE_URL = "https://odocpilot.com";
 
 /** Pages dont le <SEOHead>, le <h1> et l'intro se lisent sans données extérieures. */
 const SIMPLE_PAGES: Record<string, string> = {
+  "/": "src/pages/HomePage.tsx",
   "/pricing": "src/pages/PricingPage.tsx",
   "/fonctionnalites": "src/pages/FonctionnalitesPage.tsx",
   "/e-facture": "src/pages/EFacturePage.tsx",
@@ -125,6 +126,39 @@ function editeursContent(): string {
   );
 }
 
+function homeContent(): string {
+  return (
+    h2("Les pages prioritaires pour comprendre la réforme") +
+    links([
+      { to: "/e-facture", label: "Guide de la facture électronique obligatoire 2026-2027" },
+      { to: "/guide/plateforme-agreee", label: "Plateforme agréée (PA, ex-PDP) : rôle et choix" },
+      { to: "/guide/factur-x", label: "Factur-X : le format de facture électronique hybride" },
+      { to: "/guide/tpe-sans-comptable", label: "Facture électronique pour TPE sans comptable au quotidien" },
+    ]) +
+    h2("Outils gratuits") +
+    links([
+      { to: "/diagnostic", label: "Diagnostic conformité e-facture en 3 minutes" },
+      { to: "/generateur-factur-x", label: "Générateur de facture Factur-X gratuit" },
+      { to: "/verificateur", label: "Vérificateur de facture électronique" },
+      { to: "/livre-blanc", label: "Livre blanc : facture électronique 2026-2027" },
+    ]) +
+    h2("Guides par profil") +
+    links([
+      { to: "/auto-entrepreneurs", label: "Facture électronique pour auto-entrepreneurs" },
+      { to: "/artisans", label: "Facture électronique pour artisans et BTP" },
+      { to: "/commerce", label: "Facture électronique pour commerces et services" },
+      { to: "/professions-liberales", label: "Facture électronique pour professions libérales" },
+    ]) +
+    h2("Comparer avant de choisir") +
+    links([
+      { to: "/comparatif/pennylane", label: "OdocPilot vs Pennylane" },
+      { to: "/comparatif/qonto", label: "OdocPilot vs Qonto" },
+      { to: "/comparatif/indy", label: "OdocPilot vs Indy" },
+      { to: "/comparatif/abby", label: "OdocPilot vs Abby" },
+    ])
+  );
+}
+
 function autoEntrepreneursContent(): string {
   const a = AUTO_ENTREPRENEURS;
   const extLinks = (items: Array<{ href: string; label: string }>) =>
@@ -151,6 +185,7 @@ function metiers(): Record<string, unknown> {
 }
 
 export function planFor(loc: string): Plan {
+  if (loc === "/") return { file: SIMPLE_PAGES[loc], content: homeContent() };
   if (SIMPLE_PAGES[loc]) return { file: SIMPLE_PAGES[loc] };
 
   const guide = /^\/guide\/([a-z0-9-]+)$/.exec(loc);
@@ -187,9 +222,9 @@ export function planFor(loc: string): Plan {
   }  throw new Error(`${loc} : aucune page associée — l'ajouter dans scripts/lib/marketing-pages.ts`);
 }
 
-/** Routes prérendues : toutes les routes statiques du sitemap, sauf l'accueil. */
+/** Routes prérendues : toutes les routes statiques du sitemap, accueil compris. */
 export function prerenderableRoutes(): string[] {
-  return STATIC_ROUTES.map((r) => r.loc).filter((loc) => loc !== "/");
+  return STATIC_ROUTES.map((r) => r.loc);
 }
 
 function replaceOnce(html: string, re: RegExp, value: string, what: string): string {
@@ -202,7 +237,7 @@ function replaceOnce(html: string, re: RegExp, value: string, what: string): str
 
 /** HTML complet de la page `loc`, construit à partir du shell dist/index.html. */
 export function renderPage(shell: string, loc: string): { html: string; meta: PageMeta } {
-  if (!/^\/[a-z0-9-]+(\/[a-z0-9-]+)*$/.test(loc)) throw new Error(`${loc} : route invalide`);
+  if (loc !== "/" && !/^\/[a-z0-9-]+(\/[a-z0-9-]+)*$/.test(loc)) throw new Error(`${loc} : route invalide`);
   const plan = planFor(loc);
   const meta = new PageSource(plan.file).readMeta(plan.scope);
   if (meta.canonical !== loc) {

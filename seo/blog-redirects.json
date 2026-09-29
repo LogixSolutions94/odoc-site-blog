@@ -1,7 +1,10 @@
 {
  "/blog/brain-ia-vs-chatgpt-gestion-entreprise-comparatif": {
   "status": 301,
-  "to": "/blog/copilot-ia-gestion-entreprise-tpe-pme"
+  "to": "/fonctionnalites"
+ },
+ "/blog/calcul-conges-payes-erreurs-couter-cher-pme": {
+  "status": 410
  },
  "/blog/calendrier-facturation-electronique-pme": {
   "status": 301,
@@ -17,14 +20,18 @@
  },
  "/blog/copilot-ia-entreprise-pme": {
   "status": 301,
-  "to": "/blog/copilot-ia-gestion-entreprise-tpe-pme"
+  "to": "/fonctionnalites"
+ },
+ "/blog/copilot-ia-gestion-entreprise-tpe-pme": {
+  "status": 301,
+  "to": "/fonctionnalites"
  },
  "/blog/crm-integre-vs-crm-standalone-choix-tpe-2026": {
   "status": 410
  },
  "/blog/d-couvrez-odoc-copilote-ia-pour-tpe-gestion-docs-factures": {
   "status": 301,
-  "to": "/blog/copilot-ia-gestion-entreprise-tpe-pme"
+  "to": "/fonctionnalites"
  },
  "/blog/demo-brain-ia-odocpilot-5-questions-5-actions-reelles": {
   "status": 301,
@@ -38,9 +45,13 @@
   "status": 301,
   "to": "/blog/logiciel-devis-facture-artisan-batiment-guide-2026"
  },
+ "/blog/erp-vs-saas-gestion-pme": {
+  "status": 301,
+  "to": "/fonctionnalites"
+ },
  "/blog/erp-vs-saas-gestion-pme-2026": {
   "status": 301,
-  "to": "/blog/erp-vs-saas-gestion-pme"
+  "to": "/fonctionnalites"
  },
  "/blog/extraction-factures-ia-mistral-vs-groq-vs-gpt4": {
   "status": 301,
@@ -106,6 +117,9 @@
   "status": 301,
   "to": "/e-facture"
  },
+ "/blog/facture-electronique-pme-tunisie-obligations-2026": {
+  "status": 410
+ },
  "/blog/fec-comptable-obligation-expert-comptable": {
   "status": 301,
   "to": "/blog/fec-comptable"
@@ -160,6 +174,9 @@
   "status": 301,
   "to": "/blog/logiciel-devis-facture-artisan-batiment-guide-2026"
  },
+ "/blog/logiciel-facturation-entreprise-agricole": {
+  "status": 410
+ },
  "/blog/logiciel-facturation-entreprise-batiment": {
   "status": 301,
   "to": "/blog/logiciel-devis-facture-artisan-batiment-guide-2026"
@@ -195,6 +212,9 @@
   "to": "/blog/logiciel-gestion-tpe-pme-2026"
  },
  "/blog/logiciel-planning-tpe": {
+  "status": 410
+ },
+ "/blog/logiciel-rh-pme-2026-comparatif-solutions": {
   "status": 410
  },
  "/blog/meilleur-logiciel-comptabilite-micro-entreprise": {
@@ -283,6 +303,9 @@
  "/blog/onboarding-logiciel-comptable-temps-reel": {
   "status": 410
  },
+ "/blog/onboarding-salarie-documents-obligatoires-france": {
+  "status": 410
+ },
  "/blog/outil-de-gestion-tpe": {
   "status": 301,
   "to": "/blog/logiciel-gestion-tpe-pme-2026"
@@ -302,6 +325,9 @@
  "/blog/prix-odocpilot-tarif-plan-choisir-tpe-pme": {
   "status": 301,
   "to": "/pricing"
+ },
+ "/blog/procuration-bancaire-pme-qui-peut-signer-quoi": {
+  "status": 410
  },
  "/blog/programme-comptabilite-pme-guide-2026": {
   "status": 301,
@@ -353,6 +379,9 @@
   "to": "/blog/tableau-bord-tresorerie-7-indicateurs-suivre-hebdomadaire"
  },
  "/blog/virement-sepa-b2b-prelevement-entreprise": {
+  "status": 410
+ },
+ "/blog/webhooks-api-pme-connecter-outils-metier": {
   "status": 410
  }
 }

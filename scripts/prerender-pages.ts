@@ -5,8 +5,8 @@
  * /guide/*, /comparatif/*… porte le <title> et la description de l'ACCUEIL : pour un robot
  * qui n'exécute pas le JS (et pour le premier passage de Google), 30 pages identiques.
  *
- * Écrit dist/<route>/index.html pour chaque route statique du sitemap (sauf « / », qui
- * garde dist/index.html). nginx sert ce fichier à /<route> (try_files $uri/index.html).
+ * Écrit dist/index.html pour « / » et dist/<route>/index.html pour chaque autre route
+ * statique du sitemap. nginx sert ce fichier à /<route> (try_files $uri/index.html).
  * Détail de ce qui est écrit : scripts/lib/marketing-pages.ts.
  *
  * Aucune dépendance réseau : toute erreur est un défaut de code ou de contenu → code 1,

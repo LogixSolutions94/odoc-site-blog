@@ -6,8 +6,9 @@ import { LOGIN_URL, SIGNUP_URL } from "@/lib/marketing";
 
 const NAV = [
   { href: "/#produit", label: "Produit" },
-  { href: "/pricing", label: "Tarifs" },
   { href: "/e-facture", label: "Facture électronique" },
+  { href: "/generateur-factur-x", label: "Outils gratuits" },
+  { href: "/pricing", label: "Tarifs" },
   { href: "/editeurs", label: "Éditeurs" },
   { href: "/blog", label: "Blog" },
 ];

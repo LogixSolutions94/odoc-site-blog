@@ -23,8 +23,9 @@ const one = (html: string, re: RegExp) => {
 describe("prérendu des pages marketing", () => {
   const routes = prerenderableRoutes();
 
-  it("couvre toutes les routes statiques du sitemap sauf l'accueil", () => {
-    expect(routes).toEqual(STATIC_ROUTES.map((r) => r.loc).filter((l) => l !== "/"));
+  it("couvre toutes les routes statiques du sitemap, accueil compris", () => {
+    expect(routes).toEqual(STATIC_ROUTES.map((r) => r.loc));
+    expect(routes).toContain("/");
     expect(routes).toContain("/editeurs");
   });
 
@@ -32,7 +33,7 @@ describe("prérendu des pages marketing", () => {
     const { html, meta } = renderPage(shell, loc);
     const title = one(html, /<title>([\s\S]*?)<\/title>/);
     expect(title).toBe(meta.title);
-    expect(title).not.toBe(shellTitle);
+    if (loc !== "/") expect(title).not.toBe(shellTitle);
     expect(one(html, /<meta name="description" content="([^"]*)"/)).toBe(meta.description);
     expect(one(html, /<link rel="canonical" href="([^"]*)"/)).toBe(`${BASE_URL}${loc}`);
     expect(one(html, /<meta property="og:url" content="([^"]*)"/)).toBe(`${BASE_URL}${loc}`);

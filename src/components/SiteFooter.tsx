@@ -14,6 +14,7 @@ const COLUMNS: Array<{ title: string; links: Array<{ to: string; label: string }
       { to: "/pricing", label: "Tarifs" },
       { to: "/e-facture", label: "Facture électronique" },
       { to: "/diagnostic", label: "Diagnostic en 3 minutes" },
+      { to: "/guide/plateforme-agreee", label: "Guide plateforme agréée" },
     ],
   },
   {
@@ -29,9 +30,20 @@ const COLUMNS: Array<{ title: string; links: Array<{ to: string; label: string }
   {
     title: "Outils gratuits",
     links: [
+      { to: "/diagnostic", label: "Diagnostic conformité" },
       { to: "/generateur-factur-x", label: "Générateur Factur-X" },
       { to: "/verificateur", label: "Vérificateur de facture" },
+      { to: "/livre-blanc", label: "Livre blanc e-facture" },
       { to: "/lexique", label: "Lexique de la facture électronique" },
+    ],
+  },
+  {
+    title: "Comparatifs",
+    links: [
+      { to: "/comparatif/pennylane", label: "OdocPilot vs Pennylane" },
+      { to: "/comparatif/qonto", label: "OdocPilot vs Qonto" },
+      { to: "/comparatif/indy", label: "OdocPilot vs Indy" },
+      { to: "/comparatif/abby", label: "OdocPilot vs Abby" },
     ],
   },
   {
@@ -39,6 +51,7 @@ const COLUMNS: Array<{ title: string; links: Array<{ to: string; label: string }
     links: [
       { to: "/a-propos", label: "À propos" },
       { to: "/editeurs", label: "Offre éditeurs" },
+      { to: "/llm-info", label: "Fiche IA et conformité" },
       { to: "/blog", label: "Blog" },
       { to: "/contact", label: "Contact" },
     ],
@@ -63,7 +76,7 @@ export function SiteFooter() {
               {CONTACT_EMAIL}
             </a>
           </div>
-          <nav aria-label="Plan du site" className="grid grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-4">
+          <nav aria-label="Plan du site" className="grid grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-3 xl:grid-cols-5">
             {COLUMNS.map((col) => (
               <div key={col.title}>
                 <h2 className="font-display text-[1rem] font-bold">{col.title}</h2>

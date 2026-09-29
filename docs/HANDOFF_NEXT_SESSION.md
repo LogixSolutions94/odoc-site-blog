@@ -1,7 +1,7 @@
 # Handoff : vitrine odocpilot.com, refonte en ligne, suivi Google quotidien
 
-**Mis à jour :** 25/09/2026 · **`main`** tout déployé (déploiements verts depuis #24) · Pas de branche
-de travail ouverte.
+**Mis à jour :** 29/09/2026 · **`main`** à déployer après le commit SEO/blog du 29/09 · Pas de branche
+de travail ouverte prévue.
 
 > Lire d'abord `AGENTS.md` (identité légale, conventions), puis ce fichier. Avant de toucher une page :
 > `docs/design/REFONTE-2026-09.md` (système visuel, classes, affirmations autorisées et interdites).
@@ -21,6 +21,7 @@ de travail ouverte.
 | #31 | Accessibilité : `MotionDiv` lit `prefers-reduced-motion` dès le premier rendu (animations coupées en plein vol, 4 px de débordement sur `/diagnostic` en mobile) |
 | #33 | **Page `/auto-entrepreneurs`** : facture électronique en franchise de TVA, exemple de facture annotée, 4 étapes, 7 questions (FAQPage), prérendu complet (1 244 mots), liens depuis l'accueil, le pied de page et /e-facture |
 | #34 | Confidentialité : tous les sous-traitants affichés (Supabase, Resend, Stripe remis à côté d'OVH, Mistral, Lemon Squeezy, Google/Dropbox), décision de Riad |
+| 29/09 | **SEO technique + blog** : accueil inclus dans `prerender-pages`, H1/intro/liens internes en HTML brut, header/footer renforcés vers outils/guides/comparatifs/`llm-info`, nettoyage de 9 articles blog hors positionnement via 301/410 |
 
 **Système « Papeterie »** : papier blanc, encre pétrole. L'orange est le *surligneur* (ce que l'IA
 prépare), l'encre et le *tampon* sont ce que VOUS décidez. Police Switzer (Fontshare, autorisée par
@@ -35,6 +36,22 @@ des liens, prix, essai et éditeur : `src/lib/marketing.ts`. Typographie frança
 - Indexation demandée le 25/09 dans Search Console pour `/auto-entrepreneurs`, `/`, `/e-facture` et `/pricing`.
 - Côté SaaS, `seo-insights` (`gsc_sync`, lundi 07:00 UTC) continue de suivre les articles du blog dans `seo_page_metrics`.
 
+## 🧾 État SEO/blog vérifié le 29/09
+
+- **Live** : `https://odocpilot.com/`, `/blog`, `/e-facture`, `/auto-entrepreneurs`, `/pricing`, `/llm-info`,
+  `/guide/plateforme-agreee`, `/generateur-factur-x`, `/verificateur` répondent 200 ; `www.odocpilot.com`
+  redirige en 301 vers l'apex.
+- **Sitemap live** : 77 URL, dont 43 articles blog, 5 guides, 6 comparatifs, 5 pages métiers, 4 outils/ressources.
+- **Blog live** : articles prérendus actifs en 200 ; exemple vérifié :
+  `/blog/factur-x-rejetee-9-erreurs-plateforme-agreee` sert un HTML d'environ 30 ko avec title article.
+- **Redirections blog live** : les anciens slugs majeurs répondent correctement, par exemple
+  `/blog/odocpilot-vs-pennylane-2026` → 301 `/comparatif/pennylane`.
+- **Nettoyage préparé côté repo** : 103 entrées dans `seo/blog-redirects.json` (76 × 301, 27 × 410). Les 9 articles
+  encore live mais désormais retirés au prochain déploiement : Tunisie, agricole, RH, congés payés, procuration
+  bancaire, onboarding salarié, webhooks/API, vieux « Odoc Pulse tout-en-un », ERP vs SaaS généraliste.
+- **Accueil** : l'ancien point faible est corrigé. `prerender-pages` couvre maintenant `/` et injecte un H1,
+  l'introduction et une carte de liens vers `/e-facture`, les guides, outils gratuits, pages métiers et comparatifs.
+
 ## 🔴 Ta liste (actions fondateur)
 
 1. **Tâche cloud en attente** : *Aligner le SaaS : relances opt-in et page d'inscription* (odoc-pulse : `reminders_enabled` vaut DEFAULT true, et la page d'inscription vend « 52 actions exécutables »). Celle des sous-traitants est close : décision du 25/09, tout afficher (#34).
@@ -46,7 +63,7 @@ des liens, prix, essai et éditeur : `src/lib/marketing.ts`. Typographie frança
 |---|---|
 | Lire les premiers relevés | Vers le 10/10 : impressions hors marque, apparition de `/auto-entrepreneurs` sur « facture électronique auto-entrepreneur », position de `/guide/plateforme-agreee` |
 | Pages sœurs de `/auto-entrepreneurs` | Même gabarit (contenu dans `src/content/`, prérendu complet, FAQ en JSON-LD) pour d'autres requêtes à volume : « facture électronique artisan », « professions libérales »… Seulement si les relevés confirment l'intérêt |
-| Prérendu de l'accueil | `prerender-pages` garde `dist/index.html` pour « / » : titre et description OK, mais pas de H1 ni de texte dans le HTML brut (déjà le cas avant la refonte) |
+| Blog à réduire encore | Après les prochains relevés GSC, envisager 410/301 supplémentaires sur les articles « logiciel gestion/compta » trop généralistes s'ils attirent peu ou cannibalisent les pages guides/comparatifs |
 | Longueur de l'accueil | ≈ 11 900 px en 1440, ≈ 19 200 px en 375. À resserrer selon les premières mesures (clics d'essai par section via `data-umami-event`) |
 
 **Ne pas toucher sans Riad** : `MentionsLegalesPage`, `CguPage`, `PolitiqueConfidentialitePage`
@@ -66,6 +83,11 @@ des liens, prix, essai et éditeur : `src/lib/marketing.ts`. Typographie frança
   `[System.IO.Directory]::Delete("<wt>\node_modules", $false)` (retire le lien seul), puis
   `git worktree remove`.
 - **Rejouer le build de prod sans bun** : Node 24 exécute les scripts avec un petit résolveur d'imports sans extension (`node --import <resolveur.mjs> scripts/…`) et `--experimental-transform-types` pour `prerender-pages`. Sans clé Supabase locale, `generate-sitemap` réécrit `public/sitemap.xml` avec 0 article : **ne pas le commiter** (`git checkout -- public/sitemap.xml`).
+- **Build local 29/09** : Bun est installé dans `C:\Users\KOOBA\.bun\bin\bun.exe`. Commandes validées :
+  `bun ./node_modules/typescript/bin/tsc --noEmit`, `bun ./node_modules/vite/bin/vite.js build`,
+  `node ./node_modules/vitest/vitest.mjs run src/test/blog-redirects.test.ts src/test/prerender-pages.test.ts`.
+  Sans `.env` Supabase locale, `generate-nginx-redirects --check-dist` alerte sur des cibles blog non prérendues
+  dans `dist`, mais ces cibles ont été vérifiées en 200 sur la production.
 - **Deux sessions dans le même worktree** (cas du fork du 24/09) : elles s'écrasent. Une seule écrit,
   l'autre passe la main par message.
 

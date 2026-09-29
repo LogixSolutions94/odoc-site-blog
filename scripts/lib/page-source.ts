@@ -179,6 +179,15 @@ export class PageSource {
       const ok = (v: unknown) => typeof v === "string" || typeof v === "number";
       return ok(l) && ok(r) ? String(l) + String(r) : UNRESOLVED;
     }
+    if (
+      ts.isCallExpression(node) &&
+      ts.isIdentifier(node.expression) &&
+      node.expression.text === "fr" &&
+      node.arguments.length === 1 &&
+      ts.isExpression(node.arguments[0])
+    ) {
+      return next(node.arguments[0]);
+    }
     return UNRESOLVED;
   }
 
