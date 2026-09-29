@@ -1,10 +1,16 @@
 # Handoff : vitrine odocpilot.com, refonte en ligne, suivi Google quotidien
 
-**Mis à jour :** 29/09/2026 (après-midi) · **`main`** : PR #39 fusionnée (logo noir et blanc, mots clés
-surlignés, SuperPDP, images du blog, mode sombre des articles) · Pas de branche de travail ouverte.
+**Mis à jour :** 30/09/2026 · **`main`** du site : PR #40 fusionnée (accueil mobile raccourci).
+Côté SaaS `odoc-pulse` : **PR #82 fusionnée** (page d'inscription réalignée). Pas de branche ouverte.
 
 > Lire d'abord `AGENTS.md` (identité légale, conventions), puis ce fichier. Avant de toucher une page :
 > `docs/design/REFONTE-2026-09.md` (système visuel, classes, affirmations autorisées et interdites).
+
+> **🎯 Cap stratégique (audit + plan du 29/09, dossier privé `../plan-attaque-2026-09/`) :** le site
+> est bon (note **82/100**) et convertit quand on y arrive ; **le goulot n'est plus le design mais le
+> trafic** (hors marque : ~5 clics / 28 j). Prochaine bataille = distribution (SEO de contenu sur les
+> requêtes qui montent + un canal d'acquisition licite). Détail : `AUDIT-SITE-2026-09-29.md` et
+> `PLAN-FINAL-2026-09-29.md`. **La métrique à suivre = clics hors marque** (`odoc-seo-data/RAPPORT.md`).
 
 ---
 
@@ -23,6 +29,13 @@ surlignés, SuperPDP, images du blog, mode sombre des articles) · Pas de branch
 | #34 | Confidentialité : tous les sous-traitants affichés (Supabase, Resend, Stripe remis à côté d'OVH, Mistral, Lemon Squeezy, Google/Dropbox), décision de Riad |
 | `d3f19a2` | **SEO technique + blog** : accueil inclus dans `prerender-pages`, H1/intro/liens internes en HTML brut, header/footer renforcés vers outils/guides/comparatifs/`llm-info`, nettoyage de 9 articles blog hors positionnement via 301/410 |
 | #39 | **Demandes du 29/09** : logo noir et blanc qui tourne (`Logo.tsx`, icônes, `og-image.png`), mot-symbole « OdocPilot® », un mot clé surligné par titre (`<KeyMark>`), pied de page « … par Redsun Studio® Paris. », **SuperPDP nommé** comme plateforme agréée partenaire (raccordement de production toujours « pas encore ouvert »), images des articles dans le blog, articles lisibles en mode sombre (`html .prose`), 9 articles retirés masqués de /blog (`src/lib/retiredPosts.ts`) |
+| #40 | **Accueil mobile raccourci** (~20 000 → ~17 900 px) : sur mobile, la section produit garde la fenêtre animée + tout le texte mais masque les 4 illustrations secondaires (`hidden lg:block`) ; padding vertical des sections réduit sur mobile (`py-14 sm:py-20 lg:py-28`). Desktop inchangé. |
+| `odoc-pulse` #82 | **Page d'inscription du SaaS réalignée** sur le message du site : fini « back-office / compta-tréso-RH / 52 actions » ; désormais « L'IA prépare votre facturation. Vous validez. », Factur-X, IA française (Mistral). Fusionnée le 29/09, redéployée par Coolify. |
+
+**Base de données du blog (29/09)** : les 9 articles hors positionnement (redirigés 301/410) ont été
+passés en `status='archived'` dans Supabase de prod (via SSH VPS → `docker exec supabase-db-… psql`).
+Il reste **34 articles publiés**, cohérent avec `/blog` et le sitemap. La liste des slugs retirés fait
+foi dans `seo/blog-redirects.json` (lue au runtime par `src/lib/retiredPosts.ts`).
 
 **Système « Papeterie »** : papier blanc, encre pétrole. L'orange est le *surligneur* (ce que l'IA
 prépare), l'encre et le *tampon* sont ce que VOUS décidez. Police Switzer (Fontshare, autorisée par
@@ -56,10 +69,26 @@ des liens, prix, essai et éditeur : `src/lib/marketing.ts`. Typographie frança
 - **Accueil** : l'ancien point faible est corrigé. `prerender-pages` couvre maintenant `/` et injecte un H1,
   l'introduction et une carte de liens vers `/e-facture`, les guides, outils gratuits, pages métiers et comparatifs.
 
-## 🔴 Ta liste (actions fondateur)
+## 🔴 Ta liste (actions fondateur) — pour la reprise
 
-1. **Tâche cloud en attente** : *Aligner le SaaS : relances opt-in et page d'inscription* (odoc-pulse : `reminders_enabled` vaut DEFAULT true, et la page d'inscription vend « 52 actions exécutables »). Celle des sous-traitants est close : décision du 25/09, tout afficher (#34).
-2. **Légal encore ouvert** : pied d'email de prospection B2B et licéité des envois (voir la mémoire « dossier-conformite-legale-ouvert »). Le reste de ta liste vit dans `../odoc-pulse/docs/HANDOFF_NEXT_SESSION.md` (SuperPDP production, Lemon Squeezy, etc.).
+1. **Choisir le(s) canal(aux) d'acquisition** (le vrai levier, cf. plan final) : annuaires (France Num,
+   Appvizer, Capterra), LinkedIn du fondateur, partenariats experts-comptables, ou prospection
+   **conforme**. Le démarchage à froid actuel reste bloqué juridiquement.
+2. **Marques / société** : déposer OdocPilot + Redsun à l'INPI ; donner les infos Kbis Redsun quand la
+   société est ouverte → bascule d'un coup des mentions légales, CGU, confidentialité, `llms.txt`
+   (et retrait du nom personnel là où la loi ne l'exige plus). Aujourd'hui « ® » affiché sans dépôt.
+3. **SuperPDP production** (KYC + paiement, côté odoc-pulse) : dès que la transmission est réelle, on
+   retire les « raccordement pas encore ouvert »/« bientôt » du site.
+4. **Relances opt-in du SaaS** (`reminders_enabled` DEFAULT true) : toujours à trancher côté odoc-pulse.
+
+**⚠️ Dette CI du SaaS `odoc-pulse` (repérée le 29/09, à corriger séparément)** : sur les PR, les checks
+`verify` et `gitleaks` échouent pour des raisons **préexistantes, sans lien avec l'inscription** —
+`supabase/functions/_shared/aiUsage.ts` importe depuis `https://esm.sh/…` (erreur TS2307 du gate
+type-check), et `scripts/smtp_service_test.py:84` contient un token que gitleaks signale. La #82 a été
+fusionnée malgré ce rouge (Coolify build via `vite build`, non bloqué par ces gates). À nettoyer.
+
+**Consigne ferme (29/09)** : ne **jamais** remettre le pied d'email de prospection proposé (nom
+personnel + identité EI en clair) — cf. mémoire `dossier-conformite-legale-ouvert`.
 
 ## 🧭 Pistes ouvertes pour la suite
 
@@ -68,7 +97,8 @@ des liens, prix, essai et éditeur : `src/lib/marketing.ts`. Typographie frança
 | Lire les premiers relevés | Vers le 10/10 : impressions hors marque, apparition de `/auto-entrepreneurs` sur « facture électronique auto-entrepreneur », position de `/guide/plateforme-agreee` |
 | Pages sœurs de `/auto-entrepreneurs` | Même gabarit (contenu dans `src/content/`, prérendu complet, FAQ en JSON-LD) pour d'autres requêtes à volume : « facture électronique artisan », « professions libérales »… Seulement si les relevés confirment l'intérêt |
 | Blog à réduire encore | Après les prochains relevés GSC, envisager 410/301 supplémentaires sur les articles « logiciel gestion/compta » trop généralistes s'ils attirent peu ou cannibalisent les pages guides/comparatifs |
-| Longueur de l'accueil | ≈ 11 900 px en 1440, ≈ 19 200 px en 375. À resserrer selon les premières mesures (clics d'essai par section via `data-umami-event`) |
+| Longueur de l'accueil | ~12 500 px en 1440, **~17 900 px en 375** (après #40, contre ~20 000 avant). Pour aller plus court sur mobile il faudrait fusionner/retirer des sections de contenu (décision de Riad), pas seulement du padding. |
+| Vérifier les 2 méta-descriptions trop longues | `/fonctionnalites` (237) et `/comparatif/pennylane` (236) dépassent ~160 car. → tronquées dans Google. À raccourcir (dans `src/pages/FonctionnalitesPage.tsx` et `src/content/comparisons.ts`). |
 
 **Ne pas toucher sans Riad** : `MentionsLegalesPage`, `CguPage`, `PolitiqueConfidentialitePage`
 (versions validées, en ligne ; sous-traitants : tout afficher, décision du 25/09).
