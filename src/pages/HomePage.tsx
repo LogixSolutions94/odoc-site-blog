@@ -242,7 +242,7 @@ export default function HomePage() {
 
       {/* ─── Ce qui change ─────────────────────────────────────── */}
       <section id="reforme" className="scroll-mt-20">
-        <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 lg:py-28">
+        <div className="mx-auto max-w-[1240px] px-5 py-14 sm:px-8 sm:py-20 lg:py-28">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
             <div className="lg:sticky lg:top-24 lg:self-start">
               <p className="font-data text-[0.8125rem] text-muted-foreground">Mis à jour le 24 septembre 2026</p>
@@ -320,7 +320,7 @@ export default function HomePage() {
 
       {/* ─── En règle en trois étapes ─────────────────────────── */}
       <section className="border-y border-border bg-desk">
-        <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 lg:py-28">
+        <div className="mx-auto max-w-[1240px] px-5 py-14 sm:px-8 sm:py-20 lg:py-28">
           <SectionTitle className="max-w-[44rem]">{fr("En règle en trois étapes, sans rien installer.")}</SectionTitle>
           <ol className="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
             {STEPS.map((s, i) => (
@@ -356,7 +356,7 @@ export default function HomePage() {
 
       {/* ─── Au quotidien ─────────────────────────────────────── */}
       <section id="produit" className="scroll-mt-20">
-        <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 lg:py-28">
+        <div className="mx-auto max-w-[1240px] px-5 py-14 sm:px-8 sm:py-20 lg:py-28">
           <div className="max-w-[46rem]">
             <SectionTitle>{fr("Et chaque jour, moins de paperasse.")}</SectionTitle>
             <p className="mt-5 max-w-[34rem] text-[1.1875rem] leading-relaxed text-muted-foreground">
@@ -373,7 +373,9 @@ export default function HomePage() {
             </figcaption>
           </figure>
 
-          <div className="mt-16 space-y-20 lg:mt-24 lg:space-y-28">
+          {/* Sur mobile : titre + texte de chaque bénéfice, sans la maquette d'illustration
+              (la fenêtre animée ci-dessus montre déjà le produit) — l'accueil reste court. */}
+          <div className="mt-12 space-y-12 lg:mt-24 lg:space-y-28">
             {TASKS.map((task, i) => (
               <article key={task.kicker} className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
                 <div className={i % 2 === 1 ? "lg:order-2" : ""}>
@@ -381,7 +383,7 @@ export default function HomePage() {
                   <h3 className="mt-3 text-[clamp(1.6rem,2.6vw,2.15rem)] leading-[1.1]">{fr(task.title)}</h3>
                   <p className="mt-4 max-w-[31rem] leading-relaxed text-muted-foreground">{fr(task.text)}</p>
                 </div>
-                <div className={`rounded-xl bg-desk px-5 py-8 sm:px-10 sm:py-12 ${i % 2 === 1 ? "lg:order-1" : ""}`}>
+                <div className={`hidden rounded-xl bg-desk px-5 py-8 sm:px-10 sm:py-12 lg:block ${i % 2 === 1 ? "lg:order-1" : ""}`}>
                   <div className="mx-auto max-w-[26rem]">{task.visual}</div>
                 </div>
               </article>
@@ -392,7 +394,7 @@ export default function HomePage() {
 
       {/* ─── Le partage des rôles ─────────────────────────────── */}
       <section className="border-y border-border bg-desk">
-        <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20 lg:py-28">
+        <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20 lg:py-28">
           <div>
             <SectionTitle>
               {fr("L'IA prépare.")}
@@ -425,7 +427,7 @@ export default function HomePage() {
 
       {/* ─── Pour qui ─────────────────────────────────────────── */}
       <section id="metiers" className="scroll-mt-20">
-        <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 lg:py-28">
+        <div className="mx-auto max-w-[1240px] px-5 py-14 sm:px-8 sm:py-20 lg:py-28">
           <SectionTitle className="max-w-[44rem]">{fr("Pour toutes les entreprises, même quand vous êtes seul.")}</SectionTitle>
           <div className="mt-12 grid border-t border-foreground/80 sm:grid-cols-2 lg:grid-cols-4">
             {WHO.map((t, i) => (
@@ -453,7 +455,7 @@ export default function HomePage() {
 
       {/* ─── Outils gratuits ──────────────────────────────────── */}
       <section className="border-t border-border">
-        <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20 lg:py-28">
+        <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20 lg:py-28">
           <div>
             <SectionTitle>{fr("Commencez sans créer de compte.")}</SectionTitle>
             <p className="mt-5 max-w-[26rem] leading-relaxed text-muted-foreground">
@@ -478,7 +480,7 @@ export default function HomePage() {
 
       {/* ─── Qui construit OdocPilot ──────────────────────────── */}
       <section className="border-y border-border bg-desk">
-        <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-20 sm:px-8 lg:grid-cols-2 lg:gap-20 lg:py-28">
+        <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-2 lg:gap-20 lg:py-28">
           <div>
             <SectionTitle>{fr("Qui construit OdocPilot ?")}</SectionTitle>
             <p className="mt-6 max-w-[32rem] text-[1.1875rem] leading-relaxed">
@@ -527,7 +529,7 @@ export default function HomePage() {
 
       {/* ─── Combien ça coûte ─────────────────────────────────── */}
       <section>
-        <div className="mx-auto max-w-[1240px] px-5 py-20 sm:px-8 lg:py-28">
+        <div className="mx-auto max-w-[1240px] px-5 py-14 sm:px-8 sm:py-20 lg:py-28">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <SectionTitle>{fr("Combien ça coûte ?")}</SectionTitle>
             <Link to="/pricing" className="inline-flex items-center gap-2 font-bold link-underline" data-umami-event="home-pricing">
@@ -568,7 +570,7 @@ export default function HomePage() {
 
       {/* ─── Questions ────────────────────────────────────────── */}
       <section className="border-t border-border">
-        <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20 lg:py-28">
+        <div className="mx-auto grid max-w-[1240px] gap-12 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20 lg:py-28">
           <div>
             <SectionTitle>{fr("Vos questions sur la facture électronique.")}</SectionTitle>
             <p className="mt-5 max-w-[24rem] leading-relaxed text-muted-foreground">
