@@ -25,6 +25,7 @@ import { WHITE_PAPER } from "../../src/content/livreBlanc";
 import { GLOSSARY } from "../../src/content/glossaire";
 import { EDITEURS, editeursJsonLd } from "../../src/content/editeurs";
 import { AUTO_ENTREPRENEURS, autoEntrepreneursJsonLd } from "../../src/content/autoEntrepreneurs";
+import { OCR } from "../../src/content/ocr";
 
 export const BASE_URL = "https://odocpilot.com";
 
@@ -186,6 +187,13 @@ function metiers(): Record<string, unknown> {
 
 export function planFor(loc: string): Plan {
   if (loc === "/") return { file: SIMPLE_PAGES[loc], content: homeContent() };
+  if (loc === "/fonctionnalites") return {
+    file: SIMPLE_PAGES[loc],
+    content: `<section id="documents">${h2(OCR.title)}${p(OCR.intro)}${p(OCR.limitation)}</section>` + links([
+      { to: "/e-facture", label: "Comprendre la différence avec la facture électronique" },
+      { to: "/diagnostic", label: "Facture électronique : vérifier mes obligations gratuitement" },
+    ]),
+  };
   if (SIMPLE_PAGES[loc]) return { file: SIMPLE_PAGES[loc] };
 
   const guide = /^\/guide\/([a-z0-9-]+)$/.exec(loc);

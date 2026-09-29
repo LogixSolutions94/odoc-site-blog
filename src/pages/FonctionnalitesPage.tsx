@@ -5,9 +5,8 @@ import { Button } from "@/components/ui/button";
 import { FeaturePreview } from "@/components/FeaturePreview";
 import { ArrowRight, Check, Banknote, Brain, FolderKanban, Users } from "lucide-react";
 import { KeyMark } from "@/components/KeyMark";
-
-const APP_URL = import.meta.env.VITE_APP_URL || "https://app.odocpilot.com";
-const SIGNUP = `${APP_URL}/auth?mode=signup`;
+import { SIGNUP_URL, TRIAL } from "@/lib/marketing";
+import { OCR } from "@/content/ocr";
 
 type Group = {
   key: string;
@@ -59,9 +58,8 @@ const groups: Group[] = [
     key: "documents",
     icon: FolderKanban,
     eyebrow: "Tout votre administratif rangé",
-    title: "Photographiez, c'est classé",
-    intro:
-      "Prenez une facture fournisseur en photo : montants, TVA, échéance sont extraits et rangés automatiquement au bon endroit. Vos documents sont centralisés, retrouvables en une recherche, et reliés au reste de votre activité.",
+    title: OCR.title,
+    intro: OCR.intro,
     points: [
       "Lecture IA des factures (photo ou import) : montant, TVA, échéance extraits",
       "Classement intelligent, plus de dossiers perdus",
@@ -95,20 +93,26 @@ export default function FonctionnalitesPage() {
   return (
     <div className="flex flex-col items-center">
       <SEOHead
-        title="Fonctionnalités OdocPilot — Factur-X, lecture IA des factures, GED & export FEC"
-        description="Tout ce qu'OdocPilot prépare pour vous : factures au format Factur-X conforme, lecture IA des factures, recherche de documents en langage naturel, copilote Brain, export FEC. L'IA prépare, vous validez. Données et IA hébergées en France."
+        title="Factur-X et OCR des factures fournisseurs | OdocPilot"
+        description="Créez vos factures Factur-X, extrayez les données des factures fournisseurs et vérifiez-les avant validation. Essai 14 jours sans carte bancaire."
         canonical="/fonctionnalites"
       />
 
       {/* Hero */}
       <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-14 text-center">
-        <MotionDiv initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-semibold px-3 py-1.5">Conformité 2026 + gestion par l'IA</span>
           <h1 className="mt-5 text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground">Tout ce qu'OdocPilot <KeyMark>prépare</KeyMark> pour vous</h1>
           <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground">
-            Pas une liste de fonctions techniques — une liste de soucis en moins. L'IA prépare votre administratif et votre conformité à la facturation électronique ; vous validez d'un clic. Voici concrètement ce que vous gagnez.
+            Créez vos factures au format Factur-X et réduisez la saisie de vos factures fournisseurs grâce à la lecture automatique par IA. Contrôlez les informations extraites, puis validez-les.
           </p>
-        </MotionDiv>
+          <div className="mt-7 flex flex-col items-center gap-3">
+            <a href={SIGNUP_URL} className="btn-ink" data-umami-event="cta-fonctionnalites-hero">Essayer sur mes factures <ArrowRight className="ml-2 h-4 w-4" /></a>
+            <p className="text-sm text-muted-foreground">{TRIAL.short}</p>
+            <Link to="/diagnostic" className="text-sm underline underline-offset-4" data-umami-event="cta-fonctionnalites-diagnostic-hero">Facture électronique : vérifier mes obligations gratuitement</Link>
+            <a href="#documents" className="text-sm underline underline-offset-4">Comment fonctionne la lecture des factures fournisseurs ?</a>
+          </div>
+        </div>
       </section>
 
       {/* Groupes-bénéfices */}
@@ -117,7 +121,7 @@ export default function FonctionnalitesPage() {
           const Icon = g.icon;
           const reverse = i % 2 === 1;
           return (
-            <MotionDiv key={g.key} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="grid lg:grid-cols-2 gap-10 items-center">
+            <MotionDiv id={g.key} key={g.key} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="grid scroll-mt-24 lg:grid-cols-2 gap-10 items-center">
               <div className={reverse ? "lg:order-2" : ""}>
                 <div className="flex items-center gap-3">
                   <div className="flex items-center justify-center h-11 w-11 rounded-xl bg-primary/10"><Icon className="h-5 w-5 text-primary" /></div>
@@ -132,6 +136,14 @@ export default function FonctionnalitesPage() {
                     </li>
                   ))}
                 </ul>
+                {g.key === "documents" && (
+                  <div className="mt-6 space-y-3 border-t border-border pt-5">
+                    <p className="text-sm text-muted-foreground">{OCR.limitation}</p>
+                    <Link to="/e-facture" className="block text-sm underline underline-offset-4">Comprendre la différence avec la facture électronique</Link>
+                    <a href={SIGNUP_URL} className="btn-ink" data-umami-event="cta-fonctionnalites-ocr">Tester la lecture de mes factures</a>
+                    <p className="text-sm text-muted-foreground">{TRIAL.short}</p>
+                  </div>
+                )}
               </div>
               <div className={reverse ? "lg:order-1" : ""}>
                 <FeaturePreview kind={g.key} />
@@ -145,11 +157,9 @@ export default function FonctionnalitesPage() {
       <section className="w-full py-20 bg-secondary/60 border-t border-border">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold tracking-tight text-foreground">Le plus simple, c'est d'essayer.</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Gratuit 14 jours, sans carte bancaire. Vous verrez la différence dès la première facture.</p>
+          <p className="mt-4 text-lg text-muted-foreground">{TRIAL.short}. Importez une facture et vérifiez les informations proposées.</p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-            <a href={SIGNUP} target="_blank" rel="noopener noreferrer" data-umami-event="cta-essai-gratuit">
-              <Button size="lg" className="bg-gradient-cta text-primary-foreground font-bold">Essayer gratuitement <ArrowRight className="ml-2 h-5 w-5" /></Button>
-            </a>
+            <a href={SIGNUP_URL} className="btn-ink" data-umami-event="cta-fonctionnalites-final">Essayer gratuitement <ArrowRight className="ml-2 h-5 w-5" /></a>
             <Link to="/diagnostic" data-umami-event="cta-diagnostic"><Button size="lg" variant="outline">Vérifier ma conformité (3 min)</Button></Link>
           </div>
         </div>

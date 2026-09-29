@@ -12,6 +12,14 @@ const ROOT = resolve(__dirname, "../..");
 const shell = readFileSync(resolve(ROOT, "index.html"), "utf-8");
 const shellTitle = /<title>([\s\S]*?)<\/title>/.exec(shell)?.[1];
 
+it("sert la lecture OCR et ses limites sans JavaScript", () => {
+  const { html } = renderPage(shell, "/fonctionnalites");
+  expect(html).toContain('id="documents"');
+  expect(html).toContain("Vous contrôlez les valeurs proposées");
+  expect(html).toContain("ne remplace pas la transmission officielle");
+  expect(html).toContain('href="/diagnostic"');
+});
+
 /** Décode les entités produites par esc()/attr() pour comparer au texte source. */
 const unesc = (s: string) => s.replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
 const one = (html: string, re: RegExp) => {
