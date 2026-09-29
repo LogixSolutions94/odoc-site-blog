@@ -1,7 +1,7 @@
 # Handoff : vitrine odocpilot.com, refonte en ligne, suivi Google quotidien
 
-**Mis à jour :** 29/09/2026 · **`main`** à déployer après le commit SEO/blog du 29/09 · Pas de branche
-de travail ouverte prévue.
+**Mis à jour :** 29/09/2026 · **`main`** déployé jusqu'à `d3f19a2` (workflow
+`36561058178` vert) · Pas de branche de travail ouverte.
 
 > Lire d'abord `AGENTS.md` (identité légale, conventions), puis ce fichier. Avant de toucher une page :
 > `docs/design/REFONTE-2026-09.md` (système visuel, classes, affirmations autorisées et interdites).
@@ -21,7 +21,7 @@ de travail ouverte prévue.
 | #31 | Accessibilité : `MotionDiv` lit `prefers-reduced-motion` dès le premier rendu (animations coupées en plein vol, 4 px de débordement sur `/diagnostic` en mobile) |
 | #33 | **Page `/auto-entrepreneurs`** : facture électronique en franchise de TVA, exemple de facture annotée, 4 étapes, 7 questions (FAQPage), prérendu complet (1 244 mots), liens depuis l'accueil, le pied de page et /e-facture |
 | #34 | Confidentialité : tous les sous-traitants affichés (Supabase, Resend, Stripe remis à côté d'OVH, Mistral, Lemon Squeezy, Google/Dropbox), décision de Riad |
-| 29/09 | **SEO technique + blog** : accueil inclus dans `prerender-pages`, H1/intro/liens internes en HTML brut, header/footer renforcés vers outils/guides/comparatifs/`llm-info`, nettoyage de 9 articles blog hors positionnement via 301/410 |
+| `d3f19a2` | **SEO technique + blog** : accueil inclus dans `prerender-pages`, H1/intro/liens internes en HTML brut, header/footer renforcés vers outils/guides/comparatifs/`llm-info`, nettoyage de 9 articles blog hors positionnement via 301/410 |
 
 **Système « Papeterie »** : papier blanc, encre pétrole. L'orange est le *surligneur* (ce que l'IA
 prépare), l'encre et le *tampon* sont ce que VOUS décidez. Police Switzer (Fontshare, autorisée par
@@ -41,14 +41,16 @@ des liens, prix, essai et éditeur : `src/lib/marketing.ts`. Typographie frança
 - **Live** : `https://odocpilot.com/`, `/blog`, `/e-facture`, `/auto-entrepreneurs`, `/pricing`, `/llm-info`,
   `/guide/plateforme-agreee`, `/generateur-factur-x`, `/verificateur` répondent 200 ; `www.odocpilot.com`
   redirige en 301 vers l'apex.
-- **Sitemap live** : 77 URL, dont 43 articles blog, 5 guides, 6 comparatifs, 5 pages métiers, 4 outils/ressources.
+- **Sitemap live après déploiement** : 68 URL, dont 34 articles blog, 5 guides, 6 comparatifs, 5 pages métiers, 4 outils/ressources.
 - **Blog live** : articles prérendus actifs en 200 ; exemple vérifié :
   `/blog/factur-x-rejetee-9-erreurs-plateforme-agreee` sert un HTML d'environ 30 ko avec title article.
 - **Redirections blog live** : les anciens slugs majeurs répondent correctement, par exemple
   `/blog/odocpilot-vs-pennylane-2026` → 301 `/comparatif/pennylane`.
-- **Nettoyage préparé côté repo** : 103 entrées dans `seo/blog-redirects.json` (76 × 301, 27 × 410). Les 9 articles
-  encore live mais désormais retirés au prochain déploiement : Tunisie, agricole, RH, congés payés, procuration
-  bancaire, onboarding salarié, webhooks/API, vieux « Odoc Pulse tout-en-un », ERP vs SaaS généraliste.
+- **Nettoyage déployé** : 103 entrées dans `seo/blog-redirects.json` (76 × 301, 27 × 410). Les 9 articles
+  hors positionnement ont disparu du sitemap live : Tunisie, agricole, RH, congés payés, procuration bancaire,
+  onboarding salarié, webhooks/API, vieux « Odoc Pulse tout-en-un », ERP vs SaaS généraliste.
+  Vérifications live : `/blog/copilot-ia-gestion-entreprise-tpe-pme` → 301 `/fonctionnalites`,
+  `/blog/facture-electronique-pme-tunisie-obligations-2026` → 410.
 - **Accueil** : l'ancien point faible est corrigé. `prerender-pages` couvre maintenant `/` et injecte un H1,
   l'introduction et une carte de liens vers `/e-facture`, les guides, outils gratuits, pages métiers et comparatifs.
 
