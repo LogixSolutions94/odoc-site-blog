@@ -277,7 +277,7 @@ charge la génération et l'envoi automatique en Facture X.
 [Suite de la section avec détails, exemples, captures…]
 ```
 
-> Ce bloc de 40–60 mots est la cible des Featured Snippets Google et des citations IA (AI Overview, Perplexity, Gemini, ChatGPT).
+> Ce bloc de 40–60 mots vise les **AI Overviews et les citations IA** (Perplexity, Gemini, ChatGPT). ⚠️ **MAJ 10/2026** : les *Featured Snippets issus du schema FAQ ont disparu* (Google a retiré l'affichage des rich results FAQ le 07/05/2026). L'atomic answer sert désormais la **citation par les moteurs génératifs (GEO)**, plus l'encadré FAQ. Cf. `docs/seo/STRATEGIE-SEO-BLOG-2026-10.md` §3.2.
 
 ---
 
@@ -447,8 +447,10 @@ Ne jamais laisser l'IA seule sur :
 ### 8.1 Pourquoi le schema markup est critique en 2026
 
 - 72 % des résultats en première page utilisent le schema markup
-- Le schema FAQPage + Article produit un lift de 3,1x en citations IA (AI Overviews)
-- La combinaison FAQPage + Article + BreadcrumbList est le minimum viable pour un article blog
+- Le schema structuré aide à la compréhension de la page et aux citations IA (AI Overviews, Perplexity…)
+- La combinaison **Article/BlogPosting + BreadcrumbList + FAQPage** est le minimum viable pour un article blog
+
+> ⚠️ **MAJ octobre 2026 — rich results FAQ/HowTo supprimés.** Google a retiré l'affichage des **rich results FAQ le 7 mai 2026** (désormais réservés aux sites gouv/santé) et le **HowTo n'affiche plus de rich result depuis 2023**. Ces schemas restent **valides et lus par Google pour comprendre la page**, mais **ne produisent plus d'encadré**. Leur valeur réelle est le **GEO** (citation par les IA), pas le Featured Snippet. Rich results encore actifs : Article/BlogPosting, BreadcrumbList, Organization, Review, Product, Event, Person. → On garde FAQPage + atomic answers (valeur GEO), mais on **ne promet plus** de Featured Snippet via FAQ/HowTo. Détail : `docs/seo/STRATEGIE-SEO-BLOG-2026-10.md` §3.2.
 - Pour les pages SaaS : SoftwareApplication schema sur les pages produit
 
 ### 8.2 Template JSON-LD pour article de blog

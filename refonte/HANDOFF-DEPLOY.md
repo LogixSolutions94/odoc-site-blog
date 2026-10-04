@@ -97,9 +97,9 @@ Si tu veux de **vraies captures** de l'app connectée : capture ces écrans en `
 
 ---
 
-## 6) BUG SEO À TRAITER CÔTÉ AGENT SEO (odoc-pulse, pas ici)
+## 6) ~~BUG SEO~~ — FAUSSE ALARME, RÉSOLU (vérifié 04/10/2026)
 
-Le **prerender du blog** (`scripts/prerender-blog.ts`) lit les colonnes `json_ld`, `schema_faq`, `meta_description`. Si elles n'existent pas dans la table Supabase `blog_posts`, le SELECT échoue → **0 article prérendu** → articles **invisibles** pour Google et les bots IA. *(Non corrigé ici : impossible de vérifier le schéma de la DB depuis le Mac — REST 401 — et ce pipeline appartient à l'agent SEO côté `odoc-pulse`.)* → **À vérifier/corriger là où le schéma de la base est connu.**
+⚠️ **Cette alarme était périmée.** `scripts/prerender-blog.ts` ne lit PLUS `json_ld`/`schema_faq`/`meta_description` : il fait `select=*` (immunisé au drift de colonnes) et **dérive** le JSON-LD + la FAQ du markdown. Un prerender cassé ne rend pas le blog « invisible » : le build est **fail-closed** (`STRICT_SEO_BUILD=1` → le build échoue → l'ancien conteneur reste en ligne). Schéma live vérifié : les 39 articles publiés sont bien prérendus, avec meta description. Le vrai sujet (le site lisait `category` vide au lieu de `silo`, metas en repli) est traité dans `docs/seo/STRATEGIE-SEO-BLOG-2026-10.md` et la PR #41.
 
 ---
 
