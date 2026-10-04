@@ -20,6 +20,7 @@ import {
   buildArticleGraph,
   pickSeoTitle,
   pickSeoDescription,
+  autoLinkInternal,
   BASE_URL,
   DEFAULT_AUTHOR,
 } from "@/lib/blogContent";
@@ -124,7 +125,7 @@ export default function BlogPostPage() {
   const showTOC = headings.filter((h) => h.depth === 2).length >= 4;
   // Affichage seulement : la plupart des articles répètent leur titre en « # » sur la
   // première ligne. La page a déjà son <h1> (post.title), on ne l'affiche pas deux fois.
-  const displayBody = useMemo(() => body.replace(/^\s*#[ \t][^\n]*\n*/, ""), [body]);
+  const displayBody = useMemo(() => autoLinkInternal(body.replace(/^\s*#[ \t][^\n]*\n*/, "")), [body]);
   const { before, after } = useMemo(() => {
     const blocks = displayBody.split(/\n\n+/);
     const mid = Math.max(1, Math.floor(blocks.length / 2));

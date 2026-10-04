@@ -22,7 +22,7 @@ import { writeFileSync, readFileSync, mkdirSync, existsSync } from "fs";
 import { resolve } from "path";
 // Module PUR partagé avec le client (BlogPostPage/BlogSEOHead) → garantit la PARITÉ
 // du JSON-LD et de la FAQ entre le HTML statique (crawlers IA) et le SPA (humains).
-import { buildArticleGraph, parseFaq, pickSeoTitle, pickSeoDescription } from "../src/lib/blogContent";
+import { buildArticleGraph, parseFaq, pickSeoTitle, pickSeoDescription, autoLinkInternal } from "../src/lib/blogContent";
 import { resolveSiloSlug, categoryLongLabel } from "../src/lib/blogTaxonomy";
 
 // ── Charger .env sans dépendance (même pattern que generate-sitemap.ts) ─────────
@@ -219,7 +219,7 @@ export function buildPage(shell: string, post: Post): string {
     (post.excerpt ? `<p><em>${esc(post.excerpt)}</em></p>` : "") +
     (post.author_name ? `<p>${esc(post.author_name)}${post.published_at ? " · " + esc(post.published_at.slice(0, 10)) : ""}</p>` : "") +
     cover +
-    renderMarkdown(post.content || "") +
+    renderMarkdown(autoLinkInternal(post.content || "")) +
     `</article>`;
   html = html.replace(/<div id="root">\s*<\/div>/i, `<div id="root">${body}</div>`);
   // fallback si #root n'est pas vide dans le shell
