@@ -22,7 +22,8 @@ import { writeFileSync, readFileSync, mkdirSync, existsSync } from "fs";
 import { resolve } from "path";
 // Module PUR partagé avec le client (BlogPostPage/BlogSEOHead) → garantit la PARITÉ
 // du JSON-LD et de la FAQ entre le HTML statique (crawlers IA) et le SPA (humains).
-import { buildArticleGraph, parseFaq } from "../src/lib/blogContent";
+import { buildArticleGraph, parseFaq, pickSeoTitle, pickSeoDescription } from "../src/lib/blogContent";
+import { resolveSiloSlug, categoryLongLabel } from "../src/lib/blogTaxonomy";
 
 // ── Charger .env sans dépendance (même pattern que generate-sitemap.ts) ─────────
 try {
@@ -61,6 +62,9 @@ type Post = {
   og_image_url: string | null;
   author_name: string | null;
   category: string | null;
+  silo: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
   tags: string[] | null;
   published_at: string | null;
   updated_at: string | null;
@@ -148,21 +152,21 @@ export function renderMarkdown(md: string): string {
 // ── Construit le <head> spécifique à l'article + le JSON-LD ─────────────────────
 function buildHead(post: Post): { title: string; tags: string } {
   const url = `${BASE_URL}/blog/${post.slug}`;
-  const title = `${post.seo_title || post.title} — Blog OdocPilot`;
-  const desc = (post.seo_description || post.excerpt || "").slice(0, 300);
+  const title = `${pickSeoTitle(post)} — Blog OdocPilot`;
+  const desc = pickSeoDescription(post).slice(0, 300);
   const img = post.cover_image_url || post.og_image_url || `${BASE_URL}/og-image.png`;
 
   // @graph UNIQUE construit par le helper partagé client/SSR (parité stricte).
   // La FAQPage est DÉRIVÉE du markdown (## FAQ) → fini la branche morte schema_faq.
   const jsonLd = buildArticleGraph({
     slug: post.slug,
-    title: post.seo_title || post.title,
+    title: pickSeoTitle(post),
     description: desc,
     authorName: post.author_name,
     image: post.cover_image_url || post.og_image_url,
     datePublished: post.published_at,
     dateModified: post.updated_at,
-    category: post.category,
+    category: resolveSiloSlug(post),
     keywords: post.seo_keywords || (post.tags && post.tags.length ? post.tags.join(", ") : null),
     faq: parseFaq(post.content || ""),
   });
@@ -191,7 +195,8 @@ function buildHead(post: Post): { title: string; tags: string } {
 // ── Injecte head + corps dans le shell index.html ───────────────────────────────
 export function buildPage(shell: string, post: Post): string {
   const { title, tags } = buildHead(post);
-  const desc = (post.seo_description || post.excerpt || "").slice(0, 300);
+  const desc = pickSeoDescription(post).slice(0, 300);
+  const siloSlug = resolveSiloSlug(post);
   let html = shell;
 
   // <title> et meta description génériques → spécifiques à l'article
@@ -209,7 +214,7 @@ export function buildPage(shell: string, post: Post): string {
     ? `<img src="${attr(post.cover_image_url)}" alt="${attr(post.title)}" />` : "";
   const body =
     `<article>` +
-    `<nav><a href="${BASE_URL}">Accueil</a> › <a href="${BASE_URL}/blog">Blog</a>${post.category ? " › " + esc(post.category) : ""}</nav>` +
+    `<nav><a href="${BASE_URL}">Accueil</a> › <a href="${BASE_URL}/blog">Blog</a>${siloSlug ? " › " + esc(categoryLongLabel(siloSlug)) : ""}</nav>` +
     `<h1>${esc(post.title)}</h1>` +
     (post.excerpt ? `<p><em>${esc(post.excerpt)}</em></p>` : "") +
     (post.author_name ? `<p>${esc(post.author_name)}${post.published_at ? " · " + esc(post.published_at.slice(0, 10)) : ""}</p>` : "") +

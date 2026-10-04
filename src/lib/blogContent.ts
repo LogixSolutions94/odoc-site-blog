@@ -17,6 +17,27 @@ export const PUBLISHER_LOGO = `${BASE_URL}/og-image.png`;
 /** Auteur honnête par défaut (pas de faux expert) si author_name manque. */
 export const DEFAULT_AUTHOR = "Équipe OdocPilot";
 
+/**
+ * Métadonnées SEO EFFECTIVES, avec repli sur les colonnes du pipeline de production.
+ * Le site historique lit seo_title/seo_description ; le pipeline remplit aussi
+ * meta_title/meta_description (et ne remplit pas toujours seo_*). On prend la première
+ * valeur non vide, puis le titre / le chapeau de l'article → jamais de meta vide.
+ */
+export interface SeoMetaInput {
+  title: string;
+  seo_title?: string | null;
+  meta_title?: string | null;
+  excerpt?: string | null;
+  seo_description?: string | null;
+  meta_description?: string | null;
+}
+export function pickSeoTitle(p: SeoMetaInput): string {
+  return (p.seo_title?.trim() || p.meta_title?.trim() || p.title || "").trim();
+}
+export function pickSeoDescription(p: SeoMetaInput): string {
+  return (p.seo_description?.trim() || p.meta_description?.trim() || p.excerpt?.trim() || "").trim();
+}
+
 export interface Heading {
   depth: 2 | 3;
   text: string;

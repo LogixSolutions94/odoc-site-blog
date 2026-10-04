@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { getSilo } from "@/lib/blogTaxonomy";
+import { getSilo, resolveSiloSlug } from "@/lib/blogTaxonomy";
 import { BlogCategoryBadge } from "./BlogCategoryBadge";
 
 interface BlogCardProps {
@@ -9,6 +9,8 @@ interface BlogCardProps {
     title: string;
     excerpt: string | null;
     category: string | null;
+    /** Colonne `silo` du pipeline (prod) : prioritaire sur category pour le badge. */
+    silo?: string | null;
     author_name?: string | null;
     published_at: string | null;
     featured?: boolean | null;
@@ -85,7 +87,7 @@ function Cover({ url, w, h, className = "", eager = false }: { url: string; w: n
 export function BlogCard({ post, variant = "default", headingLevel = 3 }: BlogCardProps) {
   const Heading = headingLevel === 2 ? "h2" : "h3";
   const minutes = useMemo(() => readingMinutes(post), [post]);
-  const silo = getSilo(post.category);
+  const silo = getSilo(resolveSiloSlug(post));
   const href = `/blog/${post.slug}`;
   const titleLink = (
     <Link
