@@ -31,7 +31,7 @@ function ContactCta({ umami, className = "" }: { umami: string; className?: stri
 }
 
 export default function EditeursPage() {
-  const { why, learned, plans, steps, notThis, after } = EDITEURS;
+  const { why, learned, offers, steps, notThis, after } = EDITEURS;
 
   return (
     <div className="flex flex-col items-center">
@@ -70,26 +70,21 @@ export default function EditeursPage() {
             <p className="mt-5 font-medium text-foreground leading-relaxed">{learned.outro}</p>
           </MotionDiv>
 
-          {/* Deux formules */}
+          {/* Ce que nous construisons pour vous (catalogue, sans prix) */}
           <MotionDiv {...reveal}>
-            <h2 className="text-2xl font-bold tracking-tight text-foreground">{plans.h2}</h2>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {plans.items.map((p) => (
-                <div key={p.name} className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-card">
-                  <h3 className="font-bold text-foreground">{p.name}</h3>
-                  <p className="mt-1 text-3xl font-extrabold tracking-tight text-foreground">{p.price}</p>
-                  <ul className="mt-5 space-y-2">
-                    {p.items.map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm leading-relaxed text-muted-foreground">
-                        <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" aria-hidden="true" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+            <h2 className="text-2xl font-bold tracking-tight text-foreground">{offers.h2}</h2>
+            <p className="mt-4 text-muted-foreground leading-relaxed">{offers.lead}</p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {offers.items.map((o) => (
+                <div key={o.name} className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-card">
+                  <span className="text-xs font-semibold uppercase tracking-[0.1em] text-primary">{o.tag}</span>
+                  <h3 className="mt-2 font-bold text-foreground leading-snug">{o.name}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{o.desc}</p>
                 </div>
               ))}
             </div>
-            <p className="mt-4 text-sm text-muted-foreground">{plans.note}</p>
+            <p className="mt-5 text-sm text-muted-foreground">{offers.note}</p>
+            <ContactCta umami="cta-editeurs-offres" className="mt-6" />
           </MotionDiv>
 
           {/* Déroulé */}

@@ -119,7 +119,7 @@ function editeursContent(): string {
     h2(e.learned.h2) + p(e.learned.body) +
     `<ul class="mt-4 space-y-2 text-muted-foreground">${e.learned.rules.map((r) => `<li><strong>${esc(r.codes)}</strong> : ${esc(r.text)}</li>`).join("")}</ul>` +
     p(e.learned.outro) +
-    h2(e.plans.h2) + e.plans.items.map((pl) => h3(`${pl.name} — ${pl.price}`) + ul(pl.items)).join("") + p(e.plans.note) +
+    h2(e.offers.h2) + p(e.offers.lead) + e.offers.items.map((o) => h3(o.name) + p(o.desc)).join("") + p(e.offers.note) +
     h2(e.steps.h2) + ol(e.steps.items) +
     h2(e.notThis.h2) + p(e.notThis.body) +
     h2(e.after.h2) + p(e.after.body) +
