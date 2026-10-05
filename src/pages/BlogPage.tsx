@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BlogSEOHead } from "@/components/blog/BlogSEOHead";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { Input } from "@/components/ui/input";
-import { BLOG_CATEGORY_FILTERS } from "@/lib/blogTaxonomy";
+import { BLOG_CATEGORY_FILTERS, resolveSiloSlug } from "@/lib/blogTaxonomy";
 import { BASE_URL, PUBLISHER_NAME, PUBLISHER_LOGO } from "@/lib/blogContent";
 import { fr } from "@/lib/typo";
 import { KeyMark } from "@/components/KeyMark";
@@ -99,7 +99,7 @@ export default function BlogPage() {
 
   const filtered = useMemo(() => {
     let list = posts;
-    if (activeCategory !== "all") list = list.filter((p) => p.category === activeCategory);
+    if (activeCategory !== "all") list = list.filter((p) => resolveSiloSlug(p) === activeCategory);
     const q = search.trim().toLowerCase();
     if (q) {
       list = list.filter(
@@ -113,7 +113,7 @@ export default function BlogPage() {
   // Les slugs restent ceux de blogTaxonomy (synchronisés avec SEOBlog.md) : un silo
   // réapparaît dès qu'un article publié porte sa catégorie.
   const visibleFilters = useMemo(() => {
-    const present = new Set(posts.map((p) => p.category));
+    const present = new Set(posts.map((p) => resolveSiloSlug(p)));
     return BLOG_CATEGORY_FILTERS.filter((c) => c.value === "all" || present.has(c.value));
   }, [posts]);
 

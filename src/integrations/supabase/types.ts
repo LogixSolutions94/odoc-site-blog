@@ -21,6 +21,12 @@ export type Database = {
           category: string
           content: string
           cover_image_url: string | null
+          // Colonnes présentes en PRODUCTION, absentes des types générés d'origine
+          // (schéma live plus riche que le repo). Cf. blog-schema-two-systems-drift.
+          meta_description: string | null
+          meta_title: string | null
+          silo: string | null
+          word_count: number | null
           created_at: string | null
           excerpt: string
           featured: boolean | null

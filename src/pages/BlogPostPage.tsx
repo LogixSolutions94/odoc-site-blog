@@ -18,10 +18,13 @@ import {
   splitFaq,
   extractHeadings,
   buildArticleGraph,
+  pickSeoTitle,
+  pickSeoDescription,
+  autoLinkInternal,
   BASE_URL,
   DEFAULT_AUTHOR,
 } from "@/lib/blogContent";
-import { categoryLongLabel, categoryGuideSlug } from "@/lib/blogTaxonomy";
+import { categoryLongLabel, categoryGuideSlug, resolveSiloSlug } from "@/lib/blogTaxonomy";
 import { SIGNUP_URL, TRIAL } from "@/lib/marketing";
 import { fr } from "@/lib/typo";
 import { KeyMark } from "@/components/KeyMark";
@@ -88,13 +91,14 @@ export default function BlogPostPage() {
   }, [slug, post?.id]);
 
   const { data: relatedPosts = [] } = useQuery({
-    queryKey: ["related-posts", post?.category, slug],
+    queryKey: ["related-posts", post?.silo, slug],
     queryFn: async () => {
+      // Même silo (colonne `silo` du pipeline, renseignée en prod ; sentinelle si absente).
       const { data: sameCat } = await supabase
         .from("blog_posts")
         .select("*")
         .eq("status", "published")
-        .eq("category", post!.category)
+        .eq("silo", post!.silo ?? "__no_silo__")
         .not("slug", "in", `(${[slug!, ...RETIRED_SLUGS].join(",")})`)
         .order("published_at", { ascending: false })
         .limit(3);
@@ -121,7 +125,7 @@ export default function BlogPostPage() {
   const showTOC = headings.filter((h) => h.depth === 2).length >= 4;
   // Affichage seulement : la plupart des articles répètent leur titre en « # » sur la
   // première ligne. La page a déjà son <h1> (post.title), on ne l'affiche pas deux fois.
-  const displayBody = useMemo(() => body.replace(/^\s*#[ \t][^\n]*\n*/, ""), [body]);
+  const displayBody = useMemo(() => autoLinkInternal(body.replace(/^\s*#[ \t][^\n]*\n*/, "")), [body]);
   const { before, after } = useMemo(() => {
     const blocks = displayBody.split(/\n\n+/);
     const mid = Math.max(1, Math.floor(blocks.length / 2));
@@ -145,13 +149,13 @@ export default function BlogPostPage() {
     if (!post) return undefined;
     return buildArticleGraph({
       slug: post.slug,
-      title: post.seo_title || post.title,
-      description: post.seo_description || post.excerpt,
+      title: pickSeoTitle(post),
+      description: pickSeoDescription(post),
       authorName: post.author_name,
       image: post.cover_image_url || post.og_image_url,
       datePublished: post.published_at,
       dateModified: post.updated_at,
-      category: post.category,
+      category: resolveSiloSlug(post),
       keywords: post.seo_keywords || (post.tags?.length ? post.tags.join(", ") : null),
       faq,
     });
@@ -178,7 +182,8 @@ export default function BlogPostPage() {
   const authorName = (post.author_name || "").trim() || DEFAULT_AUTHOR;
   const showUpdated =
     post.updated_at && post.published_at && post.updated_at.slice(0, 10) !== post.published_at.slice(0, 10);
-  const guideSlug = categoryGuideSlug(post.category);
+  const siloSlug = resolveSiloSlug(post);
+  const guideSlug = categoryGuideSlug(siloSlug);
   const minutes = readingMinutes(post);
 
   // Ids des titres consommés EN ORDRE par les renderers → ancres identiques au sommaire.
@@ -220,8 +225,8 @@ export default function BlogPostPage() {
   return (
     <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
       <BlogSEOHead
-        title={`${post.seo_title || post.title} — Blog OdocPilot`}
-        description={post.seo_description || post.excerpt}
+        title={`${pickSeoTitle(post)} — Blog OdocPilot`}
+        description={pickSeoDescription(post)}
         canonical={`/blog/${post.slug}`}
         ogImage={post.og_image_url || post.cover_image_url || undefined}
         ogType="article"
@@ -253,7 +258,7 @@ export default function BlogPostPage() {
                     </li>
                     <li>
                       <Link to={`/guide/${guideSlug}`} className="transition-colors duration-200 hover:text-foreground">
-                        {categoryLongLabel(post.category)}
+                        {categoryLongLabel(siloSlug)}
                       </Link>
                     </li>
                   </>
@@ -424,7 +429,7 @@ export default function BlogPostPage() {
               <span>
                 <span className="block text-sm font-bold text-muted-foreground">Le guide complet</span>
                 <span className="mt-1 block font-display text-xl font-bold leading-snug">
-                  {guideSlug ? categoryLongLabel(post.category) : "La facture électronique 2026-2027"}
+                  {guideSlug ? categoryLongLabel(siloSlug) : "La facture électronique 2026-2027"}
                 </span>
               </span>
               <ArrowRight
@@ -461,7 +466,7 @@ export default function BlogPostPage() {
             id="a-lire-aussi"
             className="font-display text-3xl font-bold leading-[1.08] tracking-[-0.03em] sm:text-[2.2rem]"
           >
-            {guideSlug ? fr(`À lire aussi sur « ${categoryLongLabel(post.category)} »`) : "À lire aussi"}
+            {guideSlug ? fr(`À lire aussi sur « ${categoryLongLabel(siloSlug)} »`) : "À lire aussi"}
           </h2>
           <div className="mt-8 grid border-t border-foreground/80 md:grid-cols-3">
             {relatedPosts.map((rp) => (

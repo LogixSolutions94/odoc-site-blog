@@ -17,6 +17,75 @@ export const PUBLISHER_LOGO = `${BASE_URL}/og-image.png`;
 /** Auteur honnête par défaut (pas de faux expert) si author_name manque. */
 export const DEFAULT_AUTHOR = "Équipe OdocPilot";
 
+/**
+ * Métadonnées SEO EFFECTIVES, avec repli sur les colonnes du pipeline de production.
+ * Le site historique lit seo_title/seo_description ; le pipeline remplit aussi
+ * meta_title/meta_description (et ne remplit pas toujours seo_*). On prend la première
+ * valeur non vide, puis le titre / le chapeau de l'article → jamais de meta vide.
+ */
+export interface SeoMetaInput {
+  title: string;
+  seo_title?: string | null;
+  meta_title?: string | null;
+  excerpt?: string | null;
+  seo_description?: string | null;
+  meta_description?: string | null;
+}
+export function pickSeoTitle(p: SeoMetaInput): string {
+  return (p.seo_title?.trim() || p.meta_title?.trim() || p.title || "").trim();
+}
+export function pickSeoDescription(p: SeoMetaInput): string {
+  return (p.seo_description?.trim() || p.meta_description?.trim() || p.excerpt?.trim() || "").trim();
+}
+
+/**
+ * Maillage interne AUTOMATIQUE : lie la PREMIÈRE occurrence de termes-clés (en prose) vers
+ * la page pilier correspondante, pour renforcer le hub & spoke même quand l'article n'a
+ * aucun lien écrit (19/39 articles orphelins au 04/10/2026). Conservateur :
+ *   - une occurrence par URL de destination, plafonné à AUTO_LINK_MAX ;
+ *   - jamais dans un titre, un bloc/inline de code, un tableau, une citation ;
+ *   - on saute toute ligne contenant déjà un lien markdown (pas d'imbrication).
+ * S'applique AU RENDU (client + prerender), ne modifie jamais la base. Partagé → parité.
+ */
+const AUTO_LINKS: { re: RegExp; url: string }[] = [
+  { re: /plateformes?\s+agréées?/i, url: "/guide/plateforme-agreee" },
+  { re: /e-?reporting/i, url: "/guide/obligations-2026-2027" },
+  { re: /Factur-X/i, url: "/guide/factur-x" },
+  { re: /Chorus\s+Pro/i, url: "/guide/plateforme-agreee" },
+  { re: /auto-?entrepreneurs?/i, url: "/auto-entrepreneurs" },
+  { re: /facturations?\s+électroniques?|factures?\s+électroniques?/i, url: "/e-facture" },
+];
+const AUTO_LINK_MAX = 5;
+
+export function autoLinkInternal(markdown: string): string {
+  if (!markdown) return markdown;
+  const usedUrls = new Set<string>();
+  let count = 0;
+  let inFence = false;
+  const lines = markdown.replace(/\r/g, "").split("\n");
+  const out = lines.map((line) => {
+    const t = line.trimStart();
+    if (t.startsWith("```")) { inFence = !inFence; return line; }
+    if (inFence || count >= AUTO_LINK_MAX) return line;
+    // Titres, tableaux, citations, et lignes contenant déjà un lien markdown : on ne touche pas.
+    if (/^#{1,6}\s/.test(t) || t.startsWith("|") || t.startsWith(">") || line.includes("](")) return line;
+    let result = line;
+    for (const { re, url } of AUTO_LINKS) {
+      if (count >= AUTO_LINK_MAX) break;
+      if (usedUrls.has(url)) continue;
+      const m = result.match(re);
+      if (!m || m.index === undefined) continue;
+      // Pas d'ancrage à l'intérieur d'un code inline `…` (nombre impair de « ` » avant le match).
+      if (((result.slice(0, m.index).match(/`/g) || []).length) % 2 === 1) continue;
+      result = result.slice(0, m.index) + `[${m[0]}](${url})` + result.slice(m.index + m[0].length);
+      usedUrls.add(url);
+      count++;
+    }
+    return result;
+  });
+  return out.join("\n");
+}
+
 export interface Heading {
   depth: 2 | 3;
   text: string;
