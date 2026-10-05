@@ -117,15 +117,23 @@ scp -i ~/.ssh/odoc_vps_rsa -r dist/* root@151.80.144.236:/var/www/odoc/
 
 ### 3. Écrire un article blog
 ```
-Créer dans Supabase table blog_posts:
+Normalement les articles sont créés par le PIPELINE (odoc-pulse / n8n), pas à la main.
+Pour un INSERT manuel de secours, utiliser les VRAIES colonnes du schéma live :
+cover_image_url (PAS cover_image) ; status OBLIGATOIRE (sinon reste 'draft' = invisible,
+RLS) ; silo pour le clustering ; seo_title / seo_description pour les metas servies.
 
-INSERT INTO blog_posts (title, slug, content, excerpt, cover_image, published_at)
+INSERT INTO blog_posts (title, slug, content, excerpt, cover_image_url, silo,
+                        seo_title, seo_description, status, published_at)
 VALUES (
   'Titre Article',
   'titre-article',
   '# Markdown content...',
   'Courte description',
   'https://image.url',
+  'facturation-electronique',
+  'Titre SEO 55-60 car.',
+  'Meta description 150-160 car.',
+  'published',
   NOW()
 );
 

@@ -17,35 +17,42 @@
      - Structure Section 4 (H1/H2/H3, intro, Atomic Answers, FAQ, CTA)
      - Checklist 32 points Section 5 (valider chaque point)
      - Schema JSON-LD Section 8 (BlogPosting + FAQPage + BreadcrumbList)
-     - Maillage interne Section 10 (3-5 liens, ancres riches)
+     - Maillage interne Section 10 (3-5 liens, ancres riches). NB : le site auto-lie
+       en plus les termes wedge vers les piliers au rendu (autoLinkInternal), mais
+       écrire les liens reste recommandé.
   3. Format : Markdown avec frontmatter YAML
 
-ÉTAPE 3 — INSERTION SUPABASE
-  Insérer dans table blog_posts (title, slug, content, excerpt, cover_image, published_at)
-  L'indexation Google Search Console est automatique ✅
+ÉTAPE 3 — INSERTION SUPABASE (normalement via le pipeline odoc-pulse)
+  Colonnes RÉELLES : title, slug, content, excerpt, cover_image_url, silo,
+  seo_title, seo_description, status='published', published_at.
+  (meta_title/meta_description tolérés en repli ; json_ld/schema_faq NON requis —
+  le site les dérive du markdown.)
+  ⚠️ Indexation : PAS de ping automatique (endpoint google.com/ping mort depuis 2023).
+  Google recrawle le sitemap à son rythme ; soumettre l'URL dans GSC pour accélérer.
 ```
 
 ## Template frontmatter article blog
 
 ```yaml
 ---
+# Colonnes blog_posts du schéma LIVE (cf. docs/seo/STRATEGIE-SEO-BLOG-2026-10.md).
 title: "[TITRE H1 — 55-65 chars]"
 slug: "[slug-url-article]"
-excerpt: "[Meta description 150-160 chars avec KW principal]"
-category: "[Nom du silo]"
-tags: ["tag1", "tag2", "tag3"]
-author: "OdocPilot"
+excerpt: "[Chapeau 150-160 chars — sert aussi de repli meta description]"
+silo: "[facturation-electronique | obligations-2026-2027 | plateforme-agreee | factur-x | tpe-sans-comptable | outils-gestion]"
+seo_title: "[Title tag 55-60 chars]"
+seo_description: "[Meta description 150-160 chars avec KW principal]"
+seo_keywords: "[kw1, kw2, kw3]"
+cover_image_url: "https://images.pexels.com/...  (ou URL .webp)"
+og_image_url: "[optionnel — sinon cover_image_url sert d'image OG]"
+author_name: "[nom crédible — éviter « OdocPilot » générique quand c'est possible]"
+status: "published"      # OBLIGATOIRE — sinon reste 'draft' (invisible, RLS)
+featured: false
 published_at: "[AAAA-MM-JJ]"
 updated_at: "[AAAA-MM-JJ]"
-cover_image: "/images/blog/[slug].webp"
-featured: false
-seo:
-  canonical: "https://odocpilot.com/blog/[slug]"
-  og_title: "[Titre OG]"
-  og_description: "[Description OG 150-160 chars]"
-schema:
-  type: "BlogPosting"
-  faq: true
+# ⚠️ Le JSON-LD (BlogPosting + FAQPage + BreadcrumbList) et la FAQ sont DÉRIVÉS du
+# markdown par le site : pas de colonnes json_ld/schema_faq à remplir. La FAQ doit
+# être un H2 « ## FAQ » / « ## Questions fréquentes » avec des questions en ### dans le corps.
 ---
 ```
 
@@ -66,14 +73,13 @@ schema:
 1. Générer le brief via Perplexity (template Section 3 de SEOBlog.md)
 2. Donner le brief à l'agent — il lit SEOBlog.md automatiquement via @SEOBlog.md
 3. L'agent génère le contenu Markdown complet avec frontmatter + JSON-LD
-4. Insérer dans Supabase table blog_posts :
-   - title: "Titre Article"
-   - slug: "titre-article"
-   - content: "Markdown content..."
-   - excerpt: "Courte description"
-   - cover_image: "https://..."
-   - published_at: NOW()
-5. Article apparaît auto sur BlogPage
+4. Insérer dans Supabase table blog_posts (colonnes réelles) :
+   - title, slug, content (markdown), excerpt
+   - cover_image_url (PAS cover_image), silo, seo_title, seo_description
+   - status: "published" (OBLIGATOIRE), published_at: NOW()
+5. Déclencher un rebuild (push main, cron 17:00 UTC, ou workflow_dispatch) : le
+   prerender génère dist/blog/<slug>/ et l'ajoute au sitemap. Sans rebuild, l'URL
+   renvoie 404 aux crawlers jusqu'au prochain build.
 6. Accessible sur /blog/titre-article
-7. Indexation automatique Google Search Console déjà configurée ✅
+7. Indexation : soumettre l'URL dans Google Search Console (pas d'auto-ping).
 ```
