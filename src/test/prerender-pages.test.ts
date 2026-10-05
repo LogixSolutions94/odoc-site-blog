@@ -53,15 +53,18 @@ describe("prérendu des pages marketing", () => {
     expect(html).toContain(`<div id="root"><main`);
   });
 
-  it("/editeurs : texte validé complet et FAQPage", () => {
+  it("/editeurs : catalogue d'offres (sans prix) et FAQPage", () => {
     const { html, meta } = renderPage(shell, "/editeurs");
-    expect(meta.title).toBe("Test de conformité Factur-X pour éditeurs — OdocPilot");
+    expect(meta.title).toBe(EDITEURS.seoTitle);
     expect(meta.description).toBe(EDITEURS.seoDesc);
     const text = unesc(html);
-    for (const s of [EDITEURS.intro, EDITEURS.why.body, EDITEURS.learned.outro, EDITEURS.plans.note, EDITEURS.notThis.body, EDITEURS.after.body, EDITEURS.email]) {
+    for (const s of [EDITEURS.intro, EDITEURS.why.body, EDITEURS.learned.outro, EDITEURS.offers.lead, EDITEURS.offers.note, EDITEURS.notThis.body, EDITEURS.after.body, EDITEURS.email]) {
       expect(text).toContain(s);
     }
     for (const f of EDITEURS.faqs) expect(text).toContain(f.a);
+    for (const o of EDITEURS.offers.items) expect(text).toContain(o.name);
+    expect(text).not.toContain("490");
+    expect(text).not.toContain("€");
     const ld = JSON.parse(/<script type="application\/ld\+json" data-rh="true">([\s\S]*?)<\/script>/.exec(html)![1]);
     expect(ld["@type"]).toBe("FAQPage");
     expect(ld.mainEntity).toHaveLength(EDITEURS.faqs.length);
