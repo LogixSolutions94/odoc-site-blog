@@ -1,7 +1,7 @@
 # Handoff : vitrine odocpilot.com, refonte en ligne, suivi Google quotidien
 
-**Mis à jour :** 30/09/2026 · **`main`** du site : PR #40 fusionnée (accueil mobile raccourci).
-Côté SaaS `odoc-pulse` : **PR #82 fusionnée** (page d'inscription réalignée). Pas de branche ouverte.
+**Mis à jour :** 05/10/2026 · **`main`** du site : PR #41, #42, #43 fusionnées (déblocage SEO silos/metas/maillage, corrections docs/bible, /editeurs sans prix).
+Côté SaaS `odoc-pulse` : **PR #82 fusionnée** (page d'inscription réalignée). Pas de branche ouverte côté site.
 
 > Lire d'abord `AGENTS.md` (identité légale, conventions), puis ce fichier. Avant de toucher une page :
 > `docs/design/REFONTE-2026-09.md` (système visuel, classes, affirmations autorisées et interdites).
@@ -11,6 +11,19 @@ Côté SaaS `odoc-pulse` : **PR #82 fusionnée** (page d'inscription réalignée
 > trafic** (hors marque : ~5 clics / 28 j). Prochaine bataille = distribution (SEO de contenu sur les
 > requêtes qui montent + un canal d'acquisition licite). Détail : `AUDIT-SITE-2026-09-29.md` et
 > `PLAN-FINAL-2026-09-29.md`. **La métrique à suivre = clics hors marque** (`odoc-seo-data/RAPPORT.md`).
+
+## 🚀 Session 04-05/10/2026 — chantier SEO & blog (déblocage technique + stratégie)
+
+**Diagnostic complet** : `docs/seo/STRATEGIE-SEO-BLOG-2026-10.md`. **Briefs éditoriaux** : `docs/seo/BRIEFS-ARTICLES-WEDGE-2026-10.md`.
+
+Constat clé : **deux systèmes ont divergé**. Le pipeline (`odoc-pulse`, n8n) écrit un schéma riche dans `blog_posts` (`silo`, `meta_title`, `meta_description`, `json_ld`…), mais le site lisait des colonnes plus anciennes (`category` **vide sur 39/39**, `seo_*` sur 16/39) → silos/clustering morts, 23 metas = excerpt. **Corrigé en code, sans écrire en base** (PR #41) : le site lit maintenant `silo`/`meta_*` en repli. L'alarme « prerender invisible » (`HANDOFF-DEPLOY.md:102`) était **périmée** (select=* + dérivation markdown + build fail-closed). `src/integrations/supabase/types.ts` reste périmé vs le schéma live (voir memory `blog-schema-two-systems-drift`).
+
+**Ce qui reste (hors de ce repo — à relayer à l'agent SEO `odoc-pulse`)** :
+1. **Aligner le vocabulaire des silos du pipeline** sur les 6 du site (facturation-electronique, obligations-2026-2027, plateforme-agreee, factur-x, tpe-sans-comptable, outils-gestion), sinon les nouveaux articles retombent en « Outils & gestion ». Mapping côté site : `src/lib/blogTaxonomy.ts` (`SILO_SOURCE_MAP` + `SLUG_SILO_OVERRIDE`).
+2. **Fiabiliser le pipeline** : alerting fraîcheur (count publié vs prérendu vs sitemap), rebuild à la publication (repo_dispatch), validation des champs SEO avant publi, remplacer le ping Google mort. Détail : stratégie §6-D.
+3. **Produire les articles wedge** (briefs prêts), priorité **auto-entrepreneur** (pos 83-90 pour une forte demande) et **franchise de TVA** (gap que personne ne traite).
+
+**État de l'art corrigé dans `SEOBlog.md`** : les rich results **FAQ (07/05/2026) et HowTo (2023) sont supprimés** → la FAQ ne sert plus qu'au **GEO** (citation IA), plus au Featured Snippet.
 
 ---
 
@@ -30,6 +43,9 @@ Côté SaaS `odoc-pulse` : **PR #82 fusionnée** (page d'inscription réalignée
 | `d3f19a2` | **SEO technique + blog** : accueil inclus dans `prerender-pages`, H1/intro/liens internes en HTML brut, header/footer renforcés vers outils/guides/comparatifs/`llm-info`, nettoyage de 9 articles blog hors positionnement via 301/410 |
 | #39 | **Demandes du 29/09** : logo noir et blanc qui tourne (`Logo.tsx`, icônes, `og-image.png`), mot-symbole « OdocPilot® », un mot clé surligné par titre (`<KeyMark>`), pied de page « … par Redsun Studio® Paris. », **SuperPDP nommé** comme plateforme agréée partenaire (raccordement de production toujours « pas encore ouvert »), images des articles dans le blog, articles lisibles en mode sombre (`html .prose`), 9 articles retirés masqués de /blog (`src/lib/retiredPosts.ts`) |
 | #40 | **Accueil mobile raccourci** (~20 000 → ~17 900 px) : sur mobile, la section produit garde la fenêtre animée + tout le texte mais masque les 4 illustrations secondaires (`hidden lg:block`) ; padding vertical des sections réduit sur mobile (`py-14 sm:py-20 lg:py-28`). Desktop inchangé. |
+| #41 | **Déblocage SEO** (04/10) : le site lit `silo`/`meta_*` du pipeline (silos enfin actifs : 6 filtres sur /blog, metas optimisées sur 23 articles), **maillage interne auto** vers les piliers au rendu (19 orphelins corrigés), « à lire aussi » par silo. 100 % code, zéro écriture en base (`resolveSiloSlug`/`pickSeo*`/`autoLinkInternal`). |
+| #42 | **Docs/bible** : `SEOBlog.md` corrigé (rich results FAQ/HowTo morts → GEO), alarme `HANDOFF-DEPLOY.md:102` périmée corrigée, templates d'INSERT alignés sur le schéma live, briefs éditoriaux wedge. |
+| #43 | **Page `/editeurs` sans prix** : les 2 formules chiffrées (490/1 500) remplacées par un **catalogue de 12 modules/offres sans tarif** (marque blanche, raccordement PA, lecture IA, agents, modules sur mesure), hero + SEO élargis à l'intégration éditeur, test de non-régression « sans prix ». |
 | `odoc-pulse` #82 | **Page d'inscription du SaaS réalignée** sur le message du site : fini « back-office / compta-tréso-RH / 52 actions » ; désormais « L'IA prépare votre facturation. Vous validez. », Factur-X, IA française (Mistral). Fusionnée le 29/09, redéployée par Coolify. |
 
 **Base de données du blog (29/09)** : les 9 articles hors positionnement (redirigés 301/410) ont été
